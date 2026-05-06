@@ -52,6 +52,45 @@
     --shadow-lg:0 20px 50px rgba(61,189,182,.18);
   }
   html{scroll-behavior:smooth}
+  /* Lenis smooth-scroll essentials */
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+  .lenis.lenis-scrolling iframe { pointer-events: none; }
+
+  /* Custom cursor — dot + ring (desktop only) */
+  @media (min-width: 900px) {
+    body.has-aw-cursor,
+    body.has-aw-cursor a,
+    body.has-aw-cursor button,
+    body.has-aw-cursor input,
+    body.has-aw-cursor textarea,
+    body.has-aw-cursor [role="button"] { cursor: none; }
+  }
+  .aw-cursor-dot, .aw-cursor-ring {
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    border-radius: 50%;
+    transition: opacity .25s ease,
+                width .35s cubic-bezier(.2,.7,.3,1),
+                height .35s cubic-bezier(.2,.7,.3,1),
+                background-color .25s ease, border-color .25s ease;
+    mix-blend-mode: difference;
+  }
+  .aw-cursor-dot { width: 6px; height: 6px; background: #FFFFFF; }
+  .aw-cursor-ring { width: 38px; height: 38px; border: 1px solid rgba(255,255,255,0.65); background: transparent; }
+  body.aw-cursor-hover .aw-cursor-ring { width: 64px; height: 64px; border-color: var(--sea); background: rgba(61,189,182,0.12); }
+  body.aw-cursor-hover .aw-cursor-dot { width: 4px; height: 4px; background: var(--sea); }
+  body.aw-cursor-out .aw-cursor-dot, body.aw-cursor-out .aw-cursor-ring { opacity: 0; }
+  @media (max-width: 899px), (hover: none) {
+    .aw-cursor-dot, .aw-cursor-ring { display: none; }
+    body.has-aw-cursor { cursor: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .aw-cursor-dot, .aw-cursor-ring { display: none; }
+  }
+
   body{
     font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
     color:var(--ink);
@@ -2139,6 +2178,11 @@
     </a>
   </div>
 </div>
+
+<!-- Site-wide Lenis smooth scroll + custom cursor (matches other pages) -->
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="js/lenis-init.js"></script>
+<script src="js/award.js" defer></script>
 
 <script>
   /* Year stamp */
