@@ -59,6 +59,16 @@
   .lenis.lenis-stopped { overflow: hidden; }
   .lenis.lenis-scrolling iframe { pointer-events: none; }
 
+  /* Award-motion split-text & mask helpers (required by js/award.js) */
+  .aw-word { display: inline-block; white-space: nowrap; }
+  .aw-char { display: inline-block; will-change: transform, opacity; transform-origin: 50% 100%; }
+  .aw-mask-wrap { display: block; overflow: hidden; position: relative; line-height: 0; }
+  .aw-mask-wrap img { display: block; width: 100%; height: auto; }
+  @media (prefers-reduced-motion: reduce) {
+    .aw-char { transform: none !important; opacity: 1 !important; }
+    .aw-mask-wrap { clip-path: none !important; }
+  }
+
   /* Custom cursor — dot + ring (desktop only) */
   @media (min-width: 900px) {
     body.has-aw-cursor,
