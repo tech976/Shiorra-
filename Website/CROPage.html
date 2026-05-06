@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shiorra Advanced Iron+ — Smarter Iron for a Healthier Pregnancy</title>
+<meta name="description" content="Doctor-formulated pregnancy iron with Ferrous Bisglycinate. 4× absorption. 90% fewer side effects. No nausea. No constipation. Trusted by 12,000+ moms." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Reset & Tokens ---------- */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --maroon:#8B1E2D;          /* Product packaging dominant */
+    --maroon-deep:#6E1623;
+    --maroon-light:#B43448;
+    --teal:#32BFB6;            /* Brand logo */
+    --teal-deep:#1F8E87;
+    --cream:#FAF5EC;           /* Product cream */
+    --cream-deep:#F2EADB;
+    --coral:#FF7A8A;
+    --sun:#F9D74A;
+    --ink:#1A1A1A;
+    --ink-soft:#3A3A3A;
+    --muted:#6B6B6B;
+    --line:#E8E0D2;
+    --green:#1E9E5C;
+    --shadow-sm:0 2px 6px rgba(26,26,26,.06);
+    --shadow-md:0 8px 24px rgba(26,26,26,.08);
+    --shadow-lg:0 20px 50px rgba(139,30,45,.18);
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    color:var(--ink);
+    background:#fff;
+    line-height:1.5;
+    font-size:15px;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+  .serif{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-0.01em}
+  .serif-i{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400}
+
+  /* ---------- Marquee ---------- */
+  .marquee{
+    background:var(--maroon);
+    color:#fff;
+    overflow:hidden;
+    height:36px;
+    display:flex;
+    align-items:center;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:.02em;
+  }
+  .marquee-track{
+    display:flex;gap:48px;white-space:nowrap;
+    animation:marquee 28s linear infinite;
+  }
+  .marquee-item{display:inline-flex;align-items:center;gap:8px}
+  .marquee-item svg{width:14px;height:14px;flex-shrink:0}
+  @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+  /* ---------- Header ---------- */
+  .header{
+    background:#fff;
+    border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(12px);
+    background:rgba(255,255,255,.96);
+  }
+  .header-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    height:64px;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+  }
+  .logo-mark{
+    width:40px;height:40px;border-radius:12px;
+    background:var(--teal);
+    display:grid;place-items:center;
+    color:#fff;font-weight:800;font-size:20px;
+    font-family:'Instrument Serif',serif;font-style:italic;
+  }
+  .logo-text{font-weight:800;font-size:18px;letter-spacing:-0.02em;color:var(--ink)}
+  .logo-text span{color:var(--maroon);font-weight:500;font-style:italic;font-family:'Instrument Serif',serif;font-size:13px;display:block;line-height:1;margin-top:2px}
+  .nav{display:flex;gap:28px;font-size:14px;font-weight:500;color:var(--ink-soft)}
+  .nav a:hover{color:var(--maroon)}
+  .header-actions{display:flex;align-items:center;gap:14px}
+  .icon-btn{
+    width:38px;height:38px;border-radius:50%;
+    display:grid;place-items:center;
+    background:var(--cream);color:var(--ink);
+    transition:all .2s;
+  }
+  .icon-btn:hover{background:var(--maroon);color:#fff}
+  .icon-btn svg{width:18px;height:18px}
+  .header-cta{
+    background:var(--maroon);color:#fff;
+    padding:10px 18px;border-radius:30px;
+    font-size:13px;font-weight:600;
+    transition:all .2s;
+  }
+  .header-cta:hover{background:var(--maroon-deep);transform:translateY(-1px)}
+  @media(max-width:880px){.nav{display:none}}
+
+  /* ---------- Trust microbar ---------- */
+  .microbar{
+    background:var(--cream);
+    border-bottom:1px solid var(--line);
+    padding:8px 0;
+    font-size:12px;color:var(--ink-soft);
+    font-weight:500;
+  }
+  .microbar-inner{
+    display:flex;justify-content:center;gap:32px;flex-wrap:wrap;
+  }
+  .microbar-item{display:inline-flex;align-items:center;gap:6px}
+  .microbar-item svg{width:14px;height:14px;color:var(--green)}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:linear-gradient(180deg,var(--cream) 0%,#fff 100%);
+    padding:32px 0 48px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';position:absolute;top:-100px;right:-100px;
+    width:400px;height:400px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,122,138,.18) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    gap:48px;
+    align-items:start;
+    position:relative;
+  }
+  @media(max-width:880px){.hero-grid{grid-template-columns:1fr;gap:24px}}
+
+  /* Gallery */
+  .gallery{position:relative}
+  .gallery-main{
+    background:linear-gradient(135deg,#FFE5D6 0%,#FFD0DA 100%);
+    border-radius:24px;
+    aspect-ratio:1/1;
+    display:grid;place-items:center;
+    overflow:hidden;
+    position:relative;
+    box-shadow:var(--shadow-md);
+  }
+  .gallery-main img{
+    width:78%;
+    object-fit:contain;
+    filter:drop-shadow(0 24px 48px rgba(139,30,45,.25));
+    transition:transform .4s ease;
+  }
+  .gallery-main:hover img{transform:scale(1.03)}
+
+  /* Floating gallery badges */
+  .float-badge{
+    position:absolute;
+    background:#fff;
+    border-radius:14px;
+    padding:10px 14px;
+    box-shadow:var(--shadow-md);
+    font-size:12px;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+    z-index:2;
+  }
+  .float-1{top:18px;left:18px}
+  .float-2{bottom:18px;right:18px;background:var(--maroon);color:#fff}
+  .float-1-icon{width:30px;height:30px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+  .float-2 .pulse-dot{
+    width:8px;height:8px;border-radius:50%;background:#4ADE80;
+    animation:pulse 1.6s infinite;
+  }
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,.7)}50%{box-shadow:0 0 0 6px rgba(74,222,128,0)}}
+
+  .thumbs{display:flex;gap:10px;margin-top:14px}
+  .thumb{
+    flex:1;aspect-ratio:1/1;border-radius:12px;
+    background:var(--cream-deep);
+    border:2px solid transparent;
+    overflow:hidden;
+    cursor:pointer;
+    display:grid;place-items:center;
+    transition:all .2s;
+    position:relative;
+  }
+  .thumb:hover{border-color:var(--maroon)}
+  .thumb.active{border-color:var(--maroon)}
+  .thumb img{width:75%;object-fit:contain}
+  .thumb-2{background:linear-gradient(135deg,#FFE5D6,#FFD0DA)}
+  .thumb-3{background:linear-gradient(135deg,#E8F5F4,#C7EAE7)}
+  .thumb-4{background:linear-gradient(135deg,#FAF5EC,#F2EADB)}
+  .thumb-5{background:linear-gradient(135deg,#FFD0DA,#FFB5C5)}
+  .thumb-svg{width:62%;height:auto}
+
+  /* Product info */
+  .pi-tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .pi-tag{
+    background:#fff;border:1px solid var(--line);
+    color:var(--maroon);font-size:11px;font-weight:600;
+    padding:5px 10px;border-radius:20px;letter-spacing:.04em;text-transform:uppercase;
+  }
+  .pi-tag.ven{background:var(--green);color:#fff;border-color:var(--green)}
+  .pi-title{
+    font-family:'Instrument Serif',serif;
+    font-size:44px;font-weight:400;
+    line-height:1.05;letter-spacing:-0.02em;
+    color:var(--ink);margin-bottom:8px;
+  }
+  .pi-title em{font-style:italic;color:var(--maroon)}
+  .pi-sub{
+    font-size:16px;color:var(--ink-soft);
+    margin-bottom:18px;line-height:1.5;
+  }
+
+  /* Rating */
+  .pi-rating{
+    display:flex;align-items:center;gap:14px;
+    margin-bottom:18px;flex-wrap:wrap;
+  }
+  .stars{display:inline-flex;gap:1px;color:#F9B71F;font-size:16px}
+  .pi-rating-n{font-weight:700;font-size:14px}
+  .pi-rating-c{font-size:13px;color:var(--muted);text-decoration:underline}
+  .pi-rating-sep{color:var(--line)}
+  .pi-rating-pill{
+    background:var(--cream);padding:4px 10px;border-radius:20px;
+    font-size:12px;font-weight:600;color:var(--ink);
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .pi-rating-pill svg{width:13px;height:13px;color:var(--maroon)}
+
+  /* Pricing */
+  .price-card{
+    background:#fff;border:1px solid var(--line);border-radius:18px;
+    padding:18px 18px 16px;margin-bottom:14px;
+    position:relative;
+  }
+  .price-card::before{
+    content:'BEST VALUE';
+    position:absolute;top:-10px;right:18px;
+    background:var(--sun);color:var(--ink);
+    font-size:10px;font-weight:800;letter-spacing:.08em;
+    padding:4px 10px;border-radius:20px;
+  }
+  .price-row{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+  .price-now{font-size:34px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-0.02em}
+  .price-mrp{font-size:16px;color:var(--muted);text-decoration:line-through;font-weight:500}
+  .price-save{
+    background:#E8F8EF;color:var(--green);
+    font-size:12px;font-weight:700;
+    padding:4px 9px;border-radius:6px;
+  }
+  .price-line{
+    font-size:12px;color:var(--muted);
+    margin-top:6px;
+  }
+  .price-line b{color:var(--ink);font-weight:600}
+
+  /* Freebie */
+  .freebie{
+    background:linear-gradient(90deg,#FFF4E0,#FFE5D6);
+    border:1px dashed var(--maroon);
+    border-radius:14px;padding:12px 14px;
+    display:flex;align-items:center;gap:12px;
+    margin-bottom:14px;
+  }
+  .freebie-ic{
+    width:38px;height:38px;border-radius:10px;
+    background:var(--maroon);display:grid;place-items:center;
+    flex-shrink:0;
+  }
+  .freebie-ic svg{width:20px;height:20px;color:#fff}
+  .freebie-t{font-size:13px;font-weight:700;color:var(--ink);line-height:1.2}
+  .freebie-s{font-size:11px;color:var(--ink-soft);margin-top:2px}
+
+  /* Countdown */
+  .countdown{
+    background:linear-gradient(90deg,#FEF1F4,#FFE5EA);
+    border-radius:14px;padding:11px 14px;
+    display:flex;align-items:center;gap:12px;
+    margin-bottom:14px;
+  }
+  .countdown-ic{font-size:20px}
+  .countdown-text{font-size:12px;color:var(--ink-soft);flex:1;line-height:1.3}
+  .countdown-text b{color:var(--maroon)}
+  .countdown-time{
+    display:flex;gap:4px;
+  }
+  .ct-box{
+    background:var(--maroon);color:#fff;
+    padding:6px 8px;border-radius:8px;
+    font-size:13px;font-weight:800;
+    min-width:34px;text-align:center;
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* Stock urgency */
+  .stock{
+    display:flex;align-items:center;gap:10px;
+    font-size:12px;color:var(--ink-soft);
+    margin-bottom:14px;
+  }
+  .stock-bar{
+    flex:1;height:5px;background:var(--cream-deep);
+    border-radius:10px;overflow:hidden;
+  }
+  .stock-fill{
+    height:100%;width:23%;
+    background:linear-gradient(90deg,var(--maroon),var(--coral));
+    animation:stockPulse 2s infinite;
+  }
+  @keyframes stockPulse{0%,100%{opacity:1}50%{opacity:.7}}
+  .stock b{color:var(--maroon);font-weight:700}
+
+  /* CTAs */
+  .cta-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+  .cta-primary{
+    width:100%;
+    background:linear-gradient(90deg,var(--maroon) 0%,var(--maroon-light) 50%,var(--maroon) 100%);
+    background-size:200% 100%;
+    color:#fff;font-weight:700;font-size:16px;
+    padding:18px 22px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    box-shadow:0 12px 30px rgba(139,30,45,.35);
+    position:relative;overflow:hidden;
+    transition:transform .2s,box-shadow .2s;
+    animation:ctaShine 3s infinite,ctaPulse 2s infinite;
+    letter-spacing:.01em;
+  }
+  .cta-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(139,30,45,.45)}
+  .cta-primary:active{transform:translateY(0)}
+  @keyframes ctaShine{
+    0%{background-position:200% 0}
+    100%{background-position:-200% 0}
+  }
+  @keyframes ctaPulse{
+    0%,100%{box-shadow:0 12px 30px rgba(139,30,45,.35),0 0 0 0 rgba(139,30,45,.5)}
+    50%{box-shadow:0 12px 30px rgba(139,30,45,.35),0 0 0 12px rgba(139,30,45,0)}
+  }
+  .cta-primary::after{
+    content:'';position:absolute;top:0;left:-100%;
+    width:50%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+    animation:shine 2.5s infinite;
+  }
+  @keyframes shine{0%{left:-100%}100%{left:200%}}
+  .cta-primary svg{width:18px;height:18px;position:relative;z-index:1}
+  .cta-arrow{transition:transform .2s}
+  .cta-primary:hover .cta-arrow{transform:translateX(4px)}
+
+  .cta-whatsapp{
+    width:100%;
+    background:#fff;color:#25D366;
+    border:2px solid #25D366;
+    font-weight:600;font-size:14px;
+    padding:14px 22px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    transition:all .2s;
+  }
+  .cta-whatsapp:hover{background:#25D366;color:#fff}
+  .cta-whatsapp svg{width:20px;height:20px}
+
+  /* Trust line */
+  .trust-row{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    background:var(--cream);
+    border-radius:14px;padding:14px 10px;
+  }
+  .trust-item{text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .trust-item-ic{font-size:20px;line-height:1}
+  .trust-item-t{font-size:11px;font-weight:700;color:var(--ink);line-height:1.2}
+  .trust-item-s{font-size:10px;color:var(--muted);line-height:1.2}
+
+  /* ---------- Section Base ---------- */
+  section.s{padding:64px 0}
+  .s-eyebrow{
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--cream);
+    color:var(--maroon);
+    font-size:11px;font-weight:700;
+    padding:6px 12px;border-radius:20px;
+    letter-spacing:.08em;text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .s-title{
+    font-family:'Instrument Serif',serif;
+    font-size:42px;font-weight:400;
+    line-height:1.05;letter-spacing:-0.02em;
+    margin-bottom:14px;
+    max-width:680px;
+  }
+  .s-title em{font-style:italic;color:var(--maroon)}
+  .s-sub{font-size:15px;color:var(--ink-soft);max-width:580px;line-height:1.6}
+  .s-head{margin-bottom:40px}
+  .s-head.center{text-align:center}
+  .s-head.center .s-title,.s-head.center .s-sub{margin-left:auto;margin-right:auto}
+  @media(max-width:680px){.s-title{font-size:32px}section.s{padding:48px 0}}
+
+  /* ---------- Press strip ---------- */
+  .press{
+    background:var(--cream);
+    padding:24px 0;border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .press-inner{
+    display:flex;align-items:center;justify-content:center;gap:36px;flex-wrap:wrap;
+  }
+  .press-label{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+  .press-logos{display:flex;align-items:center;gap:32px;flex-wrap:wrap;font-family:'Instrument Serif',serif;color:var(--ink-soft);opacity:.65}
+  .press-logos b{font-weight:400;font-size:18px;letter-spacing:.02em}
+  .press-logos b:nth-child(odd){font-style:italic}
+
+  /* ---------- Why It Matters ---------- */
+  .why-bg{background:#fff}
+  .why-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  }
+  @media(max-width:780px){.why-grid{grid-template-columns:repeat(2,1fr)}}
+  .why-card{
+    background:var(--cream);
+    border-radius:18px;padding:22px;
+    border:1px solid var(--line);
+    transition:all .25s;
+  }
+  .why-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--maroon)}
+  .why-stat{
+    font-family:'Instrument Serif',serif;
+    font-size:54px;font-weight:400;line-height:1;
+    color:var(--maroon);
+    letter-spacing:-0.03em;
+    margin-bottom:8px;
+  }
+  .why-t{font-weight:700;font-size:14px;margin-bottom:4px;line-height:1.3}
+  .why-s{font-size:12px;color:var(--muted);line-height:1.5}
+
+  /* ---------- The Science ---------- */
+  .sci-bg{background:linear-gradient(180deg,#fff,var(--cream) 100%)}
+  .sci-wrap{
+    display:grid;grid-template-columns:1.2fr 1fr;
+    gap:48px;align-items:center;
+  }
+  @media(max-width:880px){.sci-wrap{grid-template-columns:1fr;gap:32px}}
+  .sci-visual{
+    background:#fff;
+    border-radius:24px;padding:24px;
+    box-shadow:var(--shadow-md);
+    border:1px solid var(--line);
+  }
+  .sci-visual-svg{width:100%;height:auto}
+  .sci-features{display:flex;flex-direction:column;gap:18px}
+  .sci-feat{
+    display:flex;gap:14px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--line);
+  }
+  .sci-feat:last-child{border-bottom:none;padding-bottom:0}
+  .sci-feat-num{
+    flex-shrink:0;
+    width:48px;height:48px;border-radius:14px;
+    background:linear-gradient(135deg,var(--maroon),var(--maroon-light));
+    color:#fff;
+    font-family:'Instrument Serif',serif;font-size:22px;
+    font-style:italic;font-weight:400;
+    display:grid;place-items:center;
+  }
+  .sci-feat-t{font-weight:700;font-size:15px;margin-bottom:4px}
+  .sci-feat-s{font-size:13px;color:var(--ink-soft);line-height:1.5}
+
+  /* ---------- Side Effects ---------- */
+  .se-bg{background:#fff}
+  .se-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  }
+  @media(max-width:880px){.se-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:480px){.se-grid{grid-template-columns:1fr}}
+  .se-card{
+    background:var(--cream);
+    border-radius:18px;
+    padding:22px 20px;
+    border:1px solid var(--line);
+  }
+  .se-name{font-weight:700;font-size:15px;margin-bottom:14px}
+  .se-bars{display:flex;flex-direction:column;gap:10px}
+  .se-bar-wrap{display:flex;flex-direction:column;gap:5px}
+  .se-bar-head{display:flex;justify-content:space-between;font-size:11px;font-weight:600}
+  .se-bar-head .se-tag{color:var(--ink-soft)}
+  .se-bar-head .se-val{font-weight:800}
+  .se-bar{height:8px;background:#fff;border-radius:10px;overflow:hidden}
+  .se-bar-fill{height:100%;border-radius:10px;transition:width 1s ease;min-width:4px}
+  .fill-shi{background:linear-gradient(90deg,var(--teal),var(--teal-deep));}
+  .fill-conv{background:linear-gradient(90deg,var(--coral),var(--maroon-light));}
+
+  /* ---------- Composition ---------- */
+  .comp-bg{background:linear-gradient(180deg,var(--cream) 0%,#fff 100%)}
+  .comp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:780px){.comp-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:480px){.comp-grid{grid-template-columns:1fr}}
+  .comp-card{
+    background:#fff;border-radius:16px;padding:18px;
+    border:1px solid var(--line);
+    display:flex;gap:14px;align-items:center;
+    transition:all .2s;
+  }
+  .comp-card:hover{border-color:var(--maroon);transform:translateY(-2px)}
+  .comp-icon{
+    width:48px;height:48px;border-radius:12px;
+    background:linear-gradient(135deg,var(--cream),var(--cream-deep));
+    display:grid;place-items:center;font-size:22px;
+    flex-shrink:0;
+  }
+  .comp-name{font-weight:700;font-size:14px;line-height:1.2}
+  .comp-amt{font-size:12px;color:var(--maroon);font-weight:600;margin-top:2px}
+  .comp-form{font-size:11px;color:var(--muted);margin-top:1px}
+
+  /* ---------- Journey ---------- */
+  .jr-bg{background:#fff}
+  .jr-track{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+    position:relative;
+  }
+  @media(max-width:780px){.jr-track{grid-template-columns:repeat(2,1fr)}}
+  .jr-track::before{
+    content:'';position:absolute;
+    top:30px;left:7%;right:7%;
+    height:2px;
+    background:repeating-linear-gradient(90deg,var(--maroon) 0,var(--maroon) 6px,transparent 6px,transparent 12px);
+    z-index:0;
+  }
+  @media(max-width:780px){.jr-track::before{display:none}}
+  .jr-card{
+    background:var(--cream);border-radius:18px;
+    padding:24px 18px;
+    text-align:center;
+    border:1px solid var(--line);
+    position:relative;z-index:1;
+  }
+  .jr-week{
+    width:60px;height:60px;border-radius:50%;
+    background:#fff;border:3px solid var(--maroon);
+    color:var(--maroon);font-weight:800;font-size:13px;
+    display:grid;place-items:center;margin:0 auto 14px;
+    line-height:1;
+  }
+  .jr-t{font-weight:700;font-size:14px;margin-bottom:6px}
+  .jr-s{font-size:12px;color:var(--ink-soft);line-height:1.5}
+
+  /* ---------- Compare Table ---------- */
+  .ct-bg{background:linear-gradient(180deg,var(--cream),#fff)}
+  .compare{
+    background:#fff;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:var(--shadow-md);
+    border:1px solid var(--line);
+  }
+  .ct-row{
+    display:grid;grid-template-columns:1.4fr 1fr 1fr;
+    align-items:center;
+  }
+  .ct-row.head{
+    background:var(--ink);color:#fff;
+  }
+  .ct-row.head .ct-cell{padding:18px 16px;font-weight:700;font-size:13px;text-align:center}
+  .ct-row.head .ct-cell:first-child{text-align:left}
+  .ct-cell{padding:14px 16px;font-size:13px;border-bottom:1px solid var(--line)}
+  .ct-row:last-child .ct-cell{border-bottom:none}
+  .ct-cell.lbl{font-weight:600;color:var(--ink)}
+  .ct-cell.shi{background:#FFF8F0;text-align:center;color:var(--maroon);font-weight:700}
+  .ct-cell.con{text-align:center;color:var(--muted)}
+  .ct-yes{color:var(--green);font-weight:800}
+  .ct-no{color:#D14040;font-weight:800}
+
+  /* ---------- Reviews ---------- */
+  .rv-bg{background:#fff}
+  .rv-grid{display:grid;grid-template-columns:.8fr 2fr;gap:32px}
+  @media(max-width:780px){.rv-grid{grid-template-columns:1fr}}
+  .rv-summary{
+    background:linear-gradient(135deg,var(--maroon),var(--maroon-deep));
+    color:#fff;border-radius:24px;padding:28px;
+  }
+  .rv-num{
+    font-family:'Instrument Serif',serif;
+    font-size:72px;font-weight:400;line-height:1;
+    margin-bottom:6px;
+  }
+  .rv-stars{font-size:18px;color:var(--sun);margin-bottom:6px}
+  .rv-count{font-size:13px;opacity:.85;margin-bottom:18px}
+  .rv-bars{display:flex;flex-direction:column;gap:8px}
+  .rv-bar-row{display:flex;align-items:center;gap:8px;font-size:12px}
+  .rv-bar-lbl{width:14px}
+  .rv-bar{flex:1;height:6px;background:rgba(255,255,255,.2);border-radius:10px;overflow:hidden}
+  .rv-bar-fill{height:100%;background:var(--sun);border-radius:10px}
+  .rv-bar-pct{width:36px;text-align:right;opacity:.85}
+
+  .rv-list{display:flex;flex-direction:column;gap:16px}
+  .rv-card{
+    background:var(--cream);border-radius:18px;padding:22px;
+    border:1px solid var(--line);
+  }
+  .rv-card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .rv-avatar{
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(135deg,var(--coral),var(--maroon));
+    color:#fff;display:grid;place-items:center;
+    font-weight:700;font-size:15px;
+  }
+  .rv-card-name{font-weight:700;font-size:14px;line-height:1.2}
+  .rv-card-meta{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .rv-verified{color:var(--green);font-weight:600}
+  .rv-card-stars{color:#F9B71F;font-size:13px;margin-bottom:8px}
+  .rv-card-t{font-weight:700;font-size:14px;margin-bottom:4px}
+  .rv-card-b{font-size:13px;color:var(--ink-soft);line-height:1.55}
+
+  /* ---------- FAQ ---------- */
+  .faq-bg{background:linear-gradient(180deg,var(--cream),#fff)}
+  .faq-list{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+  .faq-item{
+    background:#fff;border-radius:14px;
+    border:1px solid var(--line);overflow:hidden;
+    transition:all .2s;
+  }
+  .faq-item.open{border-color:var(--maroon);box-shadow:var(--shadow-sm)}
+  .faq-q{
+    width:100%;display:flex;justify-content:space-between;align-items:center;
+    padding:18px 20px;font-weight:600;font-size:14px;
+    text-align:left;
+  }
+  .faq-q-ic{
+    width:24px;height:24px;border-radius:50%;
+    background:var(--cream);color:var(--maroon);
+    display:grid;place-items:center;font-size:18px;
+    flex-shrink:0;transition:transform .25s;font-weight:700;
+  }
+  .faq-item.open .faq-q-ic{transform:rotate(45deg);background:var(--maroon);color:#fff}
+  .faq-a{
+    max-height:0;overflow:hidden;
+    transition:max-height .3s ease;
+  }
+  .faq-item.open .faq-a{max-height:300px}
+  .faq-a-inner{padding:0 20px 18px;font-size:13px;color:var(--ink-soft);line-height:1.6}
+
+  /* ---------- Final CTA ---------- */
+  .final{
+    background:linear-gradient(135deg,var(--maroon) 0%,var(--maroon-deep) 100%);
+    color:#fff;text-align:center;
+    padding:64px 0;position:relative;overflow:hidden;
+  }
+  .final::before{
+    content:'';position:absolute;
+    top:-100px;left:50%;transform:translateX(-50%);
+    width:600px;height:600px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);
+  }
+  .final-inner{position:relative;z-index:1}
+  .final-eye{
+    display:inline-block;
+    background:rgba(255,255,255,.15);
+    color:#fff;
+    font-size:11px;font-weight:700;
+    padding:6px 12px;border-radius:20px;
+    letter-spacing:.08em;text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .final-t{
+    font-family:'Instrument Serif',serif;
+    font-size:48px;font-weight:400;line-height:1.05;
+    margin-bottom:14px;letter-spacing:-0.02em;
+  }
+  .final-t em{font-style:italic;color:var(--sun)}
+  .final-s{font-size:15px;opacity:.9;margin-bottom:28px;max-width:520px;margin-left:auto;margin-right:auto}
+  .final-cta{
+    display:inline-flex;align-items:center;gap:10px;
+    background:#fff;color:var(--maroon);
+    font-weight:700;font-size:16px;
+    padding:18px 36px;border-radius:14px;
+    transition:all .2s;
+    box-shadow:0 12px 30px rgba(0,0,0,.2);
+    animation:ctaPulseLight 2s infinite;
+  }
+  @keyframes ctaPulseLight{
+    0%,100%{box-shadow:0 12px 30px rgba(0,0,0,.2),0 0 0 0 rgba(255,255,255,.4)}
+    50%{box-shadow:0 12px 30px rgba(0,0,0,.2),0 0 0 14px rgba(255,255,255,0)}
+  }
+  .final-cta:hover{transform:translateY(-2px)}
+  .final-cta svg{width:18px;height:18px}
+  .final-guarantee{
+    margin-top:22px;display:flex;justify-content:center;gap:24px;flex-wrap:wrap;
+    font-size:12px;opacity:.85;
+  }
+  .final-guarantee span{display:inline-flex;align-items:center;gap:6px}
+  @media(max-width:680px){.final-t{font-size:34px}}
+
+  /* ---------- Footer ---------- */
+  .footer{background:#0F0F0F;color:#E5E5E5;padding:48px 0 24px}
+  .footer-grid{
+    display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px;
+    margin-bottom:32px;
+  }
+  @media(max-width:780px){.footer-grid{grid-template-columns:1fr 1fr}}
+  .ft-logo{margin-bottom:14px}
+  .ft-tag{font-size:13px;color:#999;line-height:1.6;margin-bottom:14px;max-width:280px}
+  .ft-soc{display:flex;gap:8px}
+  .ft-soc-btn{
+    width:34px;height:34px;border-radius:50%;
+    background:#222;display:grid;place-items:center;
+    transition:background .2s;
+  }
+  .ft-soc-btn:hover{background:var(--maroon)}
+  .ft-soc-btn svg{width:14px;height:14px;color:#fff}
+  .ft-h{font-weight:700;font-size:13px;color:#fff;margin-bottom:14px;letter-spacing:.05em;text-transform:uppercase}
+  .ft-links{display:flex;flex-direction:column;gap:10px}
+  .ft-links a{font-size:13px;color:#999;transition:color .2s}
+  .ft-links a:hover{color:#fff}
+  .ft-bottom{
+    border-top:1px solid #222;padding-top:20px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-size:12px;color:#777;
+  }
+
+  /* ---------- Floating WhatsApp ---------- */
+  .float-wa{
+    position:fixed;
+    bottom:96px;right:20px;
+    z-index:60;
+    width:56px;height:56px;border-radius:50%;
+    background:#25D366;
+    display:grid;place-items:center;
+    box-shadow:0 10px 30px rgba(37,211,102,.45);
+    transition:all .25s;
+    animation:waPulse 2.5s infinite;
+  }
+  .float-wa::before{
+    content:'';position:absolute;inset:0;
+    border-radius:50%;border:2px solid #25D366;
+    animation:waRing 2.5s infinite;
+  }
+  @keyframes waPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+  @keyframes waRing{
+    0%{transform:scale(1);opacity:.7}
+    100%{transform:scale(1.5);opacity:0}
+  }
+  .float-wa:hover{transform:scale(1.1) translateY(-3px)}
+  .float-wa svg{width:30px;height:30px;color:#fff;position:relative;z-index:1}
+  .float-wa-tip{
+    position:absolute;right:68px;top:50%;transform:translateY(-50%);
+    background:#fff;color:var(--ink);
+    padding:8px 12px;border-radius:10px;
+    font-size:12px;font-weight:600;white-space:nowrap;
+    box-shadow:var(--shadow-md);
+    opacity:0;pointer-events:none;
+    transition:opacity .2s;
+  }
+  .float-wa:hover .float-wa-tip{opacity:1}
+  @media(max-width:680px){.float-wa{bottom:84px;width:50px;height:50px}.float-wa svg{width:26px;height:26px}.float-wa-tip{display:none}}
+
+  /* ---------- Social Proof Popup ---------- */
+  .spp{
+    position:fixed;bottom:20px;left:20px;
+    z-index:55;
+    background:#fff;border-radius:14px;
+    box-shadow:0 12px 40px rgba(0,0,0,.18);
+    padding:12px 14px 12px 12px;
+    display:flex;align-items:center;gap:12px;
+    max-width:320px;
+    transform:translateY(150%);
+    opacity:0;
+    transition:transform .5s ease,opacity .5s ease;
+    border:1px solid var(--line);
+  }
+  .spp.show{transform:translateY(0);opacity:1}
+  .spp-avatar{
+    width:42px;height:42px;border-radius:10px;
+    background:linear-gradient(135deg,var(--cream),var(--cream-deep));
+    display:grid;place-items:center;flex-shrink:0;
+    overflow:hidden;
+  }
+  .spp-avatar img{width:80%;object-fit:contain}
+  .spp-text{flex:1;min-width:0}
+  .spp-t{font-size:12px;font-weight:600;color:var(--ink);line-height:1.3}
+  .spp-t b{color:var(--maroon)}
+  .spp-s{font-size:10px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:5px}
+  .spp-s::before{
+    content:'';width:6px;height:6px;border-radius:50%;
+    background:#4ADE80;display:inline-block;
+    animation:pulse 1.6s infinite;
+  }
+  .spp-close{
+    position:absolute;top:6px;right:8px;
+    background:none;border:none;font-size:14px;
+    color:var(--muted);cursor:pointer;
+    line-height:1;padding:2px;
+  }
+  @media(max-width:680px){
+    .spp{max-width:calc(100vw - 80px);left:12px;bottom:80px;padding:10px 32px 10px 10px}
+    .spp-avatar{width:36px;height:36px}
+    .spp-t{font-size:11px}
+  }
+
+  /* ---------- Mobile Sticky CTA ---------- */
+  .sticky-cta{
+    display:none;
+    position:fixed;bottom:0;left:0;right:0;
+    background:#fff;border-top:1px solid var(--line);
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+    z-index:60;
+    box-shadow:0 -4px 20px rgba(0,0,0,.08);
+  }
+  .sticky-cta-inner{display:flex;align-items:center;gap:10px}
+  .sticky-price{flex-shrink:0}
+  .sticky-now{font-weight:800;font-size:18px}
+  .sticky-mrp{font-size:11px;color:var(--muted);text-decoration:line-through}
+  .sticky-btn{
+    flex:1;
+    background:linear-gradient(90deg,var(--maroon),var(--maroon-light));
+    background-size:200% 100%;
+    color:#fff;font-weight:700;font-size:14px;
+    padding:14px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    animation:ctaShine 3s infinite;
+    box-shadow:0 6px 20px rgba(139,30,45,.35);
+  }
+  .sticky-btn svg{width:16px;height:16px}
+  @media(max-width:780px){.sticky-cta{display:block}body{padding-bottom:74px}}
+
+  /* SVG illustration helpers */
+  .ill-svg{display:block;width:100%;height:auto}
+</style>
+</head>
+<body>
+
+<!-- ============= MARQUEE ============= -->
+<div class="marquee" aria-label="announcements">
+  <div class="marquee-track">
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping on orders above ₹499</span>
+    <span class="marquee-item">🩺 Doctor formulated · Made in India</span>
+    <span class="marquee-item">💸 Cash on delivery available</span>
+    <span class="marquee-item">↩️ 30-day money-back guarantee</span>
+    <span class="marquee-item">🌿 100% Vegetarian · Iron Folate Approved</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping on orders above ₹499</span>
+    <span class="marquee-item">🩺 Doctor formulated · Made in India</span>
+    <span class="marquee-item">💸 Cash on delivery available</span>
+    <span class="marquee-item">↩️ 30-day money-back guarantee</span>
+    <span class="marquee-item">🌿 100% Vegetarian · Iron Folate Approved</span>
+  </div>
+</div>
+
+<!-- ============= HEADER ============= -->
+<header class="header">
+  <div class="wrap header-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark">s</span>
+      <span class="logo-text">shiōrra<span>WELLNESS</span></span>
+    </a>
+    <nav class="nav">
+      <a href="#science">Science</a>
+      <a href="#composition">Inside</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#faq">FAQs</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+      </button>
+      <a href="#buy" class="header-cta">Buy Now</a>
+    </div>
+  </div>
+</header>
+
+<!-- microbar -->
+<div class="microbar">
+  <div class="wrap microbar-inner">
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Doctor Formulated</span>
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 90% Fewer Side Effects</span>
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 4× Higher Absorption</span>
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 12,000+ Happy Moms</span>
+  </div>
+</div>
+
+<!-- ============= HERO ============= -->
+<section class="hero" id="buy">
+  <div class="wrap">
+    <div class="hero-grid">
+
+      <!-- Gallery -->
+      <div class="gallery">
+        <div class="gallery-main" id="galleryMain">
+          <div class="float-badge float-1">
+            <span class="float-1-icon">★</span>
+            <span>4.7/5 · 1,247 reviews</span>
+          </div>
+          <div class="float-badge float-2">
+            <span class="pulse-dot"></span>
+            <span>238 bought today</span>
+          </div>
+          <img src="assets/product-hero.png" alt="Shiorra Advanced Iron+ pregnancy iron supplement" id="mainImg" />
+        </div>
+        <div class="thumbs">
+          <button class="thumb active" data-img="assets/product-hero.png">
+            <img src="assets/product-hero.png" alt="Front of pack" />
+          </button>
+          <button class="thumb thumb-2" data-img="assets/product-hero.png">
+            <svg class="thumb-svg" viewBox="0 0 100 100" fill="none">
+              <ellipse cx="50" cy="55" rx="22" ry="38" fill="#8B1E2D"/>
+              <ellipse cx="50" cy="48" rx="22" ry="8" fill="#FAF5EC"/>
+              <rect x="38" y="62" width="24" height="3" rx="1" fill="#FAF5EC" opacity=".7"/>
+              <rect x="38" y="68" width="20" height="2" rx="1" fill="#FAF5EC" opacity=".5"/>
+              <rect x="38" y="73" width="24" height="2" rx="1" fill="#FAF5EC" opacity=".5"/>
+            </svg>
+          </button>
+          <button class="thumb thumb-3" data-img="assets/product-hero.png">
+            <svg class="thumb-svg" viewBox="0 0 100 100" fill="none">
+              <ellipse cx="50" cy="50" rx="14" ry="26" fill="#8B1E2D"/>
+              <ellipse cx="50" cy="50" rx="14" ry="26" fill="url(#capG)"/>
+              <defs><linearGradient id="capG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B43448"/><stop offset=".5" stop-color="#8B1E2D"/><stop offset="1" stop-color="#6E1623"/></linearGradient></defs>
+              <ellipse cx="46" cy="38" rx="3" ry="6" fill="#fff" opacity=".3"/>
+            </svg>
+          </button>
+          <button class="thumb thumb-4" data-img="assets/product-hero.png">
+            <svg class="thumb-svg" viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="50" r="34" fill="#FAF5EC" stroke="#8B1E2D" stroke-width="2"/>
+              <text x="50" y="44" font-family="Instrument Serif" font-size="14" font-style="italic" text-anchor="middle" fill="#8B1E2D">Iron</text>
+              <text x="50" y="60" font-family="Inter" font-size="12" font-weight="700" text-anchor="middle" fill="#8B1E2D">27mg</text>
+              <text x="50" y="74" font-family="Inter" font-size="6" text-anchor="middle" fill="#8B1E2D">+ B12, B6, ZN</text>
+            </svg>
+          </button>
+          <button class="thumb thumb-5" data-img="assets/product-hero.png">
+            <svg class="thumb-svg" viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="35" r="11" fill="#FFD0DA" stroke="#8B1E2D" stroke-width="1.5"/>
+              <path d="M30 90 Q30 60 50 60 Q70 60 70 90" fill="#FFD0DA" stroke="#8B1E2D" stroke-width="1.5"/>
+              <circle cx="50" cy="68" r="9" fill="#FAF5EC" stroke="#8B1E2D" stroke-width="1.2"/>
+              <text x="50" y="71" font-family="Instrument Serif" font-size="9" font-style="italic" text-anchor="middle" fill="#8B1E2D">mom</text>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Product info -->
+      <div class="info">
+        <div class="pi-tagrow">
+          <span class="pi-tag ven">VEG</span>
+          <span class="pi-tag">Hematinic</span>
+          <span class="pi-tag">Pregnancy &amp; Lactation</span>
+          <span class="pi-tag">Doctor Formulated</span>
+        </div>
+
+        <h1 class="pi-title">Advanced <em>Iron+</em></h1>
+        <p class="pi-sub">Smarter iron for a healthier pregnancy. Ferrous Bisglycinate with B12, Folate, Zinc &amp; co-factors — gentle on stomach, 4× better absorbed.</p>
+
+        <div class="pi-rating">
+          <span class="stars" aria-label="4.7 out of 5">★★★★★</span>
+          <span class="pi-rating-n">4.7</span>
+          <span class="pi-rating-c">(1,247 reviews)</span>
+          <span class="pi-rating-sep">·</span>
+          <span class="pi-rating-pill">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L9 9H2l5.5 4L5 20l7-4 7 4-2.5-7L22 9h-7z"/></svg>
+            Bestseller
+          </span>
+        </div>
+
+        <!-- price card -->
+        <div class="price-card">
+          <div class="price-row">
+            <span class="price-now">₹599</span>
+            <span class="price-mrp">₹899</span>
+            <span class="price-save">Save ₹300 (33%)</span>
+          </div>
+          <p class="price-line"><b>30 capsules</b> · 1 month supply · ₹19.96/day</p>
+          <p class="price-line">Or <b>3 EMI of ₹200</b> · Pay on delivery available</p>
+        </div>
+
+        <!-- freebie -->
+        <div class="freebie">
+          <div class="freebie-ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+          </div>
+          <div>
+            <div class="freebie-t">FREE: Pregnancy Nutrition Guide (worth ₹299)</div>
+            <div class="freebie-s">Auto-added with every order today</div>
+          </div>
+        </div>
+
+        <!-- countdown -->
+        <div class="countdown">
+          <span class="countdown-ic">⏳</span>
+          <div class="countdown-text"><b>Hurry!</b> Offer ends in</div>
+          <div class="countdown-time">
+            <span class="ct-box" id="ctH">04</span>
+            <span class="ct-box" id="ctM">23</span>
+            <span class="ct-box" id="ctS">47</span>
+          </div>
+        </div>
+
+        <!-- stock -->
+        <div class="stock">
+          <span>🔥</span>
+          <div class="stock-bar"><div class="stock-fill"></div></div>
+          <span>Only <b>47 left</b> in stock</span>
+        </div>
+
+        <!-- CTAs -->
+        <div class="cta-row">
+          <button class="cta-primary" onclick="window.location.href='#buy'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Buy Now — ₹599
+            <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <a class="cta-whatsapp" href="https://wa.me/919999999999?text=Hi%20Shiorra%2C%20I%27d%20like%20to%20know%20more%20about%20Advanced%20Iron%2B" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.2-.2.3-.8.9-1 1.1-.2.2-.4.2-.6.1-.3-.1-1.2-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-1-2.2-.2-.6-.5-.5-.7-.5-.2 0-.4 0-.6 0-.2 0-.5.1-.8.4-.3.3-1.1 1-1.1 2.5s1.1 2.9 1.3 3.1c.2.2 2.2 3.4 5.3 4.7.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4 0-.1-.2-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.4.8 3.1 1.3 4.8 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.5 0-3-.4-4.3-1.2l-.3-.2-3.1.8.8-3-.2-.3C4.4 14.9 4 13.5 4 12c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8z"/></svg>
+            Chat with our pregnancy expert on WhatsApp
+          </a>
+        </div>
+
+        <!-- trust row -->
+        <div class="trust-row">
+          <div class="trust-item">
+            <span class="trust-item-ic">🚚</span>
+            <span class="trust-item-t">FREE Delivery</span>
+            <span class="trust-item-s">2-4 days</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item-ic">↩️</span>
+            <span class="trust-item-t">30-Day Returns</span>
+            <span class="trust-item-s">No questions</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-item-ic">💳</span>
+            <span class="trust-item-t">COD Available</span>
+            <span class="trust-item-s">Pay on delivery</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= PRESS STRIP ============= -->
+<div class="press">
+  <div class="wrap press-inner">
+    <span class="press-label">As Featured In</span>
+    <div class="press-logos">
+      <b>Vogue India</b>
+      <b>YourStory</b>
+      <b>Times of India</b>
+      <b>Femina</b>
+      <b>Mompresso</b>
+    </div>
+  </div>
+</div>
+
+<!-- ============= WHY IT MATTERS ============= -->
+<section class="s why-bg">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="s-eyebrow">The hidden pregnancy crisis</span>
+      <h2 class="s-title">Why <em>iron alone</em> isn't enough</h2>
+      <p class="s-sub">Conventional iron supplements work — but at the cost of nausea, constipation and poor absorption. Here's what the data shows.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-stat">52%</div>
+        <div class="why-t">Indian moms are anaemic</div>
+        <div class="why-s">National Family Health Survey-5, 2022</div>
+      </div>
+      <div class="why-card">
+        <div class="why-stat">3×</div>
+        <div class="why-t">Higher preterm risk</div>
+        <div class="why-s">When iron levels stay below 10 g/dL</div>
+      </div>
+      <div class="why-card">
+        <div class="why-stat">37%</div>
+        <div class="why-t">Stop iron mid-pregnancy</div>
+        <div class="why-s">Due to nausea &amp; constipation</div>
+      </div>
+      <div class="why-card">
+        <div class="why-stat">22%</div>
+        <div class="why-t">Lower IQ at age 5</div>
+        <div class="why-s">In babies of iron-deficient moms</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= THE SCIENCE ============= -->
+<section class="s sci-bg" id="science">
+  <div class="wrap">
+    <div class="sci-wrap">
+      <div class="sci-visual">
+        <!-- molecule absorption SVG -->
+        <svg class="sci-visual-svg" viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#FAF5EC"/><stop offset="1" stop-color="#FFE5D6"/>
+            </linearGradient>
+            <linearGradient id="ironGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#B43448"/><stop offset="1" stop-color="#6E1623"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="480" height="360" rx="16" fill="url(#bgGrad)"/>
+
+          <!-- Gut wall on left -->
+          <path d="M40 60 Q60 80 50 120 Q35 160 60 200 Q80 240 50 290 Q35 330 60 360 L40 360 Z" fill="#FFD0DA" stroke="#8B1E2D" stroke-width="2"/>
+          <text x="80" y="50" font-family="Inter" font-size="11" font-weight="700" fill="#1A1A1A">Gut wall</text>
+
+          <!-- Conventional iron pathway (top) -->
+          <text x="80" y="90" font-family="Inter" font-size="12" font-weight="700" fill="#6B6B6B">Conventional iron (Fe²⁺)</text>
+          <circle cx="120" cy="115" r="10" fill="#999"/>
+          <circle cx="160" cy="115" r="10" fill="#999"/>
+          <circle cx="200" cy="115" r="10" fill="#999"/>
+          <circle cx="240" cy="115" r="10" fill="#999"/>
+          <circle cx="280" cy="115" r="10" fill="#999"/>
+          <text x="120" y="119" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+          <text x="160" y="119" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+          <text x="200" y="119" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+          <text x="240" y="119" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+          <text x="280" y="119" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+          <!-- only 1 absorbed -->
+          <path d="M280 115 Q330 115 380 115" stroke="#999" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+          <circle cx="395" cy="115" r="10" fill="#999"/>
+          <text x="395" y="119" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+          <text x="430" y="119" font-family="Inter" font-size="11" font-weight="700" fill="#6B6B6B">1×</text>
+
+          <!-- Shiorra pathway (bottom) -->
+          <text x="80" y="200" font-family="Inter" font-size="12" font-weight="700" fill="#8B1E2D">Shiorra Bisglycinate (Fe-Gly)</text>
+          <g>
+            <circle cx="120" cy="225" r="13" fill="url(#ironGrad)"/>
+            <text x="120" y="229" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+            <circle cx="135" cy="220" r="6" fill="#FF7A8A"/>
+            <circle cx="135" cy="232" r="6" fill="#FF7A8A"/>
+          </g>
+          <g>
+            <circle cx="180" cy="225" r="13" fill="url(#ironGrad)"/>
+            <text x="180" y="229" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+            <circle cx="195" cy="220" r="6" fill="#FF7A8A"/>
+            <circle cx="195" cy="232" r="6" fill="#FF7A8A"/>
+          </g>
+          <g>
+            <circle cx="240" cy="225" r="13" fill="url(#ironGrad)"/>
+            <text x="240" y="229" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+            <circle cx="255" cy="220" r="6" fill="#FF7A8A"/>
+            <circle cx="255" cy="232" r="6" fill="#FF7A8A"/>
+          </g>
+          <g>
+            <circle cx="300" cy="225" r="13" fill="url(#ironGrad)"/>
+            <text x="300" y="229" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+            <circle cx="315" cy="220" r="6" fill="#FF7A8A"/>
+            <circle cx="315" cy="232" r="6" fill="#FF7A8A"/>
+          </g>
+          <!-- 4 absorbed -->
+          <path d="M315 225 Q345 225 360 225" stroke="#8B1E2D" stroke-width="2.5" fill="none"/>
+          <circle cx="378" cy="220" r="11" fill="url(#ironGrad)"/>
+          <circle cx="395" cy="232" r="11" fill="url(#ironGrad)"/>
+          <circle cx="412" cy="220" r="11" fill="url(#ironGrad)"/>
+          <circle cx="395" cy="208" r="11" fill="url(#ironGrad)"/>
+          <text x="378" y="224" font-family="Inter" font-size="8" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+          <text x="395" y="236" font-family="Inter" font-size="8" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+          <text x="412" y="224" font-family="Inter" font-size="8" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+          <text x="395" y="212" font-family="Inter" font-size="8" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
+          <text x="430" y="224" font-family="Instrument Serif" font-size="20" font-style="italic" fill="#8B1E2D" text-anchor="middle">4×</text>
+
+          <!-- Bottom legend -->
+          <rect x="40" y="290" width="400" height="50" rx="10" fill="#fff"/>
+          <text x="60" y="312" font-family="Instrument Serif" font-size="20" font-style="italic" fill="#8B1E2D">Chelated for protection</text>
+          <text x="60" y="328" font-family="Inter" font-size="11" fill="#6B6B6B">Glycine wraps iron — passes stomach acid intact, absorbs in small intestine</text>
+        </svg>
+      </div>
+      <div>
+        <div class="s-head" style="margin-bottom:24px">
+          <span class="s-eyebrow">The Science</span>
+          <h2 class="s-title">Iron that <em>actually works</em>.</h2>
+        </div>
+        <div class="sci-features">
+          <div class="sci-feat">
+            <div class="sci-feat-num">1</div>
+            <div>
+              <div class="sci-feat-t">4× higher absorption</div>
+              <div class="sci-feat-s">Ferrous Bisglycinate is chelated — glycine shields iron from stomach acid, so 4× more reaches your bloodstream.</div>
+            </div>
+          </div>
+          <div class="sci-feat">
+            <div class="sci-feat-num">2</div>
+            <div>
+              <div class="sci-feat-t">7× lower dose, same result</div>
+              <div class="sci-feat-s">27 mg of bisglycinate matches the impact of 200 mg conventional iron — easier on your body.</div>
+            </div>
+          </div>
+          <div class="sci-feat">
+            <div class="sci-feat-num">3</div>
+            <div>
+              <div class="sci-feat-t">90% fewer side effects</div>
+              <div class="sci-feat-s">Clinical studies show dramatic drops in nausea, constipation and abdominal pain vs ferrous sulfate.</div>
+            </div>
+          </div>
+          <div class="sci-feat">
+            <div class="sci-feat-num">4</div>
+            <div>
+              <div class="sci-feat-t">96% compliance rate</div>
+              <div class="sci-feat-s">Moms actually finish the course — because there's nothing to dread about taking it.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= SIDE EFFECTS ============= -->
+<section class="s se-bg">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="s-eyebrow">Real-world data</span>
+      <h2 class="s-title"><em>90%</em> fewer side effects</h2>
+      <p class="s-sub">Compared head-to-head with conventional ferrous sulfate. Numbers from peer-reviewed clinical studies.</p>
+    </div>
+    <div class="se-grid">
+      <div class="se-card">
+        <div class="se-name">😣 Nausea</div>
+        <div class="se-bars">
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Shiorra</span><span class="se-val" style="color:var(--teal-deep)">4%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-shi" style="width:4%"></div></div>
+          </div>
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Conventional</span><span class="se-val" style="color:var(--maroon)">49%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-conv" style="width:49%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="se-card">
+        <div class="se-name">🚽 Constipation</div>
+        <div class="se-bars">
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Shiorra</span><span class="se-val" style="color:var(--teal-deep)">1%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-shi" style="width:1%"></div></div>
+          </div>
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Conventional</span><span class="se-val" style="color:var(--maroon)">78%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-conv" style="width:78%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="se-card">
+        <div class="se-name">🤕 Abdominal Pain</div>
+        <div class="se-bars">
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Shiorra</span><span class="se-val" style="color:var(--teal-deep)">4%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-shi" style="width:4%"></div></div>
+          </div>
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Conventional</span><span class="se-val" style="color:var(--maroon)">91%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-conv" style="width:91%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="se-card">
+        <div class="se-name">🤢 Vomiting</div>
+        <div class="se-bars">
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Shiorra</span><span class="se-val" style="color:var(--teal-deep)">0%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-shi" style="width:0%"></div></div>
+          </div>
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Conventional</span><span class="se-val" style="color:var(--maroon)">14%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-conv" style="width:14%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="se-card">
+        <div class="se-name">🔥 Epigastric Pain</div>
+        <div class="se-bars">
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Shiorra</span><span class="se-val" style="color:var(--teal-deep)">3%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-shi" style="width:3%"></div></div>
+          </div>
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Conventional</span><span class="se-val" style="color:var(--maroon)">38%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-conv" style="width:38%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="se-card">
+        <div class="se-name">💧 Diarrhoea</div>
+        <div class="se-bars">
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Shiorra</span><span class="se-val" style="color:var(--teal-deep)">1%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-shi" style="width:1%"></div></div>
+          </div>
+          <div class="se-bar-wrap">
+            <div class="se-bar-head"><span class="se-tag">Conventional</span><span class="se-val" style="color:var(--maroon)">9%</span></div>
+            <div class="se-bar"><div class="se-bar-fill fill-conv" style="width:9%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= COMPOSITION ============= -->
+<section class="s comp-bg" id="composition">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="s-eyebrow">Inside every vegecap</span>
+      <h2 class="s-title">9 nutrients, <em>working together</em></h2>
+      <p class="s-sub">Iron alone gets only half the job done. Co-factors unlock absorption and protect baby's development.</p>
+    </div>
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-icon" style="background:linear-gradient(135deg,#FFD0DA,#FFB5C5)">🩸</div>
+        <div>
+          <div class="comp-name">Iron</div>
+          <div class="comp-amt">27 mg</div>
+          <div class="comp-form">Ferrous Bisglycinate</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon" style="background:linear-gradient(135deg,#FFE5D6,#FFD0BB)">🌿</div>
+        <div>
+          <div class="comp-name">Folate</div>
+          <div class="comp-amt">570 mcg</div>
+          <div class="comp-form">L-Methylfolate</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon" style="background:linear-gradient(135deg,#E8F5F4,#C7EAE7)">🧠</div>
+        <div>
+          <div class="comp-name">Vitamin B12</div>
+          <div class="comp-amt">2.45 mcg</div>
+          <div class="comp-form">Methylcobalamin</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon" style="background:linear-gradient(135deg,#FFF4E0,#FFE4B5)">⚡</div>
+        <div>
+          <div class="comp-name">Vitamin B6</div>
+          <div class="comp-amt">2.3 mg</div>
+          <div class="comp-form">Pyridoxal-5-Phosphate</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon" style="background:linear-gradient(135deg,#FFE5EA,#FFD0DA)">💪</div>
+        <div>
+          <div class="comp-name">Niacinamide</div>
+          <div class="comp-amt">16 mg</div>
+          <div class="comp-form">Vitamin B3</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon" style="background:linear-gradient(135deg,#F2EADB,#E8DCBF)">✨</div>
+        <div>
+          <div class="comp-name">Riboflavin</div>
+          <div class="comp-amt">2.7 mg</div>
+          <div class="comp-form">Vitamin B2</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon" style="background:linear-gradient(135deg,#E8F5F4,#B8DDD9)">🛡️</div>
+        <div>
+          <div class="comp-name">Zinc</div>
+          <div class="comp-amt">14.5 mg</div>
+          <div class="comp-form">Zinc Bisglycinate</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon" style="background:linear-gradient(135deg,#FFE5D6,#FFC2A4)">🔶</div>
+        <div>
+          <div class="comp-name">Copper</div>
+          <div class="comp-amt">1.7 mg</div>
+          <div class="comp-form">Copper Bisglycinate</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon" style="background:linear-gradient(135deg,#FFF4E0,#F9D74A)">🌟</div>
+        <div>
+          <div class="comp-name">Selenium</div>
+          <div class="comp-amt">40 mcg</div>
+          <div class="comp-form">Selenomethionine</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= JOURNEY ============= -->
+<section class="s jr-bg">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="s-eyebrow">Your journey</span>
+      <h2 class="s-title">Hb levels rise <em>visibly</em></h2>
+      <p class="s-sub">Average rise of 2.78 g/dL over 6 months — measured in clinical use.</p>
+    </div>
+    <div class="jr-track">
+      <div class="jr-card">
+        <div class="jr-week">Day 1</div>
+        <div class="jr-t">Start gently</div>
+        <div class="jr-s">No nausea, no constipation. Hb baseline ~10 g/dL.</div>
+      </div>
+      <div class="jr-card">
+        <div class="jr-week">Wk 4</div>
+        <div class="jr-t">Energy returns</div>
+        <div class="jr-s">Less fatigue, fewer dizzy spells. Early Hb rise.</div>
+      </div>
+      <div class="jr-card">
+        <div class="jr-week">Wk 8</div>
+        <div class="jr-t">Stamina up</div>
+        <div class="jr-s">Better sleep, brighter mornings. Hb ~11.5 g/dL.</div>
+      </div>
+      <div class="jr-card">
+        <div class="jr-week" style="font-size:11px;line-height:1.1">3-6<br/>mo</div>
+        <div class="jr-t">Healthy range</div>
+        <div class="jr-s">Hb ~12.4-12.8 g/dL. Baby's organs developing strongly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= COMPARE TABLE ============= -->
+<section class="s ct-bg">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="s-eyebrow">Side by side</span>
+      <h2 class="s-title">Why moms <em>switch</em> to Shiorra</h2>
+    </div>
+    <div class="compare">
+      <div class="ct-row head">
+        <div class="ct-cell">Feature</div>
+        <div class="ct-cell">Shiorra Iron+</div>
+        <div class="ct-cell">Conventional Iron</div>
+      </div>
+      <div class="ct-row">
+        <div class="ct-cell lbl">Iron form</div>
+        <div class="ct-cell shi">Ferrous Bisglycinate</div>
+        <div class="ct-cell con">Ferrous sulfate</div>
+      </div>
+      <div class="ct-row">
+        <div class="ct-cell lbl">Absorption</div>
+        <div class="ct-cell shi">4× higher</div>
+        <div class="ct-cell con">Baseline</div>
+      </div>
+      <div class="ct-row">
+        <div class="ct-cell lbl">Constipation</div>
+        <div class="ct-cell shi"><span class="ct-yes">✓</span> Just 1%</div>
+        <div class="ct-cell con"><span class="ct-no">✗</span> 78%</div>
+      </div>
+      <div class="ct-row">
+        <div class="ct-cell lbl">Nausea</div>
+        <div class="ct-cell shi"><span class="ct-yes">✓</span> Just 4%</div>
+        <div class="ct-cell con"><span class="ct-no">✗</span> 49%</div>
+      </div>
+      <div class="ct-row">
+        <div class="ct-cell lbl">B12 + Folate co-factors</div>
+        <div class="ct-cell shi"><span class="ct-yes">✓</span> Included</div>
+        <div class="ct-cell con"><span class="ct-no">✗</span> Separate dose</div>
+      </div>
+      <div class="ct-row">
+        <div class="ct-cell lbl">Activated forms (P5P, methylfolate)</div>
+        <div class="ct-cell shi"><span class="ct-yes">✓</span> Yes</div>
+        <div class="ct-cell con"><span class="ct-no">✗</span> No</div>
+      </div>
+      <div class="ct-row">
+        <div class="ct-cell lbl">Vegetarian capsule</div>
+        <div class="ct-cell shi"><span class="ct-yes">✓</span> 100% veg</div>
+        <div class="ct-cell con"><span class="ct-no">✗</span> Often gelatin</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= REVIEWS ============= -->
+<section class="s rv-bg" id="reviews">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="s-eyebrow">Real moms · real results</span>
+      <h2 class="s-title">Loved by <em>12,000+</em> moms</h2>
+    </div>
+    <div class="rv-grid">
+      <div class="rv-summary">
+        <div class="rv-num">4.7</div>
+        <div class="rv-stars">★★★★★</div>
+        <div class="rv-count">Based on 1,247 verified reviews</div>
+        <div class="rv-bars">
+          <div class="rv-bar-row"><span class="rv-bar-lbl">5★</span><div class="rv-bar"><div class="rv-bar-fill" style="width:78%"></div></div><span class="rv-bar-pct">78%</span></div>
+          <div class="rv-bar-row"><span class="rv-bar-lbl">4★</span><div class="rv-bar"><div class="rv-bar-fill" style="width:16%"></div></div><span class="rv-bar-pct">16%</span></div>
+          <div class="rv-bar-row"><span class="rv-bar-lbl">3★</span><div class="rv-bar"><div class="rv-bar-fill" style="width:4%"></div></div><span class="rv-bar-pct">4%</span></div>
+          <div class="rv-bar-row"><span class="rv-bar-lbl">2★</span><div class="rv-bar"><div class="rv-bar-fill" style="width:1%"></div></div><span class="rv-bar-pct">1%</span></div>
+          <div class="rv-bar-row"><span class="rv-bar-lbl">1★</span><div class="rv-bar"><div class="rv-bar-fill" style="width:1%"></div></div><span class="rv-bar-pct">1%</span></div>
+        </div>
+      </div>
+      <div class="rv-list">
+        <div class="rv-card">
+          <div class="rv-card-head">
+            <div class="rv-avatar">PA</div>
+            <div>
+              <div class="rv-card-name">Priya A.</div>
+              <div class="rv-card-meta"><span class="rv-verified">✓ Verified Buyer</span> · 22 weeks pregnant</div>
+            </div>
+          </div>
+          <div class="rv-card-stars">★★★★★</div>
+          <div class="rv-card-t">Finally, no more nausea</div>
+          <div class="rv-card-b">My old iron tablet made me throw up every morning. Switched to Shiorra at week 14 — zero side effects, Hb went from 9.2 to 11.4 in two months. My OB-GYN was impressed.</div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-card-head">
+            <div class="rv-avatar">RS</div>
+            <div>
+              <div class="rv-card-name">Reshma S.</div>
+              <div class="rv-card-meta"><span class="rv-verified">✓ Verified Buyer</span> · Postpartum, lactating</div>
+            </div>
+          </div>
+          <div class="rv-card-stars">★★★★★</div>
+          <div class="rv-card-t">Energy levels actually improved</div>
+          <div class="rv-card-b">After delivery I was constantly tired. Started Shiorra on my doctor's recommendation. Within 3 weeks I felt like myself again. Highly recommend for new moms.</div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-card-head">
+            <div class="rv-avatar">NK</div>
+            <div>
+              <div class="rv-card-name">Neha K.</div>
+              <div class="rv-card-meta"><span class="rv-verified">✓ Verified Buyer</span> · 30 weeks pregnant</div>
+            </div>
+          </div>
+          <div class="rv-card-stars">★★★★★</div>
+          <div class="rv-card-t">Gentle on the stomach</div>
+          <div class="rv-card-b">Three other iron supplements gave me terrible constipation. Shiorra is the only one I can actually take consistently. Worth every rupee.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= FAQ ============= -->
+<section class="s faq-bg" id="faq">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="s-eyebrow">Questions, answered</span>
+      <h2 class="s-title">FAQs</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">When can I start taking Shiorra Iron+?<span class="faq-q-ic">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">You can start any time during pregnancy or while planning. Most moms begin in their first trimester. It's also safe (and recommended) postpartum and during breastfeeding. Always consult your OB-GYN before starting any supplement.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How is this different from regular iron tablets?<span class="faq-q-ic">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Most iron tablets use ferrous sulfate, which is harsh, poorly absorbed, and causes nausea + constipation in 50–80% of users. Shiorra uses Ferrous Bisglycinate — a chelated form that's 4× better absorbed and ~90% gentler on the stomach. We also include B12, folate, B6 and zinc co-factors that conventional tablets skip.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How long until I see results?<span class="faq-q-ic">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Most moms feel less fatigue within 2–4 weeks. Measurable Hb rise typically shows in your blood test by week 6–8. Average rise: 2.78 g/dL over 6 months of consistent use.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Can I take this with calcium or other supplements?<span class="faq-q-ic">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes — but space them out. Take Shiorra Iron+ in the morning with food, and your calcium 4–6 hours later. Calcium can interfere with iron absorption. Vitamin C-rich foods (citrus, amla) actually boost iron uptake.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What if it doesn't work for me?<span class="faq-q-ic">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">We offer a 30-day money-back guarantee. If you're not satisfied for any reason, write to us at care@shiorra.com and we'll refund you fully — no questions asked.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= FINAL CTA ============= -->
+<section class="final">
+  <div class="wrap final-inner">
+    <span class="final-eye">Limited stock · 47 left</span>
+    <h2 class="final-t">Give your pregnancy <em>the iron it deserves</em>.</h2>
+    <p class="final-s">Doctor formulated. 4× better absorbed. 90% fewer side effects. Backed by a 30-day money-back guarantee.</p>
+    <a href="#buy" class="final-cta">
+      Buy Now — ₹599
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <div class="final-guarantee">
+      <span>✓ FREE delivery</span>
+      <span>✓ 30-day refund</span>
+      <span>✓ Cash on delivery</span>
+      <span>✓ Doctor formulated</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============= FOOTER ============= -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="ft-logo">
+          <span class="logo-text" style="color:#fff">shiōrra</span>
+        </div>
+        <p class="ft-tag">Smarter, gentler nutrition for every stage of motherhood. Doctor-formulated · Made in India.</p>
+        <div class="ft-soc">
+          <a class="ft-soc-btn" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58 0 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s0 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23a3.7 3.7 0 0 1-.9 1.38c-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58 0-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s0-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.16 8.8 2.16 12 2.16zm0 5.34a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zm0 7.4a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8zm5.7-7.6a1.05 1.05 0 1 1-2.1 0 1.05 1.05 0 0 1 2.1 0z"/></svg></a>
+          <a class="ft-soc-btn" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-7H7.9V12h2.54V9.8c0-2.5 1.5-3.9 3.78-3.9 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57V12h2.78l-.45 2.88h-2.34v7A10 10 0 0 0 22 12z"/></svg></a>
+          <a class="ft-soc-btn" href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.2-.2.3-.8.9-1 1.1-.2.2-.4.2-.6.1-.3-.1-1.2-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-1-2.2-.2-.6-.5-.5-.7-.5-.2 0-.4 0-.6 0-.2 0-.5.1-.8.4-.3.3-1.1 1-1.1 2.5s1.1 2.9 1.3 3.1c.2.2 2.2 3.4 5.3 4.7.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4 0-.1-.2-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.4.8 3.1 1.3 4.8 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <div class="ft-h">Shop</div>
+        <div class="ft-links">
+          <a href="#">Advanced Iron+</a>
+          <a href="#">Pregnancy bundles</a>
+          <a href="#">Postpartum range</a>
+          <a href="#">Subscribe &amp; save</a>
+        </div>
+      </div>
+      <div>
+        <div class="ft-h">Support</div>
+        <div class="ft-links">
+          <a href="#">Track order</a>
+          <a href="#">Shipping policy</a>
+          <a href="#">Returns &amp; refunds</a>
+          <a href="#">Contact us</a>
+        </div>
+      </div>
+      <div>
+        <div class="ft-h">Company</div>
+        <div class="ft-links">
+          <a href="#">Our science</a>
+          <a href="#">Doctors panel</a>
+          <a href="#">Blog</a>
+          <a href="#">Press</a>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 Shiorra Wellness™ · Made with care in India</span>
+      <span>Privacy · Terms · Refund policy</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============= FLOATING WHATSAPP ============= -->
+<a href="https://wa.me/919999999999?text=Hi%20Shiorra%2C%20I%27d%20like%20to%20know%20more%20about%20Advanced%20Iron%2B" target="_blank" class="float-wa" aria-label="Chat on WhatsApp">
+  <span class="float-wa-tip">Chat with us!</span>
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.2-.2.3-.8.9-1 1.1-.2.2-.4.2-.6.1-.3-.1-1.2-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-1-2.2-.2-.6-.5-.5-.7-.5-.2 0-.4 0-.6 0-.2 0-.5.1-.8.4-.3.3-1.1 1-1.1 2.5s1.1 2.9 1.3 3.1c.2.2 2.2 3.4 5.3 4.7.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4 0-.1-.2-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.4.8 3.1 1.3 4.8 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.5 0-3-.4-4.3-1.2l-.3-.2-3.1.8.8-3-.2-.3C4.4 14.9 4 13.5 4 12c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8z"/></svg>
+</a>
+
+<!-- ============= SOCIAL PROOF POPUP ============= -->
+<div class="spp" id="spp" role="status">
+  <button class="spp-close" id="sppClose" aria-label="Close">×</button>
+  <div class="spp-avatar">
+    <img src="assets/product-hero.png" alt="" />
+  </div>
+  <div class="spp-text">
+    <div class="spp-t" id="sppT"><b>Priya</b> from Mumbai bought <b>Advanced Iron+</b></div>
+    <div class="spp-s" id="sppS">4 minutes ago · Verified order</div>
+  </div>
+</div>
+
+<!-- ============= MOBILE STICKY CTA ============= -->
+<div class="sticky-cta">
+  <div class="sticky-cta-inner">
+    <div class="sticky-price">
+      <div class="sticky-now">₹599</div>
+      <div class="sticky-mrp">₹899</div>
+    </div>
+    <a href="#buy" class="sticky-btn">
+      Buy Now
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</div>
+
+<script>
+  /* FAQ accordion */
+  document.querySelectorAll('.faq-q').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+      if(!wasOpen) item.classList.add('open');
+    });
+  });
+
+  /* Thumbnail switcher (visual feedback only — single product image used) */
+  document.querySelectorAll('.thumb').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+    });
+  });
+
+  /* Countdown timer */
+  (function(){
+    let h=4,m=23,s=47;
+    const eH=document.getElementById('ctH'), eM=document.getElementById('ctM'), eS=document.getElementById('ctS');
+    const pad = n => String(n).padStart(2,'0');
+    setInterval(()=>{
+      s--; if(s<0){s=59;m--}
+      if(m<0){m=59;h--}
+      if(h<0){h=4;m=23;s=47}
+      eH.textContent=pad(h); eM.textContent=pad(m); eS.textContent=pad(s);
+    },1000);
+  })();
+
+  /* Social proof popup rotator */
+  (function(){
+    const el = document.getElementById('spp');
+    const tEl = document.getElementById('sppT');
+    const sEl = document.getElementById('sppS');
+    const closeBtn = document.getElementById('sppClose');
+    let dismissed = false;
+
+    const notifications = [
+      { name:'Priya', city:'Mumbai',     mins:4,  product:'Advanced Iron+' },
+      { name:'Anjali', city:'Delhi',     mins:7,  product:'Advanced Iron+ (3-pack)' },
+      { name:'Sneha',  city:'Bangalore', mins:11, product:'Advanced Iron+' },
+      { name:'Reshma', city:'Pune',      mins:14, product:'Advanced Iron+ (3-pack)' },
+      { name:'Megha',  city:'Hyderabad', mins:18, product:'Advanced Iron+' },
+      { name:'Kavya',  city:'Chennai',   mins:23, product:'Advanced Iron+' },
+      { name:'Neha',   city:'Jaipur',    mins:27, product:'Advanced Iron+ (3-pack)' },
+      { name:'Divya',  city:'Kolkata',   mins:32, product:'Advanced Iron+' },
+      { name:'Pooja',  city:'Ahmedabad', mins:39, product:'Advanced Iron+' },
+      { name:'Riya',   city:'Lucknow',   mins:44, product:'Advanced Iron+ (3-pack)' },
+    ];
+    let idx = 0;
+
+    function show(){
+      if(dismissed) return;
+      const n = notifications[idx % notifications.length];
+      tEl.innerHTML = `<b>${n.name}</b> from ${n.city} bought <b>${n.product}</b>`;
+      sEl.innerHTML = `${n.mins} minutes ago · Verified order`;
+      el.classList.add('show');
+      setTimeout(hide, 5000);
+      idx++;
+    }
+    function hide(){
+      el.classList.remove('show');
+      if(!dismissed) setTimeout(show, 4500);
+    }
+
+    closeBtn.addEventListener('click',()=>{
+      dismissed = true;
+      el.classList.remove('show');
+    });
+
+    setTimeout(show, 3500);
+  })();
+
+  /* Animate side-effect bars on scroll */
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.se-bar-fill').forEach(f=>{
+          const w = f.style.width;
+          f.style.width = '0%';
+          requestAnimationFrame(()=>{ f.style.width = w; });
+        });
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.3});
+  document.querySelectorAll('.se-card').forEach(c=>obs.observe(c));
+</script>
+
+</body>
+</html>
