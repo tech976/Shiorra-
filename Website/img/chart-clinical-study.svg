@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="520" viewBox="0 0 760 520" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+  <rect width="760" height="520" fill="#F8F4EE"/>
+
+  <!-- Header -->
+  <text x="60" y="50" fill="#1F1F1F" font-size="11" font-weight="700" letter-spacing="3">MEAN HEMOGLOBIN INCREASE FROM BASELINE</text>
+  <line x1="60" y1="62" x2="700" y2="62" stroke="#1F1F1F" stroke-width="1"/>
+
+  <!-- Legend -->
+  <g transform="translate(60 84)">
+    <rect width="14" height="14" fill="#C8C8B9" rx="2"/>
+    <text x="22" y="12" font-size="12" font-weight="600" fill="#1F1F1F">Placebo</text>
+    <g transform="translate(120 0)">
+      <rect width="14" height="14" fill="#C2185B" rx="2"/>
+      <text x="22" y="12" font-size="12" font-weight="600" fill="#1F1F1F">Shiōrra · Ferrous Bisglycinate 24 mg</text>
+    </g>
+  </g>
+
+  <!-- Y axis -->
+  <g stroke="#E5E5E5" stroke-width="1">
+    <line x1="100" y1="140" x2="700" y2="140"/>
+    <line x1="100" y1="220" x2="700" y2="220"/>
+    <line x1="100" y1="300" x2="700" y2="300"/>
+    <line x1="100" y1="380" x2="700" y2="380"/>
+  </g>
+  <line x1="100" y1="440" x2="700" y2="440" stroke="#1F1F1F" stroke-width="1.4"/>
+
+  <g fill="#6B6B6B" font-size="11" font-weight="600">
+    <text x="92" y="444" text-anchor="end">0</text>
+    <text x="92" y="384" text-anchor="end">0.5</text>
+    <text x="92" y="304" text-anchor="end">1.0</text>
+    <text x="92" y="224" text-anchor="end">1.5</text>
+    <text x="92" y="144" text-anchor="end">2.0</text>
+    <text x="92" y="104" text-anchor="end">2.5</text>
+  </g>
+  <text x="40" y="270" text-anchor="middle" fill="#1F1F1F" font-size="10" font-weight="700" letter-spacing="2.5"
+        transform="rotate(-90 40 270)">Hb (g/dL)</text>
+
+  <!-- ====================== Week 4 ====================== -->
+  <g>
+    <rect x="180" y="406" width="50" height="34" fill="#C8C8B9"/>
+    <text x="205" y="398" text-anchor="middle" fill="#6B6B6B" font-size="13" font-weight="700">+0.2</text>
+    <rect x="234" y="328" width="50" height="112" fill="#C2185B"/>
+    <rect x="234" y="328" width="50" height="6"  fill="#8E1948"/>
+    <text x="259" y="320" text-anchor="middle" fill="#1F1F1F" font-size="13" font-weight="700">+0.7</text>
+    <text x="232" y="464" text-anchor="middle" fill="#1F1F1F" font-size="11" font-weight="700" letter-spacing="2">WEEK 4</text>
+  </g>
+
+  <!-- ====================== Week 12 ====================== -->
+  <g>
+    <rect x="380" y="356" width="50" height="84" fill="#C8C8B9"/>
+    <text x="405" y="348" text-anchor="middle" fill="#6B6B6B" font-size="13" font-weight="700">+0.5</text>
+    <rect x="434" y="160" width="50" height="280" fill="#C2185B"/>
+    <rect x="434" y="160" width="50" height="6"  fill="#8E1948"/>
+    <text x="459" y="152" text-anchor="middle" fill="#1F1F1F" font-size="13" font-weight="700">+1.7</text>
+    <text x="432" y="464" text-anchor="middle" fill="#1F1F1F" font-size="11" font-weight="700" letter-spacing="2">WEEK 12</text>
+  </g>
+
+  <!-- ====================== Week 24 ====================== -->
+  <g>
+    <rect x="560" y="312" width="50" height="128" fill="#C8C8B9"/>
+    <text x="585" y="304" text-anchor="middle" fill="#6B6B6B" font-size="13" font-weight="700">+0.8</text>
+    <rect x="614" y="86" width="50" height="354" fill="#C2185B"/>
+    <rect x="614" y="86" width="50" height="6"  fill="#8E1948"/>
+    <text x="639" y="78" text-anchor="middle" fill="#C2185B" font-size="14" font-weight="700">+2.78</text>
+    <text x="612" y="464" text-anchor="middle" fill="#1F1F1F" font-size="11" font-weight="700" letter-spacing="2">WEEK 24</text>
+  </g>
+
+  <!-- Citation -->
+  <text x="380" y="498" text-anchor="middle" fill="#6B6B6B" font-size="11" font-weight="500" font-style="italic">Source · Bumrungpert A et al. Nutrients 2022;14(3):452</text>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="750" viewBox="0 0 600 750" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="vt3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#C2185B"/>
+      <stop offset="100%" stop-color="#8E1948"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="750" fill="url(#vt3)"/>
+  <!-- White semi-circle bottom -->
+  <circle cx="300" cy="900" r="260" fill="#FBE5EE" opacity="0.20"/>
+  <!-- Quote mark -->
+  <text x="80" y="240" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700"
+        font-size="280" fill="#FFFFFF" opacity="0.18">"</text>
+  <circle cx="84" cy="666" r="40" fill="#FFFFFF"/>
+  <text x="84" y="680" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-weight="700" font-size="22" fill="#C2185B">SK</text>
+</svg>

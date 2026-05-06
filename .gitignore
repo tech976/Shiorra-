@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Temp template (reference only, not part of deliverable)
+Temp/
+
+# Node / build artifacts (not used yet, future-proofing)
+node_modules/
+dist/
+build/
+*.log

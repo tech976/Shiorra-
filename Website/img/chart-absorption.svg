@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="480" viewBox="0 0 700 480" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+  <rect width="700" height="480" fill="#FFFFFF"/>
+
+  <!-- Header -->
+  <text x="60" y="50" fill="#1F1F1F" font-size="11" font-weight="700" letter-spacing="3">% IRON ABSORPTION · HUMAN STUDY</text>
+  <line x1="60" y1="62" x2="640" y2="62" stroke="#1F1F1F" stroke-width="1"/>
+
+  <!-- Y-axis hairlines + labels -->
+  <g stroke="#E5E5E5" stroke-width="1">
+    <line x1="100" y1="110" x2="640" y2="110"/>
+    <line x1="100" y1="190" x2="640" y2="190"/>
+    <line x1="100" y1="270" x2="640" y2="270"/>
+    <line x1="100" y1="350" x2="640" y2="350"/>
+  </g>
+  <line x1="100" y1="410" x2="640" y2="410" stroke="#1F1F1F" stroke-width="1.4"/>
+
+  <g fill="#6B6B6B" font-size="11" font-weight="600">
+    <text x="92" y="414" text-anchor="end">0%</text>
+    <text x="92" y="354" text-anchor="end">10%</text>
+    <text x="92" y="274" text-anchor="end">20%</text>
+    <text x="92" y="194" text-anchor="end">30%</text>
+    <text x="92" y="114" text-anchor="end">40%</text>
+  </g>
+
+  <!-- Bar 1: Ferrous Bisglycinate 30.9% (filled pink) -->
+  <g>
+    <rect x="180" y="162" width="140" height="248" fill="#C2185B"/>
+    <rect x="180" y="162" width="140" height="6" fill="#8E1948"/>
+    <text x="250" y="146" text-anchor="middle" fill="#1F1F1F" font-size="44" font-weight="700" letter-spacing="-2">30.9%</text>
+    <text x="250" y="436" text-anchor="middle" fill="#1F1F1F" font-size="11" font-weight="700" letter-spacing="2">FERROUS BISGLYCINATE</text>
+    <text x="250" y="454" text-anchor="middle" fill="#6B6B6B" font-size="10.5" font-weight="500">Shiōrra · chelated iron</text>
+  </g>
+
+  <!-- Bar 2: Ferrous Sulfate 15.8% (sage) -->
+  <g>
+    <rect x="400" y="284" width="140" height="126" fill="#C8C8B9"/>
+    <rect x="400" y="284" width="140" height="6" fill="#A6A696"/>
+    <text x="470" y="268" text-anchor="middle" fill="#1F1F1F" font-size="44" font-weight="700" letter-spacing="-2">15.8%</text>
+    <text x="470" y="436" text-anchor="middle" fill="#1F1F1F" font-size="11" font-weight="700" letter-spacing="2">FERROUS SULFATE</text>
+    <text x="470" y="454" text-anchor="middle" fill="#6B6B6B" font-size="10.5" font-weight="500">Conventional iron salt</text>
+  </g>
+
+  <!-- ~2× callout pill -->
+  <g transform="translate(345 218)">
+    <rect x="-32" y="-16" width="64" height="32" rx="16" fill="#1F1F1F"/>
+    <text y="6" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="700">~2×</text>
+  </g>
+
+  <!-- Citation -->
+  <text x="640" y="50" text-anchor="end" fill="#6B6B6B" font-size="10" font-weight="500" font-style="italic">Source · Langini S et al. Nutr Rev 1988;38(4):729–735</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="420" viewBox="0 0 600 420">
+  <rect width="600" height="420" fill="#F0EEE6"/>
+  <g fill="#205030" opacity="0.15">
+    <circle cx="200" cy="220" r="40"/>
+    <circle cx="300" cy="200" r="56"/>
+    <circle cx="400" cy="220" r="40"/>
+  </g>
+  <text x="300" y="290" text-anchor="middle" font-family="Helvetica" font-weight="700" font-size="22" fill="#1F1F1F">Inclusive wellness</text>
+  <text x="300" y="316" text-anchor="middle" font-family="Inter" font-size="12" fill="#205030" letter-spacing="3">FOR EVERY STAGE OF LIFE</text>
+</svg>

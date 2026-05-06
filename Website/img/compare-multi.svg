@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="240" viewBox="0 0 200 240" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="multiBottle" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#DCDCE0"/>
+    </linearGradient>
+  </defs>
+  <!-- Bottle body -->
+  <rect x="56" y="50" width="88" height="170" rx="4" fill="url(#multiBottle)" stroke="#C8C8D0" stroke-width="1"/>
+  <!-- Cap -->
+  <rect x="62" y="36" width="76" height="22" rx="2" fill="#3A3A42"/>
+  <!-- Label -->
+  <rect x="64" y="80" width="72" height="100" fill="#FFFFFF"/>
+  <rect x="64" y="80" width="72" height="22" fill="#1F4E8F"/>
+  <text x="100" y="95" text-anchor="middle" fill="#FFFFFF" font-size="9" font-weight="700" letter-spacing="1">GENERIC</text>
+  <text x="100" y="120" text-anchor="middle" fill="#1F1F1F" font-size="10" font-weight="700">MULTI-</text>
+  <text x="100" y="132" text-anchor="middle" fill="#1F1F1F" font-size="10" font-weight="700">VITAMIN</text>
+  <text x="100" y="152" text-anchor="middle" fill="#6B6B6B" font-size="7">Daily formula</text>
+  <text x="100" y="164" text-anchor="middle" fill="#6B6B6B" font-size="6">60 tablets</text>
+  <text x="100" y="174" text-anchor="middle" fill="#6B6B6B" font-size="6">Adults · Multipurpose</text>
+</svg>
