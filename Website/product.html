@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 <style>
   /* =========================================================
      Shiōrra — Advanced Iron+ (CRO format · brand-aligned)
@@ -27,10 +28,12 @@
 
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
-    --sea:#3DBDB6;
-    --sea-2:#2FA39C;
-    --sea-deep:#23867F;
-    --sea-soft:#E8F6F5;
+    /* Iron+ accent — pink (mirrors how Ginger+ uses one forest-green token throughout).
+       --sea* names kept so existing rules stay valid; values point at the pink palette. */
+    --sea:#FF3D8E;
+    --sea-2:#E62A78;
+    --sea-deep:#C21B62;
+    --sea-soft:#FFE4F0;
     --pink:#FF3D8E;
     --pink-2:#E62A78;
     --pink-deep:#C21B62;
@@ -49,9 +52,10 @@
     --green:#1E9E5C;
     --shadow-sm:0 2px 6px rgba(40,40,40,.06);
     --shadow-md:0 8px 24px rgba(40,40,40,.08);
-    --shadow-lg:0 20px 50px rgba(61,189,182,.18);
+    --shadow-lg:0 20px 50px rgba(40,40,40,.18);
   }
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;overflow-x:clip}
+  body{overflow-x:clip}
   /* Lenis smooth-scroll essentials */
   html.lenis, html.lenis body { height: auto; }
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -90,8 +94,8 @@
   }
   .aw-cursor-dot { width: 6px; height: 6px; background: #FFFFFF; }
   .aw-cursor-ring { width: 38px; height: 38px; border: 1px solid rgba(255,255,255,0.65); background: transparent; }
-  body.aw-cursor-hover .aw-cursor-ring { width: 64px; height: 64px; border-color: var(--sea); background: rgba(61,189,182,0.12); }
-  body.aw-cursor-hover .aw-cursor-dot { width: 4px; height: 4px; background: var(--sea); }
+  body.aw-cursor-hover .aw-cursor-ring { width: 64px; height: 64px; border-color: var(--charcoal); background: rgba(40,40,40,0.12); }
+  body.aw-cursor-hover .aw-cursor-dot { width: 4px; height: 4px; background: var(--charcoal); }
   body.aw-cursor-out .aw-cursor-dot, body.aw-cursor-out .aw-cursor-ring { opacity: 0; }
   @media (max-width: 899px), (hover: none) {
     .aw-cursor-dot, .aw-cursor-ring { display: none; }
@@ -137,39 +141,7 @@
   .marquee-item svg{width:14px;height:14px;flex-shrink:0;color:var(--sea)}
   @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-  /* ---------- Header ---------- */
-  .header{
-    background:rgba(255,255,255,.96);
-    border-bottom:1px solid var(--line);
-    position:sticky;top:0;z-index:50;
-    backdrop-filter:blur(12px);
-  }
-  .header-inner{
-    display:flex;align-items:center;justify-content:space-between;
-    height:64px;
-  }
-  .logo{display:flex;align-items:center;gap:10px}
-  .logo img{height:28px;width:auto;display:block}
-  .nav{display:flex;gap:28px;font-size:14px;font-weight:500;color:var(--ink-soft)}
-  .nav a{transition:color .2s}
-  .nav a:hover,.nav a.active{color:var(--sea)}
-  .header-actions{display:flex;align-items:center;gap:14px}
-  .icon-btn{
-    width:38px;height:38px;border-radius:50%;
-    display:grid;place-items:center;
-    background:var(--surface);color:var(--ink);
-    transition:all .2s;
-  }
-  .icon-btn:hover{background:var(--charcoal);color:#fff}
-  .icon-btn svg{width:18px;height:18px}
-  .header-cta{
-    background:var(--sea);color:#fff;
-    padding:10px 18px;border-radius:30px;
-    font-size:13px;font-weight:600;
-    transition:all .2s;
-  }
-  .header-cta:hover{background:var(--sea-2);transform:translateY(-1px)}
-  @media(max-width:880px){.nav{display:none}}
+  /* ---------- Header is now served by css/style.css (.site-header / .nav__menu) ---------- */
 
   /* ---------- Trust microbar ---------- */
   .microbar{
@@ -186,26 +158,26 @@
   .microbar-item svg{width:14px;height:14px;color:var(--sea)}
 
   /* ---------- HERO ---------- */
-  .hero{
+  .product-hero{
     background:linear-gradient(180deg,var(--surface) 0%,#fff 100%);
     padding:32px 0 56px;
     position:relative;
     /* no overflow:hidden — would break position:sticky inside */
   }
-  .hero::before{
+  .product-hero::before{
     content:'';position:absolute;top:-100px;right:-100px;
     width:400px;height:400px;border-radius:50%;
-    background:radial-gradient(circle,rgba(61,189,182,.18) 0%,transparent 70%);
+    background:radial-gradient(circle,rgba(40,40,40,.18) 0%,transparent 70%);
     pointer-events:none;
   }
-  .hero-grid{
+  .product-hero-grid{
     display:grid;
     grid-template-columns:1fr 1.05fr;
     gap:48px;
     align-items:start;
     position:relative;
   }
-  @media(max-width:880px){.hero-grid{grid-template-columns:1fr;gap:28px}}
+  @media(max-width:880px){.product-hero-grid{grid-template-columns:1fr;gap:28px}}
 
   /* Gallery — sticky on desktop while the info column scrolls */
   .gallery{
@@ -226,7 +198,7 @@
   .gallery-main img{
     width:78%;
     object-fit:contain;
-    filter:drop-shadow(0 24px 48px rgba(35,134,127,.20));
+    filter:drop-shadow(0 24px 48px rgba(40,40,40,.20));
     transition:transform .4s ease;
   }
   .gallery-main:hover img{transform:scale(1.03)}
@@ -244,12 +216,12 @@
   }
   .float-1{top:18px;left:18px}
   .float-2{bottom:18px;right:18px;background:var(--charcoal);color:#fff}
-  .float-1-icon{width:30px;height:30px;border-radius:50%;background:var(--sea);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+  .float-1-icon{width:30px;height:30px;border-radius:50%;background:var(--charcoal);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
   .float-2 .pulse-dot{
-    width:8px;height:8px;border-radius:50%;background:var(--sea);
+    width:8px;height:8px;border-radius:50%;background:var(--charcoal);
     animation:pulse 1.6s infinite;
   }
-  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(61,189,182,.7)}50%{box-shadow:0 0 0 6px rgba(61,189,182,0)}}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(40,40,40,.7)}50%{box-shadow:0 0 0 6px rgba(40,40,40,0)}}
 
   .thumbs{display:flex;gap:10px;margin-top:14px}
   .thumb{
@@ -262,8 +234,8 @@
     transition:all .2s;
     position:relative;
   }
-  .thumb:hover{border-color:var(--sea)}
-  .thumb.active{border-color:var(--sea)}
+  .thumb:hover{border-color:var(--charcoal)}
+  .thumb.active{border-color:var(--charcoal)}
   .thumb img{width:75%;object-fit:contain}
   .thumb-2{background:linear-gradient(135deg,#E8F6F5,#C7EAE7)}
   .thumb-3{background:linear-gradient(135deg,#F7F7F8,#E5E5E7)}
@@ -281,14 +253,14 @@
   .pi-tag.ven{background:var(--green);color:#fff;border-color:var(--green)}
   .pi-eyebrow-trust{
     display:inline-flex;align-items:center;gap:8px;
-    background:var(--sea-soft);color:var(--sea-deep);
+    background:var(--pink-soft);color:var(--pink-deep);
     font-size:11.5px;font-weight:800;
     padding:6px 12px;border-radius:20px;
     letter-spacing:.12em;text-transform:uppercase;
     margin-bottom:14px;
   }
   .pi-eyebrow-trust::before{
-    content:'';width:6px;height:6px;border-radius:50%;background:var(--sea);
+    content:'';width:6px;height:6px;border-radius:50%;background:var(--pink);
   }
   .pi-title{
     font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
@@ -296,7 +268,7 @@
     line-height:1.08;letter-spacing:-0.022em;
     color:var(--ink);margin-bottom:10px;
   }
-  .pi-title em{font-style:italic;color:var(--sea);font-weight:500}
+  .pi-title em{font-style:italic;color:var(--pink);font-weight:500}
   @media(max-width:680px){.pi-title{font-size:32px}}
   .pi-sub{
     font-size:17px;color:var(--ink-soft);
@@ -328,7 +300,7 @@
   .price-card::before{
     content:'BEST VALUE';
     position:absolute;top:-10px;right:18px;
-    background:var(--sea);color:#fff;
+    background:var(--charcoal);color:#fff;
     font-size:10.5px;font-weight:800;letter-spacing:.08em;
     padding:4px 10px;border-radius:20px;
   }
@@ -336,7 +308,7 @@
   .price-now{font-size:36px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-0.02em}
   .price-mrp{font-size:17px;color:var(--muted);text-decoration:line-through;font-weight:500}
   .price-save{
-    background:var(--sea-soft);color:var(--sea-deep);
+    background:var(--line-soft);color:var(--sea-deep);
     font-size:12px;font-weight:700;
     padding:4px 10px;border-radius:6px;
   }
@@ -356,11 +328,11 @@
     padding:14px;text-align:left;cursor:pointer;
     transition:all .2s;
   }
-  .sub-opt:hover{border-color:var(--sea)}
-  .sub-opt.active{border-color:var(--sea);background:var(--sea-soft);box-shadow:0 0 0 1px var(--sea) inset}
+  .sub-opt:hover{border-color:var(--charcoal)}
+  .sub-opt.active{border-color:var(--charcoal);background:var(--line-soft);box-shadow:0 0 0 1px var(--charcoal) inset}
   .sub-opt .lbl{font-size:12px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:6px}
   .sub-opt .lbl .save{
-    background:var(--sea);color:#fff;font-size:10px;font-weight:800;
+    background:var(--charcoal);color:#fff;font-size:10px;font-weight:800;
     padding:2px 6px;border-radius:20px;letter-spacing:.04em;
   }
   .sub-opt .pr{font-size:19px;font-weight:800;color:var(--ink);margin-top:6px;line-height:1}
@@ -369,15 +341,15 @@
 
   /* Freebie */
   .freebie{
-    background:linear-gradient(90deg,var(--surface),var(--sea-soft));
-    border:1px dashed var(--sea);
+    background:linear-gradient(90deg,var(--surface),var(--surface));
+    border:1px dashed var(--charcoal);
     border-radius:14px;padding:12px 14px;
     display:flex;align-items:center;gap:12px;
     margin-bottom:14px;
   }
   .freebie-ic{
     width:38px;height:38px;border-radius:10px;
-    background:var(--sea);display:grid;place-items:center;
+    background:var(--charcoal);display:grid;place-items:center;
     flex-shrink:0;
   }
   .freebie-ic svg{width:20px;height:20px;color:#fff}
@@ -386,7 +358,7 @@
 
   /* Countdown */
   .countdown{
-    background:linear-gradient(90deg,var(--surface),var(--sea-soft));
+    background:linear-gradient(90deg,var(--surface),var(--surface));
     border-radius:14px;padding:11px 14px;
     display:flex;align-items:center;gap:12px;
     margin-bottom:14px;
@@ -416,7 +388,7 @@
   }
   .stock-fill{
     height:100%;width:23%;
-    background:linear-gradient(90deg,var(--sea),var(--sea-deep));
+    background:linear-gradient(90deg,var(--charcoal),var(--charcoal));
     animation:stockPulse 2s infinite;
   }
   @keyframes stockPulse{0%,100%{opacity:1}50%{opacity:.7}}
@@ -444,8 +416,8 @@
     100%{background-position:-200% 0}
   }
   @keyframes ctaPulse{
-    0%,100%{box-shadow:0 12px 30px rgba(40,40,40,.25),0 0 0 0 rgba(61,189,182,.5)}
-    50%{box-shadow:0 12px 30px rgba(40,40,40,.25),0 0 0 12px rgba(61,189,182,0)}
+    0%,100%{box-shadow:0 12px 30px rgba(40,40,40,.25),0 0 0 0 rgba(40,40,40,.5)}
+    50%{box-shadow:0 12px 30px rgba(40,40,40,.25),0 0 0 12px rgba(40,40,40,0)}
   }
   .cta-primary::after{
     content:'';position:absolute;top:0;left:-100%;
@@ -488,12 +460,12 @@
     display:grid;place-items:center;
     color:var(--sea-deep);
     border:1px solid var(--line);
-    box-shadow:0 2px 6px rgba(35,134,127,.08);
+    box-shadow:0 2px 6px rgba(40,40,40,.08);
     transition:all .25s ease;
   }
   .trust-item:hover .trust-item-ic{
-    background:var(--sea);color:#fff;border-color:var(--sea);
-    box-shadow:0 4px 12px rgba(61,189,182,.30);
+    background:var(--charcoal);color:#fff;border-color:var(--charcoal);
+    box-shadow:0 4px 12px rgba(40,40,40,.30);
   }
   .trust-item-ic svg{width:20px;height:20px;display:block}
   .trust-item-t{font-size:12px;font-weight:700;color:var(--ink);line-height:1.2;margin-top:2px}
@@ -503,8 +475,8 @@
   section.s{padding:72px 0;font-size:17px}
   .s-eyebrow{
     display:inline-flex;align-items:center;gap:6px;
-    background:var(--sea-soft);
-    color:var(--sea-deep);
+    background:var(--pink-soft);
+    color:var(--pink-deep);
     font-size:12px;font-weight:700;
     padding:7px 14px;border-radius:20px;
     letter-spacing:.10em;text-transform:uppercase;
@@ -518,7 +490,7 @@
     max-width:760px;
     color:var(--charcoal);
   }
-  .s-title em{font-style:italic;color:var(--sea);font-weight:500}
+  .s-title em{font-style:italic;color:var(--pink);font-weight:500}
   .s-sub{font-size:18px;color:var(--ink-soft);max-width:640px;line-height:1.6}
   .s-head{margin-bottom:48px}
   .s-head.center{text-align:center}
@@ -551,7 +523,7 @@
     border:1px solid var(--line);
     transition:all .25s;
   }
-  .why-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--sea)}
+  .why-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--charcoal)}
   .why-stat{
     font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
     font-size:64px;font-weight:700;line-height:1;
@@ -591,7 +563,7 @@
     font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:26px;
     font-style:italic;font-weight:600;
     display:grid;place-items:center;
-    box-shadow:0 8px 20px rgba(255,61,142,.30);
+    box-shadow:0 8px 20px rgba(40,40,40,.30);
   }
   .sci-feat-t{font-weight:700;font-size:18px;margin-bottom:6px}
   .sci-feat-s{font-size:15px;color:var(--ink-soft);line-height:1.55}
@@ -685,76 +657,340 @@
     display:block;
   }
 
-  /* ---------- Journey ---------- */
+  /* ---------- Journey — pinned mountain climb (scrollytelling) ------
+     The whole section pins as the user scrolls. A pregnant climber
+     figure walks the trail from base camp to the summit, driven by
+     scroll progress. When she reaches the top, the section unpins
+     and the page continues. The trail draws progressively, the Hb
+     counter ramps, and milestones light up as she passes them.       */
   .jr-bg{background:#fff}
-  .jr-chart{
-    background:linear-gradient(180deg,var(--surface) 0%,#fff 100%);
-    border:1px solid var(--line);
-    border-radius:24px;
-    padding:32px 32px 24px;
-    margin-bottom:24px;
-    position:relative;overflow:hidden;
-  }
-  .jr-chart-svg{width:100%;height:auto;display:block}
-  .jr-chart-legend{
-    display:flex;justify-content:space-between;align-items:center;
-    margin-top:8px;font-size:12px;color:var(--muted);
-    letter-spacing:.04em;
-  }
-  .jr-chart-legend .axis{font-weight:700;color:var(--ink)}
-  .jr-track{
-    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
-  }
-  @media(max-width:780px){.jr-track{grid-template-columns:repeat(2,1fr)}}
-  .jr-card{
-    background:#fff;border-radius:18px;
-    padding:22px 20px;
-    border:1px solid var(--line);
-    position:relative;
-    transition:all .25s ease;
+
+  /* Pin the section: tall scroll track + sticky stage */
+  .jr-pin{position:relative; background:#fff; height:260vh;}
+  .jr-pin-stage{
+    position:sticky;top:0;height:100vh;
+    display:flex;flex-direction:column;justify-content:center;
     overflow:hidden;
+    padding:clamp(40px,6vh,72px) 0;
   }
-  .jr-card::before{
-    content:'';position:absolute;left:0;right:0;top:0;
-    height:3px;background:var(--sea);
-    transform:scaleX(var(--p,0));transform-origin:left;
-    transition:transform .3s ease;
+  @media(max-width:880px){
+    .jr-pin{height:auto}
+    .jr-pin-stage{position:relative;height:auto;padding:56px 0}
   }
-  .jr-card:nth-child(1){--p:.25}
-  .jr-card:nth-child(2){--p:.5}
-  .jr-card:nth-child(3){--p:.75}
-  .jr-card:nth-child(4){--p:1}
-  .jr-card:nth-child(4){background:linear-gradient(180deg,var(--sea-soft) 0%,#fff 100%);border-color:var(--sea)}
-  .jr-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--sea)}
-  .jr-time{
-    display:inline-flex;align-items:center;gap:6px;
-    background:var(--surface);border:1px solid var(--line);
-    color:var(--ink);font-size:11px;font-weight:700;
-    padding:5px 10px;border-radius:20px;
-    letter-spacing:.06em;text-transform:uppercase;
-    margin-bottom:14px;
+  .jr-pin-stage > .wrap{
+    width:100%;
+    flex:1;min-height:0;
+    display:flex;flex-direction:column;
   }
-  .jr-card:nth-child(4) .jr-time{background:var(--sea);color:#fff;border-color:var(--sea)}
-  .jr-hb{
-    display:flex;align-items:baseline;gap:4px;
-    margin-bottom:10px;
+  .jr-pin-stage .s-head{flex:0 0 auto}
+
+  /* Progress chip floating top-right of the stage */
+  .jr-progress{
+    position:absolute;top:24px;right:32px;
+    background:rgba(255,255,255,.85);backdrop-filter:blur(8px);
+    border:1px solid var(--line);
+    padding:7px 14px;border-radius:20px;
+    font-size:11px;font-weight:800;letter-spacing:.12em;
+    color:var(--charcoal-2);text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:8px;
+    box-shadow:0 4px 12px rgba(40,40,40,.06);
+    z-index:5;
   }
-  .jr-hb-num{
+  .jr-progress::before{
+    content:'';width:6px;height:6px;border-radius:50%;background:#282828;
+    animation:jrPulse 2s infinite;
+  }
+  .jr-progress-pct{color:#FF3D8E;font-variant-numeric:tabular-nums}
+  @media(max-width:600px){.jr-progress{top:12px;right:12px;font-size:10px;padding:5px 10px}}
+  .jr-viz{
+    display:grid;
+    grid-template-columns:1.55fr 1fr;
+    gap:40px;
+    align-items:stretch;
+  }
+  @media(max-width:980px){.jr-viz{grid-template-columns:1fr;gap:24px}}
+
+  /* CHART CARD — now FULL section wide, scene fills the viewport */
+  .jr-chart{
+    position:relative;
+    background:linear-gradient(180deg,#FBFBFC 0%,var(--surface) 100%);
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:18px 18px 18px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(40,40,40,.06);
+    flex:1;min-height:0;
+    display:flex;flex-direction:column;
+  }
+  .jr-chart::before{
+    content:'';position:absolute;top:-120px;right:-100px;
+    width:340px;height:340px;border-radius:50%;
+    background:radial-gradient(circle,rgba(40,40,40,.12) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .jr-chart-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    flex-wrap:wrap;gap:10px;margin-bottom:26px;
+  }
+  .jr-chart-title{
     font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
-    font-size:38px;font-weight:700;line-height:1;
-    color:var(--sea-deep);letter-spacing:-0.03em;
+    font-size:13px;font-weight:700;color:var(--ink);
+    letter-spacing:.14em;text-transform:uppercase;
   }
-  .jr-hb-unit{
-    font-size:13px;font-weight:600;color:var(--muted);
-    letter-spacing:.02em;
+  .jr-chart-sub{font-size:12px;color:var(--muted);font-style:italic}
+
+  /* Mountain SVG scene — fills entire chart card */
+  .jr-scene{
+    position:relative;
+    width:100%;flex:1;min-height:0;
+    border-radius:20px;overflow:hidden;
+    background:linear-gradient(180deg,#FFF9F5 0%,#FFE9F1 60%,#F7F3EE 100%);
   }
-  .jr-hb-label{
-    font-size:11px;font-weight:700;color:var(--muted);
-    letter-spacing:.10em;text-transform:uppercase;
-    margin-bottom:4px;
+  .jr-scene-svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+  /* Header bar — charcoal strip with title + outcome stat. Sits ABOVE
+     the mountain scene so the +2.78 box never overlaps the SVG. */
+  .jr-chart-head{
+    align-items:center;
+    background:linear-gradient(160deg,var(--charcoal) 0%,#1A1A1A 100%);
+    color:#fff;border-radius:16px;
+    padding:14px 22px;margin-bottom:14px;
   }
-  .jr-t{font-weight:700;font-size:16px;margin-bottom:6px;color:var(--ink)}
-  .jr-s{font-size:13px;color:var(--ink-soft);line-height:1.55}
+  .jr-chart-head .jr-chart-title{color:#fff}
+  .jr-chart-head .jr-chart-sub{color:rgba(255,255,255,.55);font-style:italic}
+  .jr-head-stat{
+    display:flex;align-items:baseline;gap:8px;line-height:1;flex-shrink:0;
+  }
+  .jr-head-stat-num{
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size:36px;font-weight:700;letter-spacing:-0.03em;
+    color:#fff;font-variant-numeric:tabular-nums;
+  }
+  .jr-head-stat-num .plus{font-size:20px;font-weight:300;color:var(--sea);margin-right:2px}
+  .jr-head-stat-unit{
+    font-size:11px;color:var(--sea);font-weight:800;
+    letter-spacing:.12em;text-transform:uppercase;
+  }
+  .jr-head-stat-sub{
+    font-size:11px;color:rgba(255,255,255,.55);font-style:italic;
+    margin-left:10px;
+  }
+  @media(max-width:640px){.jr-head-stat-sub{display:none} .jr-head-stat-num{font-size:30px}}
+
+  /* Trail path — dashoffset is driven by scroll progress, no transition */
+  .jr-trail{
+    fill:none;
+    stroke:url(#jrTrailGrad);
+    stroke-width:3.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    filter:drop-shadow(0 2px 4px rgba(40,40,40,.35));
+  }
+
+  /* Climber figure (group) — translated to the trail point in JS */
+  .jr-climber{transform-box:fill-box}
+  .jr-climber-halo{
+    fill:#282828;
+    transform-origin:center;transform-box:fill-box;
+    animation:jrClimberHalo 2.4s ease-in-out infinite;
+  }
+  @keyframes jrClimberHalo{
+    0%,100%{transform:scale(.9);opacity:.32}
+    50%{transform:scale(1.55);opacity:0}
+  }
+  .jr-climber-body{
+    transform-origin:center bottom;transform-box:fill-box;
+    animation:jrBob 1.25s ease-in-out infinite;
+  }
+  @keyframes jrBob{
+    0%,100%{transform:translateY(0) rotate(-2deg)}
+    50%{transform:translateY(-1.5px) rotate(2deg)}
+  }
+  .jr-climber-leg{
+    transform-origin:top;transform-box:fill-box;
+    animation:jrStep .55s ease-in-out infinite alternate;
+  }
+  .jr-climber-leg--r{animation-delay:-.275s}
+  @keyframes jrStep{
+    from{transform:rotate(-12deg)}
+    to{transform:rotate(12deg)}
+  }
+
+  /* Checkpoints — pin + halo + flag. Activation driven by scroll. */
+  .jr-checkpoint{transform-origin:center;transform-box:fill-box}
+  .jr-checkpoint .pin-halo{
+    fill:#282828;opacity:0;
+    transform-origin:center;transform-box:fill-box;
+    transition:opacity .35s ease, transform .35s cubic-bezier(.22,1,.36,1);
+  }
+  .jr-checkpoint .pin-dot{
+    fill:#fff;stroke:#282828;stroke-width:3;
+    opacity:.35;transform:scale(.6);
+    transform-origin:center;transform-box:fill-box;
+    transition:
+      opacity .45s ease,
+      transform .55s cubic-bezier(.34,1.56,.64,1),
+      fill .35s ease, stroke-width .35s ease;
+  }
+  .jr-checkpoint.is-passed .pin-dot{opacity:1;transform:scale(1);fill:#282828;stroke:#fff;stroke-width:3}
+  .jr-checkpoint.is-passed .pin-halo{opacity:.35;transform:scale(1.4)}
+  .jr-checkpoint--final.is-passed .pin-halo{
+    opacity:.4;
+    animation:jrPulseRing 2.4s ease-in-out infinite;
+  }
+  @keyframes jrPulseRing{
+    0%,100%{opacity:.35;transform:scale(1.2)}
+    50%{opacity:0;transform:scale(1.9)}
+  }
+
+  /* Popup callout — hidden until the climber clearly passes the checkpoint
+     (controlled via .is-popup-on, fired with a small buffer past arrival
+     so the avatar isn't still under the popup when it appears). */
+  .jr-flag{
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .5s ease;
+    transform-box:fill-box;transform-origin:center bottom;
+  }
+  .jr-checkpoint.is-popup-on .jr-flag{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  /* Sun glow in upper-right */
+  .jr-sun{
+    fill:#FFDDAA;
+    animation:jrSunPulse 5s ease-in-out infinite;
+    transform-origin:center;transform-box:fill-box;
+  }
+  @keyframes jrSunPulse{
+    0%,100%{transform:scale(1);opacity:.85}
+    50%{transform:scale(1.06);opacity:1}
+  }
+
+  /* Cloud drift */
+  .jr-cloud{
+    fill:rgba(255,255,255,.75);
+    animation:jrCloudDrift var(--dur,30s) linear infinite var(--del,0s);
+  }
+  @keyframes jrCloudDrift{
+    from{transform:translateX(-120px)}
+    to{transform:translateX(1280px)}
+  }
+
+  /* Milestone strip below the scene */
+  .jr-milestones{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+    margin-top:20px;
+  }
+  @media(max-width:520px){.jr-milestones{grid-template-columns:repeat(2,1fr)}}
+  .jr-ms{
+    padding:14px 14px;border:1px solid var(--line);border-radius:14px;
+    background:#fff;
+    display:flex;flex-direction:column;gap:4px;
+    opacity:.55;transform:translateY(0);
+    transition:opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease, background .4s ease;
+  }
+  .jr-ms.is-passed{opacity:1;border-color:var(--charcoal);box-shadow:0 10px 26px rgba(40,40,40,.10)}
+  .jr-ms--final.is-passed{
+    background:linear-gradient(180deg,#FFE4F0 0%,#fff 100%);
+    border-color:#282828;box-shadow:0 12px 32px rgba(40,40,40,.16);
+  }
+  .jr-ms-time{
+    font-size:11px;font-weight:800;letter-spacing:.10em;
+    color:var(--muted);text-transform:uppercase;
+  }
+  .jr-ms--final .jr-ms-time{color:#C21B62}
+  .jr-ms-val{
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size:22px;font-weight:800;color:var(--ink);
+    letter-spacing:-0.02em;font-variant-numeric:tabular-nums;line-height:1;
+    margin-top:2px;
+  }
+  .jr-ms-val small{font-size:11px;color:var(--muted);font-weight:600;margin-left:3px;letter-spacing:.02em}
+  .jr-ms-out{
+    font-size:12px;font-weight:600;color:var(--sea-deep);line-height:1.35;
+    margin-top:4px;
+  }
+  .jr-ms--final .jr-ms-out{color:#C21B62;font-weight:700}
+
+  /* RIGHT — feature stat (consolidated, sticky on desktop) */
+  .jr-feature{
+    position:sticky;top:120px;
+    background:linear-gradient(160deg,var(--charcoal) 0%,#1A1A1A 100%);
+    color:#fff;border-radius:28px;
+    padding:42px 36px 36px;
+    overflow:hidden;
+    box-shadow:0 24px 60px rgba(40,40,40,.22);
+  }
+  @media(max-width:980px){.jr-feature{position:static;top:auto}}
+  .jr-feature::before{
+    content:'';position:absolute;top:-100px;right:-100px;
+    width:340px;height:340px;border-radius:50%;
+    background:radial-gradient(circle,rgba(40,40,40,.30) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .jr-feature::after{
+    content:'';position:absolute;bottom:-60px;left:-60px;
+    width:220px;height:220px;border-radius:50%;
+    background:radial-gradient(circle,rgba(40,40,40,.16) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .jr-feature-inner{position:relative;z-index:1}
+  .jr-feature-eye{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:11px;font-weight:800;letter-spacing:.14em;
+    color:var(--sea);text-transform:uppercase;
+    padding:5px 12px;border-radius:20px;
+    background:rgba(40,40,40,.16);
+    border:1px solid rgba(40,40,40,.30);
+    margin-bottom:24px;
+  }
+  .jr-feature-eye::before{
+    content:'';width:6px;height:6px;border-radius:50%;background:var(--charcoal);
+    animation:jrPulse 2s infinite;
+  }
+  @keyframes jrPulse{
+    0%{box-shadow:0 0 0 0 rgba(40,40,40,.55)}
+    70%{box-shadow:0 0 0 10px rgba(40,40,40,0)}
+    100%{box-shadow:0 0 0 0 rgba(40,40,40,0)}
+  }
+  .jr-feature-stat{display:flex;align-items:flex-start;gap:6px;line-height:1;margin-bottom:18px}
+  .jr-feature-plus{
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size:48px;font-weight:300;color:var(--sea);line-height:.9;
+  }
+  .jr-feature-num{
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size:110px;font-weight:700;
+    letter-spacing:-0.05em;line-height:.85;
+    color:#fff;font-variant-numeric:tabular-nums;
+  }
+  .jr-feature-unit{
+    font-style:italic;font-weight:500;
+    font-size:18px;color:rgba(255,255,255,.65);
+    margin-top:14px;letter-spacing:.01em;
+  }
+  .jr-feature-line{
+    font-size:20px;font-weight:500;line-height:1.4;
+    letter-spacing:-0.01em;color:rgba(255,255,255,.92);
+    margin-bottom:24px;max-width:24ch;
+  }
+  .jr-feature-line em{font-style:italic;color:var(--sea)}
+  .jr-feature-meta{
+    display:flex;flex-direction:column;gap:8px;
+    padding-top:20px;border-top:1px solid rgba(255,255,255,.14);
+  }
+  .jr-feature-meta-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;line-height:1.3}
+  .jr-feature-meta-row .k{color:rgba(255,255,255,.55);letter-spacing:.08em;text-transform:uppercase;font-weight:700;font-size:10.5px}
+  .jr-feature-meta-row .v{color:#fff;font-weight:500;text-align:right}
+
+  @media(max-width:780px){
+    .jr-chart{padding:24px 20px 22px}
+    .jr-feature-num{font-size:84px}
+    .jr-feature-plus{font-size:38px}
+    .jr-feature-line{font-size:17px}
+  }
 
   /* ---------- Compare Table ---------- */
   .ct-bg{background:linear-gradient(180deg,var(--surface),#fff)}
@@ -777,7 +1013,7 @@
   .ct-cell{padding:16px 18px;font-size:15px;border-bottom:1px solid var(--line)}
   .ct-row:last-child .ct-cell{border-bottom:none}
   .ct-cell.lbl{font-weight:600;color:var(--ink)}
-  .ct-cell.shi{background:var(--sea-soft);text-align:center;color:var(--sea-deep);font-weight:700}
+  .ct-cell.shi{background:var(--line-soft);text-align:center;color:var(--sea-deep);font-weight:700}
   .ct-cell.con{text-align:center;color:var(--muted)}
   .ct-yes{color:var(--sea-deep);font-weight:800}
   .ct-no{color:#A8A8A8;font-weight:800}
@@ -794,7 +1030,7 @@
   .rv-summary::before{
     content:'';position:absolute;top:-60px;right:-60px;
     width:200px;height:200px;border-radius:50%;
-    background:radial-gradient(circle,rgba(61,189,182,.20),transparent 70%);
+    background:radial-gradient(circle,rgba(40,40,40,.20),transparent 70%);
   }
   .rv-num{
     font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
@@ -807,7 +1043,7 @@
   .rv-bar-row{display:flex;align-items:center;gap:8px;font-size:14px}
   .rv-bar-lbl{width:14px}
   .rv-bar{flex:1;height:6px;background:rgba(255,255,255,.2);border-radius:10px;overflow:hidden}
-  .rv-bar-fill{height:100%;background:var(--sea);border-radius:10px}
+  .rv-bar-fill{height:100%;background:var(--charcoal);border-radius:10px}
   .rv-bar-pct{width:36px;text-align:right;opacity:.85}
 
   .rv-list{display:flex;flex-direction:column;gap:16px}
@@ -818,7 +1054,7 @@
   .rv-card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
   .rv-avatar{
     width:42px;height:42px;border-radius:50%;
-    background:linear-gradient(135deg,var(--sea),var(--sea-deep));
+    background:linear-gradient(135deg,var(--charcoal),var(--charcoal));
     color:#fff;display:grid;place-items:center;
     font-weight:700;font-size:15px;
   }
@@ -837,7 +1073,7 @@
     border:1px solid var(--line);overflow:hidden;
     transition:all .2s;
   }
-  .faq-item.open{border-color:var(--sea);box-shadow:var(--shadow-sm)}
+  .faq-item.open{border-color:var(--charcoal);box-shadow:var(--shadow-sm)}
   .faq-q{
     width:100%;display:flex;justify-content:space-between;align-items:center;
     padding:20px 22px;font-weight:600;font-size:16px;
@@ -849,7 +1085,7 @@
     display:grid;place-items:center;font-size:18px;
     flex-shrink:0;transition:transform .25s;font-weight:700;
   }
-  .faq-item.open .faq-q-ic{transform:rotate(45deg);background:var(--sea);color:#fff}
+  .faq-item.open .faq-q-ic{transform:rotate(45deg);background:var(--charcoal);color:#fff}
   .faq-a{
     max-height:0;overflow:hidden;
     transition:max-height .3s ease;
@@ -867,18 +1103,18 @@
     content:'';position:absolute;
     top:-100px;left:50%;transform:translateX(-50%);
     width:600px;height:600px;border-radius:50%;
-    background:radial-gradient(circle,rgba(61,189,182,.18) 0%,transparent 70%);
+    background:radial-gradient(circle,rgba(40,40,40,.18) 0%,transparent 70%);
   }
   .final-inner{position:relative;z-index:1}
   .final-eye{
     display:inline-block;
-    background:rgba(61,189,182,.20);
+    background:rgba(40,40,40,.20);
     color:var(--sea);
     font-size:12px;font-weight:700;
     padding:7px 14px;border-radius:20px;
     letter-spacing:.10em;text-transform:uppercase;
     margin-bottom:20px;
-    border:1px solid rgba(61,189,182,.4);
+    border:1px solid rgba(40,40,40,.4);
   }
   .final-t{
     font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
@@ -889,18 +1125,18 @@
   .final-s{font-size:18px;opacity:.85;margin-bottom:32px;max-width:580px;margin-left:auto;margin-right:auto;line-height:1.6}
   .final-cta{
     display:inline-flex;align-items:center;gap:10px;
-    background:var(--sea);color:#fff;
+    background:var(--charcoal);color:#fff;
     font-weight:700;font-size:18px;
     padding:20px 40px;border-radius:14px;
     transition:all .2s;
-    box-shadow:0 12px 30px rgba(61,189,182,.35);
+    box-shadow:0 12px 30px rgba(40,40,40,.35);
     animation:ctaPulseLight 2.4s infinite;
   }
   @keyframes ctaPulseLight{
-    0%,100%{box-shadow:0 12px 30px rgba(61,189,182,.35),0 0 0 0 rgba(61,189,182,.4)}
-    50%{box-shadow:0 12px 30px rgba(61,189,182,.35),0 0 0 14px rgba(61,189,182,0)}
+    0%,100%{box-shadow:0 12px 30px rgba(40,40,40,.35),0 0 0 0 rgba(40,40,40,.4)}
+    50%{box-shadow:0 12px 30px rgba(40,40,40,.35),0 0 0 14px rgba(40,40,40,0)}
   }
-  .final-cta:hover{transform:translateY(-2px);background:var(--sea-2)}
+  .final-cta:hover{transform:translateY(-2px);background:var(--charcoal-2)}
   .final-cta svg{width:18px;height:18px}
   .final-guarantee{
     margin-top:26px;display:flex;justify-content:center;gap:28px;flex-wrap:wrap;
@@ -925,7 +1161,7 @@
     background:#222;display:grid;place-items:center;
     transition:background .2s;
   }
-  .ft-soc-btn:hover{background:var(--sea)}
+  .ft-soc-btn:hover{background:var(--charcoal)}
   .ft-soc-btn svg{width:14px;height:14px;color:#fff}
   .ft-h{font-weight:700;font-size:13px;color:#fff;margin-bottom:14px;letter-spacing:.05em;text-transform:uppercase}
   .ft-links{display:flex;flex-direction:column;gap:10px}
@@ -990,7 +1226,7 @@
   .spp.show{transform:translateY(0);opacity:1}
   .spp-avatar{
     width:42px;height:42px;border-radius:10px;
-    background:linear-gradient(135deg,var(--sea-soft),#fff);
+    background:linear-gradient(135deg,var(--surface),#fff);
     display:grid;place-items:center;flex-shrink:0;
     overflow:hidden;
     border:1px solid var(--line);
@@ -1002,7 +1238,7 @@
   .spp-s{font-size:10px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:5px}
   .spp-s::before{
     content:'';width:6px;height:6px;border-radius:50%;
-    background:var(--sea);display:inline-block;
+    background:var(--charcoal);display:inline-block;
     animation:pulse 1.6s infinite;
   }
   .spp-close{
@@ -1031,21 +1267,21 @@
   .inline-cta::before{
     content:'';position:absolute;top:-80px;right:-80px;
     width:280px;height:280px;border-radius:50%;
-    background:radial-gradient(circle,rgba(61,189,182,.22) 0%,transparent 70%);
+    background:radial-gradient(circle,rgba(40,40,40,.22) 0%,transparent 70%);
     pointer-events:none;
   }
   .inline-cta-text{flex:1;min-width:0;position:relative;z-index:1}
   .inline-cta-eye{
     display:inline-flex;align-items:center;gap:8px;
-    background:rgba(61,189,182,.20);color:var(--sea);
+    background:rgba(40,40,40,.20);color:var(--sea);
     font-size:11px;font-weight:800;
     padding:5px 12px;border-radius:20px;
     letter-spacing:.10em;text-transform:uppercase;
     margin-bottom:10px;
-    border:1px solid rgba(61,189,182,.4);
+    border:1px solid rgba(40,40,40,.4);
   }
   .inline-cta-eye::before{
-    content:'';width:6px;height:6px;border-radius:50%;background:var(--sea);
+    content:'';width:6px;height:6px;border-radius:50%;background:var(--charcoal);
     animation:pulse 1.6s infinite;
   }
   .inline-cta-h{
@@ -1065,14 +1301,14 @@
   .inline-cta-price .now{font-size:22px;font-weight:800;letter-spacing:-0.02em}
   .inline-cta-price .mrp{font-size:12px;color:rgba(255,255,255,.5);text-decoration:line-through}
   .inline-cta-btn{
-    background:linear-gradient(90deg,var(--sea) 0%,var(--sea-2) 50%,var(--sea) 100%);
+    background:linear-gradient(90deg,var(--charcoal) 0%,var(--charcoal-2) 50%,var(--charcoal) 100%);
     background-size:200% 100%;
     color:#fff;
     font-weight:700;font-size:18px;letter-spacing:.01em;
     padding:20px 38px;border-radius:14px;
     display:inline-flex;align-items:center;gap:10px;
     transition:transform .2s ease,box-shadow .2s ease;
-    box-shadow:0 12px 30px rgba(61,189,182,.55), 0 0 0 0 rgba(61,189,182,.6);
+    box-shadow:0 12px 30px rgba(40,40,40,.55), 0 0 0 0 rgba(40,40,40,.6);
     white-space:nowrap;position:relative;overflow:hidden;
     animation:ctaGlow 2.2s infinite, ctaShine 3s infinite;
   }
@@ -1084,12 +1320,12 @@
   }
   .inline-cta-btn:hover{
     transform:translateY(-3px);
-    box-shadow:0 18px 44px rgba(61,189,182,.65), 0 0 0 6px rgba(61,189,182,.20);
+    box-shadow:0 18px 44px rgba(40,40,40,.65), 0 0 0 6px rgba(40,40,40,.20);
   }
   .inline-cta-btn svg{width:18px;height:18px;position:relative;z-index:1}
   @keyframes ctaGlow{
-    0%,100%{box-shadow:0 12px 30px rgba(61,189,182,.55), 0 0 0 0 rgba(61,189,182,.55)}
-    50%{box-shadow:0 14px 36px rgba(61,189,182,.65), 0 0 0 14px rgba(61,189,182,0)}
+    0%,100%{box-shadow:0 12px 30px rgba(40,40,40,.55), 0 0 0 0 rgba(40,40,40,.55)}
+    50%{box-shadow:0 14px 36px rgba(40,40,40,.65), 0 0 0 14px rgba(40,40,40,0)}
   }
   @media(max-width:780px){
     .inline-cta{padding:22px 22px;border-radius:18px;flex-direction:column;align-items:flex-start;gap:18px}
@@ -1117,9 +1353,9 @@
   }
   .sticky-offer-ic{
     width:42px;height:42px;border-radius:11px;
-    background:linear-gradient(135deg,var(--sea),var(--sea-deep));
+    background:linear-gradient(135deg,var(--charcoal),var(--charcoal));
     color:#fff;display:grid;place-items:center;flex-shrink:0;
-    box-shadow:0 4px 12px rgba(61,189,182,.30);
+    box-shadow:0 4px 12px rgba(40,40,40,.30);
   }
   .sticky-offer-ic svg{width:22px;height:22px}
   .sticky-offer-text{display:flex;flex-direction:column;line-height:1.2;min-width:0}
@@ -1129,7 +1365,7 @@
     display:flex;align-items:center;gap:6px;
   }
   .sticky-offer-eye::before{
-    content:'';width:6px;height:6px;border-radius:50%;background:var(--sea);
+    content:'';width:6px;height:6px;border-radius:50%;background:var(--charcoal);
     animation:pulse 1.6s infinite;
   }
   .sticky-offer-h{font-size:14px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1186,26 +1422,39 @@
 </div>
 
 <!-- ============= HEADER ============= -->
-<header class="header">
-  <div class="wrap header-inner">
-    <a href="index.html" class="logo" aria-label="Shiōrra home">
-      <img src="img/logo/logo-green.png" alt="Shiōrra">
-    </a>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="product.html" class="active">Shop</a>
-      <a href="science.html">Science</a>
-      <a href="reviews.html">Reviews</a>
-      <a href="about.html">About</a>
-      <a href="faq.html">FAQ</a>
-    </nav>
-    <div class="header-actions">
-      <button class="icon-btn" aria-label="Search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
-      </button>
-      <a href="#buy" class="header-cta">Buy Now</a>
+<header class="site-header" id="siteHeader">
+    <div class="container">
+        <nav class="nav" id="primaryNav">
+            <a href="index.html" class="nav__logo" aria-label="Shiorra home">
+                <img src="img/logo/logo-green.png" alt="Shiōrra">
+            </a>
+            <ul class="nav__menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li class="nav__has-sub">
+                    <a href="product.html" class="nav__sub-toggle active" aria-haspopup="true" aria-expanded="false" data-nav-sub>
+                        Shop
+                        <svg class="nav__sub-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                    </a>
+                    <ul class="nav__sub" role="menu" aria-label="Shop the Shiōrra range">
+                        <li role="none"><a href="product.html" role="menuitem">Advanced Iron+</a></li>
+                        <li role="none"><a href="product-ginger.html" role="menuitem">Advanced Ginger+</a></li>
+                        <li role="none"><a href="#" role="menuitem">Advanced Calcium+</a></li>
+                        <li role="none"><a href="#" role="menuitem">Advanced Multivitamin+</a></li>
+                    </ul>
+                </li>
+                <li><a href="science.html">Science</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <div class="nav__cta">
+                <a href="#buy" class="btn">Buy now</a>
+                <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
     </div>
-  </div>
 </header>
 
 <!-- microbar -->
@@ -1219,7 +1468,7 @@
 </div>
 
 <!-- ============= HERO ============= -->
-<section class="hero" id="buy">
+<section class="product-hero" id="buy">
   <div class="wrap">
     <div class="hero-grid">
 
@@ -1458,13 +1707,13 @@
               <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFE4F0"/>
             </linearGradient>
             <linearGradient id="ironGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#FF3D8E"/><stop offset="1" stop-color="#C21B62"/>
+              <stop offset="0" stop-color="#282828"/><stop offset="1" stop-color="#3A3A3A"/>
             </linearGradient>
           </defs>
           <rect x="0" y="0" width="480" height="360" rx="16" fill="url(#bgGrad)"/>
 
           <!-- Gut wall on left -->
-          <path d="M40 60 Q60 80 50 120 Q35 160 60 200 Q80 240 50 290 Q35 330 60 360 L40 360 Z" fill="#FFE4F0" stroke="#C21B62" stroke-width="2"/>
+          <path d="M40 60 Q60 80 50 120 Q35 160 60 200 Q80 240 50 290 Q35 330 60 360 L40 360 Z" fill="#FFE4F0" stroke="#282828" stroke-width="2"/>
           <text x="80" y="50" font-family="Inter" font-size="11" font-weight="700" fill="#282828">Gut wall</text>
 
           <!-- Conventional iron pathway (top) -->
@@ -1490,29 +1739,29 @@
           <g>
             <circle cx="120" cy="225" r="13" fill="url(#ironGrad)"/>
             <text x="120" y="229" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
-            <circle cx="135" cy="220" r="6" fill="#FF3D8E" opacity=".55"/>
-            <circle cx="135" cy="232" r="6" fill="#FF3D8E" opacity=".55"/>
+            <circle cx="135" cy="220" r="6" fill="#282828" opacity=".55"/>
+            <circle cx="135" cy="232" r="6" fill="#282828" opacity=".55"/>
           </g>
           <g>
             <circle cx="180" cy="225" r="13" fill="url(#ironGrad)"/>
             <text x="180" y="229" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
-            <circle cx="195" cy="220" r="6" fill="#FF3D8E" opacity=".55"/>
-            <circle cx="195" cy="232" r="6" fill="#FF3D8E" opacity=".55"/>
+            <circle cx="195" cy="220" r="6" fill="#282828" opacity=".55"/>
+            <circle cx="195" cy="232" r="6" fill="#282828" opacity=".55"/>
           </g>
           <g>
             <circle cx="240" cy="225" r="13" fill="url(#ironGrad)"/>
             <text x="240" y="229" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
-            <circle cx="255" cy="220" r="6" fill="#FF3D8E" opacity=".55"/>
-            <circle cx="255" cy="232" r="6" fill="#FF3D8E" opacity=".55"/>
+            <circle cx="255" cy="220" r="6" fill="#282828" opacity=".55"/>
+            <circle cx="255" cy="232" r="6" fill="#282828" opacity=".55"/>
           </g>
           <g>
             <circle cx="300" cy="225" r="13" fill="url(#ironGrad)"/>
             <text x="300" y="229" font-family="Inter" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Fe</text>
-            <circle cx="315" cy="220" r="6" fill="#FF3D8E" opacity=".55"/>
-            <circle cx="315" cy="232" r="6" fill="#FF3D8E" opacity=".55"/>
+            <circle cx="315" cy="220" r="6" fill="#282828" opacity=".55"/>
+            <circle cx="315" cy="232" r="6" fill="#282828" opacity=".55"/>
           </g>
           <!-- 4 absorbed -->
-          <path d="M315 225 Q345 225 360 225" stroke="#C21B62" stroke-width="2.5" fill="none"/>
+          <path d="M315 225 Q345 225 360 225" stroke="#282828" stroke-width="2.5" fill="none"/>
           <circle cx="378" cy="220" r="11" fill="url(#ironGrad)"/>
           <circle cx="395" cy="232" r="11" fill="url(#ironGrad)"/>
           <circle cx="412" cy="220" r="11" fill="url(#ironGrad)"/>
@@ -1787,119 +2036,236 @@
   </div>
 </section>
 
-<!-- ============= JOURNEY ============= -->
-<section class="s jr-bg">
-  <div class="wrap">
-    <div class="s-head center">
-      <span class="s-eyebrow">Your journey</span>
-      <h2 class="s-title">Hb levels rise <em>visibly</em></h2>
-      <p class="s-sub">Average Hb rise of ~2.78 g/dL over six months — measured in clinical use, restored gently, week by week.</p>
-    </div>
-    <!-- Hb rise chart -->
-    <div class="jr-chart">
-      <svg class="jr-chart-svg" viewBox="0 0 1080 320" xmlns="http://www.w3.org/2000/svg" aria-label="Hemoglobin rise over time">
-        <defs>
-          <linearGradient id="jrAreaGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#3DBDB6" stop-opacity=".22"/>
-            <stop offset="1" stop-color="#3DBDB6" stop-opacity="0"/>
-          </linearGradient>
-          <linearGradient id="jrLineGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#3DBDB6"/>
-            <stop offset="1" stop-color="#23867F"/>
-          </linearGradient>
-          <filter id="jrGlow"><feGaussianBlur stdDeviation="3"/></filter>
-        </defs>
+<!-- ============= JOURNEY · pinned mountain climb ============= -->
+<section class="jr-bg jr-pin" id="jrPin">
+  <div class="jr-pin-stage" id="jrStage">
 
-        <!-- Y-axis grid lines -->
-        <g stroke="#E5E5E7" stroke-width="1" stroke-dasharray="3 4">
-          <line x1="60" y1="60"  x2="1040" y2="60"/>
-          <line x1="60" y1="130" x2="1040" y2="130"/>
-          <line x1="60" y1="200" x2="1040" y2="200"/>
-        </g>
-
-        <!-- Y-axis labels (Hb g/dL) -->
-        <g font-family="Inter" font-size="11" fill="#8A8A8A" font-weight="600">
-          <text x="50" y="64"  text-anchor="end">13.0</text>
-          <text x="50" y="134" text-anchor="end">11.5</text>
-          <text x="50" y="204" text-anchor="end">10.0</text>
-          <text x="32" y="135" text-anchor="middle" transform="rotate(-90 32 135)" fill="#282828" font-weight="700" letter-spacing=".06em">Hb (g/dL)</text>
-        </g>
-
-        <!-- WHO normal-range band (≥12 g/dL ~ y=98) -->
-        <rect x="60" y="60" width="980" height="38" fill="#3DBDB6" opacity=".08"/>
-        <text x="1032" y="78" font-family="Inter" font-size="10" fill="#23867F" font-weight="700" text-anchor="end" letter-spacing=".06em">WHO NORMAL · ≥ 12 g/dL</text>
-
-        <!-- Area fill under curve -->
-        <path d="M 100 200 C 260 198, 320 175, 420 152 S 640 110, 760 88 S 940 70, 1000 65 L 1000 240 L 100 240 Z" fill="url(#jrAreaGrad)"/>
-
-        <!-- Curve -->
-        <path d="M 100 200 C 260 198, 320 175, 420 152 S 640 110, 760 88 S 940 70, 1000 65"
-              fill="none" stroke="url(#jrLineGrad)" stroke-width="3.5" stroke-linecap="round"/>
-
-        <!-- Milestone dots + labels -->
-        <!-- Day 1 -->
-        <g>
-          <circle cx="100" cy="200" r="9" fill="#fff" stroke="#3DBDB6" stroke-width="3"/>
-          <text x="100" y="240" font-family="Inter" font-size="12" font-weight="700" fill="#282828" text-anchor="middle">Day 1</text>
-          <text x="100" y="180" font-family="Helvetica Neue, Helvetica, Arial" font-size="14" font-style="italic" font-weight="700" fill="#23867F" text-anchor="middle">10.0</text>
-        </g>
-        <!-- Wk 4 -->
-        <g>
-          <circle cx="420" cy="152" r="9" fill="#fff" stroke="#3DBDB6" stroke-width="3"/>
-          <text x="420" y="240" font-family="Inter" font-size="12" font-weight="700" fill="#282828" text-anchor="middle">Week 4</text>
-          <text x="420" y="132" font-family="Helvetica Neue, Helvetica, Arial" font-size="14" font-style="italic" font-weight="700" fill="#23867F" text-anchor="middle">10.6</text>
-        </g>
-        <!-- Wk 8 -->
-        <g>
-          <circle cx="760" cy="88" r="9" fill="#fff" stroke="#3DBDB6" stroke-width="3"/>
-          <text x="760" y="240" font-family="Inter" font-size="12" font-weight="700" fill="#282828" text-anchor="middle">Week 8</text>
-          <text x="760" y="68" font-family="Helvetica Neue, Helvetica, Arial" font-size="14" font-style="italic" font-weight="700" fill="#23867F" text-anchor="middle">11.4</text>
-        </g>
-        <!-- 3–6 mo : pulsing -->
-        <g>
-          <circle cx="1000" cy="65" r="16" fill="#3DBDB6" opacity=".18"><animate attributeName="r" values="14;22;14" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".22;0;.22" dur="2.4s" repeatCount="indefinite"/></circle>
-          <circle cx="1000" cy="65" r="11" fill="#3DBDB6" stroke="#fff" stroke-width="3"/>
-          <text x="1000" y="240" font-family="Inter" font-size="12" font-weight="700" fill="#282828" text-anchor="middle">3–6 mo</text>
-          <text x="1000" y="44" font-family="Helvetica Neue, Helvetica, Arial" font-size="16" font-style="italic" font-weight="700" fill="#23867F" text-anchor="middle">12.6+</text>
-        </g>
-
-        <!-- Caption -->
-        <text x="540" y="298" font-family="Helvetica Neue, Helvetica, Arial" font-size="14" font-style="italic" font-weight="500" fill="#282828" text-anchor="middle">Average rise · ~2.78 g/dL over six months</text>
-      </svg>
+    <div class="jr-progress" id="jrProgressChip" aria-live="polite">
+      <span>Climbing</span>
+      <span class="jr-progress-pct" id="jrProgressPct">0%</span>
     </div>
 
-    <!-- Milestone cards -->
-    <div class="jr-track">
-      <div class="jr-card">
-        <span class="jr-time">Day 1</span>
-        <div class="jr-hb-label">Hb baseline</div>
-        <div class="jr-hb"><span class="jr-hb-num">10.0</span><span class="jr-hb-unit">g/dL</span></div>
-        <div class="jr-t">Start gently</div>
-        <div class="jr-s">No nausea, no constipation. The course begins kindly — one vegecap, once a day.</div>
+    <div class="wrap">
+      <div class="s-head center" style="margin-bottom:24px">
+        <span class="s-eyebrow">Your journey</span>
+        <h2 class="s-title" style="font-size:clamp(2rem,4vw,3rem)">Hb levels rise <em>visibly</em></h2>
+        <p class="s-sub" style="font-size:15px">Scroll to walk the six-month trail — Hb climbs gently from 10.0 to 12.6+ g/dL.</p>
       </div>
-      <div class="jr-card">
-        <span class="jr-time">Week 4</span>
-        <div class="jr-hb-label">Hb rising</div>
-        <div class="jr-hb"><span class="jr-hb-num">10.6</span><span class="jr-hb-unit">g/dL</span></div>
-        <div class="jr-t">Energy returns</div>
-        <div class="jr-s">Less afternoon fatigue, fewer dizzy spells on standing — the first measurable lift.</div>
-      </div>
-      <div class="jr-card">
-        <span class="jr-time">Week 8</span>
-        <div class="jr-hb-label">Hb steady climb</div>
-        <div class="jr-hb"><span class="jr-hb-num">11.4</span><span class="jr-hb-unit">g/dL</span></div>
-        <div class="jr-t">Stamina up</div>
-        <div class="jr-s">Brighter mornings, better sleep. Ferritin stores quietly rebuilding in the background.</div>
-      </div>
-      <div class="jr-card">
-        <span class="jr-time">3–6 months</span>
-        <div class="jr-hb-label">WHO normal range</div>
-        <div class="jr-hb"><span class="jr-hb-num">12.6+</span><span class="jr-hb-unit">g/dL</span></div>
-        <div class="jr-t">Full restoration</div>
-        <div class="jr-s">Hb in healthy range, iron stores replenished. Sustained energy, healthy oxygen delivery.</div>
-      </div>
-    </div>
-  </div>
+      <div class="jr-viz" id="jrViz" style="display:flex;flex-direction:column;flex:1;min-height:0">
+
+      <!-- Full-section mountain climb scene -->
+      <div class="jr-chart">
+        <div class="jr-chart-head">
+          <div>
+            <div class="jr-chart-title">Hb climb · six-month trail</div>
+            <div class="jr-chart-sub">From base camp (10.0) to summit (12.6+ g/dL · WHO normal)</div>
+          </div>
+          <div class="jr-head-stat" aria-live="polite">
+            <span class="jr-head-stat-num"><span class="plus">+</span><span id="jrFeatureNum">0.00</span></span>
+            <span class="jr-head-stat-unit">g/dL avg rise</span>
+            <span class="jr-head-stat-sub">restored, week by week</span>
+          </div>
+        </div>
+
+        <!-- Mountain scene -->
+        <div class="jr-scene" id="jrScene">
+          <svg class="jr-scene-svg" viewBox="0 0 1080 600" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" aria-label="Six-month Hb trail climbing a mountain from base camp 10.0 g/dL to summit 12.6+ g/dL">
+            <defs>
+              <linearGradient id="jrSkyGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFE4D6"/>
+                <stop offset="1" stop-color="#FFD6E2"/>
+              </linearGradient>
+              <linearGradient id="jrMtnGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#3DBDB6"/>
+                <stop offset="1" stop-color="#23867F"/>
+              </linearGradient>
+              <linearGradient id="jrMtnFarGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#A8DDD9" stop-opacity=".7"/>
+                <stop offset="1" stop-color="#7EC6BF" stop-opacity=".5"/>
+              </linearGradient>
+              <linearGradient id="jrTrailGrad" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0" stop-color="#282828"/>
+                <stop offset="1" stop-color="#3A3A3A"/>
+              </linearGradient>
+              <radialGradient id="jrSunGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0" stop-color="#FFE6BB" stop-opacity=".9"/>
+                <stop offset="1" stop-color="#FFE6BB" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Sky -->
+            <rect x="0" y="0" width="1080" height="600" fill="url(#jrSkyGrad)"/>
+
+            <!-- Sun + glow -->
+            <circle cx="940" cy="120" r="100" fill="url(#jrSunGrad)"/>
+            <circle class="jr-sun" cx="940" cy="120" r="34"/>
+
+            <!-- Drifting clouds -->
+            <g style="--dur:42s; --del:-12s">
+              <ellipse class="jr-cloud" cx="-40" cy="160" rx="58" ry="14"/>
+              <ellipse class="jr-cloud" cx="10" cy="155" rx="40" ry="11"/>
+            </g>
+            <g style="--dur:58s; --del:-30s">
+              <ellipse class="jr-cloud" cx="-40" cy="240" rx="44" ry="11"/>
+            </g>
+
+            <!-- Far mountain range (atmospheric haze) -->
+            <path fill="url(#jrMtnFarGrad)" d="M0 520 L120 420 L260 460 L380 380 L520 430 L660 360 L800 410 L940 350 L1080 400 L1080 600 L0 600 Z"/>
+
+            <!-- Main mountain (sea-green) -->
+            <path fill="url(#jrMtnGrad)" d="M0 560 C 100 540, 180 520, 260 470 C 340 420, 420 380, 540 270 C 600 210, 670 130, 740 80 C 810 130, 880 220, 960 320 C 1020 390, 1060 460, 1080 510 L 1080 600 L 0 600 Z"/>
+
+            <!-- Snow caps on the peak (subtle highlight) -->
+            <path fill="rgba(255,255,255,.45)" d="M 700 130 C 720 110, 740 85, 740 80 C 750 100, 770 125, 780 140 C 760 145, 730 145, 700 130 Z"/>
+
+            <!-- Trail — base camp → summit -->
+            <path
+              id="jrTrail" class="jr-trail"
+              d="M 130 535 C 220 510, 270 490, 330 460 C 380 435, 430 395, 480 360 C 540 320, 600 270, 660 200 C 695 160, 720 120, 740 90"
+            />
+
+            <!-- Climber avatar — circular pregnant-woman portrait, walks the trail as user scrolls -->
+            <g id="jrClimber" class="jr-climber" transform="translate(130, 535)">
+              <!-- Pulsing halo behind avatar -->
+              <circle class="jr-climber-halo" cx="0" cy="-14" r="28"/>
+
+              <!-- Avatar body (bobs gently while she walks) -->
+              <g class="jr-climber-body">
+                <!-- Outer white avatar ring -->
+                <circle cx="0" cy="-14" r="20" fill="#fff" stroke="#282828" stroke-width="2.5"/>
+                <!-- Inner blush bg -->
+                <circle cx="0" cy="-14" r="17.5" fill="#FFE4F0"/>
+
+                <!-- Hair (back) -->
+                <ellipse cx="0" cy="-15" rx="10" ry="8" fill="#23867F"/>
+
+                <!-- Face -->
+                <circle cx="0" cy="-13" r="6" fill="#FFD9B8"/>
+
+                <!-- Hair (front bangs) -->
+                <path d="M -6 -16 C -6 -19, -4 -20, 0 -20 C 4 -20, 6 -19, 6 -16 C 5 -14, -5 -14, -6 -16 Z" fill="#23867F"/>
+
+                <!-- Eyes (tiny) -->
+                <circle cx="-2.2" cy="-13" r="0.7" fill="#282828"/>
+                <circle cx="2.2"  cy="-13" r="0.7" fill="#282828"/>
+
+                <!-- Smile -->
+                <path d="M -1.8 -10.5 Q 0 -9.5, 1.8 -10.5" stroke="#C21B62" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+
+                <!-- Dress with pregnancy bump -->
+                <path d="M -8 -7 C -9 -3, -10 1, -8 4 L 8 4 C 10 1, 9 -3, 8 -7 Z" fill="#FF3D8E"/>
+
+                <!-- Belly bump highlight -->
+                <ellipse cx="-1.5" cy="-2" rx="3.5" ry="3" fill="#FF6BA6" opacity=".75"/>
+
+                <!-- Legs poking out below the avatar circle (alternate stepping) -->
+                <line class="jr-climber-leg jr-climber-leg--l" x1="-3" y1="5"  x2="-4" y2="11" stroke="#23867F" stroke-width="2.4" stroke-linecap="round"/>
+                <line class="jr-climber-leg jr-climber-leg--r" x1="3"  y1="5"  x2="4"  y2="11" stroke="#23867F" stroke-width="2.4" stroke-linecap="round"/>
+              </g>
+            </g>
+
+            <!-- Checkpoints — properly spaced popups, no internal or neighbour overlap
+
+                 Popup canvas: 180w × 84h (top y=-42, bottom y=42)
+                 Vertical layout per row:
+                   y=-32 to -20 : status pill (font 9, height 14)
+                   y=-12        : Hb value baseline (font 22, ~22 tall) — sits below the pill, no overlap
+                   y=-12        : g/dL unit baseline (font 10), positioned RIGHT of Hb value
+                   y=14         : time label baseline (font 9.5)
+                   y=30         : description baseline (font 11)
+                                                                                                   -->
+
+            <!-- 01 — Base camp · Day 1 · 10.0 — popup ABOVE the pin -->
+            <g class="jr-checkpoint">
+              <circle class="pin-halo" cx="130" cy="535" r="22"/>
+              <circle class="pin-dot"  cx="130" cy="535" r="11"/>
+              <g class="jr-flag" transform="translate(130, 435)">
+                <rect x="-90" y="-42" width="180" height="84" rx="12" fill="#fff" stroke="#282828" stroke-width="1.5" filter="drop-shadow(0 4px 12px rgba(40,40,40,.14))"/>
+                <!-- Status pill (top-right) -->
+                <rect x="-12" y="-34" width="98" height="16" rx="8" fill="#FFE4F0"/>
+                <text x="37"  y="-23" font-family="Inter" font-size="9" font-weight="800" fill="#C21B62" letter-spacing="1" text-anchor="middle">MILD ANAEMIA</text>
+                <!-- Hb value (left of pill, slight overlap in y but different x) -->
+                <text x="-76" y="-10" font-family="Helvetica Neue, Helvetica, Arial" font-size="22" font-weight="800" fill="#282828">10.0</text>
+                <text x="-30" y="-10" font-family="Inter" font-size="11" font-weight="600" fill="#6B6B6B">g/dL</text>
+                <!-- Hairline divider -->
+                <line x1="-76" y1="2" x2="76" y2="2" stroke="#F0F0F2" stroke-width="1"/>
+                <!-- Time label -->
+                <text x="-76" y="18" font-family="Inter" font-size="9.5" font-weight="800" fill="#FF3D8E" letter-spacing="1.4">DAY 1 · BASELINE</text>
+                <!-- Description -->
+                <text x="-76" y="34" font-family="Inter" font-size="11" font-weight="500" fill="#3A3A3A">She starts the routine.</text>
+                <!-- Pointer arrow (down to pin) -->
+                <line x1="0" y1="42" x2="0" y2="84" stroke="#282828" stroke-width="1.5" stroke-dasharray="3 3" stroke-linecap="round"/>
+                <path d="M -5 82 L 5 82 L 0 92 Z" fill="#282828"/>
+              </g>
+            </g>
+
+            <!-- 02 — Week 4 · 10.6 — popup ABOVE the pin -->
+            <g class="jr-checkpoint">
+              <circle class="pin-halo" cx="330" cy="460" r="22"/>
+              <circle class="pin-dot"  cx="330" cy="460" r="11"/>
+              <g class="jr-flag" transform="translate(330, 360)">
+                <rect x="-90" y="-42" width="180" height="84" rx="12" fill="#fff" stroke="#282828" stroke-width="1.5" filter="drop-shadow(0 4px 12px rgba(40,40,40,.14))"/>
+                <rect x="-12" y="-34" width="44" height="16" rx="8" fill="#E8F6F5"/>
+                <text x="10"  y="-23" font-family="Inter" font-size="9" font-weight="800" fill="#23867F" letter-spacing="1" text-anchor="middle">+0.6</text>
+                <rect x="36"  y="-34" width="50" height="16" rx="8" fill="#FFE4F0"/>
+                <text x="61"  y="-23" font-family="Inter" font-size="9" font-weight="800" fill="#C21B62" letter-spacing="1" text-anchor="middle">MILD</text>
+                <text x="-76" y="-10" font-family="Helvetica Neue, Helvetica, Arial" font-size="22" font-weight="800" fill="#282828">10.6</text>
+                <text x="-30" y="-10" font-family="Inter" font-size="11" font-weight="600" fill="#6B6B6B">g/dL</text>
+                <line x1="-76" y1="2" x2="76" y2="2" stroke="#F0F0F2" stroke-width="1"/>
+                <text x="-76" y="18" font-family="Inter" font-size="9.5" font-weight="800" fill="#FF3D8E" letter-spacing="1.4">WEEK 4 · FIRST LIFT</text>
+                <text x="-76" y="34" font-family="Inter" font-size="11" font-weight="500" fill="#3A3A3A">Energy returning.</text>
+                <line x1="0" y1="42" x2="0" y2="84" stroke="#282828" stroke-width="1.5" stroke-dasharray="3 3" stroke-linecap="round"/>
+                <path d="M -5 82 L 5 82 L 0 92 Z" fill="#282828"/>
+              </g>
+            </g>
+
+            <!-- 03 — Week 8 · 11.4 — popup ABOVE the pin -->
+            <g class="jr-checkpoint">
+              <circle class="pin-halo" cx="540" cy="320" r="22"/>
+              <circle class="pin-dot"  cx="540" cy="320" r="11"/>
+              <g class="jr-flag" transform="translate(540, 220)">
+                <rect x="-90" y="-42" width="180" height="84" rx="12" fill="#fff" stroke="#282828" stroke-width="1.5" filter="drop-shadow(0 4px 12px rgba(40,40,40,.14))"/>
+                <rect x="-12" y="-34" width="44" height="16" rx="8" fill="#E8F6F5"/>
+                <text x="10"  y="-23" font-family="Inter" font-size="9" font-weight="800" fill="#23867F" letter-spacing="1" text-anchor="middle">+1.4</text>
+                <rect x="36"  y="-34" width="50" height="16" rx="8" fill="#FFF4E0"/>
+                <text x="61"  y="-23" font-family="Inter" font-size="9" font-weight="800" fill="#B47B00" letter-spacing="1" text-anchor="middle">NEAR</text>
+                <text x="-76" y="-10" font-family="Helvetica Neue, Helvetica, Arial" font-size="22" font-weight="800" fill="#282828">11.4</text>
+                <text x="-30" y="-10" font-family="Inter" font-size="11" font-weight="600" fill="#6B6B6B">g/dL</text>
+                <line x1="-76" y1="2" x2="76" y2="2" stroke="#F0F0F2" stroke-width="1"/>
+                <text x="-76" y="18" font-family="Inter" font-size="9.5" font-weight="800" fill="#FF3D8E" letter-spacing="1.4">WEEK 8 · STEADY CLIMB</text>
+                <text x="-76" y="34" font-family="Inter" font-size="11" font-weight="500" fill="#3A3A3A">Stamina returning.</text>
+                <line x1="0" y1="42" x2="0" y2="84" stroke="#282828" stroke-width="1.5" stroke-dasharray="3 3" stroke-linecap="round"/>
+                <path d="M -5 82 L 5 82 L 0 92 Z" fill="#282828"/>
+              </g>
+            </g>
+
+            <!-- 04 — Summit · 3-6 mo · 12.6+ — popup BELOW the pin, arrow up -->
+            <g class="jr-checkpoint jr-checkpoint--final">
+              <circle class="pin-halo" cx="740" cy="90" r="28"/>
+              <circle class="pin-dot"  cx="740" cy="90" r="12"/>
+              <g class="jr-flag" transform="translate(740, 175)">
+                <rect x="-90" y="-42" width="180" height="84" rx="12" fill="#282828" stroke="#282828" stroke-width="1.5" filter="drop-shadow(0 6px 18px rgba(40,40,40,.30))"/>
+                <rect x="-12" y="-34" width="44" height="16" rx="8" fill="rgba(255,255,255,.22)"/>
+                <text x="10"  y="-23" font-family="Inter" font-size="9" font-weight="800" fill="#fff" letter-spacing="1" text-anchor="middle">+2.6</text>
+                <rect x="36"  y="-34" width="50" height="16" rx="8" fill="#fff"/>
+                <text x="61"  y="-23" font-family="Inter" font-size="9" font-weight="800" fill="#C21B62" letter-spacing="1" text-anchor="middle">WHO ✓</text>
+                <text x="-76" y="-10" font-family="Helvetica Neue, Helvetica, Arial" font-size="22" font-weight="800" fill="#fff">12.6+</text>
+                <text x="-22" y="-10" font-family="Inter" font-size="11" font-weight="600" fill="rgba(255,255,255,.75)">g/dL</text>
+                <line x1="-76" y1="2" x2="76" y2="2" stroke="rgba(255,255,255,.22)" stroke-width="1"/>
+                <text x="-76" y="18" font-family="Inter" font-size="9.5" font-weight="800" fill="#fff" letter-spacing="1.4">SUMMIT · WHO NORMAL</text>
+                <text x="-76" y="34" font-family="Inter" font-size="11" font-weight="500" fill="#fff">Full restoration.</text>
+                <!-- Arrow at TOP, pointing up to pin -->
+                <path d="M -7 -42 L 7 -42 L 0 -52 Z" fill="#282828" stroke="#282828" stroke-width="1.5"/>
+                <line x1="-6.5" y1="-42" x2="6.5" y2="-42" stroke="#282828" stroke-width="2"/>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div><!-- end of jr-chart -->
+
+      </div><!-- /.jr-viz -->
+    </div><!-- /.wrap -->
+  </div><!-- /.jr-pin-stage -->
 </section>
 
 <!-- ============= INLINE CTA — after Journey ============= -->
@@ -1941,32 +2307,32 @@
       <div class="ct-row">
         <div class="ct-cell lbl">Iron form</div>
         <div class="ct-cell shi">Ferrous Bisglycinate</div>
-        <div class="ct-cell con">Ferrous sulfate</div>
+        <div class="ct-cell con">Ferrous sulfate, fumarate, pyrophosphate</div>
       </div>
       <div class="ct-row">
         <div class="ct-cell lbl">Absorption</div>
-        <div class="ct-cell shi">2–4× higher</div>
-        <div class="ct-cell con">Baseline</div>
+        <div class="ct-cell shi">2–4× higher absorption</div>
+        <div class="ct-cell con">Standard absorption</div>
       </div>
       <div class="ct-row">
-        <div class="ct-cell lbl">Constipation</div>
-        <div class="ct-cell shi"><span class="ct-yes">✓</span> Just 1%</div>
-        <div class="ct-cell con"><span class="ct-no">✕</span> Up to 78%</div>
+        <div class="ct-cell lbl">Digestive comfort</div>
+        <div class="ct-cell shi"><span class="ct-yes">✓</span> Gentle on the stomach</div>
+        <div class="ct-cell con"><span class="ct-no">✕</span> May cause discomfort</div>
       </div>
       <div class="ct-row">
-        <div class="ct-cell lbl">Nausea</div>
-        <div class="ct-cell shi"><span class="ct-yes">✓</span> Just 4%</div>
-        <div class="ct-cell con"><span class="ct-no">✕</span> 23–49%</div>
+        <div class="ct-cell lbl">Pregnancy-friendly</div>
+        <div class="ct-cell shi"><span class="ct-yes">✓</span> Designed for better tolerance</div>
+        <div class="ct-cell con"><span class="ct-no">✕</span> Often harder to tolerate</div>
       </div>
       <div class="ct-row">
         <div class="ct-cell lbl">B12 + Folate co-factors</div>
         <div class="ct-cell shi"><span class="ct-yes">✓</span> Included</div>
-        <div class="ct-cell con"><span class="ct-no">✕</span> Separate dose</div>
+        <div class="ct-cell con"><span class="ct-no">✕</span> Often separate</div>
       </div>
       <div class="ct-row">
         <div class="ct-cell lbl">Activated forms (P5P, methylfolate)</div>
         <div class="ct-cell shi"><span class="ct-yes">✓</span> Yes</div>
-        <div class="ct-cell con"><span class="ct-no">✕</span> No</div>
+        <div class="ct-cell con"><span class="ct-no">✕</span> Usually no</div>
       </div>
       <div class="ct-row">
         <div class="ct-cell lbl">Vegetarian capsule</div>
@@ -2130,7 +2496,7 @@
         <div class="ft-h">Shop</div>
         <div class="ft-links">
           <a href="product.html">Advanced Iron+</a>
-          <a href="product.html#composition">Ingredients</a>
+          <a href="product-ginger.html">Advanced Ginger+</a>
           <a href="#">Subscriptions</a>
           <a href="#">Bundles</a>
         </div>
@@ -2208,6 +2574,8 @@
 <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/award.js"></script>
+<!-- Site-header behaviour: mobile-nav toggle, scroll-hide, dropdown, reveal -->
+<script src="js/main.js"></script>
 
 <script>
   /* Year stamp */
@@ -2309,6 +2677,108 @@
     }
     closeBtn.addEventListener('click',()=>{ dismissed = true; el.classList.remove('show'); });
     setTimeout(show, 3500);
+  })();
+
+  /* Journey — pinned mountain climb. Scroll progress (0 → 1) walks the
+     climber up the trail, draws the trail behind her, ramps the +2.78
+     stat, and activates checkpoints & milestone cards as she passes them. */
+  (function(){
+    const pin = document.getElementById('jrPin');
+    if (!pin) return;
+    const stage      = document.getElementById('jrStage');
+    const trail      = document.getElementById('jrTrail');
+    const climber    = document.getElementById('jrClimber');
+    const featureNum = document.getElementById('jrFeatureNum');
+    const progressEl = document.getElementById('jrProgressPct');
+    const checkpoints = Array.from(pin.querySelectorAll('.jr-checkpoint'));
+    const msCards    = Array.from(pin.querySelectorAll('.jr-ms'));
+
+    // Disable pin-driven animation on touch / narrow viewports — show static end-state.
+    const isPinMode = window.matchMedia('(min-width: 881px)').matches;
+
+    if (!trail || !climber || !trail.getTotalLength) return;
+    const totalLen = trail.getTotalLength();
+    trail.style.strokeDasharray  = totalLen;
+    trail.style.strokeDashoffset = totalLen;
+
+    // Hb at start point (10.0 g/dL) → +0 ; at summit → +2.78
+    const HB_TARGET = 2.78;
+
+    // Checkpoint positions in SVG-space. Compute each one's progress along
+    // the trail so the activation thresholds match the actual geometry.
+    const CP_POINTS = [
+      { x: 130, y: 535 },
+      { x: 330, y: 460 },
+      { x: 540, y: 320 },
+      { x: 740, y:  90 }
+    ];
+    const CP_THRESHOLDS = CP_POINTS.map(({x, y}) => {
+      let best = 0, minD = Infinity;
+      const SAMPLES = 240;
+      for (let i = 0; i <= SAMPLES; i++) {
+        const t = i / SAMPLES;
+        const p = trail.getPointAtLength(t * totalLen);
+        const d = (p.x - x) ** 2 + (p.y - y) ** 2;
+        if (d < minD) { minD = d; best = t; }
+      }
+      // Tiny easing buffer so checkpoints feel "reached" slightly before exact arrival
+      return Math.max(0, best - 0.02);
+    });
+
+    const setProgress = (p) => {
+      p = Math.max(0, Math.min(1, p));
+      // Trail draw
+      trail.style.strokeDashoffset = totalLen * (1 - p);
+      // Climber walk
+      const point = trail.getPointAtLength(p * totalLen);
+      climber.setAttribute('transform', `translate(${point.x}, ${point.y - 18})`);
+      // +2.78 counter
+      if (featureNum) featureNum.textContent = (HB_TARGET * p).toFixed(2);
+      // Progress chip
+      if (progressEl) progressEl.textContent = Math.round(p * 100) + '%';
+      // Checkpoint activations
+      checkpoints.forEach((cp, i) => {
+        const passed = p >= CP_THRESHOLDS[i];
+        // Popups appear with a small buffer past arrival so the climber is
+        // clearly past the pin before the callout pops up — no overlap.
+        const isFinal = cp.classList.contains('jr-checkpoint--final');
+        const popupOn = isFinal ? passed : p >= CP_THRESHOLDS[i] + 0.04;
+        cp.classList.toggle('is-passed', passed);
+        cp.classList.toggle('is-popup-on', popupOn);
+        if (msCards[i]) msCards[i].classList.toggle('is-passed', passed);
+      });
+    };
+
+    if (!isPinMode) {
+      // Mobile / touch: just show the final state (woman at summit, all checkpoints active)
+      setProgress(1);
+      return;
+    }
+
+    // Compute scroll progress: 0 when section enters viewport at top of stage,
+    // 1 when section's bottom reaches viewport bottom (i.e. stage finishes pinning).
+    const computeProgress = () => {
+      const rect = pin.getBoundingClientRect();
+      const viewport = window.innerHeight;
+      const trackHeight = pin.offsetHeight;
+      const scrolled = -rect.top;
+      const maxScroll = trackHeight - viewport;
+      return scrolled / maxScroll;
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setProgress(computeProgress());
+        ticking = false;
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    // Initial paint
+    setProgress(computeProgress());
   })();
 
   /* Animate side-effect bars on scroll */

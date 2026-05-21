@@ -19,14 +19,47 @@
             toggle.setAttribute('aria-expanded', String(open));
         });
         $$('#navMenu a').forEach(a => a.addEventListener('click', () => {
+            if (a.classList.contains('nav__sub-toggle')) return;
             nav.classList.remove('is-open');
             toggle.setAttribute('aria-expanded', 'false');
         }));
     }
 
+    /* Shop dropdown — click-toggle, Esc + outside-click close */
+    const subToggles = $$('.nav__sub-toggle');
+    const closeAllSubs = () => $$('.nav__has-sub.is-open').forEach(p => {
+        p.classList.remove('is-open');
+        p.querySelector('.nav__sub-toggle')?.setAttribute('aria-expanded', 'false');
+    });
+    subToggles.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const parent = btn.closest('.nav__has-sub');
+            const opening = !parent.classList.contains('is-open');
+            closeAllSubs();
+            if (opening) {
+                parent.classList.add('is-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+    if (subToggles.length) {
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav__has-sub')) closeAllSubs();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeAllSubs();
+        });
+    }
+
     /* Scroll-spy active nav link */
     const links = $$('#navMenu a');
-    const sections = links.map(a => $(a.getAttribute('href'))).filter(Boolean);
+    const sections = links
+        .map(a => {
+            const href = a.getAttribute('href') || '';
+            return href.length > 1 && href.startsWith('#') ? $(href) : null;
+        })
+        .filter(Boolean);
     const setActive = () => {
         const offset = window.scrollY + 140;
         let cur = null;

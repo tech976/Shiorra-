@@ -25,7 +25,18 @@
                 </a>
                 <ul class="nav__menu" id="navMenu">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="product.html">Shop</a></li>
+                    <li class="nav__has-sub">
+                        <a href="product.html" class="nav__sub-toggle" aria-haspopup="true" aria-expanded="false" data-nav-sub>
+                            Shop
+                            <svg class="nav__sub-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                        </a>
+                        <ul class="nav__sub" role="menu" aria-label="Shop the Shiōrra range">
+                            <li role="none"><a href="product.html" role="menuitem">Advanced Iron+</a></li>
+                            <li role="none"><a href="product-ginger.html" role="menuitem">Advanced Ginger+</a></li>
+                            <li role="none"><a href="#" role="menuitem">Advanced Calcium+</a></li>
+                            <li role="none"><a href="#" role="menuitem">Advanced Multivitamin+</a></li>
+                        </ul>
+                    </li>
                     <li><a href="science.html" class="active">Science</a></li>
                     <li><a href="reviews.html">Reviews</a></li>
                     <li><a href="about.html">About</a></li>
