@@ -1,349 +1,395 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>FAQ · Shiōrra Advanced Iron+</title>
-    <meta name="description" content="Questions, answered. Everything you need to know about Shiōrra Advanced Iron+ — science, dosage, safety, and more.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/png" href="img/logo/logo-green.png">
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FAQ · Shiōrra · Common Questions Answered</title>
+<meta name="description" content="Common questions about Shiōrra Iron+, Ginger+ and EnergyOne+ — ingredients, safety, routine, shipping and returns. Real answers from K.C. Laboratories." />
+<link rel="shortcut icon" type="image/png" href="img/logo/logo-green.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --honey:#3DBDB6;
+    --honey-2:#2FA39C;
+    --honey-deep:#23867F;
+    --honey-soft:#E0F5F3;
+    --charcoal:#282828;
+    --charcoal-2:#3A3A3A;
+    --ink:#282828;
+    --ink-soft:#3A3A3A;
+    --white:#FFFFFF;
+    --surface:#F7F7F8;
+    --line:#E5E5E7;
+    --line-soft:#F0F0F2;
+    --muted:#6B6B6B;
+    --green:#1E9E5C;
+  }
+  html{scroll-behavior:smooth;overflow-x:clip}
+  body{font-family:'Inter','Helvetica Neue',Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.55;font-size:15px;overflow-x:clip}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:0;background:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  .marquee{background:var(--charcoal);color:#fff;padding:10px 0;overflow:hidden;border-bottom:1px solid var(--line)}
+  .marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 36s linear infinite;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+  .marquee-item{display:inline-flex;align-items:center;gap:8px}
+  .marquee-item svg{width:14px;height:14px;color:var(--honey)}
+  .marquee-item .accent{color:var(--honey)}
+  @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+  .microbar{background:var(--surface);border-bottom:1px solid var(--line);padding:8px 0;font-size:12px;color:var(--ink-soft);font-weight:500}
+  .microbar-inner{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+  .microbar-item{display:inline-flex;align-items:center;gap:6px}
+  .microbar-item svg{width:14px;height:14px;color:var(--honey)}
+
+  /* Hero */
+  .ed-hero{background:linear-gradient(180deg,var(--honey-soft) 0%,#fff 100%);padding:96px 0 80px;position:relative;overflow:hidden;text-align:center}
+  .ed-hero::before{content:'';position:absolute;top:-120px;right:-100px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(61,189,182,.20) 0%,transparent 70%);pointer-events:none}
+  .ed-hero .wrap{position:relative}
+  .ed-hero .eyebrow{display:inline-block;background:var(--honey-soft);color:var(--honey-deep);font-size:12px;font-weight:800;padding:7px 14px;border-radius:20px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
+  .ed-hero h1{font-family:'Helvetica Neue',Arial,sans-serif;font-size:60px;font-weight:700;line-height:1.02;letter-spacing:-0.03em;max-width:16ch;margin:0 auto 22px;color:var(--charcoal)}
+  .ed-hero h1 em{font-style:italic;color:var(--honey);font-weight:500}
+  @media(max-width:680px){.ed-hero h1{font-size:40px}}
+  .ed-hero p{font-size:17px;color:var(--muted);max-width:60ch;margin:0 auto 28px;line-height:1.6}
+
+  /* Search */
+  .fq-search{max-width:560px;margin:0 auto;position:relative}
+  .fq-search input{width:100%;padding:16px 18px 16px 48px;border:1.5px solid var(--line);background:#fff;border-radius:14px;font:inherit;font-size:15px;box-shadow:0 8px 24px rgba(40,40,40,.06);transition:border-color .2s,box-shadow .2s}
+  .fq-search input:focus{outline:none;border-color:var(--honey);box-shadow:0 0 0 4px rgba(61,189,182,.15)}
+  .fq-search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+
+  /* Categories nav */
+  .fq-cats{background:#fff;border-bottom:1px solid var(--line);padding:18px 0;position:sticky;top:0;z-index:30}
+  .fq-cats-row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+  .fq-cat-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:20px;font-size:13px;font-weight:600;color:var(--ink-soft);transition:border-color .2s,background .2s,color .2s}
+  .fq-cat-chip:hover,.fq-cat-chip.active{border-color:var(--honey);background:var(--honey-soft);color:var(--honey-deep)}
+  .fq-cat-chip .count{font-size:11px;background:var(--line-soft);padding:1px 7px;border-radius:10px;color:var(--muted-2);font-weight:700}
+  .fq-cat-chip:hover .count,.fq-cat-chip.active .count{background:#fff;color:var(--honey-deep)}
+
+  /* Sections */
+  section.s{padding:72px 0;font-size:17px}
+  @media(max-width:680px){section.s{padding:56px 0}}
+  .s-eyebrow{display:inline-block;background:var(--honey-soft);color:var(--honey-deep);font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;letter-spacing:.10em;text-transform:uppercase;margin-bottom:16px}
+  .s-title{font-family:'Helvetica Neue',Arial,sans-serif;font-size:38px;font-weight:700;line-height:1.05;letter-spacing:-0.025em;margin-bottom:12px;color:var(--charcoal)}
+  .s-title em{font-style:italic;color:var(--honey);font-weight:500}
+  @media(max-width:680px){.s-title{font-size:28px}}
+  .s-sub{font-size:16px;color:var(--ink-soft);max-width:640px;line-height:1.6}
+
+  .fq-chap{padding:64px 0}
+  .fq-chap--alt{background:var(--surface)}
+  .fq-chap__head{margin-bottom:32px;max-width:760px}
+  .fq-chap__num{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:11px;color:var(--honey-deep);letter-spacing:.16em;margin-bottom:12px}
+
+  /* Accordion */
+  .fq-list{display:grid;gap:12px}
+  .fq-item{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+  .fq-chap--alt .fq-item{background:#fff}
+  .fq-item:hover{border-color:var(--honey)}
+  .fq-item[open]{box-shadow:0 8px 24px rgba(40,40,40,.06)}
+  .fq-q{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:16px;color:var(--ink);list-style:none;gap:14px}
+  .fq-q::-webkit-details-marker{display:none}
+  .fq-q .plus{width:28px;height:28px;border-radius:50%;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;font-size:18px;font-weight:700;flex-shrink:0;transition:transform .3s,background .2s,color .2s}
+  .fq-item[open] .fq-q .plus{transform:rotate(45deg);background:var(--honey);color:#fff}
+  .fq-a{padding:0 22px 22px;color:var(--muted);line-height:1.65;font-size:14.5px}
+  .fq-a strong{color:var(--ink)}
+
+  /* Helpdesk */
+  .fq-help{background:var(--charcoal);color:#fff;padding:72px 0;text-align:center}
+  .fq-help h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:42px;font-weight:700;max-width:18ch;margin:0 auto 16px;line-height:1.05;letter-spacing:-0.02em}
+  .fq-help h2 em{font-style:italic;color:var(--honey);font-weight:500}
+  @media(max-width:680px){.fq-help h2{font-size:32px}}
+  .fq-help p{font-size:16px;color:#bbb;max-width:60ch;margin:0 auto 32px}
+  .fq-help-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:760px;margin:0 auto;text-align:left}
+  @media(max-width:680px){.fq-help-grid{grid-template-columns:1fr}}
+  .fq-help-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:22px;color:#fff;transition:transform .2s,background .2s}
+  .fq-help-card:hover{transform:translateY(-2px);background:rgba(255,255,255,.10)}
+  .fq-help-card .ic{width:38px;height:38px;border-radius:10px;background:rgba(61,189,182,.18);color:var(--honey);display:grid;place-items:center;margin-bottom:14px}
+  .fq-help-card .ic svg{width:20px;height:20px}
+  .fq-help-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;margin-bottom:6px}
+  .fq-help-card p{font-size:13.5px;color:#bbb;margin:0;line-height:1.5;max-width:none}
+
+  /* Footer */
+  .ed-footer{background:var(--charcoal);color:#ddd;padding:56px 0 24px;border-top:1px solid rgba(255,255,255,.08)}
+  .ed-footer__cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px}
+  @media(max-width:880px){.ed-footer__cols{grid-template-columns:1fr 1fr}}
+  .ed-footer__brand img{height:32px;margin-bottom:12px}
+  .ed-footer__brand p{color:#999;font-size:.88rem;max-width:32ch}
+  .ed-footer__col h5{color:#fff;font-size:.74rem;margin-bottom:12px;letter-spacing:.08em;text-transform:uppercase}
+  .ed-footer__col ul{list-style:none}
+  .ed-footer__col li{margin-bottom:8px}
+  .ed-footer__col a{color:#aaa;font-size:.88rem}
+  .ed-footer__col a:hover{color:var(--honey)}
+  .ed-footer__bar{display:flex;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);color:#777;font-size:.82rem;flex-wrap:wrap;gap:8px}
+</style>
 </head>
 <body>
 
-    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping over <span class="accent">₹999</span></span>
+    <span class="marquee-item">30-day money-back guarantee</span>
+    <span class="marquee-item">FSSAI · GMP certified · Made in India</span>
+    <span class="marquee-item">Real answers · Real humans</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping over <span class="accent">₹999</span></span>
+    <span class="marquee-item">30-day money-back guarantee</span>
+    <span class="marquee-item">FSSAI · GMP certified · Made in India</span>
+    <span class="marquee-item">Real answers · Real humans</span>
+  </div>
+</div>
 
-    <div class="promo">
-        <span>Free shipping on orders over <span class="accent">₹999</span> · Recommended by experts</span>
+<header class="site-header" id="siteHeader">
+    <div class="container">
+        <nav class="nav" id="primaryNav">
+            <a href="index.html" class="nav__logo"><img src="img/logo/logo-green.png" alt="Shiōrra"></a>
+            <ul class="nav__menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li class="nav__has-sub">
+                    <a href="product.html" class="nav__sub-toggle" aria-haspopup="true" aria-expanded="false" data-nav-sub>
+                        Shop
+                        <svg class="nav__sub-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </a>
+                    <ul class="nav__sub" role="menu">
+                        <li role="none"><a href="product.html" role="menuitem">Advanced Iron+</a></li>
+                        <li role="none"><a href="product-ginger.html" role="menuitem">Advanced Ginger+</a></li>
+                        <li role="none"><a href="product-energyone.html" role="menuitem">Advanced EnergyOne+</a></li>
+                    </ul>
+                </li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="faq.html" class="active">FAQ</a></li>
+            </ul>
+            <div class="nav__cta">
+                <a href="product.html" class="btn">Shop now</a>
+                <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+            </div>
+        </nav>
     </div>
+</header>
 
-    <header class="site-header" id="siteHeader">
-        <div class="container">
-            <nav class="nav" id="primaryNav">
-                <a href="index.html" class="nav__logo" aria-label="Shiorra home">
-                    <img src="img/logo/logo-green.png" alt="Shiōrra">
-                </a>
-                <ul class="nav__menu" id="navMenu">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="nav__has-sub">
-                        <a href="product.html" class="nav__sub-toggle" aria-haspopup="true" aria-expanded="false" data-nav-sub>
-                            Shop
-                            <svg class="nav__sub-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-                        </a>
-                        <ul class="nav__sub" role="menu" aria-label="Shop the Shiōrra range">
-                            <li role="none"><a href="product.html" role="menuitem">Advanced Iron+</a></li>
-                            <li role="none"><a href="product-ginger.html" role="menuitem">Advanced Ginger+</a></li>
-                            <li role="none"><a href="product-energyone.html" role="menuitem">Advanced EnergyOne+</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="science.html">Science</a></li>
-                    <li><a href="reviews.html">Reviews</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="faq.html" class="active">FAQ</a></li>
-                </ul>
-                <div class="nav__cta">
-                    <a href="product.html" class="btn">Shop now</a>
-                    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
-                        <span></span><span></span><span></span>
-                    </button>
-                </div>
-            </nav>
-        </div>
+<div class="microbar">
+  <div class="wrap microbar-inner">
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Real-human support</span>
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Mon-Sat, 10:00-18:00 IST</span>
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Reply within 24 hours</span>
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Doctor-trained team</span>
+  </div>
+</div>
+
+<section class="ed-hero">
+  <div class="wrap">
+    <span class="eyebrow">Common questions</span>
+    <h1>Real answers, <em>without the jargon</em>.</h1>
+    <p>Quick, honest answers to the questions women actually ask us — about ingredients, safety, your daily routine, shipping and returns.</p>
+    <div class="fq-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="fqSearch" placeholder="Search FAQs — try 'iron', 'pregnancy', 'shipping'…" autocomplete="off">
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES NAV -->
+<nav class="fq-cats">
+  <div class="wrap fq-cats-row">
+    <a href="#chap-products" class="fq-cat-chip">Products <span class="count">6</span></a>
+    <a href="#chap-pregnancy" class="fq-cat-chip">Pregnancy &amp; safety <span class="count">5</span></a>
+    <a href="#chap-routine" class="fq-cat-chip">Daily routine <span class="count">5</span></a>
+    <a href="#chap-shipping" class="fq-cat-chip">Shipping &amp; returns <span class="count">5</span></a>
+    <a href="#chap-brand" class="fq-cat-chip">Brand &amp; trust <span class="count">4</span></a>
+  </div>
+</nav>
+
+<!-- CHAP 01 — PRODUCTS -->
+<section class="fq-chap" id="chap-products">
+  <div class="wrap">
+    <header class="fq-chap__head">
+      <div class="fq-chap__num">CHAPTER 01</div>
+      <h2 class="s-title">About <em>our products</em>.</h2>
+      <p class="s-sub">What's inside, who they're for, and how they compare with what you may have tried before.</p>
     </header>
+    <div class="fq-list">
+      <details class="fq-item"><summary class="fq-q">What are the three Shiōrra products?<span class="plus">+</span></summary><div class="fq-a"><strong>Iron+</strong> is a complete hematinic for pregnancy &amp; postpartum. <strong>Ginger+</strong> is a gentle daily support for first-trimester nausea. <strong>EnergyOne+</strong> is a caffeine-free, multi-nutrient daily energy support for busy adults. All three share the same active-form formulation philosophy.</div></details>
+      <details class="fq-item"><summary class="fq-q">What makes Shiōrra Iron+ different from regular iron tablets?<span class="plus">+</span></summary><div class="fq-a">Iron+ uses <strong>Ferrous Bisglycinate</strong> — a chelated form of iron that's 2-4× better absorbed and ~90% gentler than ferrous sulfate. It also includes the B12, folate, B6 and zinc co-factors most conventional tablets skip.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is the folate in Iron+ active?<span class="plus">+</span></summary><div class="fq-a">Yes. We use <strong>L-methylfolate</strong> (570 mcg) — the active form. No enzymatic conversion required, which means it works even for women with the MTHFR variant.</div></details>
+      <details class="fq-item"><summary class="fq-q">What's in Ginger+?<span class="plus">+</span></summary><div class="fq-a">Standardized Ginger Extract (250 mg) + active <strong>B6 as P5P</strong> (2.3 mg) + Vitamin B1 + Magnesium Bisglycinate. Built specifically for first-trimester nausea and gentle daily digestion.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is EnergyOne+ caffeine-free?<span class="plus">+</span></summary><div class="fq-a">Yes — 100% caffeine-free. It uses Taurine + Ginseng extract + B-Complex + minerals + amino acids to support your body's natural energy systems. Not a stimulant, not a crash.</div></details>
+      <details class="fq-item"><summary class="fq-q">Are all Shiōrra products vegetarian?<span class="plus">+</span></summary><div class="fq-a">Yes. Every Shiōrra capsule is 100% vegetarian — vegecap shells, no gelatin, no animal-derived ingredients.</div></details>
+    </div>
+  </div>
+</section>
 
-    <!-- ============== EDITORIAL HERO ============== -->
-    <section class="fq-hero">
-        <div class="container">
-            <div class="fq-hero__masthead reveal">
-                <span>FAQ · Knowledge Base</span>
-                <span class="fq-hero__updated">Updated · 2026-05-06</span>
-            </div>
+<!-- CHAP 02 — PREGNANCY -->
+<section class="fq-chap fq-chap--alt" id="chap-pregnancy">
+  <div class="wrap">
+    <header class="fq-chap__head">
+      <div class="fq-chap__num">CHAPTER 02</div>
+      <h2 class="s-title">Pregnancy &amp; <em>safety</em>.</h2>
+      <p class="s-sub">Safe to combine, safe for trimesters — and when to talk to your gynaecologist.</p>
+    </header>
+    <div class="fq-list">
+      <details class="fq-item"><summary class="fq-q">Can I take Iron+ throughout pregnancy?<span class="plus">+</span></summary><div class="fq-a">Yes — Iron+ is designed for use throughout pregnancy and postpartum. Always confirm with your OB-GYN, particularly if your current hemoglobin is on the very low end.</div></details>
+      <details class="fq-item"><summary class="fq-q">Can I take Iron+ and Ginger+ together?<span class="plus">+</span></summary><div class="fq-a">Yes — they pair well. Many moms take Ginger+ in the morning (for nausea) and Iron+ later in the day. Both are gentle enough for daily use.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is Ginger+ safe in the first trimester?<span class="plus">+</span></summary><div class="fq-a">Yes — Ginger+ was built specifically for first-trimester nausea. The doses of ginger and B6 are pregnancy-friendly. If symptoms are severe or persistent, please consult your gynaecologist.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is EnergyOne+ safe in pregnancy?<span class="plus">+</span></summary><div class="fq-a">EnergyOne+ contains ginseng extract, which is typically <strong>not recommended during pregnancy</strong>. For pregnant or breastfeeding women, we recommend Iron+ and/or Ginger+ instead and a chat with your doctor before adding any new supplement.</div></details>
+      <details class="fq-item"><summary class="fq-q">Will Iron+ cause constipation or nausea?<span class="plus">+</span></summary><div class="fq-a">It's significantly less likely than conventional iron. Ferrous Bisglycinate is ~90% gentler on the GI tract. If you do feel queasy, take it with food, with plenty of water, and pair with Ginger+ during the first trimester.</div></details>
+    </div>
+  </div>
+</section>
 
-            <div class="fq-hero__head reveal">
-                <span class="eyebrow">Questions, answered</span>
-                <h1 class="split-words" data-split>Everything you might<br><span class="bold-pink">be wondering</span>.</h1>
-            </div>
+<!-- CHAP 03 — ROUTINE -->
+<section class="fq-chap" id="chap-routine">
+  <div class="wrap">
+    <header class="fq-chap__head">
+      <div class="fq-chap__num">CHAPTER 03</div>
+      <h2 class="s-title">Your daily <em>routine</em>.</h2>
+      <p class="s-sub">When to take, with food or not, and what to do if you miss a day.</p>
+    </header>
+    <div class="fq-list">
+      <details class="fq-item"><summary class="fq-q">When should I take Iron+?<span class="plus">+</span></summary><div class="fq-a">Once a day, ideally with a meal. Avoid pairing with tea, coffee or calcium-rich drinks within an hour — they can blunt iron absorption. Vitamin C-rich foods (citrus, amla) help.</div></details>
+      <details class="fq-item"><summary class="fq-q">When should I take Ginger+?<span class="plus">+</span></summary><div class="fq-a">Once a day, anytime. Many women take it in the morning when nausea tends to peak. You can take it with or without food.</div></details>
+      <details class="fq-item"><summary class="fq-q">When should I take EnergyOne+?<span class="plus">+</span></summary><div class="fq-a">Once a day, anytime. Most people take it in the morning. Caffeine-free, so it won't interfere with sleep if you take it later in the day.</div></details>
+      <details class="fq-item"><summary class="fq-q">How long until I notice a difference?<span class="plus">+</span></summary><div class="fq-a">Most women report the first improvements within 1-2 weeks (settling, less fatigue) and meaningful changes by week 4. With Iron+, hemoglobin usually rises steadily over 3-6 months.</div></details>
+      <details class="fq-item"><summary class="fq-q">What if I miss a day?<span class="plus">+</span></summary><div class="fq-a">Just take the next dose on schedule — don't double up. Consistency matters more than perfection.</div></details>
+    </div>
+  </div>
+</section>
 
-            <div class="fq-hero__lede reveal">
-                <p class="fq-hero__abstract">Nine of the most-asked questions about Shiōrra Advanced Iron+ — grouped into four chapters, with peer-reviewed citations where they help. If a question isn't here, <a href="mailto:hello@shiorra.com">write to us directly</a> — we read every message.</p>
-                <ul class="fq-hero__stats" aria-label="Knowledge base stats">
-                    <li><span class="num">09</span><span class="lbl">questions</span></li>
-                    <li><span class="num">04</span><span class="lbl">chapters</span></li>
-                    <li><span class="num">06</span><span class="lbl">references</span></li>
-                </ul>
-            </div>
+<!-- CHAP 04 — SHIPPING -->
+<section class="fq-chap fq-chap--alt" id="chap-shipping">
+  <div class="wrap">
+    <header class="fq-chap__head">
+      <div class="fq-chap__num">CHAPTER 04</div>
+      <h2 class="s-title">Shipping &amp; <em>returns</em>.</h2>
+      <p class="s-sub">Free shipping over ₹999, fast pan-India delivery, and a no-fuss 30-day money-back promise.</p>
+    </header>
+    <div class="fq-list">
+      <details class="fq-item"><summary class="fq-q">How long does delivery take?<span class="plus">+</span></summary><div class="fq-a">2-5 business days for most Indian addresses. Metros usually 2-3 days, remote pincodes can take up to 7. You'll get a tracking link by email and SMS.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is shipping really free?<span class="plus">+</span></summary><div class="fq-a">Free on orders over <strong>₹999</strong>. Below that, a flat ₹49 shipping fee applies. You'll see the total before checkout.</div></details>
+      <details class="fq-item"><summary class="fq-q">Do you offer Cash on Delivery?<span class="plus">+</span></summary><div class="fq-a">Yes — COD is available across India. You can also pay online via UPI, cards, wallets and netbanking.</div></details>
+      <details class="fq-item"><summary class="fq-q">What is your return policy?<span class="plus">+</span></summary><div class="fq-a">Unopened packs can be returned within <strong>30 days</strong> for a full refund. If your pack arrives damaged, write to us within 7 days and we'll replace it.</div></details>
+      <details class="fq-item"><summary class="fq-q">Do you ship outside India?<span class="plus">+</span></summary><div class="fq-a">Not yet. We're focused on India for now — international shipping is on the roadmap. Drop us a note at hello@shiorra.com to be notified.</div></details>
+    </div>
+  </div>
+</section>
 
-            <nav class="fq-hero__toc reveal" aria-label="Chapters">
-                <a href="#chap-science">01 — Science</a>
-                <a href="#chap-routine">02 — Routine</a>
-                <a href="#chap-safety">03 — Safety</a>
-                <a href="#chap-brand">04 — Brand</a>
-            </nav>
-        </div>
-    </section>
+<!-- CHAP 05 — BRAND -->
+<section class="fq-chap" id="chap-brand">
+  <div class="wrap">
+    <header class="fq-chap__head">
+      <div class="fq-chap__num">CHAPTER 05</div>
+      <h2 class="s-title">Brand &amp; <em>trust</em>.</h2>
+      <p class="s-sub">Who we are, how we make our products, and who actually answers your emails.</p>
+    </header>
+    <div class="fq-list">
+      <details class="fq-item"><summary class="fq-q">Who makes Shiōrra products?<span class="plus">+</span></summary><div class="fq-a">Shiōrra is a trademark of <strong>K.C. Laboratories</strong> — a 30-year clinical formulation house in India. Every formula is developed in-house and manufactured at our FSSAI &amp; GMP-certified facility.</div></details>
+      <details class="fq-item"><summary class="fq-q">Are your products tested?<span class="plus">+</span></summary><div class="fq-a">Yes. Every batch is lab-tested for potency, purity and heavy-metal limits. We don't ship a batch until it clears.</div></details>
+      <details class="fq-item"><summary class="fq-q">What does "Shiori" mean?<span class="plus">+</span></summary><div class="fq-a">"Shiori" (栞) is the Japanese word for a bookmark — a gentle guide that holds your place. We picked the name because that's the kind of brand we wanted to build: quiet, reliable, with you for the long story.</div></details>
+      <details class="fq-item"><summary class="fq-q">Who do I write to with questions?<span class="plus">+</span></summary><div class="fq-a">Email <a href="mailto:hello@shiorra.com" style="color:var(--honey-deep);text-decoration:underline">hello@shiorra.com</a>. A real human (often pharmacology-trained) replies within 24 hours, Mon-Sat.</div></details>
+    </div>
+  </div>
+</section>
 
-    <!-- ============== CH 01 — SCIENCE ============== -->
-    <section class="fq-chap" id="chap-science">
-        <div class="container">
-            <header class="fq-chap__head reveal">
-                <span class="fq-chap__marker">CH 01 / 04</span>
-                <span class="fq-chap__topic">Science</span>
-                <h2>The chemistry behind <span class="bold-pink">the capsule</span>.</h2>
-            </header>
-            <div class="fq-chap__list reveal">
-                <div class="faq-item fq-q is-open">
-                    <button class="faq-item__btn" aria-expanded="true">
-                        <span class="fq-q__num">01</span>
-                        <span class="fq-q__text">Why Ferrous Bisglycinate instead of ferrous sulfate or fumarate?</span>
-                        <span class="fq-q__icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="faq-item__panel" style="max-height: 320px;">
-                        <div class="faq-item__panel-inner">
-                            <p>Bisglycinate is a <em>chelated</em> form of iron — one ferrous atom protected between two glycine amino-acid molecules. This protects the iron from binding with phytates in food, allowing 2–4× higher absorption and up to ~90% fewer GI side-effects than ferrous sulfate.</p>
-                            <p class="fq-cite">Bovell-Benjamin AC et al · AJCN 2000 · Shata A · AJMMS 2014.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item fq-q">
-                    <button class="faq-item__btn" aria-expanded="false">
-                        <span class="fq-q__num">02</span>
-                        <span class="fq-q__text">Why does Shiōrra include Zinc, Copper, Selenium and B-vitamins?</span>
-                        <span class="fq-q__icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="faq-item__panel">
-                        <div class="faq-item__panel-inner">
-                            <p>Iron alone isn't enough. <strong>Copper</strong> activates the enzyme that converts ferrous→ferric iron and incorporates it into hemoglobin. <strong>Zinc</strong> reduces intrauterine growth retardation and supports fetal brain development. <strong>Selenium</strong> protects red blood cells from oxidative damage and supports healthy maternal blood pressure. The B-complex (folate, B6, B12) drives the actual RBC and DNA synthesis.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item fq-q">
-                    <button class="faq-item__btn" aria-expanded="false">
-                        <span class="fq-q__num">03</span>
-                        <span class="fq-q__text">Why active forms (methylfolate, methylcobalamin, P5P)?</span>
-                        <span class="fq-q__icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="faq-item__panel">
-                        <div class="faq-item__panel-inner">
-                            <p>Many women have genetic variants (MTHFR, MTRR) that limit conversion of synthetic folic acid and cyanocobalamin into their usable forms. Shiōrra delivers <strong>L-methylfolate</strong>, <strong>methylcobalamin</strong> and <strong>Pyridoxal-5-Phosphate</strong> — the bioactive moieties — so your body can use them directly without conversion.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- HELPDESK -->
+<section class="fq-help">
+  <div class="wrap">
+    <h2>Still have a <em>question</em>?</h2>
+    <p>Pick the way that's easiest for you. We answer every email — usually within a day, often the same day.</p>
+    <div class="fq-help-grid">
+      <a href="mailto:hello@shiorra.com" class="fq-help-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+        <h5>Email us</h5>
+        <p>hello@shiorra.com — replies within 24 hours, Mon-Sat.</p>
+      </a>
+      <a href="https://wa.me/919999999999" class="fq-help-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/></svg></div>
+        <h5>WhatsApp</h5>
+        <p>Quick questions, doctor-trained team on the other end.</p>
+      </a>
+      <a href="about.html" class="fq-help-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div>
+        <h5>Learn more</h5>
+        <p>Read about who we are, what we stand for, and the story behind the brand.</p>
+      </a>
+    </div>
+  </div>
+</section>
 
-    <!-- ============== CH 02 — ROUTINE ============== -->
-    <section class="fq-chap fq-chap--cream" id="chap-routine">
-        <div class="container">
-            <header class="fq-chap__head reveal">
-                <span class="fq-chap__marker">CH 02 / 04</span>
-                <span class="fq-chap__topic">Routine</span>
-                <h2>How to <span class="bold-pink">take it</span>, when to start.</h2>
-            </header>
-            <div class="fq-chap__list reveal">
-                <div class="faq-item fq-q">
-                    <button class="faq-item__btn" aria-expanded="false">
-                        <span class="fq-q__num">04</span>
-                        <span class="fq-q__text">When during pregnancy should I start taking Shiōrra?</span>
-                        <span class="fq-q__icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="faq-item__panel">
-                        <div class="faq-item__panel-inner">
-                            <p>Iron deficiency is highly prevalent in every trimester. Clinical guidance suggests starting iron supplementation as early as the <strong>4th month of pregnancy</strong> and continuing for 6–12 months postpartum to fully replenish stores.</p>
-                            <p class="fq-cite">Abel R et al · Trop Doct 2001.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item fq-q">
-                    <button class="faq-item__btn" aria-expanded="false">
-                        <span class="fq-q__num">05</span>
-                        <span class="fq-q__text">When will I feel a difference?</span>
-                        <span class="fq-q__icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="faq-item__panel">
-                        <div class="faq-item__panel-inner">
-                            <p>Most women report a clear lift in energy and reduced fatigue within <strong>1–4 weeks</strong>. Hemoglobin shows a steady rise through 6–8 weeks and typically stabilises in the normal pregnancy range (≥12 g/dL) by 3 months. Full correction usually completes by month 4–6.</p>
-                            <p class="fq-cite">Bumrungpert A et al · Nutrients 2022;14(3):452.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item fq-q">
-                    <button class="faq-item__btn" aria-expanded="false">
-                        <span class="fq-q__num">06</span>
-                        <span class="fq-q__text">How should I take it?</span>
-                        <span class="fq-q__icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="faq-item__panel">
-                        <div class="faq-item__panel-inner">
-                            <p>One vegecap per day — ideally one hour before, or two hours after, a meal with a full glass of water. If you experience any GI upset, take it with or just after a meal. Continue daily for 6–12 months postpartum to fully replenish iron stores.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- FOOTER -->
+<footer class="ed-footer">
+  <div class="wrap">
+    <div class="ed-footer__cols">
+      <div class="ed-footer__brand">
+        <img src="img/logo/logo-green.png" alt="Shiōrra">
+        <p>Wellness, gently formulated. A trademark of K.C. Laboratories — made in India.</p>
+      </div>
+      <div class="ed-footer__col"><h5>Shop</h5><ul>
+        <li><a href="product.html">Advanced Iron+</a></li>
+        <li><a href="product-ginger.html">Advanced Ginger+</a></li>
+        <li><a href="product-energyone.html">Advanced EnergyOne+</a></li>
+      </ul></div>
+      <div class="ed-footer__col"><h5>Brand</h5><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="reviews.html">Reviews</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul></div>
+      <div class="ed-footer__col"><h5>Support</h5><ul>
+        <li><a href="mailto:hello@shiorra.com">hello@shiorra.com</a></li>
+        <li><a href="#chap-shipping">Shipping &amp; returns</a></li>
+        <li><a href="#">Privacy &amp; terms</a></li>
+      </ul></div>
+    </div>
+    <div class="ed-footer__bar">
+      <span>&copy; <span id="year"></span> Shiōrra™ · A trademark of K.C. Laboratories</span>
+      <span>Made in India</span>
+    </div>
+  </div>
+</footer>
 
-    <!-- ============== CH 03 — SAFETY ============== -->
-    <section class="fq-chap" id="chap-safety">
-        <div class="container">
-            <header class="fq-chap__head reveal">
-                <span class="fq-chap__marker">CH 03 / 04</span>
-                <span class="fq-chap__topic">Safety</span>
-                <h2>Made for <span class="bold-pink">pregnant and lactating</span> women.</h2>
-            </header>
-            <div class="fq-chap__list reveal">
-                <div class="faq-item fq-q">
-                    <button class="faq-item__btn" aria-expanded="false">
-                        <span class="fq-q__num">07</span>
-                        <span class="fq-q__text">Is Shiōrra Advanced Iron+ safe during pregnancy?</span>
-                        <span class="fq-q__icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="faq-item__panel">
-                        <div class="faq-item__panel-inner">
-                            <p>Yes. Shiōrra Advanced Iron+ is specially formulated for pregnant and lactating women. The Ferrous Bisglycinate form is GRAS-listed (Generally Recognized As Safe) and the doses are within standard prenatal guidance. As with any supplement during pregnancy, consult your obstetrician for personal medical conditions.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item fq-q">
-                    <button class="faq-item__btn" aria-expanded="false">
-                        <span class="fq-q__num">08</span>
-                        <span class="fq-q__text">Is the capsule vegetarian?</span>
-                        <span class="fq-q__icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="faq-item__panel">
-                        <div class="faq-item__panel-inner">
-                            <p>Yes. Shiōrra uses a vegecap made from a vegetable source — unlike many capsules made from animal hooves. The formulation itself is also 100% vegetarian and preservative-free.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="js/lenis-init.js"></script>
+<script src="js/main.js"></script>
+<script>
+(function(){
+  const y = document.getElementById('year');
+  if (y) y.textContent = new Date().getFullYear();
 
-    <!-- ============== CH 04 — BRAND ============== -->
-    <section class="fq-chap fq-chap--cream" id="chap-brand">
-        <div class="container">
-            <header class="fq-chap__head reveal">
-                <span class="fq-chap__marker">CH 04 / 04</span>
-                <span class="fq-chap__topic">Brand</span>
-                <h2>The story behind <span class="bold-pink">the name</span>.</h2>
-            </header>
-            <div class="fq-chap__list reveal">
-                <div class="faq-item fq-q">
-                    <button class="faq-item__btn" aria-expanded="false">
-                        <span class="fq-q__num">09</span>
-                        <span class="fq-q__text">What does the name "Shiōrra" mean?</span>
-                        <span class="fq-q__icon" aria-hidden="true"></span>
-                    </button>
-                    <div class="faq-item__panel">
-                        <div class="faq-item__panel-inner">
-                            <p>The name is inspired by <em>"Shiori"</em> (栞) — meaning a guide. It reflects our role as a trusted companion in your journey toward the right nutrition and overall wellbeing. Read the full etymology on our <a href="about.html">about page</a>.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  // FAQ search — show/hide items matching the query
+  const input = document.getElementById('fqSearch');
+  if (!input) return;
+  const items = Array.from(document.querySelectorAll('.fq-item'));
+  const chapters = Array.from(document.querySelectorAll('.fq-chap'));
 
-    <!-- ============== HELPDESK FOOTER — direct contact ============== -->
-    <section class="fq-helpdesk">
-        <div class="container">
-            <div class="fq-helpdesk__inner reveal">
-                <div class="fq-helpdesk__col">
-                    <span class="fq-chap__topic">Still curious?</span>
-                    <h2>Write to us. <br>We read every <span class="bold-pink">message</span>.</h2>
-                </div>
-                <div class="fq-helpdesk__contacts">
-                    <a class="fq-helpdesk__link" href="mailto:hello@shiorra.com">
-                        <span class="fq-helpdesk__lbl">Email</span>
-                        <span class="fq-helpdesk__val">hello@shiorra.com</span>
-                    </a>
-                    <a class="fq-helpdesk__link" href="science.html">
-                        <span class="fq-helpdesk__lbl">References</span>
-                        <span class="fq-helpdesk__val">Read the science page →</span>
-                    </a>
-                    <a class="fq-helpdesk__link" href="product.html">
-                        <span class="fq-helpdesk__lbl">Product</span>
-                        <span class="fq-helpdesk__val">Shop Advanced Iron+ →</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    items.forEach((it) => {
+      const text = it.textContent.toLowerCase();
+      it.style.display = !q || text.includes(q) ? '' : 'none';
+    });
+    // Hide chapters whose every item is hidden
+    chapters.forEach((ch) => {
+      const visible = ch.querySelectorAll('.fq-item:not([style*="display: none"])').length;
+      ch.style.display = visible ? '' : 'none';
+    });
+  });
 
-    <!-- ============== CTA BAND ============== -->
-    <section class="cta-band">
-        <div class="container">
-            <div class="cta-band__grid">
-                <div>
-                    <h2>Still have a <span class="bold-pink">question</span>?</h2>
-                    <p>Email our team — we read every message. Or visit our science page for the references behind each claim.</p>
-                </div>
-                <div class="cta-band__cta">
-                    <a href="mailto:hello@shiorra.com" class="btn">Email us</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============== FOOTER ============== -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer__top">
-                <div class="footer__brand">
-                    <img src="img/logo/logo-green.png" alt="Shiōrra">
-                    <p>Shiōrra is a trademark of K.C. Laboratories — a commitment to wellness made simpler, more effective, and truly meaningful.</p>
-                </div>
-                <div class="footer__col"><h5>Shop</h5><ul><li><a href="product.html">Advanced Iron+</a></li></ul></div>
-                <div class="footer__col"><h5>Brand</h5><ul><li><a href="science.html">Science</a></li><li><a href="about.html">Founders</a></li><li><a href="reviews.html">Reviews</a></li></ul></div>
-                <div class="footer__col"><h5>Support</h5><ul><li><a href="faq.html">FAQ</a></li></ul></div>
-                <div class="footer__col footer__retailers"><h5>Also on</h5><ul><li><a href="#">Amazon</a></li><li><a href="#">Flipkart</a></li></ul></div>
-            </div>
-            <div class="footer__bottom">
-                <span>© <span id="year"></span> Shiōrra™ · A trademark of K.C. Laboratories · Made in India</span>
-                <span><a href="#">Privacy</a> · <a href="#">Terms</a></span>
-            </div>
-        </div>
-    </footer>
-
-
-    <!-- Lenis smooth-scroll -->
-    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-    <script src="js/lenis-init.js"></script>
-    <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js" defer></script>
-    <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
-    <script src="js/award.js" defer></script>
-
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">
-        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-    </button>
-    <script src="js/main.js"></script>
-    <script>
-        (() => {
-            const bar = document.getElementById('scrollProgress'); if (!bar) return;
-            const update = () => { const m = document.documentElement.scrollHeight - window.innerHeight; bar.style.width = (m > 0 ? (window.scrollY / m) * 100 : 0) + '%'; };
-            window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); update();
-        })();
-        (() => {
-            const heads = document.querySelectorAll('[data-split]'); if (!heads.length) return;
-            const splitNode = (n) => { const out = document.createDocumentFragment(); n.childNodes.forEach(c => { if (c.nodeType === Node.TEXT_NODE) c.textContent.split(/(\s+)/).forEach(p => { if (!p) return; if (/^\s+$/.test(p)) out.appendChild(document.createTextNode(' ')); else { const w = document.createElement('span'); w.className='word'; w.textContent=p; out.appendChild(w); } }); else if (c.nodeType === Node.ELEMENT_NODE) { if (c.tagName === 'BR') out.appendChild(c.cloneNode(true)); else { const w = document.createElement('span'); w.className='word'; w.appendChild(c.cloneNode(true)); out.appendChild(w); out.appendChild(document.createTextNode(' ')); } } }); n.innerHTML=''; n.appendChild(out); };
-            heads.forEach(h => { splitNode(h); h.querySelectorAll('.word').forEach((w,i) => w.style.transitionDelay = (i*0.06)+'s'); });
-            const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); } }), { threshold: 0.25 });
-            heads.forEach(h => io.observe(h));
-        })();
-    </script>
-
-    <script>
-        (() => {
-            const btn = document.getElementById("backToTop");
-            if (!btn) return;
-            const onScroll = () => btn.classList.toggle("is-visible", window.scrollY > 600);
-            window.addEventListener("scroll", onScroll, { passive: true });
-            btn.addEventListener("click", () => {
-                if (window.lenis) window.lenis.scrollTo(0, { duration: 1.2 });
-                else window.scrollTo({ top: 0, behavior: "smooth" });
-            });
-            onScroll();
-        })();
-    </script></body>
+  // Active-chip highlight when scrolling
+  const chips = Array.from(document.querySelectorAll('.fq-cat-chip'));
+  const ids = chips.map(c => c.getAttribute('href').slice(1));
+  const onScroll = () => {
+    let cur = ids[0];
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top - 120 <= 0) cur = id;
+    }
+    chips.forEach(c => c.classList.toggle('active', c.getAttribute('href') === '#' + cur));
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
 </html>

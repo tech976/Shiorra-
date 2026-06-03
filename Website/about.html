@@ -1,274 +1,387 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>About · Shiōrra · Founders &amp; Mission</title>
-    <meta name="description" content="The story behind Shiōrra. Founded by Dr. Shivangi Patel & Ishita Patel — built from a real, lived need. A trademark of K.C. Laboratories.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/png" href="img/logo/logo-green.png">
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About · Shiōrra · Wellness, Gently Formulated</title>
+<meta name="description" content="Shiōrra is a precision wellness brand by K.C. Laboratories — Iron+, Ginger+ and EnergyOne+. Active-form ingredients, clinical doses, gentle on the body. Made in India." />
+<link rel="shortcut icon" type="image/png" href="img/logo/logo-green.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --honey:#3DBDB6;
+    --honey-2:#2FA39C;
+    --honey-deep:#23867F;
+    --honey-soft:#E0F5F3;
+    --charcoal:#282828;
+    --charcoal-2:#3A3A3A;
+    --ink:#282828;
+    --ink-soft:#3A3A3A;
+    --white:#FFFFFF;
+    --surface:#F7F7F8;
+    --line:#E5E5E7;
+    --line-soft:#F0F0F2;
+    --muted:#6B6B6B;
+    --green:#1E9E5C;
+  }
+  html{scroll-behavior:smooth;overflow-x:clip}
+  body{font-family:'Inter','Helvetica Neue',Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.55;font-size:15px;overflow-x:clip}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:0;background:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  .marquee{background:var(--charcoal);color:#fff;padding:10px 0;overflow:hidden;border-bottom:1px solid var(--line)}
+  .marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 36s linear infinite;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+  .marquee-item{display:inline-flex;align-items:center;gap:8px}
+  .marquee-item svg{width:14px;height:14px;color:var(--honey)}
+  .marquee-item .accent{color:var(--honey)}
+  @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+  .microbar{background:var(--surface);border-bottom:1px solid var(--line);padding:8px 0;font-size:12px;color:var(--ink-soft);font-weight:500}
+  .microbar-inner{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+  .microbar-item{display:inline-flex;align-items:center;gap:6px}
+  .microbar-item svg{width:14px;height:14px;color:var(--honey)}
+
+  .ed-hero{background:linear-gradient(180deg,var(--honey-soft) 0%,#fff 100%);padding:96px 0 80px;position:relative;overflow:hidden;text-align:center}
+  .ed-hero::before{content:'';position:absolute;top:-120px;right:-100px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(61,189,182,.20) 0%,transparent 70%);pointer-events:none}
+  .ed-hero::after{content:'';position:absolute;bottom:-80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(61,189,182,.15) 0%,transparent 70%);pointer-events:none}
+  .ed-hero .wrap{position:relative}
+  .ed-hero .eyebrow{display:inline-block;background:var(--honey-soft);color:var(--honey-deep);font-size:12px;font-weight:800;padding:7px 14px;border-radius:20px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
+  .ed-hero h1{font-family:'Helvetica Neue',Arial,sans-serif;font-size:64px;font-weight:700;line-height:1.02;letter-spacing:-0.03em;max-width:14ch;margin:0 auto 22px;color:var(--charcoal)}
+  .ed-hero h1 em{font-style:italic;color:var(--honey);font-weight:500}
+  @media(max-width:680px){.ed-hero h1{font-size:42px}}
+  .ed-hero p{font-size:18px;color:var(--muted);max-width:60ch;margin:0 auto 28px;line-height:1.6}
+  .ed-hero-meta{display:inline-flex;flex-wrap:wrap;gap:18px;justify-content:center;font-size:12px;color:var(--ink-soft);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  .ed-hero-meta .dot{color:var(--honey)}
+
+  section.s{padding:80px 0;font-size:17px}
+  @media(max-width:680px){section.s{padding:56px 0}}
+  .s-eyebrow{display:inline-block;background:var(--honey-soft);color:var(--honey-deep);font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;letter-spacing:.10em;text-transform:uppercase;margin-bottom:16px}
+  .s-title{font-family:'Helvetica Neue',Arial,sans-serif;font-size:48px;font-weight:700;line-height:1.05;letter-spacing:-0.025em;margin-bottom:16px;max-width:760px;color:var(--charcoal)}
+  .s-title em{font-style:italic;color:var(--honey);font-weight:500}
+  @media(max-width:680px){.s-title{font-size:36px}}
+  .s-sub{font-size:17px;color:var(--ink-soft);max-width:640px;line-height:1.6}
+  .s-head{margin-bottom:40px}
+  .s-head.center{text-align:center}
+  .s-head.center .s-title,.s-head.center .s-sub{margin-left:auto;margin-right:auto}
+
+  /* Pillars */
+  .pillars-bg{background:#fff}
+  .pillars-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media(max-width:880px){.pillars-grid{grid-template-columns:repeat(2,1fr)}}
+  .pillar-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px;transition:transform .25s,box-shadow .25s,border-color .25s}
+  .pillar-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(40,40,40,.10);border-color:var(--honey)}
+  .pillar-num{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:11px;color:var(--honey-deep);letter-spacing:.16em;margin-bottom:14px}
+  .pillar-card h4{font-family:'Helvetica Neue',Arial,sans-serif;font-size:20px;margin-bottom:8px;color:var(--ink)}
+  .pillar-card p{font-size:14.5px;color:var(--muted);line-height:1.55}
+
+  /* Products row */
+  .prod-bg{background:linear-gradient(180deg,#fff,var(--surface) 100%)}
+  .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:880px){.prod-grid{grid-template-columns:1fr}}
+  .prod-card{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .25s,box-shadow .25s;display:block}
+  .prod-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(40,40,40,.10)}
+  .prod-card__media{aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden}
+  .prod-card--iron .prod-card__media{background:linear-gradient(180deg,#FFE4F0,#fff)}
+  .prod-card--ginger .prod-card__media{background:linear-gradient(180deg,#E0F0E5,#fff)}
+  .prod-card--energy .prod-card__media{background:linear-gradient(180deg,#FFEDD5,#fff)}
+  .prod-card__media img{width:78%;height:78%;object-fit:contain}
+  .prod-card__body{padding:24px}
+  .prod-card__eye{font-size:11px;font-weight:800;letter-spacing:.10em;text-transform:uppercase;margin-bottom:6px}
+  .prod-card--iron .prod-card__eye{color:#C21B62}
+  .prod-card--ginger .prod-card__eye{color:#144B30}
+  .prod-card--energy .prod-card__eye{color:#7C2D12}
+  .prod-card h3{font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;margin-bottom:8px;color:var(--ink)}
+  .prod-card h3 em{font-style:italic;font-weight:500}
+  .prod-card--iron h3 em{color:#FF3D8E}
+  .prod-card--ginger h3 em{color:#2E8B57}
+  .prod-card--energy h3 em{color:#EA580C}
+  .prod-card p{font-size:14.5px;color:var(--muted);line-height:1.55;margin-bottom:18px}
+  .prod-card__cta{display:inline-flex;align-items:center;gap:8px;color:var(--charcoal);font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+  .prod-card__cta svg{width:14px;height:14px;transition:transform .25s}
+  .prod-card:hover .prod-card__cta svg{transform:translateX(4px)}
+
+  /* Standards */
+  .std-bg{background:#fff}
+  .std-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:880px){.std-grid{grid-template-columns:repeat(2,1fr)}}
+  .std-card{background:var(--surface);border-radius:14px;padding:22px;text-align:left}
+  .std-card .ic{width:42px;height:42px;border-radius:12px;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;margin-bottom:14px}
+  .std-card .ic svg{width:22px;height:22px}
+  .std-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;margin-bottom:6px;color:var(--ink)}
+  .std-card p{font-size:13.5px;color:var(--muted);line-height:1.5}
+
+  /* Story */
+  .story-bg{background:linear-gradient(180deg,var(--surface),#fff 100%)}
+  .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  @media(max-width:880px){.story-grid{grid-template-columns:1fr;gap:28px}}
+  .story-copy h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:42px;font-weight:700;line-height:1.05;letter-spacing:-0.02em;margin-bottom:18px;color:var(--charcoal)}
+  .story-copy h2 em{font-style:italic;color:var(--honey);font-weight:500}
+  @media(max-width:680px){.story-copy h2{font-size:32px}}
+  .story-copy p{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+  .story-quote{background:#fff;border:1px solid var(--line);border-left:4px solid var(--honey);padding:28px;border-radius:14px;box-shadow:0 8px 24px rgba(40,40,40,.06)}
+  .story-quote .kanji{font-family:'Noto Serif',serif;font-size:80px;line-height:1;color:var(--honey-deep);margin-bottom:14px}
+  .story-quote .word{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);margin-bottom:8px}
+  .story-quote p{font-size:15.5px;color:var(--muted);line-height:1.6;font-style:italic}
+
+  /* Manifesto */
+  .manifesto{background:var(--charcoal);color:#fff;padding:80px 0;text-align:center}
+  .manifesto h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:48px;font-weight:700;max-width:18ch;margin:0 auto 16px;line-height:1.05;letter-spacing:-0.02em}
+  .manifesto h2 em{font-style:italic;color:var(--honey);font-weight:500}
+  @media(max-width:680px){.manifesto h2{font-size:36px}}
+  .manifesto p{font-size:17px;color:#bbb;max-width:60ch;margin:0 auto}
+
+  /* Final */
+  .final{background:linear-gradient(180deg,var(--honey-soft) 0%,#fff 100%);padding:96px 0;text-align:center}
+  .final h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:48px;font-weight:700;max-width:20ch;margin:0 auto 14px;line-height:1.05;letter-spacing:-0.025em;color:var(--charcoal)}
+  .final h2 em{font-style:italic;color:var(--honey);font-weight:500}
+  @media(max-width:680px){.final h2{font-size:34px}}
+  .final p{font-size:16px;color:var(--muted);max-width:540px;margin:0 auto 28px}
+  .final-cta{display:inline-flex;align-items:center;gap:10px;background:var(--charcoal);color:#fff;padding:16px 32px;border-radius:14px;font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;transition:transform .2s,background .2s}
+  .final-cta:hover{transform:translateY(-2px);background:var(--charcoal-2)}
+
+  /* Footer */
+  .ed-footer{background:var(--charcoal);color:#ddd;padding:56px 0 24px}
+  .ed-footer__cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px}
+  @media(max-width:880px){.ed-footer__cols{grid-template-columns:1fr 1fr}}
+  .ed-footer__brand img{height:32px;margin-bottom:12px}
+  .ed-footer__brand p{color:#999;font-size:.88rem;max-width:32ch}
+  .ed-footer__col h5{color:#fff;font-size:.74rem;margin-bottom:12px;letter-spacing:.08em;text-transform:uppercase}
+  .ed-footer__col ul{list-style:none}
+  .ed-footer__col li{margin-bottom:8px}
+  .ed-footer__col a{color:#aaa;font-size:.88rem}
+  .ed-footer__col a:hover{color:var(--honey)}
+  .ed-footer__bar{display:flex;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);color:#777;font-size:.82rem;flex-wrap:wrap;gap:8px}
+</style>
 </head>
 <body>
 
-    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping over <span class="accent">₹999</span></span>
+    <span class="marquee-item">Active-form ingredients · Clinical doses</span>
+    <span class="marquee-item">FSSAI · GMP certified · Made in India</span>
+    <span class="marquee-item">A trademark of K.C. Laboratories</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping over <span class="accent">₹999</span></span>
+    <span class="marquee-item">Active-form ingredients · Clinical doses</span>
+    <span class="marquee-item">FSSAI · GMP certified · Made in India</span>
+    <span class="marquee-item">A trademark of K.C. Laboratories</span>
+  </div>
+</div>
 
-    <div class="promo">
-        <span>Free shipping on orders over <span class="accent">₹999</span> · Recommended by experts</span>
+<header class="site-header" id="siteHeader">
+    <div class="container">
+        <nav class="nav" id="primaryNav">
+            <a href="index.html" class="nav__logo"><img src="img/logo/logo-green.png" alt="Shiōrra"></a>
+            <ul class="nav__menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li class="nav__has-sub">
+                    <a href="product.html" class="nav__sub-toggle" aria-haspopup="true" aria-expanded="false" data-nav-sub>
+                        Shop
+                        <svg class="nav__sub-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </a>
+                    <ul class="nav__sub" role="menu">
+                        <li role="none"><a href="product.html" role="menuitem">Advanced Iron+</a></li>
+                        <li role="none"><a href="product-ginger.html" role="menuitem">Advanced Ginger+</a></li>
+                        <li role="none"><a href="product-energyone.html" role="menuitem">Advanced EnergyOne+</a></li>
+                    </ul>
+                </li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <div class="nav__cta">
+                <a href="product.html" class="btn">Shop now</a>
+                <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+            </div>
+        </nav>
     </div>
+</header>
 
-    <header class="site-header" id="siteHeader">
-        <div class="container">
-            <nav class="nav" id="primaryNav">
-                <a href="index.html" class="nav__logo" aria-label="Shiorra home">
-                    <img src="img/logo/logo-green.png" alt="Shiōrra">
-                </a>
-                <ul class="nav__menu" id="navMenu">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="nav__has-sub">
-                        <a href="product.html" class="nav__sub-toggle" aria-haspopup="true" aria-expanded="false" data-nav-sub>
-                            Shop
-                            <svg class="nav__sub-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-                        </a>
-                        <ul class="nav__sub" role="menu" aria-label="Shop the Shiōrra range">
-                            <li role="none"><a href="product.html" role="menuitem">Advanced Iron+</a></li>
-                            <li role="none"><a href="product-ginger.html" role="menuitem">Advanced Ginger+</a></li>
-                            <li role="none"><a href="product-energyone.html" role="menuitem">Advanced EnergyOne+</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="science.html">Science</a></li>
-                    <li><a href="reviews.html">Reviews</a></li>
-                    <li><a href="about.html" class="active">About</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
-                </ul>
-                <div class="nav__cta">
-                    <a href="product.html" class="btn">Shop now</a>
-                    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
-                        <span></span><span></span><span></span>
-                    </button>
-                </div>
-            </nav>
+<div class="microbar">
+  <div class="wrap microbar-inner">
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 30+ years in clinical formulation</span>
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Active-form ingredients</span>
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> FSSAI &amp; GMP certified</span>
+    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Made in India</span>
+  </div>
+</div>
+
+<section class="ed-hero">
+  <div class="wrap">
+    <span class="eyebrow">About Shiōrra</span>
+    <h1>Wellness, <em>gently formulated</em>.</h1>
+    <p>A precision wellness house by K.C. Laboratories — building one focused product at a time, each grounded in active-form ingredients and the science of how the body actually absorbs them.</p>
+    <div class="ed-hero-meta">
+      <span>Est. 2025</span><span class="dot">·</span>
+      <span>Mumbai · India</span><span class="dot">·</span>
+      <span>3 SKUs &amp; counting</span>
+    </div>
+  </div>
+</section>
+
+<section class="s pillars-bg">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="s-eyebrow">What we stand for</span>
+      <h2 class="s-title">A brand built on <em>four promises</em>.</h2>
+      <p class="s-sub">Trust. Science. Inclusion. Guidance. These aren't taglines — they're the filter every product passes through before it earns the Shiōrra name.</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card"><div class="pillar-num">01 · TRUST</div><h4>Clean, real ingredients</h4><p>No preservatives, no artificial colours or flavours. Purity is the starting point, not an afterthought.</p></div>
+      <div class="pillar-card"><div class="pillar-num">02 · SCIENCE</div><h4>Active-form first</h4><p>Methylcobalamin, P5P, methylfolate. We pick the form your body can actually use — not the cheapest.</p></div>
+      <div class="pillar-card"><div class="pillar-num">03 · INCLUSION</div><h4>For every stage</h4><p>Pregnancy, postpartum, busy adults, active lifestyles. Thoughtful formulation for who you actually are.</p></div>
+      <div class="pillar-card"><div class="pillar-num">04 · GUIDANCE</div><h4>Your gentle ally</h4><p>"Shiori" means a guide — a trusted companion. We build products that earn that name, daily.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="s prod-bg">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="s-eyebrow">The range</span>
+      <h2 class="s-title">Three products, <em>one philosophy</em>.</h2>
+      <p class="s-sub">Each Shiōrra product is built around the same clinical bar and the same gentle formulation philosophy — across pregnancy, daily nausea, and everyday energy.</p>
+    </div>
+    <div class="prod-grid">
+      <a href="product.html" class="prod-card prod-card--iron">
+        <div class="prod-card__media"><img src="img/products/sku-iron.png" alt="Advanced Iron+"></div>
+        <div class="prod-card__body">
+          <div class="prod-card__eye">For pregnancy &amp; postpartum</div>
+          <h3>Advanced <em>Iron+</em></h3>
+          <p>Ferrous Bisglycinate 27 mg + Folate, B12, B6, Zinc, Copper, Selenium. Gentle on the stomach, no metallic aftertaste.</p>
+          <span class="prod-card__cta">Explore Iron+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
-    </header>
-
-    <!-- ============== EDITORIAL HERO ============== -->
-    <section class="about-hero">
-        <div class="container">
-            <div class="about-hero__meta reveal">
-                <span class="about-hero__kanji" aria-hidden="true">栞</span>
-                <div class="about-hero__dateline">
-                    <span>Est. 2025</span><span class="dot" aria-hidden="true"></span>
-                    <span>Mumbai · India</span><span class="dot" aria-hidden="true"></span>
-                    <span>A trademark of K.C. Laboratories</span>
-                </div>
-            </div>
-            <div class="about-hero__head reveal">
-                <span class="eyebrow">About Shiōrra</span>
-                <h1 class="split-words" data-split>Built from a <span class="bold-pink">real, lived need</span>.</h1>
-            </div>
-            <div class="about-hero__lede reveal">
-                <p class="about-hero__lead">A wellness brand born when two women — a pharmacologist and a designer — couldn't find a clean, science-backed iron supplement for the people they cared about. So they built one.</p>
-                <ul class="about-hero__chips" aria-label="Brand attributes">
-                    <li>Science-backed</li>
-                    <li>Clean formulation</li>
-                    <li>Made in India</li>
-                </ul>
-            </div>
+      </a>
+      <a href="product-ginger.html" class="prod-card prod-card--ginger">
+        <div class="prod-card__media"><img src="img/products/sku-ginger.png" alt="Advanced Ginger+"></div>
+        <div class="prod-card__body">
+          <div class="prod-card__eye">For pregnancy nausea</div>
+          <h3>Advanced <em>Ginger+</em></h3>
+          <p>Standardized Ginger + active B6 (P5P) + B1 + Magnesium. Gentle daily support for queasiness and digestion.</p>
+          <span class="prod-card__cta">Explore Ginger+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
-    </section>
-
-    <!-- ============== BRAND PILLARS — Mission · Vision · Promise ============== -->
-    <section class="pillars">
-        <div class="container">
-            <div class="pillars__head reveal">
-                <span class="eyebrow">What guides us</span>
-                <h2>Three principles that <span class="bold-pink">shape everything</span> we make.</h2>
-            </div>
-            <div class="pillars__grid reveal">
-                <article class="pillar">
-                    <span class="pillar__num">01</span>
-                    <h3 class="pillar__label">Mission</h3>
-                    <p class="pillar__lead">Bridge clinical research and everyday wellbeing.</p>
-                    <p class="pillar__body">Develop science-backed, user-centric wellness solutions that address real-life health needs and solve the root cause — safe, effective, and meaningful for every stage of life.</p>
-                </article>
-                <article class="pillar">
-                    <span class="pillar__num">02</span>
-                    <h3 class="pillar__label">Vision</h3>
-                    <p class="pillar__lead">Redefine healthcare for every stage of life.</p>
-                    <p class="pillar__body">A world where wellness is holistic, accessible, and thoughtfully designed — guiding individuals toward balance, health, and vitality through considered innovation.</p>
-                </article>
-                <article class="pillar">
-                    <span class="pillar__num">03</span>
-                    <h3 class="pillar__label">Promise</h3>
-                    <p class="pillar__lead">Clean ingredients. Honest formulations.</p>
-                    <p class="pillar__body">No preservatives. No shortcuts. Every co-factor in every blend has a defensible reason to be there. We lead with evidence, not trends.</p>
-                </article>
-            </div>
+      </a>
+      <a href="product-energyone.html" class="prod-card prod-card--energy">
+        <div class="prod-card__media"><img src="img/products/sku-multivitamin.png" alt="Advanced EnergyOne+"></div>
+        <div class="prod-card__body">
+          <div class="prod-card__eye">For daily energy &amp; focus</div>
+          <h3>Advanced <em>EnergyOne+</em></h3>
+          <p>Taurine + Ginseng + B-Complex + minerals + amino acids. Caffeine-free, multi-nutrient support for modern life.</p>
+          <span class="prod-card__cta">Explore EnergyOne+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
-    </section>
+      </a>
+    </div>
+  </div>
+</section>
 
-    <!-- ============== FOUNDERS — editorial portrait cards ============== -->
-    <section class="founders-v2" id="founders">
-        <div class="container">
-            <div class="founders-v2__head reveal">
-                <div class="founders-v2__intro">
-                    <span class="eyebrow">The founders</span>
-                    <h2 class="split-words" data-split>Two perspectives. <span class="bold-pink">One mission</span>.</h2>
-                </div>
-                <blockquote class="founders-v2__quote">
-                    "We couldn't find a product that solved the root cause with clean ingredients. So we built one — for the women in our lives, and for ourselves."
-                </blockquote>
-            </div>
+<section class="s std-bg">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="s-eyebrow">Made with intention</span>
+      <h2 class="s-title">The standards we hold <em>ourselves to</em>.</h2>
+      <p class="s-sub">Each formulation passes through the same uncompromising filters — from sourcing to shelf, from the lab to your routine.</p>
+    </div>
+    <div class="std-grid">
+      <div class="std-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h5>Clinical formulation</h5>
+        <p>Active-form ingredients, lab-tested. No preservatives, colours or artificial flavours.</p>
+      </div>
+      <div class="std-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20 M5 9h14 M5 15h14"/></svg></div>
+        <h5>FSSAI &amp; GMP</h5>
+        <p>Certified manufacturing in India to international quality standards.</p>
+      </div>
+      <div class="std-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7"/></svg></div>
+        <h5>Built for the body</h5>
+        <p>Gentle on the stomach. 100% vegetarian. Doctor-recommended pre- and postnatally.</p>
+      </div>
+      <div class="std-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h5>10,000+ moms</h5>
+        <p>Trusted by women across India who chose Shiōrra over the supplements they were on before.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <div class="founders-v2__grid">
-                <article class="founder-v2 reveal">
-                    <div class="founder-v2__avatar"><span>SP</span></div>
-                    <span class="founder-v2__role">Co-founder · Science</span>
-                    <h3 class="founder-v2__name">Dr. Shivangi Patel</h3>
-                    <p class="founder-v2__credentials">PhD Tech, Pharmacology</p>
-                    <p class="founder-v2__body">Anchors every Shiōrra formulation in clinical and pharmacological rigor. Her research background ensures we lead with evidence — not trends — and that every co-factor in our blends has a defensible reason to be there.</p>
-                    <ul class="founder-v2__credits" aria-label="Areas of expertise">
-                        <li>Clinical Pharmacology</li>
-                        <li>Formulation R&amp;D</li>
-                        <li>Evidence-based design</li>
-                    </ul>
-                </article>
+<section class="s story-bg">
+  <div class="wrap">
+    <div class="story-grid">
+      <div class="story-copy">
+        <span class="s-eyebrow">Our story</span>
+        <h2>Built from a <em>real, lived need</em>.</h2>
+        <p>Shiōrra was born when the women who built it couldn't find a clean, science-backed supplement they trusted enough to give to the people they cared about. So they built one — then a second, then a third.</p>
+        <p>Each Shiōrra product is grounded in 30+ years of clinical formulation experience from K.C. Laboratories, and is shaped by what real women told us they needed: gentler, smarter, more honest wellness.</p>
+        <p>We're a small team. Every formula is reviewed personally. Every shipment leaves with care.</p>
+      </div>
+      <div class="story-quote">
+        <div class="kanji">栞</div>
+        <div class="word">Shiori — a guide</div>
+        <p>"Shiori" is the Japanese word for a bookmark — a quiet companion that holds your place and helps you find your way back. That's the kind of brand we wanted to build.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-                <article class="founder-v2 reveal">
-                    <div class="founder-v2__avatar"><span>IP</span></div>
-                    <span class="founder-v2__role">Co-founder · Brand &amp; Experience</span>
-                    <h3 class="founder-v2__name">Ishita Patel</h3>
-                    <p class="founder-v2__credentials">MDes, NIFT Mumbai</p>
-                    <p class="founder-v2__body">The lived perspective behind why Shiōrra exists. After facing health challenges and finding no products that solved the root cause with clean ingredients, she partnered with Dr. Shivangi to design a brand that puts the user — and her body — first.</p>
-                    <ul class="founder-v2__credits" aria-label="Areas of expertise">
-                        <li>Brand &amp; Identity</li>
-                        <li>Product Design</li>
-                        <li>User Experience</li>
-                    </ul>
-                </article>
-            </div>
-        </div>
-    </section>
+<section class="manifesto">
+  <div class="wrap">
+    <h2>Better today. <em>Stronger tomorrow.</em></h2>
+    <p>Not a quick fix. Not an empty promise. A daily, gentle, science-led commitment — one product, one routine, at a time.</p>
+  </div>
+</section>
 
-    <!-- ============== ETYMOLOGY — Shiori (栞) meaning + brand story ============== -->
-    <section class="etymology">
-        <div class="container">
-            <div class="etymology__grid reveal">
-                <aside class="etymology__mark">
-                    <span class="etymology__kanji" aria-hidden="true">栞</span>
-                    <span class="etymology__romaji">Shiori</span>
-                    <span class="etymology__defn">noun · Japanese</span>
-                    <span class="etymology__gloss">A guide. A bookmark. <br>The thread that keeps <br>your place.</span>
-                </aside>
+<section class="final">
+  <div class="wrap">
+    <h2>Start a routine you can <em>actually trust</em>.</h2>
+    <p>Pick the Shiōrra product that fits the season of life you're in. Free shipping over ₹999, 30-day money-back guarantee.</p>
+    <a href="product.html" class="final-cta">
+      Explore the range
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</section>
 
-                <div class="etymology__copy">
-                    <span class="eyebrow">The name</span>
-                    <h2>A name that means <span class="italic accent-pink">guide</span>.</h2>
-                    <p>In Japan, long life isn't chased — it's quietly cultivated through mindful rituals, balanced nourishment, and a deep respect for the body's natural rhythm. The name <strong>Shiōrra</strong> draws from <em>Shiori</em>, meaning <em>a guide</em> — reflecting our role as a trusted companion in the journey toward the right nutrition and overall wellbeing.</p>
-                    <p>At the heart of Shiōrra is a commitment to purity and progress. Clean, real ingredients with no preservatives, brought together through advanced formulations — designed to be inclusive, effective, and aligned with the body's natural needs.</p>
-                    <p>Shiōrra is a trademark of <strong>K.C. Laboratories</strong>. More than a brand — a commitment to making wellness simpler, more effective, precision-driven, and truly meaningful.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<footer class="ed-footer">
+  <div class="wrap">
+    <div class="ed-footer__cols">
+      <div class="ed-footer__brand">
+        <img src="img/logo/logo-green.png" alt="Shiōrra">
+        <p>Wellness, gently formulated. A trademark of K.C. Laboratories — made in India.</p>
+      </div>
+      <div class="ed-footer__col"><h5>Shop</h5><ul>
+        <li><a href="product.html">Advanced Iron+</a></li>
+        <li><a href="product-ginger.html">Advanced Ginger+</a></li>
+        <li><a href="product-energyone.html">Advanced EnergyOne+</a></li>
+      </ul></div>
+      <div class="ed-footer__col"><h5>Brand</h5><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="reviews.html">Reviews</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul></div>
+      <div class="ed-footer__col"><h5>Support</h5><ul>
+        <li><a href="mailto:hello@shiorra.com">hello@shiorra.com</a></li>
+        <li><a href="faq.html#chap-shipping">Shipping &amp; returns</a></li>
+        <li><a href="#">Privacy &amp; terms</a></li>
+      </ul></div>
+    </div>
+    <div class="ed-footer__bar">
+      <span>&copy; <span id="year"></span> Shiōrra™ · A trademark of K.C. Laboratories</span>
+      <span>Made in India</span>
+    </div>
+  </div>
+</footer>
 
-    <!-- ============== MANIFESTO STRIP ============== -->
-    <section class="manifesto">
-        <div class="container">
-            <div class="manifesto__inner reveal">
-                <h2 class="manifesto__line">
-                    Made <span class="manifesto__accent">simpler</span>.
-                    Made <span class="manifesto__accent">effective</span>.
-                    Made <span class="manifesto__accent">meaningful</span>.
-                </h2>
-                <span class="manifesto__sig">— The Shiōrra team</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============== CTA BAND ============== -->
-    <section class="cta-band">
-        <div class="container">
-            <div class="cta-band__grid">
-                <div>
-                    <h2>Walk the path <span class="bold-pink">with us</span>.</h2>
-                    <p>Begin a quietly cultivated routine — one capsule, once a day. Trusted, certified, gentle.</p>
-                </div>
-                <div class="cta-band__cta">
-                    <a href="product.html" class="btn">Shop Advanced Iron+ — ₹ 749</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============== FOOTER ============== -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer__top">
-                <div class="footer__brand">
-                    <img src="img/logo/logo-green.png" alt="Shiōrra">
-                    <p>Shiōrra is a trademark of K.C. Laboratories — a commitment to wellness made simpler, more effective, and truly meaningful.</p>
-                    <div class="footer__social">
-                        <a href="#" aria-label="Instagram"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-                    </div>
-                </div>
-                <div class="footer__col"><h5>Shop</h5><ul><li><a href="product.html">Advanced Iron+</a></li><li><a href="product.html#ingredients">Ingredients</a></li></ul></div>
-                <div class="footer__col"><h5>Brand</h5><ul><li><a href="science.html">Science</a></li><li><a href="about.html">Founders</a></li><li><a href="reviews.html">Reviews</a></li></ul></div>
-                <div class="footer__col"><h5>Support</h5><ul><li><a href="faq.html">FAQ</a></li></ul></div>
-                <div class="footer__col footer__retailers"><h5>Also on</h5><ul><li><a href="#">Amazon</a></li><li><a href="#">Flipkart</a></li></ul></div>
-            </div>
-            <div class="footer__bottom">
-                <span>© <span id="year"></span> Shiōrra™ · A trademark of K.C. Laboratories · Made in India</span>
-                <span><a href="#">Privacy</a> · <a href="#">Terms</a></span>
-            </div>
-        </div>
-    </footer>
-
-
-    <!-- Lenis smooth-scroll -->
-    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-    <script src="js/lenis-init.js"></script>
-    <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js" defer></script>
-    <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
-    <script src="js/award.js" defer></script>
-
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">
-        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-    </button>
-    <script src="js/main.js"></script>
-    <script>
-        (() => {
-            const bar = document.getElementById('scrollProgress'); if (!bar) return;
-            const update = () => { const m = document.documentElement.scrollHeight - window.innerHeight; bar.style.width = (m > 0 ? (window.scrollY / m) * 100 : 0) + '%'; };
-            window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); update();
-        })();
-        (() => {
-            const heads = document.querySelectorAll('[data-split]'); if (!heads.length) return;
-            const splitNode = (node) => {
-                const out = document.createDocumentFragment();
-                node.childNodes.forEach(child => {
-                    if (child.nodeType === Node.TEXT_NODE) child.textContent.split(/(\s+)/).forEach(p => { if (!p) return; if (/^\s+$/.test(p)) out.appendChild(document.createTextNode(' ')); else { const w = document.createElement('span'); w.className='word'; w.textContent=p; out.appendChild(w); } });
-                    else if (child.nodeType === Node.ELEMENT_NODE) { if (child.tagName === 'BR') out.appendChild(child.cloneNode(true)); else { const w = document.createElement('span'); w.className='word'; w.appendChild(child.cloneNode(true)); out.appendChild(w); out.appendChild(document.createTextNode(' ')); } }
-                });
-                node.innerHTML = ''; node.appendChild(out);
-            };
-            heads.forEach(h => { splitNode(h); h.querySelectorAll('.word').forEach((w, i) => w.style.transitionDelay = (i * 0.06) + 's'); });
-            const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); } }), { threshold: 0.25 });
-            heads.forEach(h => io.observe(h));
-        })();
-    </script>
-
-    <script>
-        (() => {
-            const btn = document.getElementById("backToTop");
-            if (!btn) return;
-            const onScroll = () => btn.classList.toggle("is-visible", window.scrollY > 600);
-            window.addEventListener("scroll", onScroll, { passive: true });
-            btn.addEventListener("click", () => {
-                if (window.lenis) window.lenis.scrollTo(0, { duration: 1.2 });
-                else window.scrollTo({ top: 0, behavior: "smooth" });
-            });
-            onScroll();
-        })();
-    </script></body>
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="js/lenis-init.js"></script>
+<script src="js/main.js"></script>
+<script>(function(){const y=document.getElementById('year');if(y)y.textContent=new Date().getFullYear();})();</script>
+</body>
 </html>
