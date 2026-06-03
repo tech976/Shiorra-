@@ -730,6 +730,7 @@ p { margin: 0; text-wrap: pretty; line-height: 1.5; }
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    cursor: pointer;
 }
 .nav__sub-caret {
     transition: transform .25s ease;
@@ -737,14 +738,31 @@ p { margin: 0; text-wrap: pretty; line-height: 1.5; }
     margin-top: 1px;
 }
 .nav__has-sub:hover .nav__sub-caret,
+.nav__has-sub:focus-within .nav__sub-caret,
 .nav__has-sub.is-open .nav__sub-caret { transform: rotate(180deg); }
+
+/* Invisible hover bridge — fills the visual gap between the toggle and the
+   dropdown so the cursor never crosses dead space and the menu doesn't snap
+   shut while you're moving down to pick a product. */
+.nav__has-sub::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: -16px;
+    right: -16px;
+    height: 20px;
+    pointer-events: none;
+}
+.nav__has-sub:hover::after,
+.nav__has-sub:focus-within::after,
+.nav__has-sub.is-open::after { pointer-events: auto; }
 
 .nav__sub {
     position: absolute;
     top: calc(100% + 14px);
     left: 50%;
-    transform: translateX(-50%) translateY(-6px);
-    min-width: 240px;
+    transform: translateX(-50%) translateY(-4px);
+    min-width: 260px;
     background: #fff;
     border: 1px solid var(--c-line);
     border-radius: 14px;
@@ -757,7 +775,12 @@ p { margin: 0; text-wrap: pretty; line-height: 1.5; }
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity .2s ease, transform .25s cubic-bezier(.22,1,.36,1), visibility 0s linear .2s;
+    /* Slight close-delay (.18s before visibility flips) so a brief mouse-out
+       on the way back doesn't kill the menu. */
+    transition:
+        opacity .22s ease,
+        transform .28s cubic-bezier(.22,1,.36,1),
+        visibility 0s linear .18s;
     z-index: 60;
 }
 .nav__sub::before {
@@ -777,27 +800,31 @@ p { margin: 0; text-wrap: pretty; line-height: 1.5; }
     visibility: visible;
     pointer-events: auto;
     transform: translateX(-50%) translateY(0);
-    transition: opacity .2s ease, transform .25s cubic-bezier(.22,1,.36,1), visibility 0s;
+    transition:
+        opacity .18s ease,
+        transform .25s cubic-bezier(.22,1,.36,1),
+        visibility 0s;
 }
 .nav__sub li { list-style: none; }
 .nav__sub a {
     display: block;
-    padding: 10px 14px;
+    padding: 13px 18px;
     font-family: var(--ff-display);
     font-weight: 600;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--c-charcoal);
-    border-radius: 8px;
+    border-radius: 10px;
     line-height: 1.25;
-    transition: background .18s ease, color .18s ease;
+    transition: background .18s ease, color .18s ease, transform .18s ease;
 }
 .nav__sub a::after { display: none; }
 .nav__sub a:hover,
 .nav__sub a:focus-visible {
     background: var(--c-cream);
     color: var(--c-pink);
+    transform: translateX(2px);
 }
 
 /* Cleaner growing underline */

@@ -25,25 +25,39 @@
         }));
     }
 
-    /* Shop dropdown — click-toggle, Esc + outside-click close */
+    /* Shop dropdown
+       Mouse users (hover: hover + pointer: fine) get pure CSS :hover —
+       no JS click-intercept, so clicking "Shop" actually navigates to
+       product.html, and the new ::after hover-bridge keeps the menu open
+       while the cursor traverses the gap to a submenu item.
+       Touch / coarse-pointer users get a click-toggle so they can open
+       the dropdown without a hover. */
     const subToggles = $$('.nav__sub-toggle');
     const closeAllSubs = () => $$('.nav__has-sub.is-open').forEach(p => {
         p.classList.remove('is-open');
         p.querySelector('.nav__sub-toggle')?.setAttribute('aria-expanded', 'false');
     });
-    subToggles.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const parent = btn.closest('.nav__has-sub');
-            const opening = !parent.classList.contains('is-open');
-            closeAllSubs();
-            if (opening) {
-                parent.classList.add('is-open');
-                btn.setAttribute('aria-expanded', 'true');
-            }
-        });
-    });
+    const hasHover =
+        window.matchMedia &&
+        window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
     if (subToggles.length) {
+        if (!hasHover) {
+            subToggles.forEach((btn) => {
+                btn.addEventListener('click', (e) => {
+                    const parent = btn.closest('.nav__has-sub');
+                    // First tap opens; if already open, let the link navigate.
+                    if (!parent.classList.contains('is-open')) {
+                        e.preventDefault();
+                        closeAllSubs();
+                        parent.classList.add('is-open');
+                        btn.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+        }
+        // Outside-click + Esc still close any sticky-open menus (e.g. opened
+        // via keyboard focus then mouse moved away on a touch laptop).
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.nav__has-sub')) closeAllSubs();
         });
