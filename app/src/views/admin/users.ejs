@@ -1,0 +1,36 @@
+<div class="admin">
+    <%- include('./_nav') %>
+    <div class="admin__main">
+        <div class="admin__head"><h1>Users</h1><span style="color:var(--c-text-3)"><%= users.length %> users</span></div>
+
+        <form method="get" action="/admin/users" class="admin__search">
+            <input type="text" name="q" value="<%= q || '' %>" placeholder="Search by name, email or phone…">
+            <button class="btn btn--sm">Search</button>
+            <% if (q) { %><a href="/admin/users" class="btn btn--sm btn--ghost">Clear</a><% } %>
+        </form>
+
+        <table class="data-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Orders</th><th>Joined</th><th></th></tr></thead>
+            <tbody>
+            <% users.forEach(function(u) { %>
+                <tr>
+                    <td><a href="/admin/users/<%= u.id %>"><%= u.name || '—' %></a></td>
+                    <td><%= u.email %></td>
+                    <td><%= u.phone || '—' %></td>
+                    <td><span class="badge badge--<%= u.role.toLowerCase() %>"><%= u.role %></span></td>
+                    <td><%= u._count.orders %></td>
+                    <td><%= u.createdAt.toISOString().slice(0,10) %></td>
+                    <td>
+                        <a href="/admin/users/<%= u.id %>" class="btn btn--sm">Open</a>
+                        <% if (u.id !== currentUser.id) { %>
+                            <form action="/admin/users/<%= u.id %>/toggle-role" method="post" onsubmit="return confirm('Toggle role for <%= u.email %>?')" style="display:inline">
+                                <button class="btn btn--sm btn--ghost">Make <%= u.role === 'ADMIN' ? 'User' : 'Admin' %></button>
+                            </form>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>

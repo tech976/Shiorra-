@@ -1,0 +1,54 @@
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">Order</span>
+        <h1><%= order.orderNumber %></h1>
+        <p>Placed <%= order.createdAt.toISOString().slice(0,10) %> · <span class="badge badge--<%= order.status.toLowerCase() %>"><%= order.status %></span></p>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="account">
+            <%- include('../partials/account-nav', { active: 'orders' }) %>
+
+            <div class="account__main">
+                <div class="order-status-line">
+                    <% const steps = ['PAID','PROCESSING','SHIPPED','DELIVERED']; %>
+                    <% const reachedIdx = steps.indexOf(order.status); %>
+                    <% steps.forEach(function(s, i) { %>
+                        <div class="status-step <%= (reachedIdx >= i) ? 'is-done' : '' %> <%= (reachedIdx === i) ? 'is-current' : '' %>">
+                            <span class="status-dot"></span>
+                            <span class="status-lbl"><%= s %></span>
+                        </div>
+                    <% }); %>
+                </div>
+
+                <h3>Items</h3>
+                <ul class="checkout__items">
+                    <% order.items.forEach(function(it) { %>
+                        <li><span><%= it.name %> × <%= it.quantity %></span><span><%= formatINR(it.totalInPaise) %></span></li>
+                    <% }); %>
+                </ul>
+                <div class="cart__row"><span>Subtotal</span><span><%= formatINR(order.subtotalInPaise) %></span></div>
+                <div class="cart__row"><span>Shipping</span><span><%= order.shippingInPaise === 0 ? 'Free' : formatINR(order.shippingInPaise) %></span></div>
+                <div class="cart__row cart__row--total"><span>Total</span><span><%= formatINR(order.totalInPaise) %></span></div>
+
+                <% if (order.shippingAddress) { %>
+                    <h3 style="margin-top:24px">Shipping to</h3>
+                    <address class="address-block">
+                        <%= order.shippingAddress.fullName %><br>
+                        <%= order.shippingAddress.line1 %><br>
+                        <% if (order.shippingAddress.line2) { %><%= order.shippingAddress.line2 %><br><% } %>
+                        <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.postcode %><br>
+                        <%= order.shippingAddress.country %><br>
+                        <%= order.shippingAddress.phone %>
+                    </address>
+                <% } %>
+
+                <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;">
+                    <a href="/account/orders" class="btn btn--ghost btn--sm">← All orders</a>
+                    <a href="/shop" class="btn btn--sm">Continue shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

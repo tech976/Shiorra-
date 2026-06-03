@@ -1,0 +1,49 @@
+<div class="admin">
+    <%- include('./_nav') %>
+    <div class="admin__main">
+        <div class="admin__head">
+            <h1>Orders</h1>
+            <span style="color:var(--c-text-3)"><%= orders.length %> matching</span>
+        </div>
+
+        <form method="get" action="/admin/orders" class="admin__search">
+            <input type="text" name="q" value="<%= q %>" placeholder="Search by order number, customer name, or email…">
+            <select name="status">
+                <option value="">All statuses</option>
+                <% statuses.forEach(function(s) { %>
+                    <option value="<%= s %>" <%= activeStatus === s ? 'selected' : '' %>><%= s %></option>
+                <% }); %>
+            </select>
+            <button class="btn btn--sm">Filter</button>
+            <% if (q || activeStatus) { %><a href="/admin/orders" class="btn btn--sm btn--ghost">Clear</a><% } %>
+        </form>
+
+        <% if (!orders.length) { %>
+            <div class="empty-state">
+                <p>No orders match your filter.</p>
+                <% if (q || activeStatus) { %><a href="/admin/orders" class="btn">Clear filters</a><% } %>
+            </div>
+        <% } else { %>
+            <table class="data-table">
+                <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th><th></th></tr></thead>
+                <tbody>
+                <% orders.forEach(function(o) { %>
+                    <tr>
+                        <td><strong><%= o.orderNumber %></strong></td>
+                        <td>
+                            <a href="/admin/users/<%= o.userId %>"><%= o.user.name || o.user.email %></a><br>
+                            <small style="color:var(--c-text-3)"><%= o.user.email %></small>
+                        </td>
+                        <td><%= o.items.length %></td>
+                        <td><%= formatINR(o.totalInPaise) %></td>
+                        <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
+                        <td><span class="badge badge--<%= o.paymentStatus.toLowerCase() %>"><%= o.paymentStatus %></span></td>
+                        <td><%= o.createdAt.toISOString().slice(0,10) %></td>
+                        <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a></td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+</div>

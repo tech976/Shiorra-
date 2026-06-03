@@ -1,0 +1,66 @@
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">Cart</span>
+        <h1>Your cart</h1>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <% if (!items.length) { %>
+            <div class="empty-state">
+                <p>Your cart is empty.</p>
+                <a href="/shop" class="btn">Browse products</a>
+            </div>
+        <% } else { %>
+            <div class="cart">
+                <table class="cart__table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% items.forEach(function(it) { %>
+                            <tr>
+                                <td class="cart__product">
+                                    <% if (it.product.images && it.product.images[0]) { %>
+                                        <img src="<%= it.product.images[0].url %>" alt="<%= it.product.name %>">
+                                    <% } %>
+                                    <div>
+                                        <a href="/product/<%= it.product.slug %>"><%= it.product.name %></a>
+                                    </div>
+                                </td>
+                                <td><%= formatINR(it.product.priceInPaise) %></td>
+                                <td>
+                                    <form action="/cart/items/<%= it.productId %>" method="post" class="cart__qty-form">
+                                        <input type="number" name="quantity" value="<%= it.quantity %>" min="0" max="99">
+                                        <button class="btn btn--sm">Update</button>
+                                    </form>
+                                </td>
+                                <td><%= formatINR(it.subtotalInPaise) %></td>
+                                <td>
+                                    <form action="/cart/items/<%= it.productId %>?_method=DELETE" method="post">
+                                        <button class="btn btn--link">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+
+                <aside class="cart__summary">
+                    <h3>Order summary</h3>
+                    <div class="cart__row"><span>Subtotal</span><span><%= formatINR(totals.subtotalInPaise) %></span></div>
+                    <div class="cart__row"><span>Shipping</span><span><%= totals.shippingInPaise === 0 ? 'Free' : formatINR(totals.shippingInPaise) %></span></div>
+                    <div class="cart__row cart__row--total"><span>Total</span><span><%= formatINR(totals.totalInPaise) %></span></div>
+                    <a href="/checkout" class="btn btn--lg btn--full">Checkout</a>
+                </aside>
+            </div>
+        <% } %>
+    </div>
+</section>

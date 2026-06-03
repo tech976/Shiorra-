@@ -1,0 +1,33 @@
+<header class="site-header">
+    <div class="container">
+        <nav class="nav">
+            <a href="/" class="nav__logo" aria-label="Shiorra home">
+                <img src="/img/logo/logo-green.png" alt="Shiorra">
+            </a>
+            <ul class="nav__menu">
+                <li><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Home</a></li>
+                <li><a href="/shop" class="<%= currentPath.startsWith('/shop') || currentPath.startsWith('/product/') ? 'active' : '' %>">Shop</a></li>
+                <li><a href="/about" class="<%= currentPath === '/about' ? 'active' : '' %>">About</a></li>
+                <li><a href="/faq" class="<%= currentPath === '/faq' ? 'active' : '' %>">FAQ</a></li>
+                <li><a href="/contact" class="<%= currentPath === '/contact' ? 'active' : '' %>">Contact</a></li>
+            </ul>
+            <div class="nav__cta">
+                <a href="/cart" class="nav__cart" aria-label="Cart">
+                    Cart<% if (cartCount > 0) { %> <span class="nav__cart-count"><%= cartCount %></span><% } %>
+                </a>
+                <% if (currentUser) { %>
+                    <a href="/account" class="nav__account"><%= currentUser.name || currentUser.email %></a>
+                    <% if (currentUser.role === 'ADMIN') { %>
+                        <a href="/admin" class="btn btn--ghost">Admin</a>
+                    <% } %>
+                    <form action="/logout" method="post" class="nav__logout-form">
+                        <button type="submit" class="btn btn--link">Log out</button>
+                    </form>
+                <% } else { %>
+                    <a href="/login" class="btn btn--ghost">Log in</a>
+                    <a href="/register" class="btn">Sign up</a>
+                <% } %>
+            </div>
+        </nav>
+    </div>
+</header>

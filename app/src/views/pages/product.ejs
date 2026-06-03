@@ -1,0 +1,66 @@
+<section class="product">
+    <div class="container">
+        <div class="product__layout">
+            <div class="product__media">
+                <% if (product.images && product.images.length) { %>
+                    <img src="<%= product.images[0].url %>" alt="<%= product.images[0].alt || product.name %>" class="product__hero-img">
+                    <% if (product.images.length > 1) { %>
+                        <div class="product__thumbs">
+                            <% product.images.forEach(function(img) { %>
+                                <img src="<%= img.url %>" alt="<%= img.alt || product.name %>" class="product__thumb">
+                            <% }); %>
+                        </div>
+                    <% } %>
+                <% } else { %>
+                    <div class="product__placeholder"><%= product.name %></div>
+                <% } %>
+            </div>
+            <div class="product__copy">
+                <% if (product.badge) { %><span class="product__badge"><%= product.badge %></span><% } %>
+                <h1 class="product__title"><%= product.name %></h1>
+                <% if (product.tagline) { %><p class="product__tagline"><%= product.tagline %></p><% } %>
+                <p class="product__price">
+                    <%= formatINR(product.priceInPaise) %>
+                    <% if (product.mrpInPaise && product.mrpInPaise > product.priceInPaise) { %>
+                        <span class="product__mrp"><%= formatINR(product.mrpInPaise) %></span>
+                    <% } %>
+                </p>
+                <% if (product.stock > 0) { %>
+                    <p class="product__stock">In stock — ships in 1-2 days.</p>
+                <% } else { %>
+                    <p class="product__stock product__stock--out">Out of stock</p>
+                <% } %>
+
+                <form action="/cart/add" method="post" class="product__buy">
+                    <input type="hidden" name="productId" value="<%= product.id %>">
+                    <label class="product__qty">
+                        Qty
+                        <input type="number" name="quantity" value="1" min="1" max="<%= Math.max(1, product.stock) %>" <%= product.stock === 0 ? 'disabled' : '' %>>
+                    </label>
+                    <button type="submit" class="btn btn--lg" <%= product.stock === 0 ? 'disabled' : '' %>>
+                        <%= product.stock === 0 ? 'Sold out' : 'Add to cart' %>
+                    </button>
+                </form>
+
+                <% if (product.description) { %>
+                    <div class="product__desc">
+                        <%- product.description.replace(/\n/g, '<br>') %>
+                    </div>
+                <% } %>
+
+                <% if (product.ingredients) { %>
+                    <details class="product__details">
+                        <summary>Ingredients</summary>
+                        <div><%- product.ingredients.replace(/\n/g, '<br>') %></div>
+                    </details>
+                <% } %>
+                <% if (product.servingInfo) { %>
+                    <details class="product__details">
+                        <summary>How to use</summary>
+                        <div><%- product.servingInfo.replace(/\n/g, '<br>') %></div>
+                    </details>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,8 @@
+<aside class="account__nav">
+    <h4>Account</h4>
+    <a href="/account" class="<%= active === 'dashboard' ? 'active' : '' %>">Dashboard</a>
+    <a href="/account/orders" class="<%= active === 'orders' ? 'active' : '' %>">Orders</a>
+    <a href="/account/addresses" class="<%= active === 'addresses' ? 'active' : '' %>">Addresses</a>
+    <hr>
+    <form action="/logout" method="post"><button class="btn btn--link">Log out</button></form>
+</aside>

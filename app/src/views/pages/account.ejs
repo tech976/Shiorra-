@@ -1,0 +1,71 @@
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">Your account</span>
+        <h1>Hi, <%= currentUser.name || currentUser.email %></h1>
+        <p>Manage your profile, orders and saved addresses.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="account">
+            <%- include('../partials/account-nav', { active: 'dashboard' }) %>
+
+            <div class="account__main">
+                <div class="account__cards">
+                    <a href="/account/orders" class="account__card">
+                        <span class="account__card-num"><%= orderCount %></span>
+                        <span class="account__card-lbl">Orders</span>
+                    </a>
+                    <a href="/account/addresses" class="account__card">
+                        <span class="account__card-num"><%= addressCount %></span>
+                        <span class="account__card-lbl">Saved addresses</span>
+                    </a>
+                    <% if (currentUser.role === 'ADMIN') { %>
+                        <a href="/admin" class="account__card account__card--accent">
+                            <span class="account__card-num">Admin</span>
+                            <span class="account__card-lbl">Open admin panel</span>
+                        </a>
+                    <% } %>
+                </div>
+
+                <% if (latestOrders.length) { %>
+                    <h3>Recent orders</h3>
+                    <ul class="order-list">
+                        <% latestOrders.forEach(function(o) { %>
+                            <li>
+                                <a href="/account/orders/<%= o.orderNumber %>">
+                                    <strong><%= o.orderNumber %></strong>
+                                    <span><%= o.createdAt.toISOString().slice(0,10) %></span>
+                                    <span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span>
+                                    <span><%= formatINR(o.totalInPaise) %></span>
+                                </a>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <div class="empty-state empty-state--soft">
+                        <p>You haven't placed an order yet.</p>
+                        <a href="/shop" class="btn">Start shopping</a>
+                    </div>
+                <% } %>
+
+                <h3 style="margin-top:32px">Profile</h3>
+                <form action="/account/profile" method="post" class="form-grid">
+                    <label>Name<input name="name" value="<%= currentUser.name || '' %>" required></label>
+                    <label>Phone<input name="phone" value="<%= currentUser.phone || '' %>" placeholder="+91…"></label>
+                    <label class="form-grid__full">Email<input value="<%= currentUser.email %>" disabled></label>
+                    <div class="form-grid__full"><button class="btn">Save profile</button></div>
+                </form>
+
+                <h3 style="margin-top:32px">Change password</h3>
+                <form action="/account/password" method="post" class="form-grid">
+                    <label class="form-grid__full">Current password<input type="password" name="current" required></label>
+                    <label>New password<input type="password" name="next" required minlength="8"></label>
+                    <label>Confirm new<input type="password" name="confirm" required minlength="8"></label>
+                    <div class="form-grid__full"><button class="btn">Change password</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

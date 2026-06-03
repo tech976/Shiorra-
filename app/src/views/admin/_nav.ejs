@@ -1,0 +1,9 @@
+<aside class="admin__nav">
+    <h4>Admin</h4>
+    <a href="/admin" class="<%= currentPath === '/admin' ? 'active' : '' %>">Dashboard</a>
+    <a href="/admin/products" class="<%= currentPath.startsWith('/admin/products') ? 'active' : '' %>">Products</a>
+    <a href="/admin/orders" class="<%= currentPath.startsWith('/admin/orders') ? 'active' : '' %>">Orders</a>
+    <a href="/admin/users" class="<%= currentPath.startsWith('/admin/users') ? 'active' : '' %>">Users</a>
+    <hr>
+    <a href="/" class="admin__nav-back">← Back to site</a>
+</aside>

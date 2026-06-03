@@ -1,0 +1,20 @@
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">Shop</span>
+        <h1>The full range.</h1>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <% if (products.length === 0) { %>
+            <p>No products yet.</p>
+        <% } else { %>
+            <div class="product-grid">
+                <% products.forEach(function(product) { %>
+                    <%- include('../partials/product-card', { product: product }) %>
+                <% }); %>
+            </div>
+        <% } %>
+    </div>
+</section>

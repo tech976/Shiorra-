@@ -1,0 +1,74 @@
+<div class="admin">
+    <%- include('./_nav') %>
+    <div class="admin__main">
+        <div class="admin__head">
+            <h1><%= u.name || u.email %></h1>
+            <a href="/admin/users" class="btn btn--ghost btn--sm">← All users</a>
+        </div>
+
+        <div class="admin__panels">
+            <section class="admin__panel">
+                <h3>Identity</h3>
+                <dl class="kvp">
+                    <dt>Email</dt><dd><%= u.email %></dd>
+                    <dt>Name</dt><dd><%= u.name || '—' %></dd>
+                    <dt>Phone</dt><dd><%= u.phone || '—' %></dd>
+                    <dt>Role</dt><dd><span class="badge badge--<%= u.role.toLowerCase() %>"><%= u.role %></span></dd>
+                    <dt>Joined</dt><dd><%= u.createdAt.toISOString().slice(0,10) %></dd>
+                    <dt>Lifetime spend</dt><dd><strong><%= formatINR(lifetimeInPaise) %></strong></dd>
+                    <dt>Orders</dt><dd><%= u.orders.length %></dd>
+                </dl>
+
+                <% if (u.id !== currentUser.id) { %>
+                    <form action="/admin/users/<%= u.id %>/toggle-role" method="post" onsubmit="return confirm('Toggle role for <%= u.email %>?')">
+                        <input type="hidden" name="returnTo" value="/admin/users/<%= u.id %>">
+                        <button class="btn btn--ghost">Make <%= u.role === 'ADMIN' ? 'User' : 'Admin' %></button>
+                    </form>
+                <% } %>
+            </section>
+
+            <section class="admin__panel">
+                <h3>Saved addresses (<%= u.addresses.length %>)</h3>
+                <% if (!u.addresses.length) { %>
+                    <p style="color:var(--c-text-3)">No saved addresses.</p>
+                <% } else { %>
+                    <ul class="address-list">
+                        <% u.addresses.forEach(function(a) { %>
+                            <li>
+                                <% if (a.isDefault) { %><span class="badge badge--paid">Default</span><% } %>
+                                <strong><%= a.fullName %></strong><br>
+                                <%= a.line1 %><br>
+                                <% if (a.line2) { %><%= a.line2 %><br><% } %>
+                                <%= a.city %>, <%= a.state %> <%= a.postcode %><br>
+                                <%= a.country %><br>
+                                <%= a.phone %>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } %>
+            </section>
+        </div>
+
+        <h3 style="margin-top:24px">Order history</h3>
+        <% if (!u.orders.length) { %>
+            <p style="color:var(--c-text-3)">This user hasn't placed an order yet.</p>
+        <% } else { %>
+            <table class="data-table">
+                <thead><tr><th>Order</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th>Payment</th><th></th></tr></thead>
+                <tbody>
+                <% u.orders.forEach(function(o) { %>
+                    <tr>
+                        <td><%= o.orderNumber %></td>
+                        <td><%= o.createdAt.toISOString().slice(0,10) %></td>
+                        <td><%= o.items.length %></td>
+                        <td><%= formatINR(o.totalInPaise) %></td>
+                        <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
+                        <td><span class="badge badge--<%= o.paymentStatus.toLowerCase() %>"><%= o.paymentStatus %></span></td>
+                        <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a></td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+</div>

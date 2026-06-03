@@ -1,0 +1,53 @@
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">Account</span>
+        <h1>Saved addresses</h1>
+        <p>Manage where your orders ship to.</p>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="account">
+            <%- include('../partials/account-nav', { active: 'addresses' }) %>
+
+            <div class="account__main">
+                <div class="account__head">
+                    <h2>Your addresses</h2>
+                    <a href="/account/addresses/new" class="btn">+ Add address</a>
+                </div>
+
+                <% if (!addresses.length) { %>
+                    <div class="empty-state">
+                        <p>No addresses yet. Add one to speed up checkout.</p>
+                        <a href="/account/addresses/new" class="btn">Add your first address</a>
+                    </div>
+                <% } else { %>
+                    <ul class="address-list">
+                        <% addresses.forEach(function(a) { %>
+                            <li class="address-card">
+                                <% if (a.isDefault) { %><span class="badge badge--paid">Default</span><% } %>
+                                <strong><%= a.fullName %></strong>
+                                <p><%= a.line1 %></p>
+                                <% if (a.line2) { %><p><%= a.line2 %></p><% } %>
+                                <p><%= a.city %>, <%= a.state %> <%= a.postcode %></p>
+                                <p><%= a.country %></p>
+                                <p class="address-card__phone"><%= a.phone %></p>
+                                <div class="address-card__actions">
+                                    <a href="/account/addresses/<%= a.id %>/edit" class="btn btn--sm">Edit</a>
+                                    <% if (!a.isDefault) { %>
+                                        <form action="/account/addresses/<%= a.id %>/default" method="post">
+                                            <button class="btn btn--sm btn--ghost">Make default</button>
+                                        </form>
+                                    <% } %>
+                                    <form action="/account/addresses/<%= a.id %>?_method=DELETE" method="post" onsubmit="return confirm('Remove this address?');">
+                                        <button class="btn btn--sm btn--danger">Remove</button>
+                                    </form>
+                                </div>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,25 @@
+<article class="product-card">
+    <a href="/product/<%= product.slug %>" class="product-card__media">
+        <% if (product.badge) { %><span class="product-card__badge"><%= product.badge %></span><% } %>
+        <% if (product.images && product.images[0]) { %>
+            <img src="<%= product.images[0].url %>" alt="<%= product.images[0].alt || product.name %>">
+        <% } else { %>
+            <div class="product-card__placeholder"><%= product.name %></div>
+        <% } %>
+    </a>
+    <div class="product-card__body">
+        <h3 class="product-card__name"><a href="/product/<%= product.slug %>"><%= product.name %></a></h3>
+        <% if (product.tagline) { %><p class="product-card__desc"><%= product.tagline %></p><% } %>
+        <p class="product-card__price">
+            <%= formatINR(product.priceInPaise) %>
+            <% if (product.mrpInPaise && product.mrpInPaise > product.priceInPaise) { %>
+                <span class="product-card__mrp"><%= formatINR(product.mrpInPaise) %></span>
+            <% } %>
+        </p>
+    </div>
+    <form action="/cart/add" method="post" class="product-card__form">
+        <input type="hidden" name="productId" value="<%= product.id %>">
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit" class="btn btn--full">Add to cart</button>
+    </form>
+</article>

@@ -1,0 +1,13 @@
+<section class="auth">
+    <div class="container container--narrow">
+        <h1>Create an account</h1>
+        <form action="/register" method="post" class="auth__form">
+            <label>Name<input type="text" name="name" required value="<%= values.name || '' %>"></label>
+            <label>Email<input type="email" name="email" required value="<%= values.email || '' %>" autocomplete="email"></label>
+            <label>Phone (optional)<input type="tel" name="phone" value="<%= values.phone || '' %>"></label>
+            <label>Password<input type="password" name="password" required minlength="8" autocomplete="new-password"></label>
+            <button type="submit" class="btn btn--lg btn--full">Create account</button>
+        </form>
+        <p class="auth__alt">Already have an account? <a href="/login">Log in</a>.</p>
+    </div>
+</section>

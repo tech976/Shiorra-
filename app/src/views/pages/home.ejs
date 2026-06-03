@@ -1,0 +1,28 @@
+<section class="hero-band">
+    <div class="container">
+        <h1 class="hero-band__title">Wellness, <em>gently formulated</em>.</h1>
+        <p class="hero-band__lead">Active-form ingredients, clinical doses, kind to the body. Built for every stage of life.</p>
+        <div class="hero-band__cta">
+            <a href="/shop" class="btn btn--lg">Shop the routine</a>
+            <a href="/about" class="btn btn--ghost btn--lg">Our story</a>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <header class="section__head">
+            <span class="eyebrow">The range</span>
+            <h2>Made with intention.</h2>
+        </header>
+        <% if (products.length === 0) { %>
+            <p>No products yet. Check back soon.</p>
+        <% } else { %>
+            <div class="product-grid">
+                <% products.forEach(function(product) { %>
+                    <%- include('../partials/product-card', { product: product }) %>
+                <% }); %>
+            </div>
+        <% } %>
+    </div>
+</section>

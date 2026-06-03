@@ -15,3 +15,9 @@ node_modules/
 dist/
 build/
 *.log
+app/node_modules/
+app/.env
+app/.env.local
+app/.env.production
+app/src/public/uploads/*
+!app/src/public/uploads/.gitkeep

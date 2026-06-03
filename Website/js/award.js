@@ -133,48 +133,7 @@
         });
     }
 
-    /* ============================================================
-       3) CUSTOM CURSOR (desktop only)
-       Dot + ring; ring grows when hovering interactive elements.
-       ============================================================ */
-    if (isDesktop && !reduce) {
-        const dot = document.createElement('div');
-        const ring = document.createElement('div');
-        dot.className = 'aw-cursor-dot';
-        ring.className = 'aw-cursor-ring';
-        document.body.appendChild(dot);
-        document.body.appendChild(ring);
-        document.body.classList.add('has-aw-cursor');
-
-        const dotPos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-        const ringPos = { ...dotPos };
-        const target = { ...dotPos };
-
-        document.addEventListener('mousemove', (e) => {
-            target.x = e.clientX;
-            target.y = e.clientY;
-        }, { passive: true });
-
-        const tickCursor = () => {
-            dotPos.x += (target.x - dotPos.x) * 0.55;
-            dotPos.y += (target.y - dotPos.y) * 0.55;
-            ringPos.x += (target.x - ringPos.x) * 0.18;
-            ringPos.y += (target.y - ringPos.y) * 0.18;
-            dot.style.transform  = `translate3d(${dotPos.x}px, ${dotPos.y}px, 0) translate(-50%, -50%)`;
-            ring.style.transform = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0) translate(-50%, -50%)`;
-            requestAnimationFrame(tickCursor);
-        };
-        requestAnimationFrame(tickCursor);
-
-        const interactiveSel = 'a, button, .btn, [role="button"], input, textarea, label, .compare-card, .review-card, [data-cursor]';
-        document.querySelectorAll(interactiveSel).forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('aw-cursor-hover'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('aw-cursor-hover'));
-        });
-
-        document.addEventListener('mouseleave', () => document.body.classList.add('aw-cursor-out'));
-        document.addEventListener('mouseenter', () => document.body.classList.remove('aw-cursor-out'));
-    }
+    /* Custom cursor disabled — use the OS default cursor everywhere. */
 
     /* ============================================================
        4) SCROLL-MASK IMAGE REVEALS

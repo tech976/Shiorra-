@@ -1,0 +1,11 @@
+<% if (typeof flash !== 'undefined') { %>
+    <% ['error','success','info'].forEach(function(type) { %>
+        <% if (flash[type] && flash[type].length) { %>
+            <div class="flash flash--<%= type %>">
+                <div class="container">
+                    <% flash[type].forEach(function(msg) { %><span><%= msg %></span><% }); %>
+                </div>
+            </div>
+        <% } %>
+    <% }); %>
+<% } %>

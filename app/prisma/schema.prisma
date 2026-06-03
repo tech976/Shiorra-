@@ -1,0 +1,181 @@
+// Shiorra data model
+// Run `npx prisma migrate dev --name init` after editing.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  CREATED
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id            String      @id @default(cuid())
+  email         String      @unique
+  passwordHash  String
+  name          String?
+  phone         String?
+  role          Role        @default(USER)
+  emailVerified Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  addresses     Address[]
+  orders        Order[]
+  cartItems     CartItem[]
+
+  @@index([email])
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName  String
+  phone     String
+  line1     String
+  line2     String?
+  city      String
+  state     String
+  postcode  String
+  country   String   @default("India")
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]  @relation("ShippingAddress")
+
+  @@index([userId])
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  tagline       String?
+  description   String   @db.Text
+  priceInPaise  Int      // store money as integers to avoid float errors (e.g. ₹749 = 74900)
+  mrpInPaise    Int?
+  stock         Int      @default(0)
+  active        Boolean  @default(true)
+  featured      Boolean  @default(false)
+  badge         String?  // "Best Seller", "New Launch", "Bundle", etc.
+  ingredients   String?  @db.Text  // JSON or plain text
+  servingInfo   String?
+  metaTitle     String?
+  metaDesc      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  images        ProductImage[]
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+
+  @@index([slug])
+  @@index([active, featured])
+}
+
+model ProductImage {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url        String
+  alt        String?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@index([productId])
+}
+
+model CartItem {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity   Int      @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, productId])
+  @@index([userId])
+}
+
+model Order {
+  id                  String        @id @default(cuid())
+  orderNumber         String        @unique
+  userId              String
+  user                User          @relation(fields: [userId], references: [id])
+  shippingAddressId   String?
+  shippingAddress     Address?      @relation("ShippingAddress", fields: [shippingAddressId], references: [id])
+
+  subtotalInPaise     Int
+  shippingInPaise     Int           @default(0)
+  taxInPaise          Int           @default(0)
+  discountInPaise     Int           @default(0)
+  totalInPaise        Int
+
+  status              OrderStatus   @default(PENDING)
+  paymentStatus       PaymentStatus @default(CREATED)
+  razorpayOrderId     String?
+  razorpayPaymentId   String?
+  razorpaySignature   String?
+  notes               String?       @db.Text
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  items               OrderItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([razorpayOrderId])
+}
+
+model OrderItem {
+  id              String   @id @default(cuid())
+  orderId         String
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId       String
+  product         Product  @relation(fields: [productId], references: [id])
+  // Snapshot product fields at time of purchase — so historical orders don't change if the product changes later
+  name            String
+  priceInPaise    Int
+  quantity        Int
+  totalInPaise    Int
+
+  @@index([orderId])
+}
+
+// Tracks Razorpay webhook events so we never double-process the same event
+model PaymentEvent {
+  id            String   @id @default(cuid())
+  eventId       String   @unique
+  payload       String   @db.Text
+  processedAt   DateTime?
+  createdAt     DateTime @default(now())
+}

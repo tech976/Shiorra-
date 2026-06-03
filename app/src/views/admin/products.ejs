@@ -1,0 +1,61 @@
+<div class="admin">
+    <%- include('./_nav') %>
+    <div class="admin__main">
+        <div class="admin__head">
+            <h1>Products</h1>
+            <a href="/admin/products/new" class="btn">+ New product</a>
+        </div>
+
+        <form method="get" action="/admin/products" class="admin__search">
+            <input type="text" name="q" value="<%= q || '' %>" placeholder="Search by name or slug…">
+            <button class="btn btn--sm">Search</button>
+            <% if (q) { %><a href="/admin/products" class="btn btn--sm btn--ghost">Clear</a><% } %>
+        </form>
+
+        <% if (!products.length) { %>
+            <div class="empty-state">
+                <p>No products yet.</p>
+                <a href="/admin/products/new" class="btn">Create the first one</a>
+            </div>
+        <% } else { %>
+            <table class="data-table">
+                <thead><tr><th></th><th>Name</th><th>Slug</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                <% products.forEach(function(p) { %>
+                    <tr>
+                        <td class="data-table__thumb">
+                            <% if (p.images && p.images[0]) { %><img src="<%= p.images[0].url %>" alt=""><% } %>
+                        </td>
+                        <td>
+                            <strong><%= p.name %></strong>
+                            <% if (p.featured) { %> <span class="badge badge--paid">★ Featured</span><% } %>
+                        </td>
+                        <td><code><%= p.slug %></code></td>
+                        <td><%= formatINR(p.priceInPaise) %><% if (p.mrpInPaise) { %><br><small style="color:var(--c-text-3);text-decoration:line-through"><%= formatINR(p.mrpInPaise) %></small><% } %></td>
+                        <td>
+                            <form action="/admin/products/<%= p.id %>/stock" method="post" class="quick-stock">
+                                <input type="number" name="stock" value="<%= p.stock %>" min="0" step="1">
+                                <button class="btn btn--sm">Set</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/admin/products/<%= p.id %>/toggle-active" method="post" style="display:inline">
+                                <button class="badge badge--<%= p.active ? 'paid' : 'cancelled' %>" style="border:0;cursor:pointer;">
+                                    <%= p.active ? 'Active' : 'Hidden' %> · toggle
+                                </button>
+                            </form>
+                        </td>
+                        <td class="data-table__actions">
+                            <a href="/product/<%= p.slug %>" class="btn btn--sm btn--ghost" target="_blank">View</a>
+                            <a href="/admin/products/<%= p.id %>/edit" class="btn btn--sm">Edit</a>
+                            <form action="/admin/products/<%= p.id %>?_method=DELETE" method="post" onsubmit="return confirm('Delete <%= p.name %>?')" style="display:inline">
+                                <button class="btn btn--sm btn--danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+</div>

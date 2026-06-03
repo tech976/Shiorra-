@@ -1,0 +1,40 @@
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">Orders</span>
+        <h1>Your orders</h1>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="account">
+            <%- include('../partials/account-nav', { active: 'orders' }) %>
+
+            <div class="account__main">
+                <% if (!orders.length) { %>
+                    <div class="empty-state">
+                        <p>You haven't placed any orders yet.</p>
+                        <a href="/shop" class="btn">Browse products</a>
+                    </div>
+                <% } else { %>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Order</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                        <% orders.forEach(function(o) { %>
+                            <tr>
+                                <td><%= o.orderNumber %></td>
+                                <td><%= o.createdAt.toISOString().slice(0,10) %></td>
+                                <td><%= o.items.length %></td>
+                                <td><%= formatINR(o.totalInPaise) %></td>
+                                <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
+                                <td><a href="/account/orders/<%= o.orderNumber %>" class="btn btn--sm">View</a></td>
+                            </tr>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,40 @@
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer__cols">
+            <div class="footer__brand">
+                <img src="/img/logo/logo-green.png" alt="Shiorra" height="32">
+                <p>Shiorra — wellness, gently formulated. A trademark of K.C. Laboratories.</p>
+            </div>
+            <div class="footer__col">
+                <h5>Shop</h5>
+                <ul>
+                    <li><a href="/shop">All products</a></li>
+                    <li><a href="/cart">Your cart</a></li>
+                </ul>
+            </div>
+            <div class="footer__col">
+                <h5>Account</h5>
+                <ul>
+                    <% if (currentUser) { %>
+                        <li><a href="/account">Dashboard</a></li>
+                        <li><a href="/account/orders">Orders</a></li>
+                    <% } else { %>
+                        <li><a href="/login">Log in</a></li>
+                        <li><a href="/register">Sign up</a></li>
+                    <% } %>
+                </ul>
+            </div>
+            <div class="footer__col">
+                <h5>Support</h5>
+                <ul>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer__bar">
+            <span>&copy; <%= year %> Shiorra</span>
+            <span>Made in India</span>
+        </div>
+    </div>
+</footer>

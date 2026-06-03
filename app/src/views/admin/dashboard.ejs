@@ -1,0 +1,70 @@
+<div class="admin">
+    <%- include('./_nav') %>
+    <div class="admin__main">
+        <div class="admin__head"><h1>Dashboard</h1></div>
+
+        <div class="admin__cards">
+            <div class="admin__card"><span class="admin__card-num"><%= productCount %></span><span class="admin__card-lbl">Products</span><a href="/admin/products">Manage</a></div>
+            <div class="admin__card"><span class="admin__card-num"><%= orderCount %></span><span class="admin__card-lbl">Total orders · <%= todaysOrders %> today</span><a href="/admin/orders">View</a></div>
+            <div class="admin__card"><span class="admin__card-num"><%= userCount %></span><span class="admin__card-lbl">Registered users</span><a href="/admin/users">List</a></div>
+            <div class="admin__card admin__card--accent"><span class="admin__card-num"><%= formatINR(revenueInPaise) %></span><span class="admin__card-lbl">Lifetime revenue · <%= paidOrders %> paid orders</span></div>
+        </div>
+
+        <div class="admin__panels">
+            <section class="admin__panel">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+                    <h3>Last 14 days</h3>
+                    <small style="color:var(--c-text-3)">Revenue by day · orders</small>
+                </div>
+                <div class="chart-bars">
+                    <% series.forEach(function(s) { %>
+                        <div class="chart-bar" title="<%= s.day %> — <%= formatINR(s.revenueInPaise) %> · <%= s.orders %> orders">
+                            <span class="chart-bar__fill" style="height: <%= Math.round((s.revenueInPaise / maxRev) * 100) %>%"></span>
+                            <span class="chart-bar__label"><%= s.day.slice(5) %></span>
+                        </div>
+                    <% }); %>
+                </div>
+            </section>
+
+            <section class="admin__panel">
+                <h3>Pipeline</h3>
+                <div class="pipeline">
+                    <div class="pipeline-row"><span class="badge badge--pending">Pending</span><strong><%= pendingOrders %></strong></div>
+                    <div class="pipeline-row"><span class="badge badge--paid">Paid</span><strong><%= paidOrders %></strong></div>
+                </div>
+
+                <% if (lowStock.length) { %>
+                    <h3 style="margin-top:18px">Low stock</h3>
+                    <ul class="lowstock-list">
+                        <% lowStock.forEach(function(p) { %>
+                            <li>
+                                <span><%= p.name %></span>
+                                <span class="badge badge--<%= p.stock <= 3 ? 'cancelled' : 'pending' %>"><%= p.stock %></span>
+                                <a href="/admin/products/<%= p.id %>/edit" class="btn btn--sm">Edit</a>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p style="color:var(--c-text-3);margin-top:14px">All products well stocked.</p>
+                <% } %>
+            </section>
+        </div>
+
+        <h3 style="margin-top:32px">Latest orders</h3>
+        <table class="data-table">
+            <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th></th></tr></thead>
+            <tbody>
+            <% latestOrders.forEach(function(o) { %>
+                <tr>
+                    <td><%= o.orderNumber %></td>
+                    <td><%= o.user.name || o.user.email %></td>
+                    <td><%= formatINR(o.totalInPaise) %></td>
+                    <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
+                    <td><%= o.createdAt.toISOString().slice(0,10) %></td>
+                    <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a></td>
+                </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>

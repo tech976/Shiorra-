@@ -1,0 +1,74 @@
+<div class="admin">
+    <%- include('./_nav') %>
+    <div class="admin__main">
+        <div class="admin__head">
+            <h1><%= product ? 'Edit product' : 'New product' %></h1>
+            <a href="/admin/products" class="btn btn--ghost btn--sm">← All products</a>
+        </div>
+
+        <% if (errors) { %>
+            <div class="alert alert--error">
+                <strong>Please fix:</strong>
+                <ul>
+                    <% errors.forEach(function(e) { %><li><%= e.path.join('.') %>: <%= e.message %></li><% }); %>
+                </ul>
+            </div>
+        <% } %>
+
+        <form
+            action="<%= product ? '/admin/products/' + product.id : '/admin/products' %>"
+            method="post"
+            enctype="multipart/form-data"
+            class="form-grid form-grid--admin"
+        >
+            <label class="form-grid__full">Name<input name="name" required value="<%= values.name || '' %>"></label>
+            <label>Slug (URL)<input name="slug" required value="<%= values.slug || '' %>" pattern="[a-z0-9-]+"></label>
+            <label>Badge<input name="badge" value="<%= values.badge || '' %>" placeholder="Best Seller / New Launch"></label>
+            <label class="form-grid__full">Tagline<input name="tagline" value="<%= values.tagline || '' %>" maxlength="200"></label>
+            <label class="form-grid__full">Description
+                <textarea name="description" rows="6" required><%= values.description || '' %></textarea>
+            </label>
+            <label>Price (₹)<input type="number" step="0.01" min="0" name="price" required value="<%= values.price || '' %>"></label>
+            <label>MRP (₹, optional)<input type="number" step="0.01" min="0" name="mrp" value="<%= values.mrp || '' %>"></label>
+            <label>Stock<input type="number" step="1" min="0" name="stock" value="<%= values.stock !== undefined ? values.stock : 0 %>"></label>
+            <label class="form-grid__inline">
+                <input type="checkbox" name="active" value="true" <%= values.active !== false ? 'checked' : '' %>>
+                Active (visible on store)
+            </label>
+            <label class="form-grid__inline">
+                <input type="checkbox" name="featured" value="true" <%= values.featured ? 'checked' : '' %>>
+                Featured on home
+            </label>
+            <label class="form-grid__full">Ingredients
+                <textarea name="ingredients" rows="4"><%= values.ingredients || '' %></textarea>
+            </label>
+            <label class="form-grid__full">How to use / serving info
+                <textarea name="servingInfo" rows="3"><%= values.servingInfo || '' %></textarea>
+            </label>
+            <label>SEO title<input name="metaTitle" value="<%= values.metaTitle || '' %>" maxlength="120"></label>
+            <label>SEO description<input name="metaDesc" value="<%= values.metaDesc || '' %>" maxlength="220"></label>
+
+            <fieldset class="form-grid__full">
+                <legend>Images</legend>
+                <input type="file" name="images" accept="image/*" multiple>
+                <p class="form-hint">JPEG / PNG / WEBP, up to 8 files. First image is the hero.</p>
+                <% if (product && product.images && product.images.length) { %>
+                    <div class="product-images-grid">
+                        <% product.images.forEach(function(img) { %>
+                            <div class="product-image-card">
+                                <img src="<%= img.url %>" alt="">
+                                <form action="/admin/products/<%= product.id %>/images/<%= img.id %>?_method=DELETE" method="post">
+                                    <button class="btn btn--sm btn--danger">Delete</button>
+                                </form>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } %>
+            </fieldset>
+
+            <div class="form-grid__full">
+                <button class="btn btn--lg" type="submit"><%= product ? 'Save changes' : 'Create product' %></button>
+            </div>
+        </form>
+    </div>
+</div>

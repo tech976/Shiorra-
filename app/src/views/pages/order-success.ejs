@@ -1,0 +1,38 @@
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">Thank you</span>
+        <h1>Order <%= order.orderNumber %> confirmed</h1>
+        <p>We've sent a confirmation to <%= currentUser.email %>.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="order-detail">
+            <h3>What you ordered</h3>
+            <ul class="checkout__items">
+                <% order.items.forEach(function(it) { %>
+                    <li>
+                        <span><%= it.name %> × <%= it.quantity %></span>
+                        <span><%= formatINR(it.totalInPaise) %></span>
+                    </li>
+                <% }); %>
+            </ul>
+            <div class="cart__row cart__row--total"><span>Total paid</span><span><%= formatINR(order.totalInPaise) %></span></div>
+
+            <% if (order.shippingAddress) { %>
+                <h3>Shipping to</h3>
+                <address>
+                    <%= order.shippingAddress.fullName %><br>
+                    <%= order.shippingAddress.line1 %><br>
+                    <% if (order.shippingAddress.line2) { %><%= order.shippingAddress.line2 %><br><% } %>
+                    <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.postcode %><br>
+                    <%= order.shippingAddress.country %><br>
+                    <%= order.shippingAddress.phone %>
+                </address>
+            <% } %>
+
+            <p><a href="/account/orders" class="btn">View all orders</a> <a href="/shop" class="btn btn--ghost">Continue shopping</a></p>
+        </div>
+    </div>
+</section>
