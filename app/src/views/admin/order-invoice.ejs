@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invoice · <%= order.orderNumber %> · Shiōrra</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font: 14px/1.5 'Inter', system-ui, -apple-system, Helvetica, Arial, sans-serif; color: #282828; background: #f4f5f7; padding: 32px; }
+.invoice { max-width: 780px; margin: 0 auto; background: #fff; padding: 56px 56px 48px; box-shadow: 0 8px 40px rgba(0,0,0,0.06); border-radius: 6px; }
+.invoice__top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 2px solid #282828; }
+.invoice__brand { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.02em; }
+.invoice__brand small { display: block; font-size: 11px; font-weight: 600; color: #6B6B6B; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 4px; }
+.invoice__meta { text-align: right; font-size: 12px; color: #6B6B6B; }
+.invoice__meta strong { display: block; color: #282828; font-size: 18px; font-family: 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.01em; margin-bottom: 2px; }
+.invoice__addr { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+.invoice__addr h4 { font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #8A8A8A; margin-bottom: 8px; }
+.invoice__addr address { font-style: normal; line-height: 1.5; }
+.invoice table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+.invoice th { text-align: left; font-size: 10px; font-weight: 800; letter-spacing: 0.10em; text-transform: uppercase; color: #6B6B6B; padding: 10px 12px; border-bottom: 1px solid #E5E5E7; }
+.invoice th.r, .invoice td.r { text-align: right; }
+.invoice td { padding: 14px 12px; border-bottom: 1px solid #F0F0F2; vertical-align: top; }
+.invoice__totals { float: right; width: 280px; margin-bottom: 32px; }
+.invoice__totals .row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; color: #6B6B6B; }
+.invoice__totals .row--final { padding-top: 12px; border-top: 1px solid #E5E5E7; font-weight: 700; color: #282828; font-size: 16px; }
+.invoice__foot { clear: both; padding-top: 24px; border-top: 1px solid #E5E5E7; font-size: 12px; color: #8A8A8A; text-align: center; line-height: 1.6; }
+.invoice__foot strong { color: #282828; }
+.printbar { max-width: 780px; margin: 0 auto 16px; display: flex; justify-content: flex-end; gap: 10px; }
+.printbar button { background: #282828; color: #fff; border: 0; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; }
+.printbar a { background: #fff; color: #282828; border: 1px solid #E5E5E7; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; }
+@media print {
+    body { background: #fff; padding: 0; }
+    .printbar { display: none; }
+    .invoice { box-shadow: none; max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="printbar">
+    <a href="/admin/orders/<%= order.id %>">← Back</a>
+    <button onclick="window.print()">Print / save PDF</button>
+</div>
+
+<div class="invoice">
+    <div class="invoice__top">
+        <div class="invoice__brand">
+            Shiōrra
+            <small>A trademark of K.C. Laboratories</small>
+        </div>
+        <div class="invoice__meta">
+            <strong>Invoice</strong>
+            <%= order.orderNumber %><br>
+            Date: <%= order.createdAt.toISOString().slice(0,10) %><br>
+            Status: <%= order.status %>
+        </div>
+    </div>
+
+    <div class="invoice__addr">
+        <div>
+            <h4>From</h4>
+            <address>
+                <strong>Shiōrra · K.C. Laboratories</strong><br>
+                Mumbai, India<br>
+                hello@shiorra.com<br>
+                FSSAI &amp; GMP certified
+            </address>
+        </div>
+        <div>
+            <h4>Bill to</h4>
+            <address>
+                <% if (order.shippingAddress) { %>
+                    <strong><%= order.shippingAddress.fullName %></strong><br>
+                    <%= order.shippingAddress.line1 %><br>
+                    <% if (order.shippingAddress.line2) { %><%= order.shippingAddress.line2 %><br><% } %>
+                    <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.postcode %><br>
+                    <%= order.shippingAddress.country %><br>
+                    <%= order.shippingAddress.phone %><br>
+                    <%= order.user.email %>
+                <% } else { %>
+                    <strong><%= order.user.name || order.user.email %></strong><br>
+                    <%= order.user.email %>
+                <% } %>
+            </address>
+        </div>
+    </div>
+
+    <table>
+        <thead><tr><th>Item</th><th class="r">Qty</th><th class="r">Unit</th><th class="r">Total</th></tr></thead>
+        <tbody>
+        <% order.items.forEach(function(it) { %>
+            <tr><td><%= it.name %></td><td class="r"><%= it.quantity %></td><td class="r"><%= formatINR(it.priceInPaise) %></td><td class="r"><%= formatINR(it.totalInPaise) %></td></tr>
+        <% }); %>
+        </tbody>
+    </table>
+
+    <div class="invoice__totals">
+        <div class="row"><span>Subtotal</span><span><%= formatINR(order.subtotalInPaise) %></span></div>
+        <div class="row"><span>Shipping</span><span><%= order.shippingInPaise === 0 ? 'Free' : formatINR(order.shippingInPaise) %></span></div>
+        <% if (order.discountInPaise > 0) { %>
+            <div class="row"><span>Discount<% if (order.couponCode) { %> (<%= order.couponCode %>)<% } %></span><span>-<%= formatINR(order.discountInPaise) %></span></div>
+        <% } %>
+        <div class="row row--final"><span>Total</span><span><%= formatINR(order.totalInPaise) %></span></div>
+    </div>
+
+    <div class="invoice__foot">
+        Thank you for choosing Shiōrra. Questions? <strong>hello@shiorra.com</strong><br>
+        This is a system-generated invoice and does not require a signature.
+    </div>
+</div>
+
+</body>
+</html>

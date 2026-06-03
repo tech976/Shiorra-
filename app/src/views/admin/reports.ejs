@@ -1,0 +1,114 @@
+<div class="admin">
+    <%- include('./_nav') %>
+    <div class="admin__main">
+        <div class="admin__head">
+            <h1>Reports</h1>
+            <div style="display:flex;gap:8px;align-items:center">
+                <% [7, 14, 30, 60, 90, 180, 365].forEach(function(d) { %>
+                    <a href="/admin/reports?days=<%= d %>" class="btn btn--sm <%= d === days ? '' : 'btn--ghost' %>"><%= d %>d</a>
+                <% }); %>
+                <a href="/admin/reports.csv?days=<%= days %>" class="btn btn--sm btn--ghost">Export CSV</a>
+            </div>
+        </div>
+
+        <div class="kpis kpis--small">
+            <div class="kpi kpi--accent">
+                <span class="kpi__label">Paid revenue · last <%= days %>d</span>
+                <span class="kpi__num"><%= formatINR(paidRevInPaise) %></span>
+                <span class="kpi__delta is-muted"><%= paidOrderCount %> paid orders</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Shipping collected</span>
+                <span class="kpi__num"><%= formatINR(shippingInPaise) %></span>
+                <span class="kpi__delta is-muted">From paid orders</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Discounts given</span>
+                <span class="kpi__num"><%= formatINR(discountInPaise) %></span>
+                <span class="kpi__delta is-muted">Via coupons</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Net product revenue</span>
+                <span class="kpi__num"><%= formatINR(paidRevInPaise - shippingInPaise) %></span>
+                <span class="kpi__delta is-muted">Total minus shipping</span>
+            </div>
+        </div>
+
+        <section class="admin__panel" style="margin-top:16px">
+            <h3>Revenue &amp; orders · last <%= days %> days</h3>
+            <div class="chart-wrap"><canvas id="revChart" height="120"></canvas></div>
+        </section>
+
+        <section class="admin__panel" style="margin-top:16px">
+            <h3>By product · last <%= days %> days</h3>
+            <% if (!byProduct.length) { %>
+                <p style="color:var(--c-text-3);margin-top:12px">No sales in the window.</p>
+            <% } else { %>
+                <table class="data-table data-table--cozy">
+                    <thead><tr><th>Product</th><th>Units</th><th>Revenue</th><th>Share</th></tr></thead>
+                    <tbody>
+                    <% const totalRev = byProduct.reduce((n, p) => n + p.revenueInPaise, 0); %>
+                    <% byProduct.forEach(function(p) { %>
+                        <tr>
+                            <td><strong><%= p.name %></strong></td>
+                            <td><%= p.units %></td>
+                            <td><%= formatINR(p.revenueInPaise) %></td>
+                            <td>
+                                <div class="share-bar"><span style="width:<%= totalRev ? Math.round((p.revenueInPaise / totalRev) * 100) : 0 %>%"></span></div>
+                                <small><%= totalRev ? Math.round((p.revenueInPaise / totalRev) * 100) : 0 %>%</small>
+                            </td>
+                        </tr>
+                    <% }); %>
+                    </tbody>
+                </table>
+            <% } %>
+        </section>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+    const SERIES = <%- JSON.stringify(series) %>;
+    const ctx = document.getElementById('revChart');
+    if (!ctx || !SERIES.length) return;
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: SERIES.map((s) => s.day.slice(5)),
+            datasets: [
+                {
+                    type: 'bar',
+                    label: 'Revenue (₹)',
+                    data: SERIES.map((s) => s.revenueInPaise / 100),
+                    backgroundColor: 'rgba(255,61,142,0.65)',
+                    borderRadius: 6,
+                    yAxisID: 'y',
+                },
+                {
+                    type: 'line',
+                    label: 'Orders',
+                    data: SERIES.map((s) => s.orders),
+                    borderColor: '#282828',
+                    backgroundColor: 'rgba(40,40,40,0.08)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 2,
+                    yAxisID: 'y1',
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10 } } },
+            scales: {
+                y: { position: 'left', beginAtZero: true, ticks: { callback: (v) => '₹' + (v / 1000).toFixed(0) + 'k' }, grid: { color: 'rgba(0,0,0,0.04)' } },
+                y1: { position: 'right', beginAtZero: true, ticks: { precision: 0 }, grid: { drawOnChartArea: false } },
+                x: { grid: { display: false } },
+            },
+        },
+    });
+})();
+</script>

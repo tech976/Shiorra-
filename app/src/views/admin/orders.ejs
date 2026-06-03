@@ -3,47 +3,97 @@
     <div class="admin__main">
         <div class="admin__head">
             <h1>Orders</h1>
-            <span style="color:var(--c-text-3)"><%= orders.length %> matching</span>
+            <div style="display:flex;gap:8px;align-items:center">
+                <span style="color:var(--c-text-3);font-size:0.84rem"><%= orders.length %> matching · <%= matchPaidCount %> paid · <%= formatINR(matchPaidRevInPaise) %></span>
+                <a href="/admin/orders.csv?<%= new URLSearchParams({ q, status: activeStatus, from, to }).toString() %>" class="btn btn--sm btn--ghost">Export CSV</a>
+            </div>
         </div>
 
-        <form method="get" action="/admin/orders" class="admin__search">
-            <input type="text" name="q" value="<%= q %>" placeholder="Search by order number, customer name, or email…">
+        <form method="get" action="/admin/orders" class="admin__search admin__search--multi">
+            <input type="text" name="q" value="<%= q %>" placeholder="Order number, customer name or email…">
             <select name="status">
                 <option value="">All statuses</option>
                 <% statuses.forEach(function(s) { %>
                     <option value="<%= s %>" <%= activeStatus === s ? 'selected' : '' %>><%= s %></option>
                 <% }); %>
             </select>
+            <label class="datelbl">From<input type="date" name="from" value="<%= from %>"></label>
+            <label class="datelbl">To<input type="date" name="to" value="<%= to %>"></label>
             <button class="btn btn--sm">Filter</button>
-            <% if (q || activeStatus) { %><a href="/admin/orders" class="btn btn--sm btn--ghost">Clear</a><% } %>
+            <% if (q || activeStatus || from || to) { %><a href="/admin/orders" class="btn btn--sm btn--ghost">Clear</a><% } %>
         </form>
 
         <% if (!orders.length) { %>
             <div class="empty-state">
                 <p>No orders match your filter.</p>
-                <% if (q || activeStatus) { %><a href="/admin/orders" class="btn">Clear filters</a><% } %>
+                <% if (q || activeStatus || from || to) { %><a href="/admin/orders" class="btn">Clear filters</a><% } %>
             </div>
         <% } else { %>
-            <table class="data-table">
-                <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th><th></th></tr></thead>
-                <tbody>
-                <% orders.forEach(function(o) { %>
-                    <tr>
-                        <td><strong><%= o.orderNumber %></strong></td>
-                        <td>
-                            <a href="/admin/users/<%= o.userId %>"><%= o.user.name || o.user.email %></a><br>
-                            <small style="color:var(--c-text-3)"><%= o.user.email %></small>
-                        </td>
-                        <td><%= o.items.length %></td>
-                        <td><%= formatINR(o.totalInPaise) %></td>
-                        <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
-                        <td><span class="badge badge--<%= o.paymentStatus.toLowerCase() %>"><%= o.paymentStatus %></span></td>
-                        <td><%= o.createdAt.toISOString().slice(0,10) %></td>
-                        <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a></td>
-                    </tr>
-                <% }); %>
-                </tbody>
-            </table>
+            <form action="/admin/orders/bulk" method="post" id="bulkForm">
+                <div class="bulk-bar" id="bulkBar" hidden>
+                    <span id="bulkCount">0 selected</span>
+                    <select name="action" required>
+                        <option value="">Bulk action…</option>
+                        <option value="status:PROCESSING">Mark as Processing</option>
+                        <option value="status:SHIPPED">Mark as Shipped</option>
+                        <option value="status:DELIVERED">Mark as Delivered</option>
+                        <option value="status:CANCELLED">Mark as Cancelled</option>
+                    </select>
+                    <button class="btn btn--sm" type="submit">Apply</button>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width:34px"><input type="checkbox" id="bulkAll"></th>
+                            <th>Order</th><th>Customer</th><th>Items</th><th>Total</th>
+                            <th>Status</th><th>Payment</th><th>Date</th><th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% orders.forEach(function(o) { %>
+                        <tr>
+                            <td><input type="checkbox" name="ids" value="<%= o.id %>" class="bulk-row"></td>
+                            <td><strong><%= o.orderNumber %></strong><% if (o.couponCode) { %><br><small style="color:var(--c-text-3)">🎟 <%= o.couponCode %></small><% } %></td>
+                            <td>
+                                <a href="/admin/users/<%= o.userId %>"><%= o.user.name || o.user.email %></a><br>
+                                <small style="color:var(--c-text-3)"><%= o.user.email %></small>
+                            </td>
+                            <td><%= o.items.length %></td>
+                            <td><%= formatINR(o.totalInPaise) %><% if (o.discountInPaise > 0) { %><br><small style="color:var(--c-success)">-<%= formatINR(o.discountInPaise) %></small><% } %></td>
+                            <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
+                            <td><span class="badge badge--<%= o.paymentStatus.toLowerCase() %>"><%= o.paymentStatus %></span></td>
+                            <td><%= o.createdAt.toISOString().slice(0,10) %></td>
+                            <td>
+                                <a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a>
+                                <a href="/admin/orders/<%= o.id %>/invoice" target="_blank" class="btn btn--sm btn--ghost">Invoice</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                    </tbody>
+                </table>
+            </form>
         <% } %>
     </div>
 </div>
+
+<script>
+(function() {
+    const all = document.getElementById('bulkAll');
+    const rows = document.querySelectorAll('.bulk-row');
+    const bar = document.getElementById('bulkBar');
+    const count = document.getElementById('bulkCount');
+    if (!all) return;
+
+    const refresh = () => {
+        const sel = Array.from(rows).filter((r) => r.checked).length;
+        bar.hidden = sel === 0;
+        count.textContent = `${sel} selected`;
+    };
+    all.addEventListener('change', () => {
+        rows.forEach((r) => (r.checked = all.checked));
+        refresh();
+    });
+    rows.forEach((r) => r.addEventListener('change', refresh));
+})();
+</script>

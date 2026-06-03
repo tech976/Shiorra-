@@ -3,7 +3,10 @@
     <div class="admin__main">
         <div class="admin__head">
             <h1>Order <%= order.orderNumber %></h1>
-            <a href="/admin/orders" class="btn btn--ghost btn--sm">← All orders</a>
+            <div style="display:flex;gap:8px">
+                <a href="/admin/orders" class="btn btn--ghost btn--sm">← All orders</a>
+                <a href="/admin/orders/<%= order.id %>/invoice" target="_blank" class="btn btn--sm">Print invoice</a>
+            </div>
         </div>
 
         <div class="admin__panels">
@@ -19,15 +22,27 @@
                 </table>
                 <div class="cart__row"><span>Subtotal</span><span><%= formatINR(order.subtotalInPaise) %></span></div>
                 <div class="cart__row"><span>Shipping</span><span><%= formatINR(order.shippingInPaise) %></span></div>
+                <% if (order.discountInPaise > 0) { %>
+                    <div class="cart__row"><span>Discount<% if (order.couponCode) { %> · 🎟 <%= order.couponCode %><% } %></span><span style="color:var(--c-success)">-<%= formatINR(order.discountInPaise) %></span></div>
+                <% } %>
                 <div class="cart__row cart__row--total"><span>Total</span><span><%= formatINR(order.totalInPaise) %></span></div>
+
+                <h3 style="margin-top:24px">Admin notes (private)</h3>
+                <form action="/admin/orders/<%= order.id %>/notes" method="post" class="form-grid">
+                    <label class="form-grid__full">Internal notes — only admins see this
+                        <textarea name="adminNotes" rows="3" placeholder="e.g. customer requested gift wrap; out of stock — restock by Fri…"><%= order.adminNotes || '' %></textarea>
+                    </label>
+                    <div class="form-grid__full"><button class="btn btn--sm">Save notes</button></div>
+                </form>
             </section>
 
             <section class="admin__panel">
                 <h3>Customer</h3>
-                <p><strong><%= order.user.name || order.user.email %></strong><br><%= order.user.email %><br><%= order.user.phone || '' %></p>
+                <p><strong><a href="/admin/users/<%= order.user.id %>"><%= order.user.name || order.user.email %></a></strong><br><%= order.user.email %><br><%= order.user.phone || '' %></p>
+
                 <% if (order.shippingAddress) { %>
-                    <h4>Shipping to</h4>
-                    <address>
+                    <h4 style="margin-top:14px">Shipping to</h4>
+                    <address class="address-block">
                         <%= order.shippingAddress.fullName %><br>
                         <%= order.shippingAddress.line1 %><br>
                         <% if (order.shippingAddress.line2) { %><%= order.shippingAddress.line2 %><br><% } %>
@@ -37,20 +52,23 @@
                     </address>
                 <% } %>
 
-                <h3>Status</h3>
+                <h3 style="margin-top:18px">Status</h3>
                 <form action="/admin/orders/<%= order.id %>/status" method="post" class="form-grid form-grid--inline">
                     <select name="status">
                         <% ['PENDING','PAID','PROCESSING','SHIPPED','DELIVERED','CANCELLED','REFUNDED'].forEach(function(s) { %>
                             <option value="<%= s %>" <%= order.status === s ? 'selected' : '' %>><%= s %></option>
                         <% }); %>
                     </select>
-                    <button class="btn">Update status</button>
+                    <button class="btn">Update</button>
                 </form>
 
-                <h3>Payment</h3>
+                <h3 style="margin-top:18px">Payment</h3>
                 <p>Razorpay order: <code><%= order.razorpayOrderId || '—' %></code></p>
                 <p>Payment id: <code><%= order.razorpayPaymentId || '—' %></code></p>
                 <p>Status: <span class="badge badge--<%= order.paymentStatus.toLowerCase() %>"><%= order.paymentStatus %></span></p>
+                <% if (order.notes) { %>
+                    <p style="color:var(--c-text-3);font-size:0.84rem"><em><%= order.notes %></em></p>
+                <% } %>
             </section>
         </div>
     </div>

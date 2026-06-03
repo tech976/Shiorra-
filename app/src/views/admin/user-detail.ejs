@@ -6,6 +6,29 @@
             <a href="/admin/users" class="btn btn--ghost btn--sm">← All users</a>
         </div>
 
+        <div class="kpis kpis--small">
+            <div class="kpi">
+                <span class="kpi__label">Lifetime spend</span>
+                <span class="kpi__num"><%= formatINR(lifetimeInPaise) %></span>
+                <span class="kpi__delta is-muted"><%= paidOrders %> paid orders</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Average order value</span>
+                <span class="kpi__num"><%= formatINR(aovInPaise) %></span>
+                <span class="kpi__delta is-muted">Across paid orders</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Total orders</span>
+                <span class="kpi__num"><%= u.orders.length %></span>
+                <span class="kpi__delta is-muted">All statuses</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Last order</span>
+                <span class="kpi__num" style="font-size:1rem"><%= lastOrderAt ? lastOrderAt.toISOString().slice(0,10) : '—' %></span>
+                <span class="kpi__delta is-muted">Most recent paid</span>
+            </div>
+        </div>
+
         <div class="admin__panels">
             <section class="admin__panel">
                 <h3>Identity</h3>
@@ -15,16 +38,25 @@
                     <dt>Phone</dt><dd><%= u.phone || '—' %></dd>
                     <dt>Role</dt><dd><span class="badge badge--<%= u.role.toLowerCase() %>"><%= u.role %></span></dd>
                     <dt>Joined</dt><dd><%= u.createdAt.toISOString().slice(0,10) %></dd>
-                    <dt>Lifetime spend</dt><dd><strong><%= formatINR(lifetimeInPaise) %></strong></dd>
-                    <dt>Orders</dt><dd><%= u.orders.length %></dd>
                 </dl>
 
                 <% if (u.id !== currentUser.id) { %>
-                    <form action="/admin/users/<%= u.id %>/toggle-role" method="post" onsubmit="return confirm('Toggle role for <%= u.email %>?')">
+                    <form action="/admin/users/<%= u.id %>/toggle-role" method="post" onsubmit="return confirm('Toggle role for <%= u.email %>?');">
                         <input type="hidden" name="returnTo" value="/admin/users/<%= u.id %>">
                         <button class="btn btn--ghost">Make <%= u.role === 'ADMIN' ? 'User' : 'Admin' %></button>
                     </form>
                 <% } %>
+
+                <h3 style="margin-top:18px">Tags &amp; notes (internal)</h3>
+                <form action="/admin/users/<%= u.id %>" method="post" class="form-grid">
+                    <label class="form-grid__full">Tags (comma-separated)
+                        <input name="tags" value="<%= (u.tags || []).join(', ') %>" placeholder="vip, repeat, beta-tester">
+                    </label>
+                    <label class="form-grid__full">Internal notes (admins only)
+                        <textarea name="adminNotes" rows="4" placeholder="e.g. asked about postpartum kits; reach out about bundle offer"><%= u.adminNotes || '' %></textarea>
+                    </label>
+                    <div class="form-grid__full"><button class="btn btn--sm">Save customer info</button></div>
+                </form>
             </section>
 
             <section class="admin__panel">

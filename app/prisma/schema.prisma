@@ -41,6 +41,8 @@ model User {
   phone         String?
   role          Role        @default(USER)
   emailVerified Boolean     @default(false)
+  adminNotes    String?     @db.Text
+  tags          String[]    @default([])
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
@@ -145,6 +147,12 @@ model Order {
   razorpayPaymentId   String?
   razorpaySignature   String?
   notes               String?       @db.Text
+  adminNotes          String?       @db.Text
+  tags                String[]      @default([])
+
+  couponCode          String?
+  couponId            String?
+  coupon              Coupon?       @relation(fields: [couponId], references: [id])
 
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
@@ -154,6 +162,32 @@ model Order {
   @@index([userId])
   @@index([status])
   @@index([razorpayOrderId])
+  @@index([createdAt])
+}
+
+enum DiscountType {
+  FIXED
+  PERCENT
+}
+
+model Coupon {
+  id              String       @id @default(cuid())
+  code            String       @unique
+  type            DiscountType
+  value           Int          // For FIXED → paise. For PERCENT → integer % (e.g. 15 = 15%).
+  minSubtotal     Int          @default(0)
+  usageLimit      Int?         // null = unlimited
+  usedCount       Int          @default(0)
+  active          Boolean      @default(true)
+  expiresAt       DateTime?
+  notes           String?      @db.Text
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  orders          Order[]
+
+  @@index([code])
+  @@index([active])
 }
 
 model OrderItem {

@@ -1,40 +1,176 @@
 <div class="admin">
     <%- include('./_nav') %>
     <div class="admin__main">
-        <div class="admin__head"><h1>Dashboard</h1></div>
-
-        <div class="admin__cards">
-            <div class="admin__card"><span class="admin__card-num"><%= productCount %></span><span class="admin__card-lbl">Products</span><a href="/admin/products">Manage</a></div>
-            <div class="admin__card"><span class="admin__card-num"><%= orderCount %></span><span class="admin__card-lbl">Total orders · <%= todaysOrders %> today</span><a href="/admin/orders">View</a></div>
-            <div class="admin__card"><span class="admin__card-num"><%= userCount %></span><span class="admin__card-lbl">Registered users</span><a href="/admin/users">List</a></div>
-            <div class="admin__card admin__card--accent"><span class="admin__card-num"><%= formatINR(revenueInPaise) %></span><span class="admin__card-lbl">Lifetime revenue · <%= paidOrders %> paid orders</span></div>
+        <div class="admin__head">
+            <h1>Dashboard</h1>
+            <div style="display:flex;gap:8px">
+                <a href="/admin/reports" class="btn btn--ghost btn--sm">Reports →</a>
+                <a href="/admin/orders" class="btn btn--sm">View orders</a>
+            </div>
         </div>
 
-        <div class="admin__panels">
-            <section class="admin__panel">
-                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
-                    <h3>Last 14 days</h3>
-                    <small style="color:var(--c-text-3)">Revenue by day · orders</small>
-                </div>
-                <div class="chart-bars">
-                    <% series.forEach(function(s) { %>
-                        <div class="chart-bar" title="<%= s.day %> — <%= formatINR(s.revenueInPaise) %> · <%= s.orders %> orders">
-                            <span class="chart-bar__fill" style="height: <%= Math.round((s.revenueInPaise / maxRev) * 100) %>%"></span>
-                            <span class="chart-bar__label"><%= s.day.slice(5) %></span>
-                        </div>
-                    <% }); %>
-                </div>
-            </section>
+        <!-- ============== KPI ROW ============== -->
+        <div class="kpis">
+            <div class="kpi kpi--accent">
+                <span class="kpi__label">Revenue · Today</span>
+                <span class="kpi__num"><%= formatINR(kpis.revTodayInPaise) %></span>
+                <span class="kpi__delta <%= kpis.revDeltaPct >= 0 ? 'is-up' : 'is-down' %>">
+                    <%= kpis.revDeltaPct >= 0 ? '▲' : '▼' %> <%= Math.abs(kpis.revDeltaPct) %>% vs yesterday
+                </span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Revenue · This month</span>
+                <span class="kpi__num"><%= formatINR(kpis.revMonthInPaise) %></span>
+                <span class="kpi__delta is-muted">Yesterday <%= formatINR(kpis.revYesterdayInPaise) %></span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Orders · Today</span>
+                <span class="kpi__num"><%= kpis.ordersToday %></span>
+                <span class="kpi__delta is-muted">Yesterday <%= kpis.ordersYesterday %></span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Average order value</span>
+                <span class="kpi__num"><%= formatINR(kpis.aovInPaise) %></span>
+                <span class="kpi__delta is-muted">Across all paid orders</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Lifetime revenue</span>
+                <span class="kpi__num"><%= formatINR(kpis.totalRevInPaise) %></span>
+                <span class="kpi__delta is-muted"><%= kpis.orderCount %> total orders</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Customers · Total</span>
+                <span class="kpi__num"><%= kpis.userCount %></span>
+                <span class="kpi__delta is-muted">+<%= kpis.newUsersToday %> today</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi__label">Active SKUs</span>
+                <span class="kpi__num"><%= kpis.productCount %></span>
+                <span class="kpi__delta is-muted"><a href="/admin/products" style="color:inherit;text-decoration:underline">Manage</a></span>
+            </div>
+            <div class="kpi kpi--warn">
+                <span class="kpi__label">Abandoned carts</span>
+                <span class="kpi__num"><%= kpis.cartAbandonedCount %></span>
+                <span class="kpi__delta is-muted">&gt; 24 hours inactive</span>
+            </div>
+        </div>
 
+        <!-- ============== CHART + STATUS ROW ============== -->
+        <div class="admin__panels admin__panels--wide">
             <section class="admin__panel">
-                <h3>Pipeline</h3>
-                <div class="pipeline">
-                    <div class="pipeline-row"><span class="badge badge--pending">Pending</span><strong><%= pendingOrders %></strong></div>
-                    <div class="pipeline-row"><span class="badge badge--paid">Paid</span><strong><%= paidOrders %></strong></div>
+                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+                    <h3>Sales · last 30 days</h3>
+                    <small style="color:var(--c-text-3)">Revenue and orders</small>
                 </div>
+                <div class="chart-wrap"><canvas id="salesChart" height="120"></canvas></div>
+            </section>
+            <section class="admin__panel">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+                    <h3>Order pipeline</h3>
+                    <small style="color:var(--c-text-3)">By status</small>
+                </div>
+                <div class="chart-wrap chart-wrap--donut"><canvas id="statusChart"></canvas></div>
+                <ul class="legend">
+                    <li><span class="legend__sw" style="background:#FFB100"></span> Pending · <strong><%= statusBreakdown.pending %></strong></li>
+                    <li><span class="legend__sw" style="background:#2C4FB8"></span> Processing · <strong><%= statusBreakdown.processing %></strong></li>
+                    <li><span class="legend__sw" style="background:#7C3AED"></span> Shipped · <strong><%= statusBreakdown.shipped %></strong></li>
+                    <li><span class="legend__sw" style="background:#1E9E5C"></span> Delivered · <strong><%= statusBreakdown.delivered %></strong></li>
+                    <li><span class="legend__sw" style="background:#C21B62"></span> Cancelled · <strong><%= statusBreakdown.cancelled %></strong></li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- ============== TABLES ROW ============== -->
+        <div class="admin__panels admin__panels--equal">
+            <section class="admin__panel">
+                <h3>Top products · last 30 days</h3>
+                <% if (topProducts.length === 0) { %>
+                    <p style="color:var(--c-text-3);margin-top:12px">No sales yet in the last 30 days.</p>
+                <% } else { %>
+                    <table class="data-table data-table--cozy">
+                        <thead><tr><th>Product</th><th>Units</th><th>Revenue</th></tr></thead>
+                        <tbody>
+                        <% topProducts.forEach(function(p) { %>
+                            <tr>
+                                <td><a href="/admin/products"><strong><%= p.name %></strong></a></td>
+                                <td><%= p.unitsSold %></td>
+                                <td><%= formatINR(p.revenueInPaise) %></td>
+                            </tr>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                <% } %>
+            </section>
+            <section class="admin__panel">
+                <h3>Top customers</h3>
+                <% if (topCustomers.length === 0) { %>
+                    <p style="color:var(--c-text-3);margin-top:12px">No paid orders yet.</p>
+                <% } else { %>
+                    <table class="data-table data-table--cozy">
+                        <thead><tr><th>Customer</th><th>Orders</th><th>Lifetime</th></tr></thead>
+                        <tbody>
+                        <% topCustomers.forEach(function(c) { %>
+                            <tr>
+                                <td>
+                                    <% if (c.user) { %>
+                                        <a href="/admin/users/<%= c.user.id %>"><strong><%= c.user.name || c.user.email %></strong></a>
+                                    <% } else { %>
+                                        <span style="color:var(--c-text-3)">Unknown user</span>
+                                    <% } %>
+                                </td>
+                                <td><%= c.orderCount %></td>
+                                <td><%= formatINR(c.lifetimeInPaise) %></td>
+                            </tr>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                <% } %>
+            </section>
+        </div>
+
+        <!-- ============== RECENT ROW ============== -->
+        <div class="admin__panels admin__panels--equal">
+            <section class="admin__panel">
+                <h3>Latest orders</h3>
+                <% if (latestOrders.length === 0) { %>
+                    <p style="color:var(--c-text-3);margin-top:12px">No orders yet.</p>
+                <% } else { %>
+                    <table class="data-table data-table--cozy">
+                        <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th></th></tr></thead>
+                        <tbody>
+                        <% latestOrders.forEach(function(o) { %>
+                            <tr>
+                                <td><strong><%= o.orderNumber %></strong></td>
+                                <td><%= o.user.name || o.user.email %></td>
+                                <td><%= formatINR(o.totalInPaise) %></td>
+                                <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
+                                <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a></td>
+                            </tr>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                <% } %>
+            </section>
+            <section class="admin__panel">
+                <h3>Recent sign-ups</h3>
+                <% if (recentUsers.length === 0) { %>
+                    <p style="color:var(--c-text-3);margin-top:12px">No new users yet.</p>
+                <% } else { %>
+                    <ul class="activity">
+                        <% recentUsers.forEach(function(u) { %>
+                            <li>
+                                <div>
+                                    <a href="/admin/users/<%= u.id %>"><strong><%= u.name || u.email %></strong></a>
+                                    <span class="badge badge--<%= u.role.toLowerCase() %>"><%= u.role %></span>
+                                </div>
+                                <small><%= u.createdAt.toISOString().slice(0,16).replace('T',' ') %></small>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } %>
 
                 <% if (lowStock.length) { %>
-                    <h3 style="margin-top:18px">Low stock</h3>
+                    <h3 style="margin-top:24px">Low stock</h3>
                     <ul class="lowstock-list">
                         <% lowStock.forEach(function(p) { %>
                             <li>
@@ -44,27 +180,115 @@
                             </li>
                         <% }); %>
                     </ul>
-                <% } else { %>
-                    <p style="color:var(--c-text-3);margin-top:14px">All products well stocked.</p>
                 <% } %>
             </section>
         </div>
-
-        <h3 style="margin-top:32px">Latest orders</h3>
-        <table class="data-table">
-            <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th></th></tr></thead>
-            <tbody>
-            <% latestOrders.forEach(function(o) { %>
-                <tr>
-                    <td><%= o.orderNumber %></td>
-                    <td><%= o.user.name || o.user.email %></td>
-                    <td><%= formatINR(o.totalInPaise) %></td>
-                    <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
-                    <td><%= o.createdAt.toISOString().slice(0,10) %></td>
-                    <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a></td>
-                </tr>
-            <% }); %>
-            </tbody>
-        </table>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+    const SERIES = <%- JSON.stringify(series) %>;
+    const STATUS = {
+        Pending: <%= statusBreakdown.pending %>,
+        Processing: <%= statusBreakdown.processing %>,
+        Shipped: <%= statusBreakdown.shipped %>,
+        Delivered: <%= statusBreakdown.delivered %>,
+        Cancelled: <%= statusBreakdown.cancelled %>,
+    };
+
+    const fmtINR = (n) => '₹' + Math.round(n / 100).toLocaleString('en-IN');
+
+    // 30-day combined bar+line
+    const sCtx = document.getElementById('salesChart');
+    if (sCtx) {
+        new Chart(sCtx, {
+            type: 'bar',
+            data: {
+                labels: SERIES.map((s) => s.day.slice(5)),
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'Revenue',
+                        data: SERIES.map((s) => s.revenueInPaise / 100),
+                        backgroundColor: 'rgba(255,61,142,0.65)',
+                        borderRadius: 6,
+                        yAxisID: 'y',
+                    },
+                    {
+                        type: 'line',
+                        label: 'Orders',
+                        data: SERIES.map((s) => s.orders),
+                        borderColor: '#282828',
+                        backgroundColor: 'rgba(40,40,40,0.08)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 2,
+                        yAxisID: 'y1',
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: true, position: 'bottom', labels: { boxWidth: 10 } },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) =>
+                                ctx.dataset.label === 'Revenue'
+                                    ? '₹' + (ctx.raw || 0).toLocaleString('en-IN')
+                                    : ctx.raw + ' orders',
+                        },
+                    },
+                },
+                scales: {
+                    y: {
+                        position: 'left',
+                        beginAtZero: true,
+                        ticks: { callback: (v) => '₹' + (v / 1000).toFixed(0) + 'k' },
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                    },
+                    y1: {
+                        position: 'right',
+                        beginAtZero: true,
+                        ticks: { precision: 0 },
+                        grid: { drawOnChartArea: false },
+                    },
+                    x: { grid: { display: false } },
+                },
+            },
+        });
+    }
+
+    // Status donut
+    const dCtx = document.getElementById('statusChart');
+    if (dCtx) {
+        const labels = Object.keys(STATUS);
+        const values = Object.values(STATUS);
+        const allZero = values.every((v) => !v);
+        new Chart(dCtx, {
+            type: 'doughnut',
+            data: {
+                labels,
+                datasets: [
+                    {
+                        data: allZero ? [1] : values,
+                        backgroundColor: allZero
+                            ? ['#E5E5E7']
+                            : ['#FFB100', '#2C4FB8', '#7C3AED', '#1E9E5C', '#C21B62'],
+                        borderWidth: 0,
+                    },
+                ],
+            },
+            options: {
+                cutout: '64%',
+                plugins: { legend: { display: false } },
+                maintainAspectRatio: false,
+            },
+        });
+    }
+})();
+</script>

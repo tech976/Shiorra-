@@ -1,0 +1,53 @@
+<div class="admin">
+    <%- include('./_nav') %>
+    <div class="admin__main">
+        <div class="admin__head">
+            <h1>Coupons</h1>
+            <a href="/admin/coupons/new" class="btn">+ New coupon</a>
+        </div>
+
+        <% if (!coupons.length) { %>
+            <div class="empty-state">
+                <p>No coupons yet. Create one to give customers a discount at checkout.</p>
+                <a href="/admin/coupons/new" class="btn">Create your first coupon</a>
+            </div>
+        <% } else { %>
+            <table class="data-table">
+                <thead><tr><th>Code</th><th>Discount</th><th>Min subtotal</th><th>Used</th><th>Status</th><th>Expires</th><th></th></tr></thead>
+                <tbody>
+                <% coupons.forEach(function(c) { %>
+                    <tr>
+                        <td><code class="coupon-code">🎟 <%= c.code %></code></td>
+                        <td>
+                            <% if (c.type === 'FIXED') { %>
+                                <strong><%= formatINR(c.value) %> off</strong>
+                            <% } else { %>
+                                <strong><%= c.value %>% off</strong>
+                            <% } %>
+                        </td>
+                        <td><%= c.minSubtotal > 0 ? formatINR(c.minSubtotal) : '—' %></td>
+                        <td><%= c.usedCount %><% if (c.usageLimit) { %> / <%= c.usageLimit %><% } %></td>
+                        <td>
+                            <% const isExpired = c.expiresAt && new Date(c.expiresAt) < new Date(); %>
+                            <% if (!c.active) { %>
+                                <span class="badge badge--cancelled">Disabled</span>
+                            <% } else if (isExpired) { %>
+                                <span class="badge badge--cancelled">Expired</span>
+                            <% } else { %>
+                                <span class="badge badge--paid">Active</span>
+                            <% } %>
+                        </td>
+                        <td><%= c.expiresAt ? c.expiresAt.toISOString().slice(0,10) : '—' %></td>
+                        <td class="data-table__actions">
+                            <a href="/admin/coupons/<%= c.id %>/edit" class="btn btn--sm">Edit</a>
+                            <form action="/admin/coupons/<%= c.id %>?_method=DELETE" method="post" onsubmit="return confirm('Delete coupon <%= c.code %>?');" style="display:inline">
+                                <button class="btn btn--sm btn--danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+</div>

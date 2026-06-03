@@ -48,12 +48,29 @@ router.delete('/products/:productId/images/:imageId', ctrl.imageDelete);
 
 // Orders
 router.get('/orders', ctrl.orderList);
+router.get('/orders.csv', ctrl.orderExportCsv);
+router.post('/orders/bulk', ctrl.orderBulk);
 router.get('/orders/:id', ctrl.orderDetail);
+router.get('/orders/:id/invoice', ctrl.orderInvoice);
 router.post('/orders/:id/status', ctrl.orderUpdateStatus);
+router.post('/orders/:id/notes', ctrl.orderUpdateNotes);
 
 // Users
 router.get('/users', ctrl.userList);
 router.get('/users/:id', ctrl.userDetail);
+router.post('/users/:id', ctrl.userUpdate);
 router.post('/users/:id/toggle-role', ctrl.userToggleRole);
+
+// Coupons
+router.get('/coupons', ctrl.couponList);
+router.get('/coupons/new', ctrl.couponNew);
+router.post('/coupons', ctrl.couponCreate);
+router.get('/coupons/:id/edit', ctrl.couponEdit);
+router.post('/coupons/:id', ctrl.couponUpdate);
+router.delete('/coupons/:id', ctrl.couponDelete);
+
+// Reports
+router.get('/reports', ctrl.reports);
+router.get('/reports.csv', ctrl.reportsCsv);
 
 module.exports = router;

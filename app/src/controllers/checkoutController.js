@@ -24,7 +24,8 @@ exports.showCheckout = async (req, res, next) => {
       req.flash('info', 'Your cart is empty.');
       return res.redirect('/cart');
     }
-    const totals = cartController.summarise(items);
+    const coupon = await cartController.resolveSessionCoupon(req);
+    const totals = cartController.summarise(items, coupon);
     let addresses = [];
     if (req.user) {
       addresses = await prisma.address.findMany({ where: { userId: req.user.id }, orderBy: { isDefault: 'desc' } });
@@ -34,6 +35,7 @@ exports.showCheckout = async (req, res, next) => {
       items,
       totals,
       addresses,
+      coupon,
       razorpayKeyId: env.razorpay.keyId || '',
       razorpayEnabled: !!(env.razorpay.keyId && env.razorpay.keySecret),
     });
@@ -58,7 +60,8 @@ exports.placeCod = async (req, res, next) => {
       return res.redirect('/checkout');
     }
     const addr = parsed.data;
-    const totals = cartController.summarise(items);
+    const coupon = await cartController.resolveSessionCoupon(req);
+    const totals = cartController.summarise(items, coupon);
 
     const address = await prisma.address.create({
       data: { ...addr, line2: addr.line2 || null, userId: req.user.id },
@@ -74,11 +77,13 @@ exports.placeCod = async (req, res, next) => {
           subtotalInPaise: totals.subtotalInPaise,
           shippingInPaise: totals.shippingInPaise,
           taxInPaise: 0,
-          discountInPaise: 0,
+          discountInPaise: totals.discountInPaise,
           totalInPaise: totals.totalInPaise,
           status: 'PROCESSING',
           paymentStatus: 'CREATED',
           notes: 'Cash on Delivery',
+          couponCode: coupon?.code || null,
+          couponId: coupon?.id || null,
           items: {
             create: items.map((it) => ({
               productId: it.productId,
@@ -97,10 +102,14 @@ exports.placeCod = async (req, res, next) => {
           data: { stock: { decrement: it.quantity } },
         });
       }
+      if (coupon) {
+        await tx.coupon.update({ where: { id: coupon.id }, data: { usedCount: { increment: 1 } } });
+      }
       return created;
     });
 
     await prisma.cartItem.deleteMany({ where: { userId: req.user.id } });
+    delete req.session.couponCode;
 
     req.flash('success', `Order ${order.orderNumber} placed — pay on delivery.`);
     res.redirect(`/checkout/success/${order.orderNumber}`);
@@ -125,8 +134,8 @@ exports.createOrder = async (req, res, next) => {
       return res.status(400).json({ error: 'Invalid shipping address.', issues: parsed.error.issues });
     }
     const addr = parsed.data;
-
-    const totals = cartController.summarise(items);
+    const coupon = await cartController.resolveSessionCoupon(req);
+    const totals = cartController.summarise(items, coupon);
 
     const rzp = getRazorpay();
     if (!rzp) {
@@ -157,9 +166,11 @@ exports.createOrder = async (req, res, next) => {
           subtotalInPaise: totals.subtotalInPaise,
           shippingInPaise: totals.shippingInPaise,
           taxInPaise: 0,
-          discountInPaise: 0,
+          discountInPaise: totals.discountInPaise,
           totalInPaise: totals.totalInPaise,
           razorpayOrderId: rzpOrder.id,
+          couponCode: coupon?.code || null,
+          couponId: coupon?.id || null,
           items: {
             create: items.map((it) => ({
               productId: it.productId,
@@ -171,8 +182,12 @@ exports.createOrder = async (req, res, next) => {
           },
         },
       });
+      if (coupon) {
+        await tx.coupon.update({ where: { id: coupon.id }, data: { usedCount: { increment: 1 } } });
+      }
       return created;
     });
+    if (coupon) delete req.session.couponCode;
 
     res.json({
       ok: true,

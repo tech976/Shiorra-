@@ -1,7 +1,5 @@
 const prisma = require('../config/db');
 
-// Returns a list of { product, quantity, subtotalInPaise } for either an
-// authenticated user (DB-backed cart) or a guest (session-backed cart).
 async function loadCart(req) {
   if (req.user) {
     const items = await prisma.cartItem.findMany({
@@ -35,22 +33,53 @@ async function loadCart(req) {
     }));
 }
 
-function summarise(items) {
+function computeDiscount(coupon, subtotal) {
+  if (!coupon || !coupon.active) return 0;
+  if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) return 0;
+  if (coupon.minSubtotal && subtotal < coupon.minSubtotal) return 0;
+  if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) return 0;
+  if (coupon.type === 'FIXED') return Math.min(subtotal, coupon.value);
+  if (coupon.type === 'PERCENT') return Math.floor((subtotal * coupon.value) / 100);
+  return 0;
+}
+
+async function resolveSessionCoupon(req) {
+  const code = req.session?.couponCode;
+  if (!code) return null;
+  const coupon = await prisma.coupon.findUnique({ where: { code } });
+  if (!coupon) {
+    delete req.session.couponCode;
+    return null;
+  }
+  return coupon;
+}
+
+function summarise(items, coupon) {
   const subtotal = items.reduce((n, it) => n + it.subtotalInPaise, 0);
-  const shipping = subtotal >= 99900 ? 0 : 4900; // free shipping over ₹999, otherwise ₹49
-  const total = subtotal + shipping;
+  const shipping = subtotal >= 99900 ? 0 : 4900;
+  const discount = computeDiscount(coupon, subtotal);
+  const total = Math.max(0, subtotal + shipping - discount);
   const itemCount = items.reduce((n, it) => n + it.quantity, 0);
-  return { subtotalInPaise: subtotal, shippingInPaise: shipping, totalInPaise: total, itemCount };
+  return {
+    subtotalInPaise: subtotal,
+    shippingInPaise: shipping,
+    discountInPaise: discount,
+    totalInPaise: total,
+    itemCount,
+  };
 }
 
 exports.loadCart = loadCart;
 exports.summarise = summarise;
+exports.resolveSessionCoupon = resolveSessionCoupon;
+exports.computeDiscount = computeDiscount;
 
 exports.view = async (req, res, next) => {
   try {
     const items = await loadCart(req);
-    const totals = summarise(items);
-    res.render('pages/cart', { title: 'Your cart', items, totals });
+    const coupon = await resolveSessionCoupon(req);
+    const totals = summarise(items, coupon);
+    res.render('pages/cart', { title: 'Your cart', items, totals, coupon });
   } catch (err) {
     next(err);
   }
@@ -80,11 +109,10 @@ exports.add = async (req, res, next) => {
 
     if (req.accepts('json') && req.xhr) {
       const items = await loadCart(req);
-      return res.json({ ok: true, cartCount: summarise(items).itemCount });
+      const coupon = await resolveSessionCoupon(req);
+      return res.json({ ok: true, cartCount: summarise(items, coupon).itemCount });
     }
     req.flash('success', `${product.name} added to cart.`);
-    // Prefer the Referer (origin-checked) so the user lands back on the page
-    // they were browsing; otherwise send them to the cart.
     const ref = req.get('Referer') || '';
     const host = req.get('Host') || '';
     const sameHost = ref && new URL(ref, `http://${host}`).host === host;
@@ -130,4 +158,48 @@ exports.remove = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+exports.applyCoupon = async (req, res, next) => {
+  try {
+    const code = String(req.body.code || '').trim().toUpperCase();
+    if (!code) {
+      req.flash('error', 'Enter a coupon code.');
+      return res.redirect('/cart');
+    }
+    const coupon = await prisma.coupon.findUnique({ where: { code } });
+    if (!coupon || !coupon.active) {
+      req.flash('error', `Coupon "${code}" is not valid.`);
+      return res.redirect('/cart');
+    }
+    if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) {
+      req.flash('error', `Coupon "${code}" has expired.`);
+      return res.redirect('/cart');
+    }
+    if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) {
+      req.flash('error', `Coupon "${code}" has reached its usage limit.`);
+      return res.redirect('/cart');
+    }
+    // Validate min subtotal against current cart
+    const items = await loadCart(req);
+    const subtotal = items.reduce((n, it) => n + it.subtotalInPaise, 0);
+    if (coupon.minSubtotal && subtotal < coupon.minSubtotal) {
+      req.flash(
+        'error',
+        `Coupon "${code}" needs a minimum subtotal of ₹${(coupon.minSubtotal / 100).toFixed(0)}.`
+      );
+      return res.redirect('/cart');
+    }
+    req.session.couponCode = coupon.code;
+    req.flash('success', `Coupon "${code}" applied.`);
+    res.redirect('/cart');
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.removeCoupon = (req, res) => {
+  delete req.session.couponCode;
+  req.flash('success', 'Coupon removed.');
+  res.redirect('/cart');
 };

@@ -60,6 +60,12 @@
                 </ul>
                 <div class="cart__row"><span>Subtotal</span><span><%= formatINR(totals.subtotalInPaise) %></span></div>
                 <div class="cart__row"><span>Shipping</span><span><%= totals.shippingInPaise === 0 ? 'Free' : formatINR(totals.shippingInPaise) %></span></div>
+                <% if (totals.discountInPaise > 0) { %>
+                    <div class="cart__row cart__row--discount">
+                        <span>Discount<% if (coupon) { %> · 🎟 <%= coupon.code %><% } %></span>
+                        <span>-<%= formatINR(totals.discountInPaise) %></span>
+                    </div>
+                <% } %>
                 <div class="cart__row cart__row--total"><span>Total</span><span><%= formatINR(totals.totalInPaise) %></span></div>
             </aside>
         </div>

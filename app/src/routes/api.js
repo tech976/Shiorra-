@@ -13,7 +13,8 @@ router.get('/me', (req, res) => {
 router.get('/cart', async (req, res, next) => {
   try {
     const items = await cartCtrl.loadCart(req);
-    const totals = cartCtrl.summarise(items);
+    const coupon = await cartCtrl.resolveSessionCoupon(req);
+    const totals = cartCtrl.summarise(items, coupon);
     res.json({
       items: items.map((it) => ({
         productId: it.productId,
@@ -24,6 +25,7 @@ router.get('/cart', async (req, res, next) => {
         image: it.product.images?.[0]?.url || null,
       })),
       totals,
+      coupon: coupon ? { code: coupon.code, type: coupon.type, value: coupon.value } : null,
     });
   } catch (err) {
     next(err);

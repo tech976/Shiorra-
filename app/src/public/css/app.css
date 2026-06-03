@@ -734,3 +734,149 @@ a.account__card.account__card--accent:hover { background: var(--c-pink); color: 
 a.account__card.account__card--accent:hover .account__card-num,
 a.account__card.account__card--accent:hover .account__card-lbl { color: #fff; }
 
+/* ----------------------------------------------------------
+   Admin v2 — Shopify-style dashboard components
+   ---------------------------------------------------------- */
+
+/* KPI grid */
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
+@media (max-width: 1100px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px)  { .kpis { grid-template-columns: 1fr; } }
+.kpis--small { grid-template-columns: repeat(4, 1fr); }
+.kpi {
+    background: #fff;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-lg);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: transform .2s, box-shadow .2s;
+}
+.kpi:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(40,40,40,0.06); }
+.kpi__label { color: var(--c-text-3); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.kpi__num   { font-family: var(--ff-display); font-weight: 700; font-size: 1.55rem; color: var(--c-charcoal); letter-spacing: -0.015em; line-height: 1.1; }
+.kpi__delta { font-size: 0.78rem; color: var(--c-success); }
+.kpi__delta.is-down  { color: var(--c-danger); }
+.kpi__delta.is-muted { color: var(--c-text-3); }
+.kpi--accent { background: var(--c-pink-soft); border-color: var(--c-pink-soft); }
+.kpi--accent .kpi__label, .kpi--accent .kpi__num { color: var(--c-pink-deep); }
+.kpi--warn   { background: var(--c-warn-soft); border-color: var(--c-warn-soft); }
+.kpi--warn   .kpi__label, .kpi--warn   .kpi__num { color: var(--c-warn); }
+
+/* Chart wrappers */
+.chart-wrap { position: relative; height: 240px; }
+.chart-wrap--donut { height: 200px; max-width: 200px; margin: 0 auto; }
+
+/* Donut legend list */
+.legend { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.86rem; color: var(--c-text-2); }
+.legend li { display: flex; align-items: center; gap: 8px; }
+.legend__sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legend strong { color: var(--c-charcoal); margin-left: 4px; }
+
+/* Panel layouts */
+.admin__panels--wide { grid-template-columns: 2fr 1fr; }
+.admin__panels--equal { grid-template-columns: 1fr 1fr; }
+@media (max-width: 980px) {
+    .admin__panels--wide, .admin__panels--equal { grid-template-columns: 1fr; }
+}
+
+/* Cozy data table for dashboard widgets */
+.data-table--cozy th { padding: 8px 10px; font-size: 0.7rem; }
+.data-table--cozy td { padding: 10px; font-size: 0.88rem; }
+
+/* Activity feed (recent sign-ups list) */
+.activity { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-direction: column; gap: 10px; }
+.activity li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 12px;
+    background: var(--c-surface);
+    border-radius: var(--r-sm);
+}
+.activity small { color: var(--c-text-3); font-size: 0.78rem; }
+
+/* Orders v2: bulk-action bar + date filter labels */
+.admin__search--multi { gap: 8px; flex-wrap: wrap; align-items: end; }
+.admin__search--multi select { padding: 10px 12px; border: 1px solid var(--c-line); border-radius: var(--r-md); }
+.datelbl { display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: var(--c-text-3); }
+.datelbl input { padding: 8px 10px; border: 1px solid var(--c-line); border-radius: var(--r-sm); font: inherit; }
+
+.bulk-bar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: var(--c-charcoal);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: var(--r-md);
+    margin: 10px 0;
+}
+.bulk-bar select {
+    padding: 8px 10px;
+    border: 0;
+    border-radius: var(--r-sm);
+    font: inherit;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+}
+.bulk-bar select option { color: var(--c-charcoal); background: #fff; }
+.bulk-bar span { font-weight: 700; font-size: 0.86rem; flex: 1; }
+
+/* Coupon code chip */
+.coupon-code {
+    background: var(--c-pink-soft);
+    color: var(--c-pink-deep);
+    padding: 4px 10px;
+    border-radius: var(--r-sm);
+    font-family: var(--ff-display);
+    font-weight: 800;
+    font-size: 0.84rem;
+    letter-spacing: 0.06em;
+    display: inline-block;
+}
+
+/* Cart: coupon form + discount row */
+.coupon-form { display: flex; gap: 8px; margin-top: 14px; align-items: center; }
+.coupon-form input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    font: inherit;
+    text-transform: uppercase;
+}
+.coupon-form input:focus { outline: none; border-color: var(--c-pink); box-shadow: 0 0 0 3px rgba(255,61,142,0.12); }
+.cart__row--discount { color: var(--c-success); }
+.cart__row--discount code { background: var(--c-success-soft); padding: 2px 8px; border-radius: 6px; font-size: 0.78rem; color: var(--c-success); }
+
+/* Share bar (Reports table) */
+.share-bar {
+    width: 120px;
+    height: 6px;
+    background: var(--c-line-soft);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+.share-bar span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--c-pink), var(--c-pink-deep));
+    border-radius: 999px;
+}
+
+/* Extra badge tones for paymentStatus */
+.badge--captured, .badge--authorized { background: var(--c-success-soft); color: var(--c-success); }
+.badge--created  { background: var(--c-warn-soft); color: var(--c-warn); }
+.badge--failed   { background: var(--c-pink-soft); color: var(--c-pink-deep); }
+
