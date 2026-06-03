@@ -1,28 +1,917 @@
-<section class="hero-band">
-    <div class="container">
-        <h1 class="hero-band__title">Wellness, <em>gently formulated</em>.</h1>
-        <p class="hero-band__lead">Active-form ingredients, clinical doses, kind to the body. Built for every stage of life.</p>
-        <div class="hero-band__cta">
-            <a href="/shop" class="btn btn--lg">Shop the routine</a>
-            <a href="/about" class="btn btn--ghost btn--lg">Our story</a>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Shiōrra Advanced Iron+ · Smarter Iron for a Healthier Pregnancy</title>
+    <meta name="description" content="Shiōrra Advanced Iron+ — Smarter iron for a healthier pregnancy. Ferrous Bisglycinate, Selenium, Copper, Zinc & B-Complex Vitamins. Gentle on stomach, no preservatives. A trademark of K.C. Laboratories.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="/img/logo/logo-green.png">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+    <!-- ============== PROMO STRIP ============== -->
+    <div class="promo">
+        <span>Free shipping on orders over <span class="accent">₹999</span> · Recommended by experts</span>
+    </div>
+
+    <!-- ============== HEADER ============== -->
+    <header class="site-header" id="siteHeader">
+        <div class="container">
+            <nav class="nav" id="primaryNav">
+                <a href="/" class="nav__logo" aria-label="Shiorra home">
+                    <img src="/img/logo/logo-green.png" alt="Shiōrra">
+                </a>
+                <ul class="nav__menu" id="navMenu">
+                    <li><a href="/" class="active">Home</a></li>
+                    <li class="nav__has-sub">
+                        <a href="/product/advanced-iron" class="nav__sub-toggle" aria-haspopup="true" aria-expanded="false" data-nav-sub>
+                            Shop
+                            <svg class="nav__sub-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                        </a>
+                        <ul class="nav__sub" role="menu" aria-label="Shop the Shiōrra range">
+                            <li role="none"><a href="/product/advanced-iron" role="menuitem">Advanced Iron+</a></li>
+                            <li role="none"><a href="/product/advanced-ginger" role="menuitem">Advanced Ginger+</a></li>
+                            <li role="none"><a href="/product/advanced-energyone" role="menuitem">Advanced EnergyOne+</a></li>
+                        </ul>
+                    </li>                    <li><a href="/reviews">Reviews</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+                <div class="nav__cta">
+                    <ul class="nav__icons">
+                        <li><a href="#" aria-label="Search">
+                            <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        </a></li>
+                        <li><a href="<%= currentUser ? '/account' : '/login' %>" aria-label="Account">
+                            <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </a></li>
+                        <li><a href="/cart" aria-label="Cart">
+                            <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+                            <% if (cartCount > 0) { %><span class="cart-dot"><%= cartCount %></span><% } %>
+                        </a></li>
+                    </ul>
+                    <a href="/product/advanced-iron" class="btn">Shop now</a>
+                    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ============== HERO — full-bleed rotating banner ============== -->
+    <section class="hero hero--banners" id="home" aria-label="Featured campaigns">
+        <div class="hero-banners" id="heroBanners" data-progress="1" aria-roledescription="banner" aria-live="polite">
+
+            <div class="hero-banners__track">
+                <!-- Banner 1 · Advanced Iron+ -->
+                <figure class="hero-banners__slide is-active" data-index="0" aria-hidden="false">
+                    <a href="/product/advanced-iron" aria-label="Nourish today, strengthen tomorrow — Shop Shiōrra Advanced Iron+">
+                        <img src="/img/banners/banner-2.png" alt="Pregnant woman cradling her bump beside Shiōrra Advanced Iron+ boxes — Nourish Today, Strengthen Tomorrow" loading="eager">
+                    </a>
+                </figure>
+                <!-- Banner 2 · Advanced Ginger+ -->
+                <figure class="hero-banners__slide" data-index="1" aria-hidden="true">
+                    <a href="/product/advanced-ginger" aria-label="Gentle support for morning sickness — Shop Shiōrra Advanced Ginger+">
+                        <img src="/img/products/banner-ginger-2.png" alt="Pregnant woman cradling her bump beside Shiōrra Advanced Ginger+ box and benefit chips — Gentle Support for Morning Sickness" loading="lazy">
+                    </a>
+                </figure>
+            </div>
+
+            <div class="hero-banners__dots" role="tablist" aria-label="Banner indicators">
+                <button class="hero-banners__dot is-active" data-go="0" role="tab" aria-selected="true"  aria-label="Show Iron+ banner"></button>
+                <button class="hero-banners__dot"            data-go="1" role="tab" aria-selected="false" aria-label="Show Ginger+ banner"></button>
+            </div>
+
+            <div class="hero-banners__progress" aria-hidden="true"></div>
+        </div>
+    </section>
+
+    <!-- ============== PRODUCT SHOWCASE — Explore the routine ============== -->
+    <section class="products-row" id="shop" aria-label="Shop the Shiōrra routine">
+        <div class="container">
+            <header class="products-row__head reveal">
+                <h2 class="products-row__title">Explore the <em>Shiōrra routine</em></h2>
+                <p class="products-row__sub">Clinical. Gentle. Beautifully simple.</p>
+            </header>
+
+            <div class="products-row__grid stagger">
+
+                <!-- 01 — Advanced Iron+ -->
+                <article class="product-card product-card--01 reveal">
+                    <a href="/product/advanced-iron" class="product-card__media" aria-label="Advanced Iron+ · 30 vegecaps">
+                        <span class="product-card__badge product-card__badge--sea">Best Seller</span>
+                        <span class="product-card__discount">Save <strong>17%</strong> today</span>
+                        <img src="/img/products/sku-iron.png" alt="Shiōrra Advanced Iron+ box with capsule blister, glass of water and stoneware">
+                    </a>
+                    <div class="product-card__body">
+                        <h3 class="product-card__name">Advanced Iron+</h3>
+                        <p class="product-card__desc">For a healthier pregnancy &amp; postpartum.</p>
+                        <div class="product-card__rating">
+                            <span class="product-card__stars">★★★★★</span>
+                            <a href="/reviews" class="product-card__reviews">1,240 reviews</a>
+                        </div>
+                        <p class="product-card__price"><small>From</small>₹749</p>
+                    </div>
+                    <a href="/product/advanced-iron" class="product-card__cta">
+                        Add to cart
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+                    </a>
+                </article>
+
+                <!-- 02 — Advanced Ginger+ (new launch) -->
+                <article class="product-card product-card--02 reveal">
+                    <a href="/product/advanced-ginger" class="product-card__media" aria-label="Advanced Ginger+ · gentle daily support for pregnancy">
+                        <span class="product-card__badge product-card__badge--ink">New Launch</span>
+                        <span class="product-card__discount">Save <strong>15%</strong> on subscription</span>
+                        <img src="/img/products/sku-ginger.png" alt="Shiōrra Advanced Ginger+ box with capsule blister and fresh ginger root on a warm backdrop">
+                    </a>
+                    <div class="product-card__body">
+                        <h3 class="product-card__name">Advanced Ginger+</h3>
+                        <p class="product-card__desc">Gentle daily support for pregnancy wellness.</p>
+                        <div class="product-card__rating">
+                            <span class="product-card__stars">★★★★★</span>
+                            <a href="/reviews" class="product-card__reviews">Early reviews</a>
+                        </div>
+                        <p class="product-card__price"><small>From</small>₹599</p>
+                    </div>
+                    <a href="/product/advanced-ginger" class="product-card__cta">
+                        Add to cart
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+                    </a>
+                </article>
+
+                <!-- 03 — Advanced EnergyOne+ -->
+                <article class="product-card product-card--03 reveal">
+                    <a href="/product/advanced-energyone" class="product-card__media" aria-label="Advanced EnergyOne+ · daily energy, focus & vitality">
+                        <span class="product-card__badge product-card__badge--ink">New Launch</span>
+                        <span class="product-card__discount">Save <strong>18%</strong> on subscription</span>
+                        <img src="/img/products/sku-multivitamin.png" alt="Shiōrra Advanced EnergyOne+ box — placeholder, swap with the real product photo">
+                    </a>
+                    <div class="product-card__body">
+                        <h3 class="product-card__name">Advanced EnergyOne+</h3>
+                        <p class="product-card__desc">Daily energy, focus &amp; vitality — caffeine-free.</p>
+                        <div class="product-card__rating">
+                            <span class="product-card__stars">★★★★★</span>
+                            <a href="/reviews" class="product-card__reviews">Early reviews</a>
+                        </div>
+                        <p class="product-card__price"><small>From</small>₹699</p>
+                    </div>
+                    <a href="/product/advanced-energyone" class="product-card__cta">
+                        Add to cart
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+                    </a>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== TRUST ROW — quiet band of e-commerce trust signals ============== -->
+    <section class="trust-row" aria-label="Trust signals">
+        <div class="container">
+            <div class="trust-row__inner">
+                <div class="trust-item">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg>
+                    <div class="trust-item__txt">Doctor-recommended<small>For pregnancy &amp; postpartum</small></div>
+                </div>
+                <div class="trust-item">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M14 6V4H10v2"/><path d="M2 12h20"/></svg>
+                    <div class="trust-item__txt">Free shipping<small>On orders over ₹999</small></div>
+                </div>
+                <div class="trust-item">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.5 0 4.8 1 6.5 2.5"/><path d="M21 4v5h-5"/></svg>
+                    <div class="trust-item__txt">30-day refund<small>Money-back guarantee</small></div>
+                </div>
+                <div class="trust-item">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="m9 14-2 8 5-3 5 3-2-8"/></svg>
+                    <div class="trust-item__txt">FSSAI &amp; GMP<small>Certified manufacturing</small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== TRUST GRID — three-column static apothecary trust bar ============== -->
+    <section class="trust-grid" id="standards" aria-label="Brand standards">
+        <div class="container">
+            <div class="trust-grid__head reveal">
+                <span class="eyebrow eyebrow--sage">Made with intention</span>
+                <h2>The standards we hold <span class="bold-pink">ourselves to</span>.</h2>
+            </div>
+
+            <div class="trust-grid__cols reveal">
+                <article class="trust-cell">
+                    <span class="trust-cell__num">01</span>
+                    <h3 class="trust-cell__title">Clinical formulation</h3>
+                    <p class="trust-cell__body">Active-form Ferrous Bisglycinate. Lab-tested. No preservatives, no artificial colours or flavours.</p>
+                </article>
+                <article class="trust-cell">
+                    <span class="trust-cell__num">02</span>
+                    <h3 class="trust-cell__title">Built for the body</h3>
+                    <p class="trust-cell__body">Gentle on the stomach. 100% vegetarian. Doctor-recommended for prenatal and postnatal care.</p>
+                </article>
+                <article class="trust-cell">
+                    <span class="trust-cell__num">03</span>
+                    <h3 class="trust-cell__title">Certified &amp; sourced</h3>
+                    <p class="trust-cell__body">FSSAI · GMP certified. Manufactured in India to international quality standards.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== QUICK-NAV — pill strip page jumper ============== -->
+    <nav class="quick-nav" aria-label="Section jumper">
+        <div class="container">
+            <div class="quick-nav__inner">
+                <a href="/reviews">
+                    <span class="quick-nav__icon">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </span>
+                    <span>Videos</span>
+                </a>
+                <a href="#claims">
+                    <span class="quick-nav__icon">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 9 22 9 17 14 19 22 12 18 5 22 7 14 2 9 9 9 12 2"/></svg>
+                    </span>
+                    <span>Benefits</span>
+                </a>
+                <a href="/reviews">
+                    <span class="quick-nav__icon">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/></svg>
+                    </span>
+                    <span>Reviews</span>
+                </a>
+                <a href="/faq">
+                    <span class="quick-nav__icon">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </span>
+                    <span>FAQs</span>
+                </a>
+                <a href="/product/advanced-iron#composition">
+                    <span class="quick-nav__icon">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v6L4 20a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-6-12V2"/><path d="M9 2h6"/></svg>
+                    </span>
+                    <span>Ingredients</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============== COMPANY · Who is Shiōrra ============== -->
+    <section class="company" id="company" aria-label="About Shiōrra">
+        <div class="container">
+            <div class="company__grid">
+                <header class="company__head reveal">
+                    <span class="eyebrow eyebrow--sage">Who we are</span>
+                    <h2 class="company__title">
+                        A <span class="bold-pink">wellness house</span><br>
+                        for every life stage.
+                    </h2>
+                    <p class="company__lede">Shiōrra is a precision wellness brand by <strong>K.C. Laboratories</strong> — a 30-year clinical formulation company headquartered in India. We build one focused product at a time, each grounded in active-form ingredients and the science of how the body actually absorbs them.</p>
+                    <p class="company__lede company__lede--muted">Iron+ was our first promise. Ginger+ followed, and now EnergyOne+ — same clinical bar, same gentle formulation philosophy, every single time.</p>
+                </header>
+
+                <ul class="company__facts reveal stagger">
+                    <li class="company__fact">
+                        <span class="company__fact-num">30<small>+</small></span>
+                        <span class="company__fact-lbl">Years in clinical formulation</span>
+                    </li>
+                    <li class="company__fact">
+                        <span class="company__fact-num">10k<small>+</small></span>
+                        <span class="company__fact-lbl">Women on a Shiōrra routine</span>
+                    </li>
+                    <li class="company__fact">
+                        <span class="company__fact-num">5</span>
+                        <span class="company__fact-lbl">SKUs in the roadmap, by 2026</span>
+                    </li>
+                    <li class="company__fact">
+                        <span class="company__fact-num">FSSAI<small> · GMP</small></span>
+                        <span class="company__fact-lbl">Certified manufacturing in India</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== TICKER ============== -->
+    <div class="ticker" aria-hidden="true">
+        <div class="ticker__track">
+            <span class="ticker__item">Clean ingredients</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">No preservatives</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">Recommended by experts</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">Backed by science</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">Gentle on the stomach</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">For pregnant &amp; lactating women</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">Made in India</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <!-- duplicated for seamless loop -->
+            <span class="ticker__item">Clean ingredients</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">No preservatives</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">Recommended by experts</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">Backed by science</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">Gentle on the stomach</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">For pregnant &amp; lactating women</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
+            <span class="ticker__item">Made in India</span>
+            <svg class="ticker__star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 8 22 8 16 13 18 22 12 17 6 22 8 13 2 8 10 8Z"/></svg>
         </div>
     </div>
-</section>
 
-<section class="section">
-    <div class="container">
-        <header class="section__head">
-            <span class="eyebrow">The range</span>
-            <h2>Made with intention.</h2>
-        </header>
-        <% if (products.length === 0) { %>
-            <p>No products yet. Check back soon.</p>
-        <% } else { %>
-            <div class="product-grid">
-                <% products.forEach(function(product) { %>
-                    <%- include('../partials/product-card', { product: product }) %>
-                <% }); %>
+    <!-- ============== CLAIMS — Why moms trust Shiōrra ============== -->
+    <section class="claims" id="claims" aria-label="Product claims">
+        <div class="container">
+            <div class="claims__head reveal">
+                <div class="claims__head__intro">
+                    <span class="eyebrow">Made with care</span>
+                    <h2>Why moms <span class="bold-pink">trust Shiōrra</span></h2>
+                </div>
+                <div class="claims__head__lede">
+                    <p class="claims__stat-line">
+                        <span class="claims__stat">10,000<sup class="claims__stat-plus">+</sup></span>
+                        <span class="claims__stat-copy">women chose Shiōrra Advanced Iron+ over the iron tablets they were prescribed before.</span>
+                    </p>
+                    <ul class="claims__tags" aria-label="Brand attributes">
+                        <li>Clinically meaningful</li>
+                        <li>Gently formulated</li>
+                        <li>Doctor-recommended</li>
+                    </ul>
+                </div>
             </div>
-        <% } %>
-    </div>
-</section>
+
+            <div class="claims__grid stagger">
+                <article class="claim reveal">
+                    <span class="claim__num">01</span>
+                    <div class="claim__icon">
+                        <!-- Chelated iron molecule: Fe core with bisglycinate ligands -->
+                        <svg class="ico" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="9.5" y1="10" x2="13" y2="13"/>
+                            <line x1="18.5" y1="10" x2="15" y2="13"/>
+                            <line x1="9.5" y1="18" x2="13" y2="15"/>
+                            <line x1="18.5" y1="18" x2="15" y2="15"/>
+                            <circle cx="14" cy="14" r="2.6" fill="currentColor" stroke="none"/>
+                            <circle cx="7.5" cy="9" r="2"/>
+                            <circle cx="20.5" cy="9" r="2"/>
+                            <circle cx="7.5" cy="19" r="2"/>
+                            <circle cx="20.5" cy="19" r="2"/>
+                        </svg>
+                    </div>
+                    <h3>Better <span class="accent">Absorption</span>,<br>better results.</h3>
+                    <p>Ferrous Bisglycinate is the gentlest, best-absorbed form of iron — clinically proven to outperform traditional iron salts.</p>
+                </article>
+
+                <article class="claim reveal">
+                    <span class="claim__num">02</span>
+                    <div class="claim__icon">
+                        <!-- Hemoglobin trend rising — clinical chart with data points -->
+                        <svg class="ico" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 23h20"/>
+                            <path d="M4 23V5"/>
+                            <polyline points="4.5 19 9 14 14 16 19 9 23 11"/>
+                            <circle cx="9" cy="14" r="1.4" fill="currentColor" stroke="none"/>
+                            <circle cx="14" cy="16" r="1.4" fill="currentColor" stroke="none"/>
+                            <circle cx="19" cy="9" r="1.4" fill="currentColor" stroke="none"/>
+                            <circle cx="23" cy="11" r="1.4" fill="currentColor" stroke="none"/>
+                        </svg>
+                    </div>
+                    <h3>Reduces <span class="accent">fatigue</span>,<br>improves energy.</h3>
+                    <p>Most women feel a meaningful lift in energy within four weeks of starting their daily Shiōrra routine.</p>
+                </article>
+
+                <article class="claim reveal">
+                    <span class="claim__num">03</span>
+                    <div class="claim__icon">
+                        <!-- Stethoscope — clinician recommendation -->
+                        <svg class="ico" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6 4v6a4 4 0 0 0 8 0V4"/>
+                            <path d="M10 14v3a5 5 0 0 0 10 0v-2"/>
+                            <circle cx="20" cy="11" r="2.4"/>
+                            <circle cx="6" cy="4" r="1.4" fill="currentColor" stroke="none"/>
+                            <circle cx="14" cy="4" r="1.4" fill="currentColor" stroke="none"/>
+                        </svg>
+                    </div>
+                    <h3>Trusted by <span class="accent">experts</span>,<br>recommended care.</h3>
+                    <p>Recommended by gynaecologists and clinicians across India for women planning, expecting, or recovering from pregnancy.</p>
+                </article>
+
+                <article class="claim reveal">
+                    <span class="claim__num">04</span>
+                    <div class="claim__icon">
+                        <!-- Mother + baby — heart cradling smaller filled heart -->
+                        <svg class="ico" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M14 24s-9-5.4-9-12.4A4.6 4.6 0 0 1 14 8.6 4.6 4.6 0 0 1 23 11.6c0 7-9 12.4-9 12.4z"/>
+                            <path d="M14 17s-3-1.9-3-4.6a1.6 1.6 0 0 1 3-1.05 1.6 1.6 0 0 1 3 1.05c0 2.7-3 4.6-3 4.6z" fill="currentColor" stroke="none"/>
+                        </svg>
+                    </div>
+                    <h3>Care for <span class="accent">you</span>,<br>care for your baby.</h3>
+                    <p>Supports fetal brain &amp; organ development with a precision blend of Iron, Folate, B12, Selenium, Zinc &amp; Copper.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== FEATURED PRODUCT — editorial product spread ============== -->
+    <section class="fp-feature">
+        <div class="container">
+            <header class="fp-feature__masthead reveal">
+                <span class="fp-feature__kicker">The Product</span>
+                <span class="fp-feature__edition">Bestseller · Edition 01</span>
+            </header>
+
+            <div class="fp-feature__layout">
+                <div class="fp-feature__media reveal">
+                    <span class="fp-feature__price-tag">
+                        <span class="fp-feature__price-currency">₹</span>
+                        <span class="fp-feature__price-num">749</span>
+                        <span class="fp-feature__price-unit">/ 30 caps</span>
+                    </span>
+                    <img src="/img/products/box-studio.png" alt="Shiōrra Advanced Iron+ box, clean studio shot">
+                </div>
+
+                <div class="fp-feature__copy reveal">
+                    <div class="fp-feature__rating-row">
+                        <span class="fp-feature__stars" aria-label="4.9 stars">★ ★ ★ ★ ★</span>
+                        <span class="fp-feature__rating-num">4.9</span>
+                        <a href="/reviews" class="fp-feature__rating-link">1,240+ reviews →</a>
+                    </div>
+
+                    <h2 class="fp-feature__title">
+                        <span class="fp-feature__title-pre">Advanced</span>
+                        <span class="fp-feature__title-main">Iron<span class="fp-feature__title-plus">+</span></span>
+                    </h2>
+
+                    <p class="fp-feature__deck">An innovative blend to support healthy iron levels and the co-factors of pregnancy — designed to improve hemoglobin and your baby's development.</p>
+
+                    <dl class="fp-feature__specs">
+                        <div>
+                            <dt>Active form</dt>
+                            <dd>Ferrous Bisglycinate</dd>
+                        </div>
+                        <div>
+                            <dt>Per dose</dt>
+                            <dd>27 mg iron · 9 actives</dd>
+                        </div>
+                        <div>
+                            <dt>Routine</dt>
+                            <dd>1 vegecap, daily</dd>
+                        </div>
+                        <div>
+                            <dt>Made for</dt>
+                            <dd>Pregnancy &amp; postpartum</dd>
+                        </div>
+                    </dl>
+
+                    <ul class="fp-feature__features">
+                        <li><span>01</span>Boosts hemoglobin</li>
+                        <li><span>02</span>Reduces fatigue</li>
+                        <li><span>03</span>Supports fetal brain</li>
+                        <li><span>04</span>2–4× absorption</li>
+                    </ul>
+
+                    <div class="fp-feature__cta">
+                        <a href="/product/advanced-iron" class="btn btn--pink">Shop now · ₹ 749</a>
+                        <a href="#" class="btn btn--ghost">Learn more</a>
+                    </div>
+
+                    <p class="fp-feature__trust">Trusted by <strong>10,000+ moms</strong> across India · Free shipping over ₹999</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== FEATURED PRODUCT · Ginger+ (reversed) ============== -->
+    <section class="fp-feature fp-feature--reverse fp-feature--alt">
+        <div class="container">
+            <header class="fp-feature__masthead reveal">
+                <span class="fp-feature__kicker">The Product</span>
+                <span class="fp-feature__edition">New Launch · Edition 02</span>
+            </header>
+
+            <div class="fp-feature__layout">
+                <div class="fp-feature__media reveal">
+                    <span class="fp-feature__price-tag">
+                        <span class="fp-feature__price-currency">₹</span>
+                        <span class="fp-feature__price-num">599</span>
+                        <span class="fp-feature__price-unit">/ 30 caps</span>
+                    </span>
+                    <img src="/img/products/ginger-box-1.png" alt="Shiōrra Advanced Ginger+ box, clean studio shot">
+                </div>
+
+                <div class="fp-feature__copy reveal">
+                    <div class="fp-feature__rating-row">
+                        <span class="fp-feature__stars" aria-label="4.8 stars">★ ★ ★ ★ ★</span>
+                        <span class="fp-feature__rating-num">4.8</span>
+                        <a href="/reviews" class="fp-feature__rating-link">Early reviews →</a>
+                    </div>
+
+                    <h2 class="fp-feature__title">
+                        <span class="fp-feature__title-pre">Advanced</span>
+                        <span class="fp-feature__title-main">Ginger<span class="fp-feature__title-plus">+</span></span>
+                    </h2>
+
+                    <p class="fp-feature__deck">Gentle daily ginger to ease morning sickness, support digestion and warm you up — formulated with B6 for natural nausea relief during pregnancy.</p>
+
+                    <dl class="fp-feature__specs">
+                        <div>
+                            <dt>Active form</dt>
+                            <dd>Standardized Ginger extract</dd>
+                        </div>
+                        <div>
+                            <dt>Per dose</dt>
+                            <dd>250 mg ginger + B6</dd>
+                        </div>
+                        <div>
+                            <dt>Routine</dt>
+                            <dd>1 vegecap, daily</dd>
+                        </div>
+                        <div>
+                            <dt>Made for</dt>
+                            <dd>Pregnancy &amp; morning sickness</dd>
+                        </div>
+                    </dl>
+
+                    <ul class="fp-feature__features">
+                        <li><span>01</span>Eases nausea</li>
+                        <li><span>02</span>Supports digestion</li>
+                        <li><span>03</span>Warming comfort</li>
+                        <li><span>04</span>B6 co-factor</li>
+                    </ul>
+
+                    <div class="fp-feature__cta">
+                        <a href="/product/advanced-ginger" class="btn btn--pink">Shop now · ₹ 599</a>
+                        <a href="#" class="btn btn--ghost">Learn more</a>
+                    </div>
+
+                    <p class="fp-feature__trust">A trusted ally for the first trimester · Free shipping over ₹999</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== FEATURED PRODUCT · EnergyOne+ ============== -->
+    <section class="fp-feature">
+        <div class="container">
+            <header class="fp-feature__masthead reveal">
+                <span class="fp-feature__kicker">The Product</span>
+                <span class="fp-feature__edition">Daily energy · Edition 03</span>
+            </header>
+
+            <div class="fp-feature__layout">
+                <div class="fp-feature__media reveal">
+                    <span class="fp-feature__price-tag">
+                        <span class="fp-feature__price-currency">₹</span>
+                        <span class="fp-feature__price-num">699</span>
+                        <span class="fp-feature__price-unit">/ 30 caps</span>
+                    </span>
+                    <img src="/img/products/sku-multivitamin.png" alt="Shiōrra Advanced EnergyOne+ — placeholder, swap with the real product photo when available">
+                </div>
+
+                <div class="fp-feature__copy reveal">
+                    <div class="fp-feature__rating-row">
+                        <span class="fp-feature__stars" aria-label="4.8 stars">★ ★ ★ ★ ★</span>
+                        <span class="fp-feature__rating-num">4.8</span>
+                        <a href="/reviews" class="fp-feature__rating-link">Early reviews →</a>
+                    </div>
+
+                    <h2 class="fp-feature__title">
+                        <span class="fp-feature__title-pre">Advanced</span>
+                        <span class="fp-feature__title-main">EnergyOne<span class="fp-feature__title-plus">+</span></span>
+                    </h2>
+
+                    <p class="fp-feature__deck">Daily nutritional support for energy, focus &amp; vitality — Taurine, Ginseng Extract, B-Complex vitamins, essential minerals and amino acids. Caffeine-free.</p>
+
+                    <dl class="fp-feature__specs">
+                        <div>
+                            <dt>Lead actives</dt>
+                            <dd>Taurine + Ginseng Extract</dd>
+                        </div>
+                        <div>
+                            <dt>Per dose</dt>
+                            <dd>B-Complex · Minerals · Amino acids</dd>
+                        </div>
+                        <div>
+                            <dt>Routine</dt>
+                            <dd>1 vegecap, daily</dd>
+                        </div>
+                        <div>
+                            <dt>Made for</dt>
+                            <dd>Busy adults · active lifestyles</dd>
+                        </div>
+                    </dl>
+
+                    <ul class="fp-feature__features">
+                        <li><span>01</span>Energy metabolism</li>
+                        <li><span>02</span>Focus &amp; alertness</li>
+                        <li><span>03</span>Caffeine-free</li>
+                        <li><span>04</span>Multi-nutrient</li>
+                    </ul>
+
+                    <div class="fp-feature__cta">
+                        <a href="/product/advanced-energyone" class="btn btn--pink">Shop now · ₹ 699</a>
+                        <a href="/product/advanced-energyone" class="btn btn--ghost">See the science</a>
+                    </div>
+
+                    <p class="fp-feature__trust">Recharge. Refocus. Revitalize. · Free shipping over ₹999</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== STANDS FOR ============== -->
+    <section class="section" id="stands">
+        <div class="container">
+            <div class="stands__head reveal">
+                <span class="eyebrow">Why Shiōrra</span>
+                <h2>What this brand <span class="bold-pink">stands for</span>.</h2>
+                <p class="lead">Shiōrra is more than a brand. It is a commitment to making wellness simpler, more effective, precision-driven, and truly meaningful — for every stage of life.</p>
+            </div>
+
+            <div class="stands__grid stagger">
+                <div class="stand reveal">
+                    <div class="stand__num">01</div>
+                    <h3 class="stand__title">Trust</h3>
+                    <p>Clean, real ingredients with no preservatives — purity is the starting point, not an afterthought.</p>
+                </div>
+                <div class="stand reveal">
+                    <div class="stand__num">02</div>
+                    <h3 class="stand__title">Science</h3>
+                    <p>Every formulation is grounded in clinical research, built to solve the root cause — not the symptom.</p>
+                </div>
+                <div class="stand reveal">
+                    <div class="stand__num">03</div>
+                    <h3 class="stand__title">Inclusion</h3>
+                    <p>Thoughtfully designed for every stage of life — pregnant, lactating, and the women they become.</p>
+                </div>
+                <div class="stand reveal">
+                    <div class="stand__num">04</div>
+                    <h3 class="stand__title">Guidance</h3>
+                    <p>"Shiori" means a guide — your trusted companion in the journey toward lasting wellbeing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== CTA BAND ============== -->
+    <section class="cta-band">
+        <div class="container">
+            <div class="cta-band__grid">
+                <div>
+                    <h2>Nourish today. <span class="bold-pink">Strengthen tomorrow.</span></h2>
+                    <p>Start with the routine that's right for you — clinical formulation, active-form ingredients, gentle every single day. Free shipping over ₹999.</p>
+                </div>
+                <div class="cta-band__cta">
+                    <a href="/product/advanced-iron" class="btn">Shop Iron+</a>
+                    <a href="/product/advanced-ginger" class="btn btn--ghost">Shop Ginger+</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== FOOTER ============== -->
+    <footer class="site-footer" id="contact">
+        <div class="container">
+            <div class="footer__top">
+                <div class="footer__brand">
+                    <img src="/img/logo/logo-green.png" alt="Shiōrra">
+                    <p>Shiōrra is a trademark of K.C. Laboratories — a commitment to wellness made simpler, more effective, and truly meaningful.</p>
+                    <div class="footer__social">
+                        <a href="#" aria-label="Instagram"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+                        <a href="#" aria-label="LinkedIn"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6Z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+                        <a href="#" aria-label="Email"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+                    </div>
+                </div>
+
+                <div class="footer__col">
+                    <h5>Shop</h5>
+                    <ul>
+                        <li><a href="/product/advanced-iron">Advanced Iron+</a></li>
+                        <li><a href="/product/advanced-iron#composition">Ingredients</a></li>
+                        <li><a href="#">Subscriptions</a></li>
+                        <li><a href="#">Bundles</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__col">
+                    <h5>Brand</h5>
+                    <ul>                        <li><a href="/about">Founders</a></li>
+                        
+                        <li><a href="/reviews">Reviews</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__col">
+                    <h5>Support</h5>
+                    <ul>
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Privacy &amp; Terms</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__col footer__retailers">
+                    <h5>Also on</h5>
+                    <ul>
+                        <li><a href="#">Amazon</a></li>
+                        <li><a href="#">Flipkart</a></li>
+                        <li><a href="#">Nykaa</a></li>
+                        <li><a href="#">Pharmeasy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <span>© <span id="year"></span> Shiōrra™ · A trademark of K.C. Laboratories · Made in India</span>
+                <span><a href="#">Privacy</a> · <a href="#">Terms</a></span>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Lenis smooth-scroll -->
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+    <script src="/js/lenis-init.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+    <script src="/js/award.js" defer></script>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+    <script src="/js/main.js"></script>
+    <script>
+        // Hero banner carousel — auto-advance every 5s, pause on hover, dots + arrows + keyboard
+        (() => {
+            const root = document.getElementById('heroBanners');
+            if (!root) return;
+            const slides = Array.from(root.querySelectorAll('.hero-banners__slide'));
+            const dots   = Array.from(root.querySelectorAll('.hero-banners__dot'));
+            const prevBtn = document.getElementById('bannerPrev');
+            const nextBtn = document.getElementById('bannerNext');
+            const INTERVAL = 2000;
+            let idx = 0, paused = false, timer = null, progressTimer = null, progressStart = 0;
+
+            const setActive = (n) => {
+                idx = (n + slides.length) % slides.length;
+                slides.forEach((s, i) => {
+                    const on = i === idx;
+                    s.classList.toggle('is-active', on);
+                    s.setAttribute('aria-hidden', String(!on));
+                });
+                dots.forEach((d, i) => {
+                    const on = i === idx;
+                    d.classList.toggle('is-active', on);
+                    d.setAttribute('aria-selected', String(on));
+                });
+                resetProgress();
+            };
+
+            const next = () => setActive(idx + 1);
+            const prev = () => setActive(idx - 1);
+
+            const resetProgress = () => {
+                root.style.setProperty('--p', '0%');
+                progressStart = performance.now();
+            };
+            const tickProgress = () => {
+                if (!paused) {
+                    const elapsed = performance.now() - progressStart;
+                    const pct = Math.min(100, (elapsed / INTERVAL) * 100);
+                    root.style.setProperty('--p', pct + '%');
+                }
+                progressTimer = requestAnimationFrame(tickProgress);
+            };
+
+            const start = () => {
+                stop();
+                timer = setInterval(() => { if (!paused) next(); }, INTERVAL);
+            };
+            const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+
+            // Manual controls
+            nextBtn?.addEventListener('click', () => { setActive(idx + 1); start(); });
+            prevBtn?.addEventListener('click', () => { setActive(idx - 1); start(); });
+            dots.forEach((d) => d.addEventListener('click', () => {
+                setActive(parseInt(d.dataset.go, 10) || 0);
+                start();
+            }));
+
+            // Pause while hovering / focusing
+            root.addEventListener('mouseenter', () => { paused = true; });
+            root.addEventListener('mouseleave', () => { paused = false; progressStart = performance.now(); });
+            root.addEventListener('focusin',   () => { paused = true; });
+            root.addEventListener('focusout',  () => { paused = false; progressStart = performance.now(); });
+
+            // Keyboard
+            root.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft')  { prev(); start(); }
+                if (e.key === 'ArrowRight') { next(); start(); }
+            });
+            root.tabIndex = 0;
+
+            // Pause when page tab hidden
+            document.addEventListener('visibilitychange', () => {
+                paused = document.hidden;
+                if (!paused) progressStart = performance.now();
+            });
+
+            resetProgress();
+            tickProgress();
+            start();
+        })();
+
+        // Scroll progress bar
+        (() => {
+            const bar = document.getElementById('scrollProgress');
+            if (!bar) return;
+            const update = () => {
+                const max = document.documentElement.scrollHeight - window.innerHeight;
+                const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+                bar.style.width = pct + '%';
+            };
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
+        })();
+
+        // Word-by-word headline reveal
+        (() => {
+            const heads = document.querySelectorAll('[data-split]');
+            if (!heads.length) return;
+            const splitNode = (node) => {
+                const out = document.createDocumentFragment();
+                node.childNodes.forEach(child => {
+                    if (child.nodeType === Node.TEXT_NODE) {
+                        const parts = child.textContent.split(/(\s+)/);
+                        parts.forEach(part => {
+                            if (!part) return;
+                            if (/^\s+$/.test(part)) {
+                                out.appendChild(document.createTextNode(' '));
+                            } else {
+                                const w = document.createElement('span');
+                                w.className = 'word';
+                                w.textContent = part;
+                                out.appendChild(w);
+                            }
+                        });
+                    } else if (child.nodeType === Node.ELEMENT_NODE) {
+                        if (child.tagName === 'BR') {
+                            out.appendChild(child.cloneNode(true));
+                        } else {
+                            const w = document.createElement('span');
+                            w.className = 'word';
+                            w.appendChild(child.cloneNode(true));
+                            out.appendChild(w);
+                            out.appendChild(document.createTextNode(' '));
+                        }
+                    }
+                });
+                node.innerHTML = '';
+                node.appendChild(out);
+            };
+            heads.forEach(h => {
+                splitNode(h);
+                h.querySelectorAll('.word').forEach((w, i) => {
+                    w.style.transitionDelay = (i * 0.06) + 's';
+                });
+            });
+            const io = new IntersectionObserver(entries => {
+                entries.forEach(en => {
+                    if (en.isIntersecting) {
+                        en.target.classList.add('is-visible');
+                        io.unobserve(en.target);
+                    }
+                });
+            }, { threshold: 0.25 });
+            heads.forEach(h => io.observe(h));
+        })();
+    </script>
+
+    <script>
+        (() => {
+            const btn = document.getElementById("backToTop");
+            if (!btn) return;
+            const onScroll = () => btn.classList.toggle("is-visible", window.scrollY > 600);
+            window.addEventListener("scroll", onScroll, { passive: true });
+            btn.addEventListener("click", () => {
+                if (window.lenis) window.lenis.scrollTo(0, { duration: 1.2 });
+                else window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+            onScroll();
+        })();
+    </script></body>
+</html>

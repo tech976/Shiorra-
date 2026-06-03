@@ -8,6 +8,7 @@ router.get('/shop', ctrl.shop);
 router.get('/product/:slug', ctrl.product);
 router.get('/about', ctrl.about);
 router.get('/faq', ctrl.faq);
+router.get('/reviews', ctrl.reviews);
 router.get('/contact', ctrl.contact);
 
 module.exports = router;
