@@ -7428,12 +7428,12 @@ body.aw-cursor-out .aw-cursor-ring {
 .scroll-seq[data-scroll-seq="ginger"] .scroll-seq__eyebrow { color: #23867F; }
 .scroll-seq[data-scroll-seq="energy"] .scroll-seq__eyebrow { color: #C2410C; }
 
-/* Whatever section comes immediately after the scroll-seq starts at the very
-   top — no padding gap. The .s class normally carries ~80–160px of top
-   padding; that's the second source of the "blank space" you saw. */
+/* The section after scroll-seq gets a tighter padding than .s defaults
+   (which are 80–160px) — enough breathing room so the next title doesn't
+   collide with the bottle's exit, but no large blank gap. */
 .scroll-seq + section,
 .scroll-seq + .s {
-    padding-top: 0;
+    padding-top: clamp(48px, 7vw, 96px);
 }
 
 @media (max-width: 900px) {
