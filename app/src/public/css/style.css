@@ -7307,13 +7307,14 @@ body.aw-cursor-out .aw-cursor-ring {
    Iron+, sage for Ginger+, warm for Energy+).
    ========================================================= */
 .scroll-seq {
-    /* section_height = sticky_child_height (100vh) + scroll_travel (30vh).
-       This is the key: with section = 130vh, the sticky's bottom always
-       coincides with the section's bottom — there is never any empty
-       section bg visible below the stage. The next section starts the
-       moment the bottle moves out. */
+    /* Section = 100vh sticky + 150vh of scroll travel = 250vh total.
+       Scroll travel of 150vh maps to 150 frames at ~1vh per frame
+       (~11px/frame on a 1080 viewport) — slow, deliberate, Apple-style
+       rotation. The user feels pinned on the bottle while they scroll
+       through the spin; rest of the page is "paused" until rotation
+       completes. */
     position: relative;
-    height: 130vh;
+    height: 250vh;
     background: #FFFFFF;
     isolation: isolate;
     overflow: hidden;
@@ -7439,7 +7440,7 @@ body.aw-cursor-out .aw-cursor-ring {
 }
 
 @media (max-width: 900px) {
-    .scroll-seq { height: 110vh; }
+    .scroll-seq { height: 180vh; }
     .scroll-seq__sticky {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;

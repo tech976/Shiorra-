@@ -13,15 +13,26 @@
  * Behaviour:
  *   - Preloads frames with an 8-in-flight cap to avoid hammering the network.
  *   - Canvas pixel buffer tracks CSS box × DPR (clamped to 2) via ResizeObserver.
- *   - Scroll progress = how far the user has scrolled through the section's
- *     200vh travel; mapped linearly to a frame index.
- *   - Draws are RAF-coalesced and short-circuit when the frame index is unchanged.
- *   - Errors (404, decode fail) are tolerated — the section still functions on
- *     whichever frames did load.
+ *   - Scroll progress (0..1) is computed from the section's travel. The
+ *     CSS gives this section ~150vh of scroll travel, so the playback feels
+ *     slow and deliberate.
+ *   - DISPLAYED frame index lerps toward the scroll target every animation
+ *     frame. This means even on a fast scroll the rotation still plays back
+ *     smoothly instead of jumping straight to the end — buttery Apple feel.
+ *   - Draws are RAF-driven and short-circuit when the integer frame index
+ *     hasn't changed since the last draw.
+ *   - Errors (404, decode fail) are tolerated; the section still functions
+ *     on whichever frames did load.
  */
 (function () {
   const SELECTOR = '[data-scroll-seq]';
   const CONCURRENCY = 8;
+  // Lerp factor: how much of the gap (target - displayed) is closed each tick.
+  // 0.12 ≈ 95% caught up in ~25 frames at 60fps (~400ms). Lower = smoother but
+  // more lag behind the wheel. Tune by feel.
+  const LERP_FACTOR = 0.12;
+  // Tick stops when displayed is within this many frames of target.
+  const SNAP_EPSILON = 0.25;
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll(SELECTOR).forEach(init);
@@ -35,19 +46,18 @@
 
     const ctx = canvas.getContext('2d', { alpha: false });
     function applyCtxQuality() {
-        // Setting canvas.width/height resets context state — call this after every resize.
-        // Pick the best sampling the browser offers — turns bilinear into bicubic
-        // on engines that respect this hint (Safari/Chrome).
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
+      // Setting canvas.width/height resets context state — call after resize.
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
     }
     applyCtxQuality();
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     const images = new Array(total);
     let lastDrawn = -1;
-    let raf = null;
+    let targetFrame = 0;    // where scroll says we should be (float 0..total-1)
+    let displayedFrame = 0; // what's currently on-screen (float, lerps toward target)
+    let tickRaf = null;     // RAF handle for the lerp loop
 
-    // Progress UI — a thin underline that fills as the user scrolls.
     const progressBar = root.querySelector('.scroll-seq__progress > span');
 
     // ---- preload with concurrency cap ----
@@ -64,7 +74,7 @@
       images[i - 1] = img;
       const onSettle = () => {
         loaded++;
-        if (loaded === Math.min(8, total)) draw(); // first paint as soon as a few are in
+        if (loaded === Math.min(8, total)) requestDraw(); // first paint as soon as a few are in
         if (loaded < total) loadNext();
       };
       img.onload = onSettle;
@@ -79,7 +89,7 @@
       canvas.height = Math.max(1, Math.round(r.height * dpr));
       applyCtxQuality();
       lastDrawn = -1;
-      draw();
+      drawAt(displayedFrame);
     }
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
@@ -93,13 +103,12 @@
       return Math.max(0, Math.min(1, p));
     }
 
-    function draw() {
-      const p = progress();
-      if (progressBar) progressBar.style.transform = `scaleX(${p})`;
-      const i = Math.max(0, Math.min(total - 1, Math.floor(p * (total - 1))));
+    function drawAt(frameFloat) {
+      const i = Math.max(0, Math.min(total - 1, Math.round(frameFloat)));
+      if (progressBar) progressBar.style.transform = `scaleX(${frameFloat / (total - 1)})`;
       if (i === lastDrawn) return;
       let img = images[i];
-      // If the current index hasn't loaded yet, walk back to the nearest loaded frame.
+      // Fallback: walk back to nearest loaded frame if this one hasn't arrived yet.
       if (!img || !img.complete || !img.naturalWidth) {
         for (let j = i - 1; j >= 0; j--) {
           if (images[j] && images[j].complete && images[j].naturalWidth) {
@@ -120,17 +129,31 @@
       lastDrawn = i;
     }
 
-    function onScroll() {
-      if (raf != null) return;
-      raf = requestAnimationFrame(() => {
-        raf = null;
-        draw();
-      });
+    function tick() {
+      tickRaf = null;
+      const diff = targetFrame - displayedFrame;
+      if (Math.abs(diff) > SNAP_EPSILON) {
+        displayedFrame += diff * LERP_FACTOR;
+        drawAt(displayedFrame);
+        tickRaf = requestAnimationFrame(tick);
+      } else {
+        displayedFrame = targetFrame;
+        drawAt(displayedFrame);
+      }
     }
-    window.addEventListener('scroll', onScroll, { passive: true });
+
+    function requestDraw() {
+      // Refresh target from scroll, kick the lerp loop if it's idle.
+      targetFrame = progress() * (total - 1);
+      if (tickRaf == null) tickRaf = requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('scroll', requestDraw, { passive: true });
     window.addEventListener('resize', () => {
       lastDrawn = -1;
-      draw();
+      requestDraw();
     });
+    // Initial sync — important if the section is already partially in view on load.
+    requestDraw();
   }
 })();
