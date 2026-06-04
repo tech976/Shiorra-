@@ -86,11 +86,15 @@
 
   .gallery{position:sticky;top:88px}
   @media(max-width:880px){.gallery{position:static}}
-  .gallery-main{
-    aspect-ratio:1/1;width:100%;background:#fff;border-radius:22px;border:1px solid var(--line);
+  .gallery-main{aspect-ratio:4/5;width:100%;background:#fff;border-radius:22px;border:1px solid var(--line);
     display:grid;place-items:center;overflow:hidden;position:relative;
   }
-  .gallery-main img{width:90%;height:90%;object-fit:contain}
+  .gallery-main img{width:100%;height:100%;object-fit:cover;object-position:center}
+  .gallery-thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+  .gallery-thumb{aspect-ratio:4/5;background:#fff;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;padding:0;transition:border-color .2s,transform .2s}
+  .gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+  .gallery-thumb:hover{border-color:var(--honey);transform:translateY(-1px)}
+  .gallery-thumb.is-active{border-color:var(--honey);box-shadow:0 0 0 3px var(--honey-soft) inset}
   .gallery-placeholder{
     width:90%;height:90%;display:grid;place-items:center;flex-direction:column;
     background:repeating-linear-gradient(45deg,#fff7e5 0 16px,#fde4b8 16px 32px);
@@ -374,11 +378,15 @@
             <span class="pulse-dot"></span>
             <span>Now shipping</span>
           </div>
-          <!-- TODO: replace with real EnergyOne+ product photo at img/products/sku-energyone.png -->
-          <div class="gallery-placeholder">
-            Advanced EnergyOne+
-            <span>img/products/sku-energyone.png</span>
-          </div>
+          <!-- TODO: replace these with real EnergyOne+ photos at /img/products/sku-energyone-1..5.png -->
+          <img id="galleryMain" src="/img/products/sku-multivitamin.png" alt="Shiōrra Advanced EnergyOne+ — placeholder pack shot">
+        </div>
+        <div class="gallery-thumbs" id="galleryThumbs">
+          <button type="button" class="gallery-thumb is-active" data-full="/img/products/sku-multivitamin.png" aria-label="Pack shot"><img src="/img/products/sku-multivitamin.png" alt=""></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/sku-bundle.png" aria-label="Bundle view"><img src="/img/products/sku-bundle.png" alt=""></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/sku-calcium.png" aria-label="Capsules"><img src="/img/products/sku-calcium.png" alt=""></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/sku-iron.png" aria-label="Front/back"><img src="/img/products/sku-iron.png" alt=""></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/sku-ginger.png" aria-label="Lifestyle"><img src="/img/products/sku-ginger.png" alt=""></button>
         </div>
       </div>
 
@@ -814,6 +822,21 @@
 <script src="/js/main.js"></script>
 
 <script>
+  /* Gallery — click a thumb to swap the main image */
+  (function () {
+    const main = document.getElementById('galleryMain');
+    const thumbs = document.querySelectorAll('.gallery-thumb');
+    if (!main || !thumbs.length) return;
+    thumbs.forEach((t) => {
+      t.addEventListener('click', () => {
+        const url = t.getAttribute('data-full');
+        if (!url) return;
+        thumbs.forEach((x) => x.classList.remove('is-active'));
+        t.classList.add('is-active');
+        main.src = url;
+      });
+    });
+  })();
   // Quantity stepper
   (function () {
     document.querySelectorAll('.pi-qty').forEach((q) => {

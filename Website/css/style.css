@@ -6877,8 +6877,11 @@ body.aw-cursor-out .aw-cursor-ring {
     border-radius: 0;
     overflow: hidden;
     background: var(--c-surface-1);
-    /* Matches banner-1 & 2 (1672 x 941 ≈ 16:9); banners 3-5 (3:2) crop a touch top/bottom under cover */
-    aspect-ratio: 16 / 9;
+    /* Lock the slot to exactly (viewport height − header chrome). With the
+       promo strip (~34 px) + sticky site-header (~54 px) ≈ 88 px above, this
+       means header + hero banner = 100vh on the dot. No 16:9 aspect-ratio
+       on desktop — the image stretches via object-fit:cover to fill the slot. */
+    height: calc(100vh - 88px);
     isolation: isolate;
 }
 .hero-banners__track { position: absolute; inset: 0; }
@@ -6966,7 +6969,7 @@ body.aw-cursor-out .aw-cursor-ring {
 
 /* Mobile: portrait aspect so banner content stays readable */
 @media (max-width: 720px) {
-    .hero-banners { aspect-ratio: 4 / 5; border-radius: 0; }
+    .hero-banners { height: auto; aspect-ratio: 4 / 5; border-radius: 0; }
     .hero-banners__slide img { object-position: center; }
     .hero-banners__dots { bottom: 12px; padding: 6px 10px; gap: 8px; }
 }
