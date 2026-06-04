@@ -7334,6 +7334,13 @@ body.aw-cursor-out .aw-cursor-ring {
     background: linear-gradient(180deg, #FAFAFA 0%, #FFFFFF 28%, #FFFFFF 72%, #F5F5F5 100%);
     isolation: isolate;
 }
+/* Per-product scroll-seq gradient — edges tinted to the product's package
+   colour, middle stays #FFF so the bottle's studio backdrop stays clean for
+   the canvas's mix-blend-mode: multiply. The bottom-edge tone matches the
+   symptoms section's bg in each product EJS, so the transition is seamless. */
+.scroll-seq[data-scroll-seq="iron"]   { background: linear-gradient(180deg, #FBE5EE 0%, #FFFFFF 28%, #FFFFFF 72%, #FBE5EE 100%); }
+.scroll-seq[data-scroll-seq="ginger"] { background: linear-gradient(180deg, #E0F4F2 0%, #FFFFFF 28%, #FFFFFF 72%, #E0F4F2 100%); }
+.scroll-seq[data-scroll-seq="energy"] { background: linear-gradient(180deg, #EDE9FE 0%, #FFFFFF 28%, #FFFFFF 72%, #EDE9FE 100%); }
 
 .scroll-seq__sticky {
     position: sticky;
@@ -7457,19 +7464,14 @@ body.aw-cursor-out .aw-cursor-ring {
 .scroll-seq[data-scroll-seq="ginger"] .scroll-seq__eyebrow { color: #23867F; }
 .scroll-seq[data-scroll-seq="energy"] .scroll-seq__eyebrow { color: #6D28D9; }
 
-/* The section after scroll-seq gets a tighter padding than .s defaults
-   (which are 80–160px) — enough breathing room so the next title doesn't
-   collide with the bottle's exit, but no large blank gap.
-
-   Background continues the scroll-seq's studio gradient: the top edge is
-   #F5F5F5 (matches scroll-seq's bottom edge exactly) and fades up to pure
-   white below — so the eye reads "one continuous studio" instead of "two
-   stacked sections". !important is necessary because .symptoms-bg has an
-   inline #fff declaration in the EJS that loads after this stylesheet. */
+/* Tighter padding-top for the section immediately after scroll-seq — no
+   large blank gap before the next title. The bg is left to each product
+   page's inline EJS rules so each SKU can pick its own package-tinted
+   colour, which matches the scroll-seq's bottom-edge gradient above for
+   a seamless transition. */
 .scroll-seq + section,
 .scroll-seq + .s {
     padding-top: clamp(48px, 7vw, 96px);
-    background: linear-gradient(180deg, #F5F5F5 0%, #FAFAFA 18%, #FFFFFF 45%) !important;
 }
 
 @media (max-width: 900px) {
