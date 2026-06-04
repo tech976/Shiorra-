@@ -7052,11 +7052,18 @@ body.aw-cursor-out .aw-cursor-ring {
 }
 .product-card:hover .product-card__media img{transform: scale(1.03);}
 
-/* All product shots share the same warm shoot backdrop —
-   the card media background blends with that floor tone. */
-.product-card--01 .product-card__media,
-.product-card--02 .product-card__media,
-.product-card--03 .product-card__media{background: #F7F3EC;}
+/* Per-product card palettes — Iron+ red/pink, Ginger+ keeps the warm shoot
+   cream, Energy+ light faint lavender. The accent colour on the card title
+   and price echoes the bg so the eye picks up which SKU is which at a glance. */
+.product-card--01 .product-card__media { background: linear-gradient(180deg, #FFE4EC 0%, #FFFFFF 100%); }
+.product-card--02 .product-card__media { background: #F7F3EC; }
+.product-card--03 .product-card__media { background: linear-gradient(180deg, #EDE9FE 0%, #FFFFFF 100%); }
+
+/* Title + price tinted to the card palette */
+.product-card--01 .product-card__name { color: #BE123C; }
+.product-card--01 .product-card__price { color: #BE123C; }
+.product-card--03 .product-card__name { color: #6D28D9; }
+.product-card--03 .product-card__price { color: #6D28D9; }
 
 /* Status badge — top-left */
 .product-card__badge{
@@ -7446,9 +7453,9 @@ body.aw-cursor-out .aw-cursor-ring {
    each frame. A second CSS shadow would just double up and read as a halo. */
 
 /* Per-product accent (only the eyebrow text picks it up — keep bg pure white) */
-.scroll-seq[data-scroll-seq="iron"]   .scroll-seq__eyebrow { color: #C2185B; }
+.scroll-seq[data-scroll-seq="iron"]   .scroll-seq__eyebrow { color: #BE123C; }
 .scroll-seq[data-scroll-seq="ginger"] .scroll-seq__eyebrow { color: #23867F; }
-.scroll-seq[data-scroll-seq="energy"] .scroll-seq__eyebrow { color: #C2410C; }
+.scroll-seq[data-scroll-seq="energy"] .scroll-seq__eyebrow { color: #6D28D9; }
 
 /* The section after scroll-seq gets a tighter padding than .s defaults
    (which are 80–160px) — enough breathing room so the next title doesn't
