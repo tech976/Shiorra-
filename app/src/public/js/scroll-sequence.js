@@ -34,6 +34,14 @@
     if (!slug || !canvas || total <= 0) return;
 
     const ctx = canvas.getContext('2d', { alpha: false });
+    function applyCtxQuality() {
+        // Setting canvas.width/height resets context state — call this after every resize.
+        // Pick the best sampling the browser offers — turns bilinear into bicubic
+        // on engines that respect this hint (Safari/Chrome).
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+    }
+    applyCtxQuality();
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     const images = new Array(total);
     let lastDrawn = -1;
@@ -69,6 +77,7 @@
       const r = canvas.getBoundingClientRect();
       canvas.width = Math.max(1, Math.round(r.width * dpr));
       canvas.height = Math.max(1, Math.round(r.height * dpr));
+      applyCtxQuality();
       lastDrawn = -1;
       draw();
     }

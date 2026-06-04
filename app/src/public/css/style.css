@@ -7300,23 +7300,55 @@ body.aw-cursor-out .aw-cursor-ring {
 
 /* =========================================================
    Scroll-driven product sequence
+   The section background is a heavily blurred, scaled-up copy of the
+   product's first frame — so the edge of the frame's studio backdrop
+   dissolves into the section instead of meeting a hard seam at the canvas
+   bounds. Each product gets a subtly different bg because the source frame
+   tones differ (pink/magenta for Iron+, sage for Ginger+, warm for Energy+).
    ========================================================= */
 .scroll-seq {
     position: relative;
     height: 250vh;
-    background: var(--c-white);
+    background: #FCFCFC;
     isolation: isolate;
+    overflow: hidden;
 }
+.scroll-seq::before,
+.scroll-seq::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+.scroll-seq::before {
+    /* Blurred backdrop sourced from the product's first frame */
+    background-position: center;
+    background-size: cover;
+    filter: blur(80px) saturate(1.18) brightness(1.05);
+    transform: scale(1.35);
+    opacity: 0.85;
+}
+.scroll-seq::after {
+    /* Gentle vignette to feather the section edges back to white */
+    background:
+        radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(255, 255, 255, 0.35) 70%, rgba(255, 255, 255, 0.85) 100%);
+}
+.scroll-seq[data-scroll-seq="iron"]::before   { background-image: url('/frames/iron/ezgif-frame-001.jpg'); }
+.scroll-seq[data-scroll-seq="ginger"]::before { background-image: url('/frames/ginger/ezgif-frame-001.jpg'); }
+.scroll-seq[data-scroll-seq="energy"]::before { background-image: url('/frames/energy/ezgif-frame-001.jpg'); }
+
 .scroll-seq__sticky {
     position: sticky;
     top: 0;
     height: 100vh;
     display: grid;
-    grid-template-columns: 1fr 1.15fr;
+    grid-template-columns: 1fr 1.05fr;
     gap: clamp(24px, 4vw, 64px);
     padding: 0 clamp(20px, 6vw, 96px);
     align-items: center;
     overflow: hidden;
+    z-index: 1;
 }
 .scroll-seq__copy {
     max-width: 460px;
@@ -7384,25 +7416,31 @@ body.aw-cursor-out .aw-cursor-ring {
 .scroll-seq__stage {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
-    max-width: 680px;
+    aspect-ratio: 3 / 4;
+    max-width: 540px;
+    max-height: 86vh;
     justify-self: center;
     display: grid;
     place-items: center;
-    filter: drop-shadow(0 28px 44px rgba(40, 40, 40, 0.08));
+    filter: drop-shadow(0 38px 60px rgba(40, 40, 40, 0.16));
 }
 .scroll-seq__stage canvas {
     width: 100%;
     height: 100%;
     display: block;
     will-change: contents;
+    /* Perceived-sharpness micro-boost — JPEGs at 720×1280 look softer than the
+       brand wants. Cheap CSS filter masks compression artifacts without halos. */
+    filter: contrast(1.04) saturate(1.06);
+    /* Hint to browser image-smoothing pipeline */
+    image-rendering: -webkit-optimize-contrast;
 }
 .scroll-seq__stage::after {
     content: "";
     position: absolute;
-    inset: auto 8% 6% 8%;
-    height: 12px;
-    background: radial-gradient(ellipse at center, rgba(40, 40, 40, 0.18), transparent 70%);
+    inset: auto 12% 4% 12%;
+    height: 14px;
+    background: radial-gradient(ellipse at center, rgba(40, 40, 40, 0.22), transparent 72%);
     pointer-events: none;
     z-index: -1;
 }
