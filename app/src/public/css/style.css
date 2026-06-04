@@ -7311,17 +7311,21 @@ body.aw-cursor-out .aw-cursor-ring {
        Across 200vh = ~2160px the canvas plays 150 frames at ~14px/frame —
        slow and deliberate, the user is genuinely pinned on the bottle.
        NO overflow: hidden here — it would break the sticky positioning
-       of the child, which is exactly the bug we hit before.
+       of the child (Chrome bug we hit before).
 
        Background: soft studio-light gradient. Slightly off-white at the top
        and bottom edges so the section reads as a studio scene, not a
        clinical white box. The bottom edge tone (#F5F5F5) is intentionally
        the same as the symptoms section's top edge — so when one ends and
-       the other begins, the colors meet seamlessly and the two sections
-       feel like one continuous studio. */
+       the other begins, the colors meet seamlessly.
+
+       isolation: isolate creates a new stacking context so the canvas's
+       mix-blend-mode: multiply blends against THIS section's background
+       (not the whole page). */
     position: relative;
     height: 300vh;
     background: linear-gradient(180deg, #FAFAFA 0%, #FFFFFF 28%, #FFFFFF 72%, #F5F5F5 100%);
+    isolation: isolate;
 }
 
 .scroll-seq__sticky {
@@ -7420,11 +7424,22 @@ body.aw-cursor-out .aw-cursor-ring {
     height: 100%;
     display: block;
     will-change: contents;
-    /* The frames have a near-white studio backdrop (~#F5F5F5). The brightness
-       lift pushes those near-whites to actual #FFF so they match the pure-white
-       section bg seamlessly — no visible canvas rectangle, no border, no halo.
-       Contrast + saturate are the existing JPEG-artifact masking pass. */
-    filter: brightness(1.06) contrast(1.05) saturate(1.06);
+    /* mix-blend-mode: multiply is THE fix for the "white rectangle" border.
+       Multiply formula per channel: result = (canvas × section_bg) / 255.
+       - The JPEG's studio-backdrop pixels (lifted to pure 255 by brightness
+         filter below) multiply to: 255 × bg / 255 = bg. So the studio bg
+         pixels of the JPEG become identical to the section gradient
+         underneath — the canvas rectangle is invisible.
+       - The product's dark pixels (e.g. 50): 50 × 255 / 255 = 50. The
+         bottle keeps its colour and reads against the studio gradient.
+
+       brightness(1.10) pushes the JPEG's near-white studio bg to actual
+       #FFF before multiply runs — this is what makes the merge clean.
+       Saturate compensates for the slight darkening multiply imposes on
+       coloured pixels (the bottle's reds, etc.) so the product still
+       reads as vivid. */
+    mix-blend-mode: multiply;
+    filter: brightness(1.10) contrast(1.06) saturate(1.12);
     image-rendering: -webkit-optimize-contrast;
 }
 /* Floor shadow removed — the 3D source already bakes a studio shadow into
