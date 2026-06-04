@@ -1,52 +1,405 @@
-<section class="page-hero">
+<style>
+    /* ─────────── Order detail (premium) ─────────── */
+
+    /* Reusable status pill (same as orders list) */
+    .status-pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 5px 11px; border-radius: 999px;
+        font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+        text-transform: capitalize;
+        background: #F2F3F5; color: #4A4F55; border: 1px solid #E6E8EB;
+        line-height: 1;
+    }
+    .status-pill::before {
+        content: ""; width: 6px; height: 6px; border-radius: 50%;
+        background: currentColor; opacity: .85;
+    }
+    .status-pill--pending    { background: #FFF7E6; color: #8A5A00; border-color: #F4E2B8; }
+    .status-pill--paid       { background: #EEF6F1; color: #2C6A4F; border-color: #D1E6D9; }
+    .status-pill--processing { background: #F1F1F9; color: #4A4DA8; border-color: #DCDCEF; }
+    .status-pill--shipped    { background: #EAF2FB; color: #1E5BA6; border-color: #C8DCF1; }
+    .status-pill--delivered  { background: #E8F3EC; color: #1F6B3A; border-color: #BFE0CB; }
+    .status-pill--cancelled  { background: #F4F4F5; color: #6A6F75; border-color: #E4E5E7; }
+
+    /* Header strip */
+    .od-head {
+        display: flex; align-items: flex-end; justify-content: space-between;
+        gap: 16px; flex-wrap: wrap;
+        padding-bottom: 24px; margin-bottom: 32px;
+        border-bottom: 1px solid #ECECEC;
+    }
+    .od-head__id { display: flex; flex-direction: column; gap: 6px; }
+    .od-head__eyebrow {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px; letter-spacing: 0.06em; color: var(--c-text-2, #6A6F75);
+        text-transform: uppercase;
+    }
+    .od-head__num {
+        margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.02em;
+        color: var(--c-text-1, #15171A);
+    }
+    .od-head__meta {
+        display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+        font-size: 13px; color: var(--c-text-2, #6A6F75);
+    }
+    .od-head__back {
+        font-size: 13px; color: var(--c-text-2, #6A6F75); text-decoration: none;
+        display: inline-flex; align-items: center; gap: 6px;
+    }
+    .od-head__back:hover { color: #23867F; }
+
+    /* Two-column inside main */
+    .od-grid {
+        display: grid; grid-template-columns: 1.6fr 1fr;
+        gap: 40px; align-items: start;
+    }
+    @media (max-width: 960px) {
+        .od-grid { grid-template-columns: 1fr; gap: 28px; }
+    }
+
+    /* Section card */
+    .od-section {
+        background: #FFFFFF;
+        border: 1px solid #ECECEC;
+        border-radius: 14px;
+        padding: 28px 28px;
+        margin-bottom: 20px;
+    }
+    .od-section__title {
+        margin: 0 0 18px 0; font-size: 15px; font-weight: 600;
+        letter-spacing: 0.02em; text-transform: uppercase;
+        color: var(--c-text-2, #6A6F75);
+    }
+
+    /* Vertical timeline */
+    .od-timeline { list-style: none; padding: 0; margin: 0; position: relative; }
+    .od-timeline__item {
+        position: relative;
+        padding-left: 32px;
+        padding-bottom: 22px;
+        display: flex; flex-direction: column; gap: 2px;
+    }
+    .od-timeline__item:last-child { padding-bottom: 0; }
+    .od-timeline__item::before {
+        /* connecting line */
+        content: ""; position: absolute;
+        left: 7px; top: 16px; bottom: -6px;
+        width: 1px; background: #E4E5E7;
+    }
+    .od-timeline__item:last-child::before { display: none; }
+    .od-timeline__dot {
+        position: absolute; left: 0; top: 4px;
+        width: 16px; height: 16px; border-radius: 50%;
+        background: #FFFFFF; border: 1.5px solid #D6D9DD;
+        display: inline-flex; align-items: center; justify-content: center;
+    }
+    .od-timeline__item.is-done .od-timeline__dot {
+        background: #23867F; border-color: #23867F;
+        box-shadow: 0 0 0 4px rgba(35, 134, 127, 0.10);
+    }
+    .od-timeline__item.is-done .od-timeline__dot::after {
+        content: ""; width: 5px; height: 5px; border-radius: 50%; background: #FFFFFF;
+    }
+    .od-timeline__item.is-done::before { background: #23867F; }
+    .od-timeline__item.is-current .od-timeline__dot {
+        background: #FFFFFF; border-color: #23867F;
+        box-shadow: 0 0 0 4px rgba(35, 134, 127, 0.15);
+    }
+    .od-timeline__lbl {
+        font-size: 14px; font-weight: 600; color: var(--c-text-1, #15171A);
+        letter-spacing: -0.005em;
+    }
+    .od-timeline__item:not(.is-done):not(.is-current) .od-timeline__lbl { color: #9AA0A6; font-weight: 500; }
+    .od-timeline__sub {
+        font-size: 12px; color: var(--c-text-2, #6A6F75);
+    }
+
+    /* Items list */
+    .od-items { list-style: none; padding: 0; margin: 0; }
+    .od-item {
+        display: grid;
+        grid-template-columns: 60px 1fr auto;
+        gap: 16px; align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid #ECECEC;
+    }
+    .od-item:last-child { border-bottom: none; }
+    .od-item__thumb {
+        width: 60px; height: 60px; border-radius: 10px;
+        background: #F4F5F6; border: 1px solid #ECECEC;
+        display: inline-flex; align-items: center; justify-content: center;
+        overflow: hidden; flex-shrink: 0;
+        font-size: 18px; font-weight: 600; color: #6A6F75;
+    }
+    .od-item__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .od-item__name {
+        font-size: 14px; font-weight: 500; color: var(--c-text-1, #15171A);
+        letter-spacing: -0.005em; margin: 0 0 2px 0;
+    }
+    .od-item__sub {
+        font-size: 12px; color: var(--c-text-2, #6A6F75);
+    }
+    .od-item__total {
+        font-size: 14px; font-weight: 600; color: var(--c-text-1, #15171A);
+        letter-spacing: -0.005em; white-space: nowrap;
+    }
+
+    /* Summary rows */
+    .od-summary { display: flex; flex-direction: column; gap: 12px; }
+    .od-row {
+        display: flex; justify-content: space-between; align-items: baseline;
+        font-size: 14px; color: var(--c-text-1, #15171A);
+    }
+    .od-row__lbl { color: var(--c-text-2, #6A6F75); }
+    .od-row--total {
+        padding-top: 14px; margin-top: 6px;
+        border-top: 1px solid #ECECEC;
+        font-size: 16px; font-weight: 600; letter-spacing: -0.01em;
+    }
+    .od-row--total .od-row__lbl { color: var(--c-text-1, #15171A); font-weight: 600; }
+    .od-row--free { color: #2C6A4F; font-weight: 500; }
+
+    /* Address */
+    .od-address {
+        font-style: normal; font-size: 14px; line-height: 1.65;
+        color: var(--c-text-1, #15171A);
+    }
+    .od-address strong { font-weight: 600; }
+
+    /* Payment row */
+    .od-payment {
+        display: flex; align-items: center; gap: 12px;
+        font-size: 14px; color: var(--c-text-1, #15171A);
+    }
+    .od-payment__icon {
+        width: 38px; height: 26px; border-radius: 5px;
+        background: linear-gradient(135deg, #2E3A4A 0%, #1B232E 100%);
+        display: inline-flex; align-items: center; justify-content: center;
+        color: #FFFFFF; font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
+    }
+    .od-payment__sub { color: var(--c-text-2, #6A6F75); font-size: 13px; }
+
+    /* Sticky summary on desktop */
+    @media (min-width: 961px) {
+        .od-aside { position: sticky; top: 96px; }
+    }
+
+    /* Actions row */
+    .od-actions {
+        display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+        margin-top: 8px;
+    }
+    .od-actions .btn { padding-inline: 18px; }
+    .od-help {
+        margin-left: auto; font-size: 13px; color: var(--c-text-2, #6A6F75);
+        text-decoration: none;
+    }
+    .od-help:hover { color: #23867F; }
+
+    /* Cancelled banner */
+    .od-cancel {
+        background: #F4F4F5; border: 1px solid #E4E5E7;
+        border-radius: 12px; padding: 14px 16px;
+        font-size: 13px; color: #4A4F55;
+        display: flex; gap: 10px; align-items: flex-start;
+    }
+</style>
+
+<%
+    var status = (order.status || 'PENDING').toString();
+    var pillClass = 'status-pill--' + status.toLowerCase();
+    var prettyStatus = status.charAt(0) + status.slice(1).toLowerCase();
+
+    // Timeline progression
+    var steps = [
+        { key: 'PLACED',    label: 'Order placed',  sub: 'We received your order' },
+        { key: 'PAID',      label: 'Payment confirmed', sub: 'Payment captured' },
+        { key: 'SHIPPED',   label: 'Shipped',       sub: 'On the way to you' },
+        { key: 'DELIVERED', label: 'Delivered',     sub: 'Enjoy your order' }
+    ];
+    var rankMap = { PENDING: 0, PAID: 1, PROCESSING: 1, SHIPPED: 2, DELIVERED: 3, CANCELLED: -1 };
+    var rank = (rankMap[status] !== undefined) ? rankMap[status] : 0;
+
+    // Payment last 4 — gracefully parse from razorpayPaymentId tail if available
+    var payId = order.razorpayPaymentId || '';
+    var last4 = payId && payId.length >= 4 ? payId.slice(-4) : null;
+    var payMethod = payId ? 'Razorpay' : (order.paymentStatus === 'CAPTURED' ? 'Online' : 'Pending');
+%>
+
+<section class="page-hero" style="padding-bottom:28px;">
     <div class="container">
-        <span class="eyebrow">Order</span>
-        <h1><%= order.orderNumber %></h1>
-        <p>Placed <%= order.createdAt.toISOString().slice(0,10) %> · <span class="badge badge--<%= order.status.toLowerCase() %>"><%= order.status %></span></p>
+        <a href="/account/orders" class="od-head__back">← All orders</a>
     </div>
 </section>
-<section class="section">
+
+<section class="section" style="padding-top:8px;">
     <div class="container">
         <div class="account">
             <%- include('../partials/account-nav', { active: 'orders' }) %>
 
             <div class="account__main">
-                <div class="order-status-line">
-                    <% const steps = ['PAID','PROCESSING','SHIPPED','DELIVERED']; %>
-                    <% const reachedIdx = steps.indexOf(order.status); %>
-                    <% steps.forEach(function(s, i) { %>
-                        <div class="status-step <%= (reachedIdx >= i) ? 'is-done' : '' %> <%= (reachedIdx === i) ? 'is-current' : '' %>">
-                            <span class="status-dot"></span>
-                            <span class="status-lbl"><%= s %></span>
+                <header class="od-head">
+                    <div class="od-head__id">
+                        <span class="od-head__eyebrow">Order</span>
+                        <h1 class="od-head__num">#<%= order.orderNumber %></h1>
+                        <div class="od-head__meta">
+                            <span>Placed <%= order.createdAt.toISOString().slice(0,10) %></span>
+                            <span aria-hidden="true">·</span>
+                            <span class="status-pill <%= pillClass %>"><%= prettyStatus %></span>
                         </div>
-                    <% }); %>
-                </div>
+                    </div>
+                    <div class="od-head__meta" style="font-size:14px;">
+                        <span style="color:var(--c-text-2,#6A6F75);">Total</span>
+                        <strong style="font-size:20px;letter-spacing:-0.015em;color:var(--c-text-1,#15171A);"><%= formatINR(order.totalInPaise) %></strong>
+                    </div>
+                </header>
 
-                <h3>Items</h3>
-                <ul class="checkout__items">
-                    <% order.items.forEach(function(it) { %>
-                        <li><span><%= it.name %> × <%= it.quantity %></span><span><%= formatINR(it.totalInPaise) %></span></li>
-                    <% }); %>
-                </ul>
-                <div class="cart__row"><span>Subtotal</span><span><%= formatINR(order.subtotalInPaise) %></span></div>
-                <div class="cart__row"><span>Shipping</span><span><%= order.shippingInPaise === 0 ? 'Free' : formatINR(order.shippingInPaise) %></span></div>
-                <div class="cart__row cart__row--total"><span>Total</span><span><%= formatINR(order.totalInPaise) %></span></div>
-
-                <% if (order.shippingAddress) { %>
-                    <h3 style="margin-top:24px">Shipping to</h3>
-                    <address class="address-block">
-                        <%= order.shippingAddress.fullName %><br>
-                        <%= order.shippingAddress.line1 %><br>
-                        <% if (order.shippingAddress.line2) { %><%= order.shippingAddress.line2 %><br><% } %>
-                        <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.postcode %><br>
-                        <%= order.shippingAddress.country %><br>
-                        <%= order.shippingAddress.phone %>
-                    </address>
+                <% if (status === 'CANCELLED') { %>
+                    <div class="od-cancel" style="margin-bottom:20px;">
+                        <span aria-hidden="true">⚠</span>
+                        <span>This order was cancelled. If a payment was charged, the refund will reach your original account within 5–7 business days.</span>
+                    </div>
                 <% } %>
 
-                <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;">
-                    <a href="/account/orders" class="btn btn--ghost btn--sm">← All orders</a>
-                    <a href="/shop" class="btn btn--sm">Continue shopping</a>
+                <div class="od-grid">
+                    <!-- LEFT COLUMN -->
+                    <div>
+                        <!-- Timeline -->
+                        <section class="od-section">
+                            <h2 class="od-section__title">Status</h2>
+                            <ol class="od-timeline">
+                                <% if (status === 'CANCELLED') { %>
+                                    <li class="od-timeline__item is-current">
+                                        <span class="od-timeline__dot"></span>
+                                        <span class="od-timeline__lbl">Order placed</span>
+                                        <span class="od-timeline__sub"><%= order.createdAt.toISOString().slice(0,10) %></span>
+                                    </li>
+                                    <li class="od-timeline__item">
+                                        <span class="od-timeline__dot"></span>
+                                        <span class="od-timeline__lbl">Cancelled</span>
+                                        <span class="od-timeline__sub">No further action required</span>
+                                    </li>
+                                <% } else { %>
+                                    <% steps.forEach(function(s, i) {
+                                        var done = i <= rank;
+                                        var current = i === rank;
+                                    %>
+                                        <li class="od-timeline__item <%= done ? 'is-done' : '' %> <%= current ? 'is-current' : '' %>">
+                                            <span class="od-timeline__dot"></span>
+                                            <span class="od-timeline__lbl"><%= s.label %></span>
+                                            <span class="od-timeline__sub"><%= s.sub %></span>
+                                        </li>
+                                    <% }); %>
+                                <% } %>
+                            </ol>
+                        </section>
+
+                        <!-- Items -->
+                        <section class="od-section">
+                            <h2 class="od-section__title">Items · <%= order.items.length %></h2>
+                            <ul class="od-items">
+                                <% order.items.forEach(function(it) {
+                                    var img = (it.product && (it.product.imageUrl || it.product.image)) || it.imageUrl || it.image || null;
+                                    var letter = (it.name || '·').trim().charAt(0).toUpperCase();
+                                    var unit = (it.priceInPaise !== undefined) ? formatINR(it.priceInPaise) : null;
+                                %>
+                                    <li class="od-item">
+                                        <span class="od-item__thumb">
+                                            <% if (img) { %>
+                                                <img src="<%= img %>" alt="">
+                                            <% } else { %>
+                                                <%= letter %>
+                                            <% } %>
+                                        </span>
+                                        <div>
+                                            <p class="od-item__name"><%= it.name %></p>
+                                            <p class="od-item__sub">
+                                                Qty <%= it.quantity %><% if (unit) { %> · <%= unit %> each<% } %>
+                                            </p>
+                                        </div>
+                                        <span class="od-item__total"><%= formatINR(it.totalInPaise) %></span>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </section>
+
+                        <!-- Shipping address -->
+                        <section class="od-section">
+                            <h2 class="od-section__title">Shipping to</h2>
+                            <% if (order.shippingAddress) { %>
+                                <address class="od-address">
+                                    <strong><%= order.shippingAddress.fullName %></strong><br>
+                                    <%= order.shippingAddress.line1 %><br>
+                                    <% if (order.shippingAddress.line2) { %><%= order.shippingAddress.line2 %><br><% } %>
+                                    <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.postcode %><br>
+                                    <%= order.shippingAddress.country %><br>
+                                    <span style="color:var(--c-text-2,#6A6F75);"><%= order.shippingAddress.phone %></span>
+                                </address>
+                            <% } else { %>
+                                <p style="margin:0;color:var(--c-text-2,#6A6F75);font-size:14px;">No shipping address on file for this order.</p>
+                            <% } %>
+                        </section>
+
+                        <!-- Payment -->
+                        <section class="od-section">
+                            <h2 class="od-section__title">Payment</h2>
+                            <div class="od-payment">
+                                <span class="od-payment__icon" aria-hidden="true">PAY</span>
+                                <div>
+                                    <div><%= payMethod %><% if (last4) { %> · ending •••• <%= last4 %><% } %></div>
+                                    <div class="od-payment__sub">
+                                        <% if (order.paymentStatus === 'CAPTURED') { %>Paid in full
+                                        <% } else if (order.paymentStatus === 'REFUNDED') { %>Refunded
+                                        <% } else if (order.paymentStatus === 'FAILED') { %>Payment failed
+                                        <% } else { %>Awaiting payment<% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- RIGHT COLUMN: Sticky summary -->
+                    <aside class="od-aside">
+                        <section class="od-section">
+                            <h2 class="od-section__title">Order summary</h2>
+                            <div class="od-summary">
+                                <div class="od-row">
+                                    <span class="od-row__lbl">Subtotal</span>
+                                    <span><%= formatINR(order.subtotalInPaise) %></span>
+                                </div>
+                                <div class="od-row">
+                                    <span class="od-row__lbl">Shipping</span>
+                                    <span class="<%= order.shippingInPaise === 0 ? 'od-row--free' : '' %>">
+                                        <%= order.shippingInPaise === 0 ? 'Free' : formatINR(order.shippingInPaise) %>
+                                    </span>
+                                </div>
+                                <% if (order.taxInPaise && order.taxInPaise > 0) { %>
+                                    <div class="od-row">
+                                        <span class="od-row__lbl">Tax</span>
+                                        <span><%= formatINR(order.taxInPaise) %></span>
+                                    </div>
+                                <% } %>
+                                <% if (order.discountInPaise && order.discountInPaise > 0) { %>
+                                    <div class="od-row">
+                                        <span class="od-row__lbl">Discount</span>
+                                        <span style="color:#2C6A4F;">− <%= formatINR(order.discountInPaise) %></span>
+                                    </div>
+                                <% } %>
+                                <div class="od-row od-row--total">
+                                    <span class="od-row__lbl">Total</span>
+                                    <span><%= formatINR(order.totalInPaise) %></span>
+                                </div>
+                            </div>
+
+                            <div class="od-actions" style="margin-top:20px;">
+                                <a href="/cart" class="btn" style="flex:1;text-align:center;min-width:140px;">Reorder</a>
+                                <a href="/account/orders/<%= order.orderNumber %>/invoice" class="btn btn--ghost" style="flex:1;text-align:center;min-width:140px;">Invoice</a>
+                            </div>
+                            <div style="margin-top:14px;text-align:center;">
+                                <a href="/contact" class="od-help">Need help with this order?</a>
+                            </div>
+                        </section>
+                    </aside>
                 </div>
             </div>
         </div>

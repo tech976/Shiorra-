@@ -1,8 +1,55 @@
-<aside class="account__nav">
-    <h4>Account</h4>
-    <a href="/account" class="<%= active === 'dashboard' ? 'active' : '' %>">Dashboard</a>
-    <a href="/account/orders" class="<%= active === 'orders' ? 'active' : '' %>">Orders</a>
-    <a href="/account/addresses" class="<%= active === 'addresses' ? 'active' : '' %>">Addresses</a>
-    <hr>
-    <form action="/logout" method="post"><button class="btn btn--link">Log out</button></form>
+<aside class="acct-nav">
+    <div class="acct-nav__card">
+        <div class="acct-nav__head">
+            <span class="acct-nav__eyebrow">Account</span>
+            <p class="acct-nav__name"><%= (typeof currentUser !== 'undefined' && currentUser && (currentUser.name || currentUser.email)) || 'Welcome' %></p>
+            <% if (typeof currentUser !== 'undefined' && currentUser && currentUser.email) { %>
+                <p class="acct-nav__email"><%= currentUser.email %></p>
+            <% } %>
+        </div>
+
+        <nav class="acct-nav__list" aria-label="Account navigation">
+            <a href="/account" class="acct-nav__item <%= active === 'dashboard' ? 'is-active' : '' %>">
+                <span class="acct-nav__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 12 4l9 8"/><path d="M5 10v10h14V10"/></svg>
+                </span>
+                <span class="acct-nav__lbl">Overview</span>
+            </a>
+            <a href="/account/orders" class="acct-nav__item <%= active === 'orders' ? 'is-active' : '' %>">
+                <span class="acct-nav__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+                </span>
+                <span class="acct-nav__lbl">Orders</span>
+            </a>
+            <a href="/account/addresses" class="acct-nav__item <%= active === 'addresses' ? 'is-active' : '' %>">
+                <span class="acct-nav__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                </span>
+                <span class="acct-nav__lbl">Addresses</span>
+            </a>
+            <a href="/account#profile" class="acct-nav__item <%= active === 'profile' ? 'is-active' : '' %>">
+                <span class="acct-nav__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+                </span>
+                <span class="acct-nav__lbl">Profile</span>
+            </a>
+            <% if (typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'ADMIN') { %>
+                <a href="/admin" class="acct-nav__item acct-nav__item--alt">
+                    <span class="acct-nav__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v4H4z"/><path d="M4 13h10v6H4z"/><path d="M17 13h3v6h-3z"/></svg>
+                    </span>
+                    <span class="acct-nav__lbl">Admin panel</span>
+                </a>
+            <% } %>
+        </nav>
+
+        <form action="/logout" method="post" class="acct-nav__logout">
+            <button type="submit" class="acct-nav__signout">
+                <span class="acct-nav__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5"/><path d="M5 12h12"/></svg>
+                </span>
+                <span class="acct-nav__lbl">Sign out</span>
+            </button>
+        </form>
+    </div>
 </aside>

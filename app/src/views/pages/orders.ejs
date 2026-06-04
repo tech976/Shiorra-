@@ -1,3 +1,152 @@
+<style>
+    /* ─────────── Orders list (premium card layout) ─────────── */
+    .so-orders { display: flex; flex-direction: column; gap: 16px; }
+
+    /* Header strip above cards */
+    .so-orders__head {
+        display: flex; align-items: flex-end; justify-content: space-between;
+        gap: 16px; flex-wrap: wrap; margin-bottom: 8px;
+    }
+    .so-orders__head h2 {
+        margin: 0; font-size: 22px; letter-spacing: -0.01em; font-weight: 600;
+        color: var(--c-text-1, #15171A);
+    }
+    .so-orders__count {
+        font-size: 13px; color: var(--c-text-2, #6A6F75); letter-spacing: 0.02em;
+    }
+
+    /* The card itself */
+    .so-card {
+        position: relative;
+        display: block;
+        background: #FFFFFF;
+        border: 1px solid #ECECEC;
+        border-radius: 14px;
+        padding: 22px 24px;
+        text-decoration: none;
+        color: inherit;
+        transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .so-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px -16px rgba(20, 28, 36, 0.18);
+        border-color: #DDDDDD;
+    }
+
+    /* Top row of card: order# + status + total */
+    .so-card__top {
+        display: flex; align-items: flex-start; justify-content: space-between;
+        gap: 16px; flex-wrap: wrap;
+    }
+    .so-card__id {
+        display: flex; flex-direction: column; gap: 4px; min-width: 0;
+    }
+    .so-card__num {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 13px; letter-spacing: 0.04em; color: var(--c-text-2, #6A6F75);
+    }
+    .so-card__date {
+        font-size: 14px; color: var(--c-text-1, #15171A); font-weight: 500;
+        letter-spacing: -0.005em;
+    }
+    .so-card__right {
+        display: flex; align-items: center; gap: 14px;
+    }
+    .so-card__total {
+        font-size: 18px; font-weight: 600; letter-spacing: -0.015em;
+        color: var(--c-text-1, #15171A);
+    }
+
+    /* Status pill (reusable) */
+    .status-pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 5px 11px; border-radius: 999px;
+        font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+        text-transform: capitalize;
+        background: #F2F3F5; color: #4A4F55; border: 1px solid #E6E8EB;
+        line-height: 1;
+    }
+    .status-pill::before {
+        content: ""; width: 6px; height: 6px; border-radius: 50%;
+        background: currentColor; opacity: .85;
+    }
+    .status-pill--pending    { background: #FFF7E6; color: #8A5A00; border-color: #F4E2B8; }
+    .status-pill--paid       { background: #EEF6F1; color: #2C6A4F; border-color: #D1E6D9; }
+    .status-pill--processing { background: #F1F1F9; color: #4A4DA8; border-color: #DCDCEF; }
+    .status-pill--shipped    { background: #EAF2FB; color: #1E5BA6; border-color: #C8DCF1; }
+    .status-pill--delivered  { background: #E8F3EC; color: #1F6B3A; border-color: #BFE0CB; }
+    .status-pill--cancelled  { background: #F4F4F5; color: #6A6F75; border-color: #E4E5E7; }
+
+    /* Mid row: thumbnails + meta */
+    .so-card__body {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 16px; margin-top: 20px; flex-wrap: wrap;
+    }
+    .so-thumbs {
+        display: flex; align-items: center;
+    }
+    .so-thumb {
+        width: 44px; height: 44px; border-radius: 10px;
+        background: #F4F5F6; border: 1.5px solid #FFFFFF;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 13px; font-weight: 600; color: #6A6F75;
+        margin-left: -8px; overflow: hidden;
+        box-shadow: 0 1px 2px rgba(20, 28, 36, 0.06);
+    }
+    .so-thumb:first-child { margin-left: 0; }
+    .so-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .so-thumb--more {
+        background: #FFFFFF; color: #4A4F55; border-color: #ECECEC;
+        font-size: 12px;
+    }
+    .so-items-meta {
+        font-size: 13px; color: var(--c-text-2, #6A6F75);
+        margin-left: 12px;
+    }
+
+    .so-card__cta {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-size: 14px; font-weight: 500; letter-spacing: -0.005em;
+        color: #23867F;
+        text-decoration: none;
+    }
+    .so-card__cta::after {
+        content: "→"; font-weight: 400; transition: transform .2s ease;
+    }
+    .so-card:hover .so-card__cta::after { transform: translateX(3px); }
+
+    /* Empty state */
+    .so-empty {
+        background: #FFFFFF;
+        border: 1px solid #ECECEC;
+        border-radius: 16px;
+        padding: 56px 32px;
+        text-align: center;
+        display: flex; flex-direction: column; align-items: center; gap: 18px;
+    }
+    .so-empty__art {
+        width: 92px; height: 92px; border-radius: 50%;
+        background: linear-gradient(180deg, #F4F8F7 0%, #E9F1EF 100%);
+        display: inline-flex; align-items: center; justify-content: center;
+        color: #23867F;
+    }
+    .so-empty__title {
+        margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.01em;
+        color: var(--c-text-1, #15171A);
+    }
+    .so-empty__sub {
+        margin: 0; font-size: 14px; color: var(--c-text-2, #6A6F75); max-width: 380px;
+    }
+
+    @media (max-width: 560px) {
+        .so-card { padding: 18px; }
+        .so-card__top { gap: 10px; }
+        .so-card__total { font-size: 16px; }
+        .so-card__body { gap: 12px; }
+        .so-items-meta { margin-left: 0; flex-basis: 100%; }
+    }
+</style>
+
 <section class="page-hero">
     <div class="container">
         <span class="eyebrow">Orders</span>
@@ -11,28 +160,76 @@
 
             <div class="account__main">
                 <% if (!orders.length) { %>
-                    <div class="empty-state">
-                        <p>You haven't placed any orders yet.</p>
-                        <a href="/shop" class="btn">Browse products</a>
+                    <div class="so-empty">
+                        <span class="so-empty__art" aria-hidden="true">
+                            <svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 14h28l-2 24H12L10 14Z"/>
+                                <path d="M17 14a7 7 0 0 1 14 0"/>
+                                <path d="M19 24l3 3 7-7"/>
+                            </svg>
+                        </span>
+                        <div>
+                            <h3 class="so-empty__title">No orders yet</h3>
+                            <p class="so-empty__sub">When you place your first order, it will appear here with status updates and tracking details.</p>
+                        </div>
+                        <a href="/shop" class="btn">Shop the range</a>
                     </div>
                 <% } else { %>
-                    <table class="data-table">
-                        <thead>
-                            <tr><th>Order</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr>
-                        </thead>
-                        <tbody>
-                        <% orders.forEach(function(o) { %>
-                            <tr>
-                                <td><%= o.orderNumber %></td>
-                                <td><%= o.createdAt.toISOString().slice(0,10) %></td>
-                                <td><%= o.items.length %></td>
-                                <td><%= formatINR(o.totalInPaise) %></td>
-                                <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
-                                <td><a href="/account/orders/<%= o.orderNumber %>" class="btn btn--sm">View</a></td>
-                            </tr>
+                    <div class="so-orders__head">
+                        <h2>Order history</h2>
+                        <span class="so-orders__count"><%= orders.length %> order<%= orders.length === 1 ? '' : 's' %></span>
+                    </div>
+
+                    <div class="so-orders">
+                        <% orders.forEach(function(o) {
+                            var status = (o.status || 'PENDING').toString();
+                            var pillClass = 'status-pill--' + status.toLowerCase();
+                            var itemCount = (o.items || []).reduce(function(s, it){ return s + (it.quantity || 1); }, 0);
+                            var visible = (o.items || []).slice(0, 4);
+                            var extra = Math.max(0, (o.items || []).length - visible.length);
+                        %>
+                            <a class="so-card" href="/account/orders/<%= o.orderNumber %>">
+                                <div class="so-card__top">
+                                    <div class="so-card__id">
+                                        <span class="so-card__num">#<%= o.orderNumber %></span>
+                                        <span class="so-card__date">Placed <%= o.createdAt.toISOString().slice(0,10) %></span>
+                                    </div>
+                                    <div class="so-card__right">
+                                        <span class="status-pill <%= pillClass %>"><%= status.charAt(0) + status.slice(1).toLowerCase() %></span>
+                                        <span class="so-card__total"><%= formatINR(o.totalInPaise) %></span>
+                                    </div>
+                                </div>
+
+                                <div class="so-card__body">
+                                    <div style="display:flex;align-items:center;flex-wrap:wrap;">
+                                        <div class="so-thumbs" aria-hidden="true">
+                                            <% if (visible.length === 0) { %>
+                                                <span class="so-thumb">·</span>
+                                            <% } else { %>
+                                                <% visible.forEach(function(it) {
+                                                    var img = (it.product && (it.product.imageUrl || it.product.image)) || it.imageUrl || it.image || null;
+                                                    var letter = (it.name || '·').trim().charAt(0).toUpperCase();
+                                                %>
+                                                    <span class="so-thumb">
+                                                        <% if (img) { %>
+                                                            <img src="<%= img %>" alt="">
+                                                        <% } else { %>
+                                                            <%= letter %>
+                                                        <% } %>
+                                                    </span>
+                                                <% }); %>
+                                                <% if (extra > 0) { %>
+                                                    <span class="so-thumb so-thumb--more">+<%= extra %></span>
+                                                <% } %>
+                                            <% } %>
+                                        </div>
+                                        <span class="so-items-meta"><%= itemCount %> item<%= itemCount === 1 ? '' : 's' %></span>
+                                    </div>
+                                    <span class="so-card__cta">View details</span>
+                                </div>
+                            </a>
                         <% }); %>
-                        </tbody>
-                    </table>
+                    </div>
                 <% } %>
             </div>
         </div>

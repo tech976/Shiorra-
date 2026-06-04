@@ -1,33 +1,247 @@
-<section class="page-hero">
+<style>
+    /* ============================================================
+       Shiorra — Account: Address form
+       ============================================================ */
+    :root {
+        --acct-ink: #282828;
+        --acct-ink-2: #4A4A4A;
+        --acct-muted: #6B6B6B;
+        --acct-muted-2: #8A8A8A;
+        --acct-line: #ECECEC;
+        --acct-line-2: #F2F2F2;
+        --acct-bg: #FFFFFF;
+        --acct-bg-soft: #FAFAFA;
+        --acct-accent: #23867F;
+        --acct-accent-2: #1B6E68;
+        --acct-accent-soft: rgba(35, 134, 127, 0.08);
+        --acct-shadow-sm: 0 1px 2px rgba(40, 40, 40, 0.04);
+        --acct-shadow: 0 1px 2px rgba(40, 40, 40, 0.04), 0 12px 32px rgba(40, 40, 40, 0.06);
+        --acct-radius: 22px;
+        --acct-radius-sm: 14px;
+        --acct-radius-xs: 12px;
+    }
+
+    .acct-hero {
+        background: var(--acct-bg-soft);
+        border-bottom: 1px solid var(--acct-line);
+        padding: clamp(56px, 9vw, 88px) 0 clamp(40px, 6vw, 64px);
+    }
+    .acct-hero .container { max-width: 1180px; }
+    .acct-hero__eyebrow {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-size: 11px; font-weight: 600;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: var(--acct-muted); margin-bottom: 18px;
+    }
+    .acct-hero__eyebrow::before { content: ""; width: 22px; height: 1px; background: var(--acct-ink); }
+    .acct-hero__eyebrow a { color: inherit; text-decoration: none; transition: color 160ms ease; }
+    .acct-hero__eyebrow a:hover { color: var(--acct-accent); }
+    .acct-hero__eyebrow span { color: var(--acct-muted-2); }
+    .acct-hero h1 {
+        font-family: var(--ff-body, "Inter", sans-serif);
+        font-size: clamp(32px, 4.4vw, 44px);
+        font-weight: 600; letter-spacing: -0.02em; line-height: 1.08;
+        color: var(--acct-ink); margin: 0 0 14px;
+    }
+    .acct-hero p { font-size: 16px; line-height: 1.6; color: var(--acct-muted); max-width: 60ch; margin: 0; }
+
+    .acct-shell { padding: clamp(36px, 5vw, 64px) 0 clamp(72px, 10vw, 120px); background: var(--acct-bg); }
+    .acct-shell .container { max-width: 1180px; }
+    .acct-grid {
+        display: grid;
+        grid-template-columns: 268px minmax(0, 1fr);
+        gap: clamp(24px, 3vw, 40px);
+        align-items: start;
+    }
+    @media (max-width: 920px) { .acct-grid { grid-template-columns: 1fr; gap: 20px; } }
+
+    /* Sidebar nav */
+    .acct-nav { position: sticky; top: 96px; }
+    @media (max-width: 920px) { .acct-nav { position: static; } }
+    .acct-nav__card {
+        background: var(--acct-bg);
+        border: 1px solid var(--acct-line);
+        border-radius: var(--acct-radius);
+        padding: 22px 18px;
+        box-shadow: var(--acct-shadow-sm);
+    }
+    .acct-nav__head { padding: 6px 10px 18px; border-bottom: 1px solid var(--acct-line-2); margin-bottom: 12px; }
+    .acct-nav__eyebrow {
+        display: block; font-size: 11px; font-weight: 600;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: var(--acct-muted-2); margin-bottom: 8px;
+    }
+    .acct-nav__name { margin: 0; font-size: 15px; font-weight: 600; color: var(--acct-ink); line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .acct-nav__email { margin: 3px 0 0; font-size: 12.5px; color: var(--acct-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .acct-nav__list { display: flex; flex-direction: column; gap: 2px; padding: 4px 0; }
+    .acct-nav__item {
+        position: relative; display: flex; align-items: center; gap: 12px;
+        padding: 11px 14px; border-radius: var(--acct-radius-xs);
+        font-size: 14.5px; font-weight: 500; color: var(--acct-ink-2);
+        text-decoration: none; transition: background 160ms ease, color 160ms ease;
+    }
+    .acct-nav__item:hover { background: var(--acct-bg-soft); color: var(--acct-ink); }
+    .acct-nav__item.is-active { background: var(--acct-bg-soft); color: var(--acct-ink); font-weight: 600; }
+    .acct-nav__item.is-active::before {
+        content: ""; position: absolute; left: 4px; top: 12px; bottom: 12px;
+        width: 3px; border-radius: 3px; background: var(--acct-accent);
+    }
+    .acct-nav__item--alt { color: var(--acct-accent); }
+    .acct-nav__icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; color: currentColor; flex-shrink: 0; }
+    .acct-nav__logout { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--acct-line-2); }
+    .acct-nav__signout {
+        width: 100%; display: flex; align-items: center; gap: 12px;
+        padding: 11px 14px; border: 0; background: transparent;
+        font-family: inherit; font-size: 14.5px; font-weight: 500;
+        color: var(--acct-muted); text-align: left; cursor: pointer;
+        border-radius: var(--acct-radius-xs);
+        transition: background 160ms ease, color 160ms ease;
+    }
+    .acct-nav__signout:hover { background: var(--acct-bg-soft); color: var(--acct-ink); }
+
+    /* Main */
+    .acct-main { min-width: 0; display: flex; flex-direction: column; gap: clamp(20px, 2.4vw, 28px); }
+    .acct-panel {
+        background: var(--acct-bg); border: 1px solid var(--acct-line);
+        border-radius: var(--acct-radius);
+        padding: clamp(28px, 3.4vw, 44px);
+        box-shadow: var(--acct-shadow-sm);
+        max-width: 760px;
+    }
+    .acct-panel__head { margin-bottom: 26px; }
+    .acct-panel__title { margin: 0; font-size: 19px; font-weight: 600; letter-spacing: -0.01em; color: var(--acct-ink); }
+    .acct-panel__sub { margin: 6px 0 0; font-size: 14px; color: var(--acct-muted); line-height: 1.55; }
+
+    /* Forms */
+    .acct-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; }
+    .acct-form__full { grid-column: 1 / -1; }
+    @media (max-width: 640px) { .acct-form { grid-template-columns: 1fr; } }
+    .acct-fieldgroup-title {
+        grid-column: 1 / -1;
+        margin: 8px 0 -4px;
+        font-size: 11.5px; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        color: var(--acct-muted);
+    }
+    .acct-fieldgroup-title:first-child { margin-top: 0; }
+    .acct-field { display: flex; flex-direction: column; gap: 8px; }
+    .acct-field__lbl {
+        font-size: 11.5px; font-weight: 600;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        color: var(--acct-ink-2);
+    }
+    .acct-field__lbl .req { color: var(--acct-accent); margin-left: 2px; }
+    .acct-field input,
+    .acct-field select,
+    .acct-field textarea {
+        width: 100%; box-sizing: border-box;
+        padding: 13px 16px;
+        font-family: inherit; font-size: 15px; color: var(--acct-ink);
+        background: var(--acct-bg);
+        border: 1px solid var(--acct-line);
+        border-radius: var(--acct-radius-xs);
+        transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+        appearance: none;
+    }
+    .acct-field input::placeholder { color: var(--acct-muted-2); }
+    .acct-field input:hover, .acct-field select:hover, .acct-field textarea:hover { border-color: #D8D8D8; }
+    .acct-field input:focus, .acct-field select:focus, .acct-field textarea:focus {
+        outline: none;
+        border-color: var(--acct-accent);
+        box-shadow: 0 0 0 4px var(--acct-accent-soft);
+    }
+    .acct-field__hint { font-size: 12.5px; color: var(--acct-muted); margin: 2px 0 0; }
+    .acct-divider { grid-column: 1 / -1; height: 1px; background: var(--acct-line-2); margin: 6px 0; border: 0; }
+
+    .acct-actions {
+        grid-column: 1 / -1;
+        display: flex; gap: 12px; flex-wrap: wrap;
+        padding-top: 8px;
+    }
+
+    .acct-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 14px 32px;
+        font-family: inherit; font-size: 14.5px; font-weight: 600; letter-spacing: 0.005em;
+        border: 1px solid var(--acct-ink); background: var(--acct-ink); color: #fff;
+        border-radius: 999px; cursor: pointer; text-decoration: none;
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+    .acct-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(40,40,40,0.16); background: #000; border-color: #000; color: #fff; }
+    .acct-btn--ghost { background: transparent; color: var(--acct-ink); border-color: var(--acct-line); }
+    .acct-btn--ghost:hover { background: var(--acct-bg-soft); color: var(--acct-ink); border-color: #D8D8D8; box-shadow: none; }
+</style>
+
+<section class="acct-hero">
     <div class="container">
-        <span class="eyebrow">Account</span>
-        <h1><%= address ? 'Edit address' : 'Add address' %></h1>
+        <span class="acct-hero__eyebrow"><a href="/account/addresses">Addresses</a> <span>·</span> <%= address ? 'Edit' : 'New' %></span>
+        <h1><%= address ? 'Edit address' : 'Add a new address' %></h1>
+        <p><%= address ? 'Update the details we use to ship your orders.' : 'Save an address now to make checkout faster next time.' %></p>
     </div>
 </section>
-<section class="section">
+
+<section class="acct-shell">
     <div class="container">
-        <div class="account">
+        <div class="acct-grid">
             <%- include('../partials/account-nav', { active: 'addresses' }) %>
 
-            <div class="account__main">
-                <form
-                    action="<%= address ? '/account/addresses/' + address.id : '/account/addresses' %>"
-                    method="post"
-                    class="form-grid"
-                >
-                    <label>Full name<input name="fullName" required value="<%= values.fullName || '' %>"></label>
-                    <label>Phone<input name="phone" required value="<%= values.phone || '' %>"></label>
-                    <label class="form-grid__full">Address line 1<input name="line1" required value="<%= values.line1 || '' %>"></label>
-                    <label class="form-grid__full">Address line 2 (optional)<input name="line2" value="<%= values.line2 || '' %>"></label>
-                    <label>City<input name="city" required value="<%= values.city || '' %>"></label>
-                    <label>State<input name="state" required value="<%= values.state || '' %>"></label>
-                    <label>Postcode<input name="postcode" required value="<%= values.postcode || '' %>"></label>
-                    <label>Country<input name="country" required value="<%= values.country || 'India' %>"></label>
-                    <div class="form-grid__full" style="display:flex;gap:10px;flex-wrap:wrap;">
-                        <button class="btn"><%= address ? 'Save changes' : 'Add address' %></button>
-                        <a href="/account/addresses" class="btn btn--ghost">Cancel</a>
+            <div class="acct-main">
+                <div class="acct-panel">
+                    <div class="acct-panel__head">
+                        <h2 class="acct-panel__title"><%= address ? 'Address details' : 'New address' %></h2>
+                        <p class="acct-panel__sub">All fields are required unless marked optional.</p>
                     </div>
-                </form>
+
+                    <form
+                        action="<%= address ? '/account/addresses/' + address.id : '/account/addresses' %>"
+                        method="post"
+                        class="acct-form"
+                    >
+                        <p class="acct-fieldgroup-title">Contact</p>
+                        <label class="acct-field">
+                            <span class="acct-field__lbl">Full name <span class="req">*</span></span>
+                            <input name="fullName" required value="<%= values.fullName || '' %>" autocomplete="name">
+                        </label>
+                        <label class="acct-field">
+                            <span class="acct-field__lbl">Phone <span class="req">*</span></span>
+                            <input name="phone" required value="<%= values.phone || '' %>" autocomplete="tel" placeholder="+91…">
+                        </label>
+
+                        <hr class="acct-divider">
+
+                        <p class="acct-fieldgroup-title">Address</p>
+                        <label class="acct-field acct-form__full">
+                            <span class="acct-field__lbl">Address line 1 <span class="req">*</span></span>
+                            <input name="line1" required value="<%= values.line1 || '' %>" autocomplete="address-line1" placeholder="House / flat, street">
+                        </label>
+                        <label class="acct-field acct-form__full">
+                            <span class="acct-field__lbl">Address line 2 <span style="color:var(--acct-muted-2);font-weight:500;letter-spacing:0.04em;text-transform:none;">(optional)</span></span>
+                            <input name="line2" value="<%= values.line2 || '' %>" autocomplete="address-line2" placeholder="Apartment, suite, landmark">
+                        </label>
+
+                        <label class="acct-field">
+                            <span class="acct-field__lbl">City <span class="req">*</span></span>
+                            <input name="city" required value="<%= values.city || '' %>" autocomplete="address-level2">
+                        </label>
+                        <label class="acct-field">
+                            <span class="acct-field__lbl">State <span class="req">*</span></span>
+                            <input name="state" required value="<%= values.state || '' %>" autocomplete="address-level1">
+                        </label>
+                        <label class="acct-field">
+                            <span class="acct-field__lbl">Postcode <span class="req">*</span></span>
+                            <input name="postcode" required value="<%= values.postcode || '' %>" autocomplete="postal-code" inputmode="numeric">
+                        </label>
+                        <label class="acct-field">
+                            <span class="acct-field__lbl">Country <span class="req">*</span></span>
+                            <input name="country" required value="<%= values.country || 'India' %>" autocomplete="country-name">
+                        </label>
+
+                        <div class="acct-actions">
+                            <button class="acct-btn" type="submit"><%= address ? 'Save changes' : 'Add address' %></button>
+                            <a href="/account/addresses" class="acct-btn acct-btn--ghost">Cancel</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

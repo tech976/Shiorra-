@@ -1,70 +1,530 @@
-<section class="page-hero">
+<style>
+    /* ============================================================
+       Shiorra — Account area (shared)
+       Premium white-on-white, calm spacing, restrained seagreen
+       Scoped under .acct-shell so we don't fight global rules.
+       ============================================================ */
+    :root {
+        --acct-ink: #282828;
+        --acct-ink-2: #4A4A4A;
+        --acct-muted: #6B6B6B;
+        --acct-muted-2: #8A8A8A;
+        --acct-line: #ECECEC;
+        --acct-line-2: #F2F2F2;
+        --acct-bg: #FFFFFF;
+        --acct-bg-soft: #FAFAFA;
+        --acct-bg-tint: #F6F7F7;
+        --acct-accent: #23867F;
+        --acct-accent-2: #1B6E68;
+        --acct-accent-soft: rgba(35, 134, 127, 0.08);
+        --acct-shadow-sm: 0 1px 2px rgba(40, 40, 40, 0.04);
+        --acct-shadow: 0 1px 2px rgba(40, 40, 40, 0.04), 0 12px 32px rgba(40, 40, 40, 0.06);
+        --acct-shadow-lg: 0 1px 2px rgba(40, 40, 40, 0.05), 0 20px 48px rgba(40, 40, 40, 0.09);
+        --acct-radius: 22px;
+        --acct-radius-sm: 14px;
+        --acct-radius-xs: 12px;
+    }
+
+    /* Hero — airy, hairline divider */
+    .acct-hero {
+        background: var(--acct-bg-soft);
+        border-bottom: 1px solid var(--acct-line);
+        padding: clamp(56px, 9vw, 88px) 0 clamp(40px, 6vw, 64px);
+    }
+    .acct-hero .container { max-width: 1180px; }
+    .acct-hero__eyebrow {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-family: var(--ff-body, "Inter", sans-serif);
+        font-size: 11px; font-weight: 600;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: var(--acct-muted);
+        margin-bottom: 18px;
+    }
+    .acct-hero__eyebrow::before {
+        content: ""; width: 22px; height: 1px; background: var(--acct-ink);
+    }
+    .acct-hero h1 {
+        font-family: var(--ff-body, "Inter", sans-serif);
+        font-size: clamp(32px, 4.4vw, 44px);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.08;
+        color: var(--acct-ink);
+        margin: 0 0 14px;
+    }
+    .acct-hero p {
+        font-size: 16px; line-height: 1.6;
+        color: var(--acct-muted);
+        max-width: 60ch; margin: 0;
+    }
+
+    /* Two-column shell */
+    .acct-shell { padding: clamp(36px, 5vw, 64px) 0 clamp(72px, 10vw, 120px); background: var(--acct-bg); }
+    .acct-shell .container { max-width: 1180px; }
+    .acct-grid {
+        display: grid;
+        grid-template-columns: 268px minmax(0, 1fr);
+        gap: clamp(24px, 3vw, 40px);
+        align-items: start;
+    }
+    @media (max-width: 920px) {
+        .acct-grid { grid-template-columns: 1fr; gap: 20px; }
+    }
+
+    /* Sidebar nav card */
+    .acct-nav { position: sticky; top: 96px; }
+    @media (max-width: 920px) { .acct-nav { position: static; } }
+    .acct-nav__card {
+        background: var(--acct-bg);
+        border: 1px solid var(--acct-line);
+        border-radius: var(--acct-radius);
+        padding: 22px 18px;
+        box-shadow: var(--acct-shadow-sm);
+    }
+    .acct-nav__head { padding: 6px 10px 18px; border-bottom: 1px solid var(--acct-line-2); margin-bottom: 12px; }
+    .acct-nav__eyebrow {
+        display: block;
+        font-size: 11px; font-weight: 600;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: var(--acct-muted-2);
+        margin-bottom: 8px;
+    }
+    .acct-nav__name {
+        margin: 0; font-size: 15px; font-weight: 600; color: var(--acct-ink); line-height: 1.3;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .acct-nav__email {
+        margin: 3px 0 0; font-size: 12.5px; color: var(--acct-muted);
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .acct-nav__list { display: flex; flex-direction: column; gap: 2px; padding: 4px 0; }
+    .acct-nav__item {
+        position: relative;
+        display: flex; align-items: center; gap: 12px;
+        padding: 11px 14px;
+        border-radius: var(--acct-radius-xs);
+        font-size: 14.5px; font-weight: 500;
+        color: var(--acct-ink-2);
+        text-decoration: none;
+        transition: background 160ms ease, color 160ms ease;
+    }
+    .acct-nav__item:hover { background: var(--acct-bg-soft); color: var(--acct-ink); }
+    .acct-nav__item.is-active {
+        background: var(--acct-bg-soft);
+        color: var(--acct-ink);
+        font-weight: 600;
+    }
+    .acct-nav__item.is-active::before {
+        content: ""; position: absolute; left: 4px; top: 12px; bottom: 12px;
+        width: 3px; border-radius: 3px; background: var(--acct-accent);
+    }
+    .acct-nav__item--alt { color: var(--acct-accent); }
+    .acct-nav__item--alt:hover { color: var(--acct-accent-2); }
+    .acct-nav__icon {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 22px; height: 22px; color: currentColor; flex-shrink: 0;
+    }
+    .acct-nav__logout { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--acct-line-2); }
+    .acct-nav__signout {
+        width: 100%;
+        display: flex; align-items: center; gap: 12px;
+        padding: 11px 14px;
+        border: 0; background: transparent;
+        font-family: inherit; font-size: 14.5px; font-weight: 500;
+        color: var(--acct-muted);
+        text-align: left; cursor: pointer;
+        border-radius: var(--acct-radius-xs);
+        transition: background 160ms ease, color 160ms ease;
+    }
+    .acct-nav__signout:hover { background: var(--acct-bg-soft); color: var(--acct-ink); }
+
+    /* Main column */
+    .acct-main { min-width: 0; display: flex; flex-direction: column; gap: clamp(20px, 2.4vw, 28px); }
+
+    /* Surface — base panel */
+    .acct-panel {
+        background: var(--acct-bg);
+        border: 1px solid var(--acct-line);
+        border-radius: var(--acct-radius);
+        padding: clamp(24px, 3vw, 36px);
+        box-shadow: var(--acct-shadow-sm);
+    }
+    .acct-panel__head {
+        display: flex; justify-content: space-between; align-items: baseline;
+        gap: 16px; margin-bottom: 22px;
+    }
+    .acct-panel__title {
+        margin: 0; font-size: 19px; font-weight: 600;
+        letter-spacing: -0.01em; color: var(--acct-ink);
+    }
+    .acct-panel__sub {
+        margin: 6px 0 0; font-size: 14px; color: var(--acct-muted); line-height: 1.55;
+    }
+
+    /* Stat cards (dashboard) */
+    .acct-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+    }
+    .acct-stat {
+        position: relative;
+        display: flex; flex-direction: column; gap: 10px;
+        padding: 26px 26px 24px;
+        background: var(--acct-bg);
+        border: 1px solid var(--acct-line);
+        border-radius: 20px;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: var(--acct-shadow-sm);
+        transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+    .acct-stat:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--acct-shadow);
+        border-color: #E0E0E0;
+    }
+    .acct-stat__icon {
+        width: 36px; height: 36px; border-radius: 10px;
+        display: inline-flex; align-items: center; justify-content: center;
+        background: var(--acct-accent-soft); color: var(--acct-accent);
+        margin-bottom: 4px;
+    }
+    .acct-stat__num {
+        font-family: var(--ff-body, "Inter", sans-serif);
+        font-size: 30px; font-weight: 600; letter-spacing: -0.02em;
+        color: var(--acct-ink); line-height: 1;
+    }
+    .acct-stat__num--accent { color: var(--acct-accent); }
+    .acct-stat__lbl { font-size: 13px; color: var(--acct-muted); letter-spacing: 0.01em; }
+    .acct-stat__arrow {
+        position: absolute; top: 22px; right: 22px;
+        color: var(--acct-muted-2);
+        transition: color 200ms ease, transform 200ms ease;
+    }
+    .acct-stat:hover .acct-stat__arrow { color: var(--acct-accent); transform: translate(2px, -2px); }
+
+    /* Order list */
+    .acct-orderlist { list-style: none; margin: 0; padding: 0; }
+    .acct-orderlist li + li { border-top: 1px solid var(--acct-line-2); }
+    .acct-orderlist a {
+        display: grid;
+        grid-template-columns: minmax(110px, 1.2fr) minmax(90px, 1fr) auto minmax(80px, 0.8fr) auto;
+        align-items: center; gap: 16px;
+        padding: 16px 4px;
+        text-decoration: none; color: var(--acct-ink);
+        transition: color 160ms ease;
+    }
+    .acct-orderlist a:hover { color: var(--acct-accent); }
+    .acct-order__num { font-weight: 600; font-size: 14.5px; letter-spacing: -0.005em; }
+    .acct-order__date { font-size: 13.5px; color: var(--acct-muted); }
+    .acct-order__total { font-size: 14.5px; font-weight: 600; color: var(--acct-ink); text-align: right; }
+    .acct-order__chev { color: var(--acct-muted-2); justify-self: end; }
+    @media (max-width: 640px) {
+        .acct-orderlist a { grid-template-columns: 1fr auto; row-gap: 4px; }
+        .acct-order__date, .acct-order__total, .acct-order__chev { grid-column: auto; }
+    }
+
+    /* Status pill */
+    .acct-pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 11.5px; font-weight: 600; letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 5px 10px; border-radius: 999px;
+        background: var(--acct-bg-soft); color: var(--acct-ink-2);
+        border: 1px solid var(--acct-line);
+        white-space: nowrap;
+    }
+    .acct-pill::before {
+        content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6;
+    }
+    .acct-pill--paid, .acct-pill--delivered { background: rgba(30,158,92,0.08); color: #1E7A48; border-color: rgba(30,158,92,0.18); }
+    .acct-pill--pending, .acct-pill--processing { background: rgba(180,123,0,0.08); color: #8A5E00; border-color: rgba(180,123,0,0.18); }
+    .acct-pill--shipped { background: var(--acct-accent-soft); color: var(--acct-accent-2); border-color: rgba(35,134,127,0.18); }
+    .acct-pill--cancelled, .acct-pill--failed, .acct-pill--refunded { background: rgba(194,27,98,0.06); color: #9A1450; border-color: rgba(194,27,98,0.16); }
+
+    /* Forms */
+    .acct-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; }
+    .acct-form__full { grid-column: 1 / -1; }
+    @media (max-width: 640px) { .acct-form { grid-template-columns: 1fr; } }
+    .acct-field { display: flex; flex-direction: column; gap: 8px; }
+    .acct-field__lbl {
+        font-size: 11.5px; font-weight: 600;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        color: var(--acct-ink-2);
+    }
+    .acct-field input,
+    .acct-field select,
+    .acct-field textarea {
+        width: 100%; box-sizing: border-box;
+        padding: 13px 16px;
+        font-family: inherit; font-size: 15px; color: var(--acct-ink);
+        background: var(--acct-bg);
+        border: 1px solid var(--acct-line);
+        border-radius: var(--acct-radius-xs);
+        transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+        appearance: none;
+    }
+    .acct-field input::placeholder { color: var(--acct-muted-2); }
+    .acct-field input:hover, .acct-field select:hover, .acct-field textarea:hover { border-color: #D8D8D8; }
+    .acct-field input:focus, .acct-field select:focus, .acct-field textarea:focus {
+        outline: none;
+        border-color: var(--acct-accent);
+        box-shadow: 0 0 0 4px var(--acct-accent-soft);
+    }
+    .acct-field input:disabled {
+        background: var(--acct-bg-soft); color: var(--acct-muted); cursor: not-allowed;
+    }
+    .acct-field__hint { font-size: 12.5px; color: var(--acct-muted); margin: 2px 0 0; }
+
+    /* Form action row */
+    .acct-actions {
+        display: flex; gap: 12px; flex-wrap: wrap;
+        padding-top: 6px;
+    }
+
+    /* Buttons (account-scoped to override global) */
+    .acct-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 13px 26px;
+        font-family: inherit; font-size: 14.5px; font-weight: 600;
+        letter-spacing: 0.005em;
+        border: 1px solid var(--acct-ink); background: var(--acct-ink); color: #fff;
+        border-radius: 999px; cursor: pointer; text-decoration: none;
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+    .acct-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(40,40,40,0.16); background: #000; border-color: #000; color: #fff; }
+    .acct-btn--ghost { background: transparent; color: var(--acct-ink); border-color: var(--acct-line); }
+    .acct-btn--ghost:hover { background: var(--acct-bg-soft); color: var(--acct-ink); border-color: #D8D8D8; box-shadow: none; }
+    .acct-btn--accent { background: var(--acct-accent); border-color: var(--acct-accent); }
+    .acct-btn--accent:hover { background: var(--acct-accent-2); border-color: var(--acct-accent-2); }
+    .acct-btn--sm { padding: 9px 16px; font-size: 13px; }
+    .acct-btn--danger { background: transparent; color: #9A1450; border-color: rgba(194,27,98,0.25); }
+    .acct-btn--danger:hover { background: rgba(194,27,98,0.06); color: #9A1450; border-color: rgba(194,27,98,0.45); box-shadow: none; }
+
+    /* Empty state */
+    .acct-empty {
+        display: flex; flex-direction: column; align-items: center;
+        text-align: center; gap: 14px;
+        padding: 36px 24px;
+        background: var(--acct-bg-soft);
+        border: 1px dashed var(--acct-line);
+        border-radius: var(--acct-radius-sm);
+    }
+    .acct-empty__art { width: 80px; height: 80px; color: var(--acct-accent); opacity: 0.85; }
+    .acct-empty__title { margin: 4px 0 0; font-size: 16px; font-weight: 600; color: var(--acct-ink); }
+    .acct-empty__copy { margin: 0; max-width: 36ch; font-size: 14px; color: var(--acct-muted); line-height: 1.55; }
+    .acct-empty .acct-btn { margin-top: 6px; }
+
+    /* Inline-form reset for tiny POST forms (logout, delete, etc.) */
+    .acct-inline-form { display: inline; margin: 0; padding: 0; }
+
+    /* Address card grid (shared by addresses page) */
+    .acct-addrgrid {
+        display: grid; gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    .acct-addr {
+        position: relative;
+        display: flex; flex-direction: column;
+        background: var(--acct-bg);
+        border: 1px solid var(--acct-line);
+        border-radius: 20px;
+        padding: 24px 24px 20px;
+        box-shadow: var(--acct-shadow-sm);
+        transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+    .acct-addr:hover { transform: translateY(-2px); box-shadow: var(--acct-shadow); border-color: #E0E0E0; }
+    .acct-addr__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+    .acct-addr__label {
+        font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+        color: var(--acct-muted);
+    }
+    .acct-addr__default {
+        font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+        padding: 4px 9px; border-radius: 999px;
+        background: var(--acct-accent-soft); color: var(--acct-accent-2);
+    }
+    .acct-addr__name { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--acct-ink); }
+    .acct-addr__body { margin: 0; font-size: 14px; line-height: 1.6; color: var(--acct-ink-2); }
+    .acct-addr__body span { display: block; }
+    .acct-addr__phone { margin: 10px 0 0; font-size: 13.5px; color: var(--acct-muted); }
+    .acct-addr__actions {
+        display: flex; gap: 8px; flex-wrap: wrap;
+        margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--acct-line-2);
+    }
+    .acct-addr--new {
+        display: flex; align-items: center; justify-content: center;
+        text-align: center;
+        background: transparent;
+        border: 1.5px dashed var(--acct-line);
+        color: var(--acct-muted);
+        text-decoration: none;
+        min-height: 200px;
+        box-shadow: none;
+    }
+    .acct-addr--new:hover {
+        border-color: var(--acct-accent);
+        color: var(--acct-accent);
+        background: var(--acct-accent-soft);
+        transform: translateY(-2px); box-shadow: var(--acct-shadow-sm);
+    }
+    .acct-addr--new__inner { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .acct-addr--new__plus {
+        width: 44px; height: 44px; border-radius: 50%;
+        display: inline-flex; align-items: center; justify-content: center;
+        background: var(--acct-bg); border: 1px solid var(--acct-line);
+        color: var(--acct-accent);
+    }
+    .acct-addr--new__lbl { font-size: 14.5px; font-weight: 600; letter-spacing: -0.005em; }
+</style>
+
+<section class="acct-hero">
     <div class="container">
-        <span class="eyebrow">Your account</span>
+        <span class="acct-hero__eyebrow">Your account</span>
         <h1>Hi, <%= currentUser.name || currentUser.email %></h1>
-        <p>Manage your profile, orders and saved addresses.</p>
+        <p>Your orders, addresses and profile — all in one calm place.</p>
     </div>
 </section>
 
-<section class="section">
+<section class="acct-shell">
     <div class="container">
-        <div class="account">
+        <div class="acct-grid">
             <%- include('../partials/account-nav', { active: 'dashboard' }) %>
 
-            <div class="account__main">
-                <div class="account__cards">
-                    <a href="/account/orders" class="account__card">
-                        <span class="account__card-num"><%= orderCount %></span>
-                        <span class="account__card-lbl">Orders</span>
+            <div class="acct-main">
+                <!-- Stat cards -->
+                <div class="acct-stats">
+                    <a href="/account/orders" class="acct-stat">
+                        <span class="acct-stat__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+                        </span>
+                        <span class="acct-stat__num"><%= orderCount %></span>
+                        <span class="acct-stat__lbl">Orders placed</span>
+                        <span class="acct-stat__arrow" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+                        </span>
                     </a>
-                    <a href="/account/addresses" class="account__card">
-                        <span class="account__card-num"><%= addressCount %></span>
-                        <span class="account__card-lbl">Saved addresses</span>
+                    <a href="/account/addresses" class="acct-stat">
+                        <span class="acct-stat__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                        </span>
+                        <span class="acct-stat__num"><%= addressCount %></span>
+                        <span class="acct-stat__lbl">Saved addresses</span>
+                        <span class="acct-stat__arrow" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+                        </span>
                     </a>
                     <% if (currentUser.role === 'ADMIN') { %>
-                        <a href="/admin" class="account__card account__card--accent">
-                            <span class="account__card-num">Admin</span>
-                            <span class="account__card-lbl">Open admin panel</span>
+                        <a href="/admin" class="acct-stat">
+                            <span class="acct-stat__icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v4H4z"/><path d="M4 13h10v6H4z"/><path d="M17 13h3v6h-3z"/></svg>
+                            </span>
+                            <span class="acct-stat__num acct-stat__num--accent">Admin</span>
+                            <span class="acct-stat__lbl">Open admin panel</span>
+                            <span class="acct-stat__arrow" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+                            </span>
                         </a>
                     <% } %>
                 </div>
 
-                <% if (latestOrders.length) { %>
-                    <h3>Recent orders</h3>
-                    <ul class="order-list">
-                        <% latestOrders.forEach(function(o) { %>
-                            <li>
-                                <a href="/account/orders/<%= o.orderNumber %>">
-                                    <strong><%= o.orderNumber %></strong>
-                                    <span><%= o.createdAt.toISOString().slice(0,10) %></span>
-                                    <span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span>
-                                    <span><%= formatINR(o.totalInPaise) %></span>
-                                </a>
-                            </li>
-                        <% }); %>
-                    </ul>
-                <% } else { %>
-                    <div class="empty-state empty-state--soft">
-                        <p>You haven't placed an order yet.</p>
-                        <a href="/shop" class="btn">Start shopping</a>
+                <!-- Recent orders -->
+                <div class="acct-panel">
+                    <div class="acct-panel__head">
+                        <div>
+                            <h2 class="acct-panel__title">Recent orders</h2>
+                            <p class="acct-panel__sub">Your latest activity at a glance.</p>
+                        </div>
+                        <% if (latestOrders.length) { %>
+                            <a href="/account/orders" class="acct-btn acct-btn--ghost acct-btn--sm">View all</a>
+                        <% } %>
                     </div>
-                <% } %>
 
-                <h3 style="margin-top:32px">Profile</h3>
-                <form action="/account/profile" method="post" class="form-grid">
-                    <label>Name<input name="name" value="<%= currentUser.name || '' %>" required></label>
-                    <label>Phone<input name="phone" value="<%= currentUser.phone || '' %>" placeholder="+91…"></label>
-                    <label class="form-grid__full">Email<input value="<%= currentUser.email %>" disabled></label>
-                    <div class="form-grid__full"><button class="btn">Save profile</button></div>
-                </form>
+                    <% if (latestOrders.length) { %>
+                        <ul class="acct-orderlist">
+                            <% latestOrders.forEach(function(o) { %>
+                                <li>
+                                    <a href="/account/orders/<%= o.orderNumber %>">
+                                        <span class="acct-order__num"><%= o.orderNumber %></span>
+                                        <span class="acct-order__date"><%= o.createdAt.toISOString().slice(0,10) %></span>
+                                        <span class="acct-pill acct-pill--<%= o.status.toLowerCase() %>"><%= o.status %></span>
+                                        <span class="acct-order__total"><%= formatINR(o.totalInPaise) %></span>
+                                        <span class="acct-order__chev" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+                                        </span>
+                                    </a>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    <% } else { %>
+                        <div class="acct-empty">
+                            <svg class="acct-empty__art" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M18 26h44l-3 36H21L18 26Z"/>
+                                <path d="M30 26a10 10 0 0 1 20 0"/>
+                                <path d="M30 40h20"/>
+                            </svg>
+                            <h3 class="acct-empty__title">No orders yet</h3>
+                            <p class="acct-empty__copy">When you place an order, it will appear here with tracking and details.</p>
+                            <a href="/shop" class="acct-btn">Start shopping</a>
+                        </div>
+                    <% } %>
+                </div>
 
-                <h3 style="margin-top:32px">Change password</h3>
-                <form action="/account/password" method="post" class="form-grid">
-                    <label class="form-grid__full">Current password<input type="password" name="current" required></label>
-                    <label>New password<input type="password" name="next" required minlength="8"></label>
-                    <label>Confirm new<input type="password" name="confirm" required minlength="8"></label>
-                    <div class="form-grid__full"><button class="btn">Change password</button></div>
-                </form>
+                <!-- Profile -->
+                <div class="acct-panel" id="profile">
+                    <div class="acct-panel__head">
+                        <div>
+                            <h2 class="acct-panel__title">Profile</h2>
+                            <p class="acct-panel__sub">Update the name and phone we use for orders.</p>
+                        </div>
+                    </div>
+                    <form action="/account/profile" method="post" class="acct-form">
+                        <label class="acct-field">
+                            <span class="acct-field__lbl">Full name</span>
+                            <input name="name" value="<%= currentUser.name || '' %>" required autocomplete="name">
+                        </label>
+                        <label class="acct-field">
+                            <span class="acct-field__lbl">Phone</span>
+                            <input name="phone" value="<%= currentUser.phone || '' %>" placeholder="+91…" autocomplete="tel">
+                        </label>
+                        <label class="acct-field acct-form__full">
+                            <span class="acct-field__lbl">Email</span>
+                            <input value="<%= currentUser.email %>" disabled>
+                            <span class="acct-field__hint">Your sign-in email — contact support to change.</span>
+                        </label>
+                        <div class="acct-form__full acct-actions">
+                            <button class="acct-btn" type="submit">Save profile</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Password -->
+                <div class="acct-panel">
+                    <div class="acct-panel__head">
+                        <div>
+                            <h2 class="acct-panel__title">Password</h2>
+                            <p class="acct-panel__sub">Choose a strong password unique to Shiōrra.</p>
+                        </div>
+                    </div>
+                    <form action="/account/password" method="post" class="acct-form">
+                        <label class="acct-field acct-form__full">
+                            <span class="acct-field__lbl">Current password</span>
+                            <input type="password" name="current" required autocomplete="current-password">
+                        </label>
+                        <label class="acct-field">
+                            <span class="acct-field__lbl">New password</span>
+                            <input type="password" name="next" required minlength="8" autocomplete="new-password">
+                        </label>
+                        <label class="acct-field">
+                            <span class="acct-field__lbl">Confirm new password</span>
+                            <input type="password" name="confirm" required minlength="8" autocomplete="new-password">
+                        </label>
+                        <div class="acct-form__full acct-actions">
+                            <button class="acct-btn" type="submit">Change password</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
