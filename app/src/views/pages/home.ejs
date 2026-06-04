@@ -824,11 +824,9 @@
                 start();
             }));
 
-            // Pause while hovering / focusing
-            root.addEventListener('mouseenter', () => { paused = true; });
-            root.addEventListener('mouseleave', () => { paused = false; progressStart = performance.now(); });
-            root.addEventListener('focusin',   () => { paused = true; });
-            root.addEventListener('focusout',  () => { paused = false; progressStart = performance.now(); });
+            // Carousel keeps rotating regardless of hover — user explicitly
+            // asked for constant automatic motion. Only pause is the tab-
+            // visibility one below (saves CPU when tab is backgrounded).
 
             // Keyboard
             root.addEventListener('keydown', (e) => {
