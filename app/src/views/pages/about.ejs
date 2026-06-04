@@ -86,11 +86,11 @@
   @media(max-width:880px){.prod-grid{grid-template-columns:1fr}}
   .prod-card{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .25s,box-shadow .25s;display:block}
   .prod-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(40,40,40,.10)}
-  .prod-card__media{aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden}
+  .prod-card__media{aspect-ratio:4/5;overflow:hidden}
   .prod-card--iron .prod-card__media{background:linear-gradient(180deg,#FFE4F0,#fff)}
   .prod-card--ginger .prod-card__media{background:linear-gradient(180deg,#E0F0E5,#fff)}
   .prod-card--energy .prod-card__media{background:linear-gradient(180deg,#FFEDD5,#fff)}
-  .prod-card__media img{width:78%;height:78%;object-fit:contain}
+  .prod-card__media img{width:100%;height:100%;object-fit:cover}
   .prod-card__body{padding:24px}
   .prod-card__eye{font-size:11px;font-weight:800;letter-spacing:.10em;text-transform:uppercase;margin-bottom:6px}
   .prod-card--iron .prod-card__eye{color:#C21B62}
@@ -250,7 +250,7 @@
     </div>
     <div class="prod-grid">
       <a href="/product/advanced-iron" class="prod-card prod-card--iron">
-        <div class="prod-card__media"><img src="/img/products/sku-iron.png" alt="Advanced Iron+"></div>
+        <div class="prod-card__media"><img src="/img/products/iron-1.jpg" alt="Advanced Iron+"></div>
         <div class="prod-card__body">
           <div class="prod-card__eye">For pregnancy &amp; postpartum</div>
           <h3>Advanced <em>Iron+</em></h3>
@@ -259,7 +259,7 @@
         </div>
       </a>
       <a href="/product/advanced-ginger" class="prod-card prod-card--ginger">
-        <div class="prod-card__media"><img src="/img/products/sku-ginger.png" alt="Advanced Ginger+"></div>
+        <div class="prod-card__media"><img src="/img/products/ginger-1.jpg" alt="Advanced Ginger+"></div>
         <div class="prod-card__body">
           <div class="prod-card__eye">For pregnancy nausea</div>
           <h3>Advanced <em>Ginger+</em></h3>
@@ -268,7 +268,7 @@
         </div>
       </a>
       <a href="/product/advanced-energyone" class="prod-card prod-card--energy">
-        <div class="prod-card__media"><img src="/img/products/sku-multivitamin.png" alt="Advanced EnergyOne+"></div>
+        <div class="prod-card__media"><img src="/img/products/energy-1.jpg" alt="Advanced EnergyOne+"></div>
         <div class="prod-card__body">
           <div class="prod-card__eye">For daily energy &amp; focus</div>
           <h3>Advanced <em>EnergyOne+</em></h3>
