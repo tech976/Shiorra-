@@ -87,20 +87,21 @@
   .prod-card{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .25s,box-shadow .25s;display:block}
   .prod-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(40,40,40,.10)}
   .prod-card__media{aspect-ratio:4/5;overflow:hidden}
-  .prod-card--iron .prod-card__media{background:linear-gradient(180deg,#FFE4EC,#fff)}
-  .prod-card--ginger .prod-card__media{background:linear-gradient(180deg,#E0F0E5,#fff)}
-  .prod-card--energy .prod-card__media{background:linear-gradient(180deg,#EDE9FE,#fff)}
+  /* Card media backdrops kept neutral — accents live only in fonts */
+  .prod-card--iron .prod-card__media,
+  .prod-card--ginger .prod-card__media,
+  .prod-card--energy .prod-card__media{background:#fff}
   .prod-card__media img{width:100%;height:100%;object-fit:cover}
   .prod-card__body{padding:24px}
   .prod-card__eye{font-size:11px;font-weight:800;letter-spacing:.10em;text-transform:uppercase;margin-bottom:6px}
   .prod-card--iron .prod-card__eye{color:#BE123C}
   .prod-card--ginger .prod-card__eye{color:#144B30}
-  .prod-card--energy .prod-card__eye{color:#5B21B6}
+  .prod-card--energy .prod-card__eye{color:#B73A92}
   .prod-card h3{font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;margin-bottom:8px;color:var(--ink)}
   .prod-card h3 em{font-style:italic;font-weight:500}
   .prod-card--iron h3 em{color:#E11D48}
   .prod-card--ginger h3 em{color:#2E8B57}
-  .prod-card--energy h3 em{color:#7C3AED}
+  .prod-card--energy h3 em{color:#B73A92}
   .prod-card p{font-size:14.5px;color:var(--muted);line-height:1.55;margin-bottom:18px}
   .prod-card__cta{display:inline-flex;align-items:center;gap:8px;color:var(--charcoal);font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
   .prod-card__cta svg{width:14px;height:14px;transition:transform .25s}

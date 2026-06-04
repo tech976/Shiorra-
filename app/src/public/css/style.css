@@ -7052,18 +7052,18 @@ body.aw-cursor-out .aw-cursor-ring {
 }
 .product-card:hover .product-card__media img{transform: scale(1.03);}
 
-/* Per-product card palettes — Iron+ red/pink, Ginger+ keeps the warm shoot
-   cream, Energy+ light faint lavender. The accent colour on the card title
-   and price echoes the bg so the eye picks up which SKU is which at a glance. */
-.product-card--01 .product-card__media { background: linear-gradient(180deg, #FFE4EC 0%, #FFFFFF 100%); }
-.product-card--02 .product-card__media { background: #F7F3EC; }
-.product-card--03 .product-card__media { background: linear-gradient(180deg, #EDE9FE 0%, #FFFFFF 100%); }
+/* Card media backdrops stay neutral (warm cream like the shoot). Only the
+   title + price text picks up the product accent — that's the "pop" the
+   user asked for: white bg, fonts highlighted in package colour. */
+.product-card--01 .product-card__media,
+.product-card--02 .product-card__media,
+.product-card--03 .product-card__media { background: #F7F3EC; }
 
-/* Title + price tinted to the card palette */
-.product-card--01 .product-card__name { color: #BE123C; }
+/* Title + price tinted to the product accent (darker shade for visible pop) */
+.product-card--01 .product-card__name,
 .product-card--01 .product-card__price { color: #BE123C; }
-.product-card--03 .product-card__name { color: #6D28D9; }
-.product-card--03 .product-card__price { color: #6D28D9; }
+.product-card--03 .product-card__name,
+.product-card--03 .product-card__price { color: #B73A92; }
 
 /* Status badge — top-left */
 .product-card__badge{
@@ -7334,13 +7334,9 @@ body.aw-cursor-out .aw-cursor-ring {
     background: linear-gradient(180deg, #FAFAFA 0%, #FFFFFF 28%, #FFFFFF 72%, #F5F5F5 100%);
     isolation: isolate;
 }
-/* Per-product scroll-seq gradient — edges tinted to the product's package
-   colour, middle stays #FFF so the bottle's studio backdrop stays clean for
-   the canvas's mix-blend-mode: multiply. The bottom-edge tone matches the
-   symptoms section's bg in each product EJS, so the transition is seamless. */
-.scroll-seq[data-scroll-seq="iron"]   { background: linear-gradient(180deg, #FBE5EE 0%, #FFFFFF 28%, #FFFFFF 72%, #FBE5EE 100%); }
-.scroll-seq[data-scroll-seq="ginger"] { background: linear-gradient(180deg, #E0F4F2 0%, #FFFFFF 28%, #FFFFFF 72%, #E0F4F2 100%); }
-.scroll-seq[data-scroll-seq="energy"] { background: linear-gradient(180deg, #EDE9FE 0%, #FFFFFF 28%, #FFFFFF 72%, #EDE9FE 100%); }
+/* Scroll-seq stays on the neutral studio gradient defined above —
+   page backgrounds are pure white per brand brief; product color only
+   lives in fonts, not in section bgs. */
 
 .scroll-seq__sticky {
     position: sticky;
@@ -7462,16 +7458,16 @@ body.aw-cursor-out .aw-cursor-ring {
 /* Per-product accent (only the eyebrow text picks it up — keep bg pure white) */
 .scroll-seq[data-scroll-seq="iron"]   .scroll-seq__eyebrow { color: #BE123C; }
 .scroll-seq[data-scroll-seq="ginger"] .scroll-seq__eyebrow { color: #23867F; }
-.scroll-seq[data-scroll-seq="energy"] .scroll-seq__eyebrow { color: #6D28D9; }
+.scroll-seq[data-scroll-seq="energy"] .scroll-seq__eyebrow { color: #B73A92; }
 
-/* Tighter padding-top for the section immediately after scroll-seq — no
-   large blank gap before the next title. The bg is left to each product
-   page's inline EJS rules so each SKU can pick its own package-tinted
-   colour, which matches the scroll-seq's bottom-edge gradient above for
-   a seamless transition. */
+/* Tighter padding-top for the section immediately after scroll-seq + the
+   bg gradient continues the scroll-seq's bottom edge tone (#F5F5F5) so
+   the studio merge stays seamless. !important overrides the per-page
+   #fff that .symptoms-bg etc. carry. */
 .scroll-seq + section,
 .scroll-seq + .s {
     padding-top: clamp(48px, 7vw, 96px);
+    background: linear-gradient(180deg, #F5F5F5 0%, #FAFAFA 18%, #FFFFFF 45%) !important;
 }
 
 @media (max-width: 900px) {
