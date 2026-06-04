@@ -7307,15 +7307,17 @@ body.aw-cursor-out .aw-cursor-ring {
    Iron+, sage for Ginger+, warm for Energy+).
    ========================================================= */
 .scroll-seq {
+    /* section_height = sticky_child_height (100vh) + scroll_travel (30vh).
+       This is the key: with section = 130vh, the sticky's bottom always
+       coincides with the section's bottom — there is never any empty
+       section bg visible below the stage. The next section starts the
+       moment the bottle moves out. */
     position: relative;
-    height: 170vh;          /* 70vh of scroll travel — enough for smooth 150-frame playback without feeling padded */
+    height: 130vh;
     background: #FFFFFF;
     isolation: isolate;
     overflow: hidden;
 }
-.scroll-seq[data-scroll-seq="iron"]   { background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 55%, #FBF3F6 100%); }
-.scroll-seq[data-scroll-seq="ginger"] { background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 55%, #F2F9F5 100%); }
-.scroll-seq[data-scroll-seq="energy"] { background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 55%, #FFF6EC 100%); }
 
 .scroll-seq__sticky {
     position: sticky;
@@ -7433,7 +7435,7 @@ body.aw-cursor-out .aw-cursor-ring {
 .scroll-seq[data-scroll-seq="energy"] .scroll-seq__eyebrow { color: #C2410C; }
 
 @media (max-width: 900px) {
-    .scroll-seq { height: 120vh; }
+    .scroll-seq { height: 110vh; }
     .scroll-seq__sticky {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
