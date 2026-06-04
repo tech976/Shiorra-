@@ -7311,10 +7311,17 @@ body.aw-cursor-out .aw-cursor-ring {
        Across 200vh = ~2160px the canvas plays 150 frames at ~14px/frame —
        slow and deliberate, the user is genuinely pinned on the bottle.
        NO overflow: hidden here — it would break the sticky positioning
-       of the child, which is exactly the bug we hit before. */
+       of the child, which is exactly the bug we hit before.
+
+       Background: soft studio-light gradient. Slightly off-white at the top
+       and bottom edges so the section reads as a studio scene, not a
+       clinical white box. The bottom edge tone (#F5F5F5) is intentionally
+       the same as the symptoms section's top edge — so when one ends and
+       the other begins, the colors meet seamlessly and the two sections
+       feel like one continuous studio. */
     position: relative;
     height: 300vh;
-    background: #FFFFFF;
+    background: linear-gradient(180deg, #FAFAFA 0%, #FFFFFF 28%, #FFFFFF 72%, #F5F5F5 100%);
 }
 
 .scroll-seq__sticky {
@@ -7430,10 +7437,17 @@ body.aw-cursor-out .aw-cursor-ring {
 
 /* The section after scroll-seq gets a tighter padding than .s defaults
    (which are 80–160px) — enough breathing room so the next title doesn't
-   collide with the bottle's exit, but no large blank gap. */
+   collide with the bottle's exit, but no large blank gap.
+
+   Background continues the scroll-seq's studio gradient: the top edge is
+   #F5F5F5 (matches scroll-seq's bottom edge exactly) and fades up to pure
+   white below — so the eye reads "one continuous studio" instead of "two
+   stacked sections". !important is necessary because .symptoms-bg has an
+   inline #fff declaration in the EJS that loads after this stylesheet. */
 .scroll-seq + section,
 .scroll-seq + .s {
     padding-top: clamp(48px, 7vw, 96px);
+    background: linear-gradient(180deg, #F5F5F5 0%, #FAFAFA 18%, #FFFFFF 45%) !important;
 }
 
 @media (max-width: 900px) {
