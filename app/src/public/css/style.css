@@ -7338,6 +7338,19 @@ body.aw-cursor-out .aw-cursor-ring {
    page backgrounds are pure white per brand brief; product color only
    lives in fonts, not in section bgs. */
 
+/* Iron+'s new 3D render set is 1080×1080 square — stage matches so the
+   bottle fills the visible area instead of letterboxing inside the
+   ginger/energy portrait container. align-self: center because we no
+   longer need stretch (the square stage doesn't extend to full sticky
+   height); the section bg is white and the body is white, so the area
+   above/below the centred stage just reads as more studio. */
+.scroll-seq[data-scroll-seq="iron"] .scroll-seq__stage {
+    aspect-ratio: 1 / 1;
+    max-width: 640px;
+    align-self: center;
+    height: auto;
+}
+
 .scroll-seq__sticky {
     position: sticky;
     top: 0;
