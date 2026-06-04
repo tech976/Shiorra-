@@ -7307,17 +7307,14 @@ body.aw-cursor-out .aw-cursor-ring {
    Iron+, sage for Ginger+, warm for Energy+).
    ========================================================= */
 .scroll-seq {
-    /* Section = 100vh sticky + 150vh of scroll travel = 250vh total.
-       Scroll travel of 150vh maps to 150 frames at ~1vh per frame
-       (~11px/frame on a 1080 viewport) — slow, deliberate, Apple-style
-       rotation. The user feels pinned on the bottle while they scroll
-       through the spin; rest of the page is "paused" until rotation
-       completes. */
+    /* Section = 100vh sticky child + 200vh of scroll travel = 300vh total.
+       Across 200vh = ~2160px the canvas plays 150 frames at ~14px/frame —
+       slow and deliberate, the user is genuinely pinned on the bottle.
+       NO overflow: hidden here — it would break the sticky positioning
+       of the child, which is exactly the bug we hit before. */
     position: relative;
-    height: 250vh;
+    height: 300vh;
     background: #FFFFFF;
-    isolation: isolate;
-    overflow: hidden;
 }
 
 .scroll-seq__sticky {
@@ -7440,7 +7437,7 @@ body.aw-cursor-out .aw-cursor-ring {
 }
 
 @media (max-width: 900px) {
-    .scroll-seq { height: 180vh; }
+    .scroll-seq { height: 220vh; }
     .scroll-seq__sticky {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;

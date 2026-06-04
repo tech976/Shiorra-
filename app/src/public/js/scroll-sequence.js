@@ -28,9 +28,9 @@
   const SELECTOR = '[data-scroll-seq]';
   const CONCURRENCY = 8;
   // Lerp factor: how much of the gap (target - displayed) is closed each tick.
-  // 0.12 ≈ 95% caught up in ~25 frames at 60fps (~400ms). Lower = smoother but
-  // more lag behind the wheel. Tune by feel.
-  const LERP_FACTOR = 0.12;
+  // 0.22 ≈ 95% caught up in ~13 frames at 60fps (~210ms). High enough that
+  // slow scrolls track 1:1; low enough that fast flicks still ease in.
+  const LERP_FACTOR = 0.22;
   // Tick stops when displayed is within this many frames of target.
   const SNAP_EPSILON = 0.25;
 
