@@ -68,23 +68,37 @@
         <div class="hero-banners" id="heroBanners" data-progress="1" aria-roledescription="banner" aria-live="polite">
 
             <div class="hero-banners__track">
-                <!-- Banner 1 · Advanced Iron+ -->
+                <!-- Banner 1 (default visible) · hero-3 -->
                 <figure class="hero-banners__slide is-active" data-index="0" aria-hidden="false">
-                    <a href="/product/advanced-iron" aria-label="Nourish today, strengthen tomorrow — Shop Shiōrra Advanced Iron+">
-                        <img src="/img/banners/hero-1.jpg" alt="Shiōrra Advanced Iron+ — Nourish today, strengthen tomorrow" loading="eager">
+                    <a href="/product/advanced-iron" aria-label="Shop Shiōrra — gentle wellness">
+                        <img src="/img/banners/hero-3.jpg" alt="Shiōrra hero banner" loading="eager">
                     </a>
                 </figure>
-                <!-- Banner 2 · Advanced Ginger+ -->
+                <!-- Banner 2 · hero-1 -->
                 <figure class="hero-banners__slide" data-index="1" aria-hidden="true">
-                    <a href="/product/advanced-ginger" aria-label="Gentle support for morning sickness — Shop Shiōrra Advanced Ginger+">
-                        <img src="/img/banners/hero-2.jpg" alt="Shiōrra Advanced Ginger+ — Gentle support for morning sickness" loading="lazy">
+                    <a href="/product/advanced-iron" aria-label="Shop Shiōrra Advanced Iron+">
+                        <img src="/img/banners/hero-1.jpg" alt="Shiōrra Advanced Iron+ banner" loading="lazy">
+                    </a>
+                </figure>
+                <!-- Banner 3 · hero-2 -->
+                <figure class="hero-banners__slide" data-index="2" aria-hidden="true">
+                    <a href="/product/advanced-ginger" aria-label="Shop Shiōrra Advanced Ginger+">
+                        <img src="/img/banners/hero-2.jpg" alt="Shiōrra Advanced Ginger+ banner" loading="lazy">
+                    </a>
+                </figure>
+                <!-- Banner 4 · hero-4 -->
+                <figure class="hero-banners__slide" data-index="3" aria-hidden="true">
+                    <a href="/product/advanced-energyone" aria-label="Shop Shiōrra Advanced EnergyOne+">
+                        <img src="/img/banners/hero-4.jpg" alt="Shiōrra Advanced EnergyOne+ banner" loading="lazy">
                     </a>
                 </figure>
             </div>
 
             <div class="hero-banners__dots" role="tablist" aria-label="Banner indicators">
-                <button class="hero-banners__dot is-active" data-go="0" role="tab" aria-selected="true"  aria-label="Show Iron+ banner"></button>
-                <button class="hero-banners__dot"            data-go="1" role="tab" aria-selected="false" aria-label="Show Ginger+ banner"></button>
+                <button class="hero-banners__dot is-active" data-go="0" role="tab" aria-selected="true"  aria-label="Banner 1"></button>
+                <button class="hero-banners__dot"            data-go="1" role="tab" aria-selected="false" aria-label="Banner 2"></button>
+                <button class="hero-banners__dot"            data-go="2" role="tab" aria-selected="false" aria-label="Banner 3"></button>
+                <button class="hero-banners__dot"            data-go="3" role="tab" aria-selected="false" aria-label="Banner 4"></button>
             </div>
 
             <div class="hero-banners__progress" aria-hidden="true"></div>
@@ -762,7 +776,7 @@
             const dots   = Array.from(root.querySelectorAll('.hero-banners__dot'));
             const prevBtn = document.getElementById('bannerPrev');
             const nextBtn = document.getElementById('bannerNext');
-            const INTERVAL = 2000;
+            const INTERVAL = 5000;
             let idx = 0, paused = false, timer = null, progressTimer = null, progressStart = 0;
 
             const setActive = (n) => {
