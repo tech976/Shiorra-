@@ -1,14 +1,30 @@
+<%- include('./_styles') %>
 <div class="admin">
     <%- include('./_nav') %>
     <div class="admin__main">
-        <div class="admin__head">
-            <h1><%= coupon ? 'Edit coupon' : 'New coupon' %></h1>
-            <a href="/admin/coupons" class="btn btn--ghost btn--sm">← All coupons</a>
+
+        <div class="adm-hero">
+            <div class="adm-crumbs">
+                <a href="/admin">Admin</a>
+                <span class="sep">/</span>
+                <a href="/admin/coupons">Coupons</a>
+                <span class="sep">/</span>
+                <strong><%= coupon ? (coupon.code || 'Edit') : 'New coupon' %></strong>
+            </div>
+            <div class="adm-hero__row">
+                <div>
+                    <h1><%= coupon ? 'Edit coupon' : 'New coupon' %></h1>
+                    <div class="adm-hero__sub"><%= coupon ? 'Adjust the discount code, expiry or usage limits.' : 'Create a new discount code your customers can apply at checkout.' %></div>
+                </div>
+                <div class="adm-hero__actions">
+                    <a href="/admin/coupons" class="btn btn--ghost btn--sm">← All coupons</a>
+                </div>
+            </div>
         </div>
 
         <% if (errors) { %>
             <div class="alert alert--error">
-                <strong>Please fix:</strong>
+                <strong>Please fix the following:</strong>
                 <ul>
                     <% errors.forEach(function(e) { %><li><%= e.path.join('.') %>: <%= e.message %></li><% }); %>
                 </ul>
@@ -16,7 +32,7 @@
         <% } %>
 
         <form action="<%= coupon ? '/admin/coupons/' + coupon.id : '/admin/coupons' %>" method="post" class="form-grid form-grid--admin">
-            <label>Code<input name="code" required value="<%= values.code || '' %>" placeholder="WELCOME10" style="text-transform:uppercase"></label>
+            <label>Code<input name="code" required value="<%= values.code || '' %>" placeholder="WELCOME10" style="text-transform:uppercase;letter-spacing:0.05em;font-weight:600"></label>
             <label>Type
                 <select name="type">
                     <option value="PERCENT" <%= values.type === 'PERCENT' ? 'selected' : '' %>>Percent off</option>
@@ -24,20 +40,23 @@
                 </select>
             </label>
             <label>Value<input name="value" required value="<%= values.value || '' %>" placeholder="10 for 10% or 100 for ₹100">
-                <small class="form-hint">Percent: 1-100 · Fixed: rupees off</small>
+                <small class="form-hint" style="text-transform:none;letter-spacing:normal;font-weight:400">Percent: 1-100 · Fixed: rupees off</small>
             </label>
             <label>Minimum subtotal (₹, optional)<input name="minSubtotal" value="<%= values.minSubtotal || '' %>" placeholder="0 for no minimum"></label>
-            <label>Usage limit (optional)<input name="usageLimit" value="<%= values.usageLimit || '' %>" placeholder="Leave blank for unlimited"></label>
+            <label>Usage limit (optional)<input name="usageLimit" value="<%= values.usageLimit || '' %>" placeholder="Blank = unlimited"></label>
             <label>Expires on (optional)<input type="date" name="expiresAt" value="<%= values.expiresAt || '' %>"></label>
             <label class="form-grid__inline">
                 <input type="checkbox" name="active" value="true" <%= values.active !== false ? 'checked' : '' %>>
-                Active
+                Active (available to customers)
             </label>
             <label class="form-grid__full">Internal notes (optional)
                 <textarea name="notes" rows="2" placeholder="e.g. launched in newsletter Q3"><%= values.notes || '' %></textarea>
             </label>
-            <div class="form-grid__full">
-                <button class="btn"><%= coupon ? 'Save changes' : 'Create coupon' %></button>
+
+            <div class="form-grid__full adm-save-bar" style="grid-column:1/-1">
+                <span class="adm-save-bar__hint"><%= coupon ? 'Changes apply to new orders only — existing orders are unaffected.' : 'Code will be active immediately after creation.' %></span>
+                <a href="/admin/coupons" class="btn btn--sm btn--ghost">Cancel</a>
+                <button class="btn btn--sm adm-btn-accent"><%= coupon ? 'Save changes' : 'Create coupon' %></button>
             </div>
         </form>
     </div>

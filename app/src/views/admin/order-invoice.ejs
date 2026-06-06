@@ -3,34 +3,227 @@
 <head>
 <meta charset="utf-8">
 <title>Invoice · <%= order.orderNumber %> · Shiōrra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font: 14px/1.5 'Inter', system-ui, -apple-system, Helvetica, Arial, sans-serif; color: #282828; background: #f4f5f7; padding: 32px; }
-.invoice { max-width: 780px; margin: 0 auto; background: #fff; padding: 56px 56px 48px; box-shadow: 0 8px 40px rgba(0,0,0,0.06); border-radius: 6px; }
-.invoice__top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 2px solid #282828; }
-.invoice__brand { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.02em; }
-.invoice__brand small { display: block; font-size: 11px; font-weight: 600; color: #6B6B6B; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 4px; }
-.invoice__meta { text-align: right; font-size: 12px; color: #6B6B6B; }
-.invoice__meta strong { display: block; color: #282828; font-size: 18px; font-family: 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.01em; margin-bottom: 2px; }
-.invoice__addr { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px; }
-.invoice__addr h4 { font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #8A8A8A; margin-bottom: 8px; }
-.invoice__addr address { font-style: normal; line-height: 1.5; }
-.invoice table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
-.invoice th { text-align: left; font-size: 10px; font-weight: 800; letter-spacing: 0.10em; text-transform: uppercase; color: #6B6B6B; padding: 10px 12px; border-bottom: 1px solid #E5E5E7; }
-.invoice th.r, .invoice td.r { text-align: right; }
-.invoice td { padding: 14px 12px; border-bottom: 1px solid #F0F0F2; vertical-align: top; }
-.invoice__totals { float: right; width: 280px; margin-bottom: 32px; }
-.invoice__totals .row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; color: #6B6B6B; }
-.invoice__totals .row--final { padding-top: 12px; border-top: 1px solid #E5E5E7; font-weight: 700; color: #282828; font-size: 16px; }
-.invoice__foot { clear: both; padding-top: 24px; border-top: 1px solid #E5E5E7; font-size: 12px; color: #8A8A8A; text-align: center; line-height: 1.6; }
-.invoice__foot strong { color: #282828; }
-.printbar { max-width: 780px; margin: 0 auto 16px; display: flex; justify-content: flex-end; gap: 10px; }
-.printbar button { background: #282828; color: #fff; border: 0; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; }
-.printbar a { background: #fff; color: #282828; border: 1px solid #E5E5E7; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; }
+body {
+    font: 14px/1.55 'Inter', system-ui, -apple-system, Helvetica, Arial, sans-serif;
+    color: #1A1F2B;
+    background: #F4F5F7;
+    padding: 40px 20px 56px;
+    -webkit-font-smoothing: antialiased;
+}
+.invoice {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 60px 64px 52px;
+    box-shadow: 0 12px 40px rgba(15,23,42,0.06);
+    border-radius: 8px;
+    border: 1px solid #ECECEC;
+}
+.invoice__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #1A1F2B;
+}
+.invoice__brand {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: -0.025em;
+    color: #1A1F2B;
+}
+.invoice__brand small {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #6B7280;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 6px;
+}
+.invoice__meta { text-align: right; font-size: 12px; color: #6B7280; line-height: 1.7; }
+.invoice__meta strong {
+    display: block;
+    color: #1A1F2B;
+    font-size: 18px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+.invoice__meta-row { display: flex; justify-content: flex-end; gap: 8px; }
+.invoice__meta-row span:first-child {
+    color: #8A8A8A;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+.invoice__meta-row span:last-child {
+    color: #1A1F2B;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+}
+.invoice__status-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: #E0F5EA;
+    color: #1E9E5C;
+}
+.invoice__addr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    margin-bottom: 36px;
+}
+.invoice__addr h4 {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8A8A8A;
+    margin-bottom: 10px;
+}
+.invoice__addr address {
+    font-style: normal;
+    line-height: 1.6;
+    color: #4A5160;
+}
+.invoice__addr address strong { color: #1A1F2B; font-weight: 600; }
+.invoice table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 28px;
+}
+.invoice th {
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6B7280;
+    padding: 12px;
+    border-bottom: 1px solid #ECECEC;
+    background: #FAFAFB;
+}
+.invoice th.r, .invoice td.r {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+.invoice td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #F4F4F5;
+    vertical-align: top;
+    color: #1A1F2B;
+}
+.invoice td strong { font-weight: 600; }
+.invoice__totals {
+    margin-left: auto;
+    width: 320px;
+    margin-bottom: 32px;
+}
+.invoice__totals .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 13px;
+    color: #6B7280;
+}
+.invoice__totals .row span:last-child {
+    font-variant-numeric: tabular-nums;
+    color: #1A1F2B;
+    font-weight: 500;
+}
+.invoice__totals .row--final {
+    margin-top: 8px;
+    padding-top: 14px;
+    border-top: 2px solid #1A1F2B;
+    font-weight: 700;
+    color: #1A1F2B;
+    font-size: 17px;
+}
+.invoice__totals .row--final span:last-child {
+    font-weight: 800;
+    font-size: 18px;
+}
+.invoice__foot {
+    clear: both;
+    padding-top: 28px;
+    border-top: 1px solid #ECECEC;
+    font-size: 12px;
+    color: #8A8A8A;
+    text-align: center;
+    line-height: 1.7;
+}
+.invoice__foot strong { color: #1A1F2B; }
+.invoice__paid-stamp {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 6px 16px;
+    border: 2px solid #1E9E5C;
+    color: #1E9E5C;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+.printbar {
+    max-width: 800px;
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.printbar button, .printbar a {
+    border: 1px solid #ECECEC;
+    background: #fff;
+    color: #1A1F2B;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.printbar button {
+    background: #1A1F2B;
+    color: #fff;
+    border-color: #1A1F2B;
+}
+.printbar button:hover { background: #23867F; border-color: #23867F; }
+.printbar a:hover { background: #FAFAFB; }
+
 @media print {
     body { background: #fff; padding: 0; }
     .printbar { display: none; }
-    .invoice { box-shadow: none; max-width: none; }
+    .invoice { box-shadow: none; max-width: none; border: 0; padding: 28px; border-radius: 0; }
+}
+@media (max-width: 640px) {
+    body { padding: 16px; }
+    .invoice { padding: 32px 24px; }
+    .invoice__top { flex-direction: column; gap: 16px; }
+    .invoice__meta { text-align: left; }
+    .invoice__meta-row { justify-content: flex-start; }
+    .invoice__addr { grid-template-columns: 1fr; gap: 20px; }
+    .invoice__totals { width: 100%; }
 }
 </style>
 </head>
@@ -49,9 +242,12 @@ body { font: 14px/1.5 'Inter', system-ui, -apple-system, Helvetica, Arial, sans-
         </div>
         <div class="invoice__meta">
             <strong>Invoice</strong>
-            <%= order.orderNumber %><br>
-            Date: <%= order.createdAt.toISOString().slice(0,10) %><br>
-            Status: <%= order.status %>
+            <div class="invoice__meta-row"><span>No.</span><span><%= order.orderNumber %></span></div>
+            <div class="invoice__meta-row"><span>Date</span><span><%= order.createdAt.toISOString().slice(0,10) %></span></div>
+            <div class="invoice__meta-row"><span>Status</span><span><%= order.status %></span></div>
+            <% if (order.paymentStatus === 'PAID' || order.paymentStatus === 'CAPTURED') { %>
+                <div style="margin-top:8px"><span class="invoice__status-pill">Paid</span></div>
+            <% } %>
         </div>
     </div>
 
@@ -88,7 +284,12 @@ body { font: 14px/1.5 'Inter', system-ui, -apple-system, Helvetica, Arial, sans-
         <thead><tr><th>Item</th><th class="r">Qty</th><th class="r">Unit</th><th class="r">Total</th></tr></thead>
         <tbody>
         <% order.items.forEach(function(it) { %>
-            <tr><td><%= it.name %></td><td class="r"><%= it.quantity %></td><td class="r"><%= formatINR(it.priceInPaise) %></td><td class="r"><%= formatINR(it.totalInPaise) %></td></tr>
+            <tr>
+                <td><strong><%= it.name %></strong></td>
+                <td class="r"><%= it.quantity %></td>
+                <td class="r"><%= formatINR(it.priceInPaise) %></td>
+                <td class="r"><%= formatINR(it.totalInPaise) %></td>
+            </tr>
         <% }); %>
         </tbody>
     </table>

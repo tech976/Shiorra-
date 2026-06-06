@@ -1,40 +1,316 @@
+<style>
+  /* ============================================================
+     Site footer — Allbirds-style premium e-commerce footer
+     Scoped overrides for .site-footer (defined in app.css)
+     ============================================================ */
+  .site-footer {
+    background: #FAFAFA !important;
+    color: #475569 !important;
+    padding: 80px 0 0 !important;
+    margin-top: 96px !important;
+    border-top: 1px solid #EAECEF;
+  }
+  @media (max-width: 720px) { .site-footer { padding-top: 56px !important; margin-top: 64px !important; } }
+
+  .site-footer .container { max-width: 1200px; }
+
+  /* Newsletter row */
+  .footer-newsletter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid #EAECEF;
+    align-items: center;
+  }
+  .footer-newsletter__copy h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #0F172A;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+  .footer-newsletter__copy p {
+    margin: 0;
+    color: #64748B;
+    font-size: 14.5px;
+    line-height: 1.55;
+    max-width: 42ch;
+  }
+  .footer-newsletter__form {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .footer-newsletter__form input {
+    flex: 1;
+    height: 52px;
+    padding: 0 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #0F172A;
+    background: #fff;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .footer-newsletter__form input::placeholder { color: #94A3B8; }
+  .footer-newsletter__form input:focus {
+    outline: none;
+    border-color: #23867F;
+    box-shadow: 0 0 0 4px rgba(35,134,127,0.10);
+  }
+  .footer-newsletter__form button {
+    height: 52px;
+    padding: 0 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: #0F172A;
+    border: 0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background .15s ease, transform .12s ease;
+    white-space: nowrap;
+  }
+  .footer-newsletter__form button:hover { background: #1E293B; transform: translateY(-1px); }
+  .footer-newsletter__form button:active { transform: translateY(0); }
+
+  @media (max-width: 880px) {
+    .footer-newsletter { grid-template-columns: 1fr; gap: 24px; padding-bottom: 40px; }
+    .footer-newsletter__copy h3 { font-size: 24px; }
+  }
+  @media (max-width: 480px) {
+    .footer-newsletter__form { flex-direction: column; }
+    .footer-newsletter__form button { width: 100%; }
+  }
+
+  /* Brand + columns grid */
+  .footer-main {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding: 56px 0 64px;
+  }
+  .site-footer .footer__brand img {
+    height: 36px;
+    width: auto;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .site-footer .footer__brand .footer__tagline {
+    color: #64748B !important;
+    font-size: 14px !important;
+    line-height: 1.6;
+    margin: 0 0 24px !important;
+    max-width: 28ch !important;
+  }
+  .footer__social { display: flex; gap: 10px; }
+  .footer__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #EAECEF;
+    color: #475569;
+    transition: background .15s ease, color .15s ease, border-color .15s ease, transform .12s ease;
+  }
+  .footer__social a:hover {
+    background: #0F172A;
+    color: #fff;
+    border-color: #0F172A;
+    transform: translateY(-1px);
+  }
+  .footer__social svg { width: 16px; height: 16px; display: block; }
+
+  .site-footer .footer__col h5 {
+    color: #0F172A !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 11px !important;
+    letter-spacing: 0.10em !important;
+    text-transform: uppercase !important;
+    font-weight: 600 !important;
+    margin: 0 0 16px !important;
+  }
+  .site-footer .footer__col ul { list-style: none; padding: 0; margin: 0; }
+  .site-footer .footer__col li { margin-bottom: 10px !important; }
+  .site-footer .footer__col a {
+    color: #475569 !important;
+    font-size: 13.5px !important;
+    font-weight: 400 !important;
+    text-decoration: none;
+    transition: color .15s ease;
+  }
+  .site-footer .footer__col a:hover { color: #0F172A !important; }
+
+  @media (max-width: 980px) {
+    .footer-main { grid-template-columns: 1fr 1fr; gap: 40px 32px; padding: 48px 0 56px; }
+    .footer-main .footer__brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 520px) {
+    .footer-main { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+  }
+
+  /* Bottom bar */
+  .site-footer .footer__bar {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between !important;
+    gap: 24px;
+    padding: 22px 0 !important;
+    border-top: 1px solid #EAECEF !important;
+    color: #94A3B8 !important;
+    font-size: 12.5px !important;
+    flex-wrap: wrap;
+  }
+  .footer__bar-legal { display: flex; gap: 22px; flex-wrap: wrap; }
+  .footer__bar-legal a {
+    color: #64748B !important;
+    text-decoration: none;
+    font-size: 12.5px;
+    transition: color .15s ease;
+  }
+  .footer__bar-legal a:hover { color: #0F172A !important; }
+  .footer__pay {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94A3B8;
+  }
+  .footer__pay-label {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #94A3B8;
+    margin-right: 4px;
+  }
+  .footer__pay-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 22px;
+    padding: 0 8px;
+    background: #fff;
+    border: 1px solid #EAECEF;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #475569;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 720px) {
+    .site-footer .footer__bar { flex-direction: column; align-items: flex-start; gap: 14px; padding: 20px 0 28px !important; }
+  }
+</style>
 <footer class="site-footer">
     <div class="container">
-        <div class="footer__cols">
-            <div class="footer__brand">
-                <img src="/img/logo/logo-green.png" alt="Shiorra" height="32">
-                <p>Shiorra — wellness, gently formulated. A trademark of K.C. Laboratories.</p>
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+            <div class="footer-newsletter__copy">
+                <h3>Join the journey.</h3>
+                <p>Be the first to hear about new formulations, gentle wellness rituals and members-only drops. No noise — just the good stuff.</p>
             </div>
+            <form class="footer-newsletter__form" action="/newsletter/subscribe" method="post">
+                <input type="email" name="email" required placeholder="Enter your email" autocomplete="email" inputmode="email">
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+
+        <!-- Brand + link columns -->
+        <div class="footer-main">
+            <div class="footer__brand">
+                <img src="/img/logo/logo-green.png" alt="Shiorra">
+                <p class="footer__tagline">Shiōrra — wellness, gently formulated. A trademark of K.C. Laboratories.</p>
+                <div class="footer__social" aria-label="Social links">
+                    <a href="https://instagram.com" aria-label="Instagram" rel="noopener" target="_blank">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
+                    </a>
+                    <a href="https://facebook.com" aria-label="Facebook" rel="noopener" target="_blank">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.6c0-.9.25-1.5 1.55-1.5H16.6V4.4c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.45-4 4.1V10.5H7.7v3h2.5V21h3.3z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" aria-label="X (Twitter)" rel="noopener" target="_blank">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 3h3.2l-7 8L22 21h-6.4l-5-6.5L4.8 21H1.6l7.5-8.6L1.5 3H8l4.5 6L17.5 3zm-1.1 16.2h1.8L7.7 4.7H5.8l10.6 14.5z"/></svg>
+                    </a>
+                    <a href="https://youtube.com" aria-label="YouTube" rel="noopener" target="_blank">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5.2 3-5.2 3z"/></svg>
+                    </a>
+                </div>
+            </div>
+
             <div class="footer__col">
                 <h5>Shop</h5>
                 <ul>
                     <li><a href="/shop">All products</a></li>
+                    <li><a href="/product/advanced-iron">Advanced Iron</a></li>
+                    <li><a href="/product/energy-plus">Energy+</a></li>
                     <li><a href="/cart">Your cart</a></li>
                 </ul>
             </div>
+
             <div class="footer__col">
                 <h5>Account</h5>
                 <ul>
                     <% if (currentUser) { %>
                         <li><a href="/account">Dashboard</a></li>
                         <li><a href="/account/orders">Orders</a></li>
+                        <li><a href="/account/addresses">Addresses</a></li>
+                        <li><a href="/logout">Log out</a></li>
                     <% } else { %>
                         <li><a href="/login">Log in</a></li>
                         <li><a href="/register">Sign up</a></li>
+                        <li><a href="/cart">Your cart</a></li>
                     <% } %>
                 </ul>
             </div>
+
             <div class="footer__col">
                 <h5>Support</h5>
                 <ul>
                     <li><a href="/faq">FAQ</a></li>
-                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/contact">Contact us</a></li>
+                    <li><a href="/shipping">Shipping</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                </ul>
+            </div>
+
+            <div class="footer__col">
+                <h5>Company</h5>
+                <ul>
+                    <li><a href="/about">About Shiōrra</a></li>
+                    <li><a href="/reviews">Reviews</a></li>
+                    <li><a href="/journal">Journal</a></li>
+                    <li><a href="/sustainability">Sustainability</a></li>
                 </ul>
             </div>
         </div>
+
+        <!-- Bottom bar -->
         <div class="footer__bar">
-            <span>&copy; <%= year %> Shiorra</span>
-            <span>Made in India</span>
+            <span>&copy; <%= year %> Shiōrra. A trademark of K.C. Laboratories. Made in India.</span>
+            <span class="footer__bar-legal">
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+                <a href="/returns">Returns</a>
+                <a href="/sitemap">Sitemap</a>
+            </span>
+            <span class="footer__pay" aria-label="Payment methods accepted">
+                <span class="footer__pay-label">We accept</span>
+                <span class="footer__pay-chip">Visa</span>
+                <span class="footer__pay-chip">MC</span>
+                <span class="footer__pay-chip">UPI</span>
+                <span class="footer__pay-chip">Amex</span>
+            </span>
         </div>
     </div>
 </footer>

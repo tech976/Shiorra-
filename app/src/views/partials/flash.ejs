@@ -1,11 +1,163 @@
 <% if (typeof flash !== 'undefined') { %>
-    <% ['error','success','info'].forEach(function(type) { %>
-        <% if (flash[type] && flash[type].length) { %>
-            <div class="flash flash--<%= type %>">
-                <div class="container">
-                    <% flash[type].forEach(function(msg) { %><span><%= msg %></span><% }); %>
-                </div>
-            </div>
-        <% } %>
-    <% }); %>
+    <% var __hasFlash = (flash.error && flash.error.length) || (flash.success && flash.success.length) || (flash.info && flash.info.length); %>
+    <% if (__hasFlash) { %>
+        <style>
+          /* ============================================================
+             Flash toasts — Stripe-style top-right notifications
+             Scoped to .flash-stack so it never leaks into app.css
+             ============================================================ */
+          .flash-stack {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: calc(100vw - 32px);
+            width: 380px;
+            pointer-events: none;
+          }
+          .flash-toast {
+            pointer-events: auto;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 14px 14px 16px;
+            background: #fff;
+            border: 1px solid rgba(15,23,42,0.08);
+            border-radius: 14px;
+            box-shadow:
+              0 1px 2px rgba(15,23,42,0.04),
+              0 8px 24px -4px rgba(15,23,42,0.12),
+              0 16px 48px -12px rgba(15,23,42,0.14);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #0F172A;
+            opacity: 0;
+            transform: translateY(-8px) scale(0.98);
+            animation: flashIn .28s cubic-bezier(.2,.7,.3,1) forwards;
+          }
+          .flash-toast.is-leaving {
+            animation: flashOut .22s ease forwards;
+          }
+          @keyframes flashIn {
+            to { opacity: 1; transform: translateY(0) scale(1); }
+          }
+          @keyframes flashOut {
+            to { opacity: 0; transform: translateY(-6px) scale(0.98); }
+          }
+          .flash-toast__icon {
+            flex: 0 0 22px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+          }
+          .flash-toast__icon svg { width: 14px; height: 14px; display: block; }
+          .flash-toast__body { flex: 1; min-width: 0; }
+          .flash-toast__title {
+            font-weight: 600;
+            font-size: 13.5px;
+            letter-spacing: -0.005em;
+            margin: 0 0 2px;
+            color: #0F172A;
+          }
+          .flash-toast__msg {
+            color: #475569;
+            font-size: 13.5px;
+            word-wrap: break-word;
+          }
+          .flash-toast__close {
+            flex: 0 0 24px;
+            width: 24px;
+            height: 24px;
+            border: 0;
+            background: transparent;
+            color: #94A3B8;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .15s ease, color .15s ease;
+            margin: -2px -2px 0 0;
+          }
+          .flash-toast__close:hover { background: #F1F5F9; color: #0F172A; }
+          .flash-toast__close svg { width: 14px; height: 14px; display: block; }
+
+          /* Variants */
+          .flash-toast--success { border-color: rgba(30,158,92,0.22); }
+          .flash-toast--success .flash-toast__icon { background: #E0F5EA; color: #1E9E5C; }
+          .flash-toast--success .flash-toast__title { color: #0F5132; }
+
+          .flash-toast--error { border-color: rgba(194,27,98,0.20); }
+          .flash-toast--error .flash-toast__icon { background: #FFE4F0; color: #C21B62; }
+          .flash-toast--error .flash-toast__title { color: #9A0E48; }
+
+          .flash-toast--info { border-color: rgba(29,78,216,0.18); }
+          .flash-toast--info .flash-toast__icon { background: #E0EBFF; color: #1D4ED8; }
+          .flash-toast--info .flash-toast__title { color: #1E3A8A; }
+
+          @media (max-width: 480px) {
+            .flash-stack { top: 12px; right: 12px; left: 12px; width: auto; max-width: none; }
+            .flash-toast { font-size: 13.5px; padding: 12px 12px 12px 14px; }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .flash-toast, .flash-toast.is-leaving { animation: none; opacity: 1; transform: none; }
+          }
+        </style>
+        <div class="flash-stack" role="status" aria-live="polite">
+            <% var __variants = [
+                { key: 'success', title: 'Success', icon: 'check' },
+                { key: 'error',   title: 'Something went wrong', icon: 'alert' },
+                { key: 'info',    title: 'Heads up', icon: 'info' }
+            ]; %>
+            <% __variants.forEach(function(v) { %>
+                <% if (flash[v.key] && flash[v.key].length) { %>
+                    <% flash[v.key].forEach(function(msg) { %>
+                        <div class="flash flash--<%= v.key %> flash-toast flash-toast--<%= v.key %>" data-flash>
+                            <span class="flash-toast__icon" aria-hidden="true">
+                                <% if (v.icon === 'check') { %>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 8"/></svg>
+                                <% } else if (v.icon === 'alert') { %>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2.5 20h19L12 4z"/><line x1="12" y1="10" x2="12" y2="14"/><circle cx="12" cy="17" r="0.8" fill="currentColor" stroke="none"/></svg>
+                                <% } else { %>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="8" r="0.8" fill="currentColor" stroke="none"/></svg>
+                                <% } %>
+                            </span>
+                            <div class="flash-toast__body">
+                                <p class="flash-toast__title"><%= v.title %></p>
+                                <span class="flash-toast__msg"><%= msg %></span>
+                            </div>
+                            <button type="button" class="flash-toast__close" aria-label="Dismiss" data-flash-close>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+                            </button>
+                        </div>
+                    <% }); %>
+                <% } %>
+            <% }); %>
+        </div>
+        <script>
+          (function () {
+            var DISMISS_MS = 5000;
+            var toasts = document.querySelectorAll('.flash-stack [data-flash]');
+            toasts.forEach(function (el, i) {
+              function dismiss() {
+                if (el.classList.contains('is-leaving')) return;
+                el.classList.add('is-leaving');
+                setTimeout(function () { el.parentNode && el.parentNode.removeChild(el); }, 240);
+              }
+              var btn = el.querySelector('[data-flash-close]');
+              if (btn) btn.addEventListener('click', dismiss);
+              setTimeout(dismiss, DISMISS_MS + i * 250);
+            });
+          })();
+        </script>
+    <% } %>
 <% } %>

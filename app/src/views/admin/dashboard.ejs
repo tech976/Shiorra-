@@ -1,11 +1,24 @@
+<%- include('./_styles') %>
 <div class="admin">
     <%- include('./_nav') %>
     <div class="admin__main">
-        <div class="admin__head">
-            <h1>Dashboard</h1>
-            <div style="display:flex;gap:8px">
-                <a href="/admin/reports" class="btn btn--ghost btn--sm">Reports →</a>
-                <a href="/admin/orders" class="btn btn--sm">View orders</a>
+
+        <!-- ============== HERO ============== -->
+        <div class="adm-hero">
+            <div class="adm-crumbs">
+                <a href="/admin">Admin</a>
+                <span class="sep">/</span>
+                <strong>Dashboard</strong>
+            </div>
+            <div class="adm-hero__row">
+                <div>
+                    <h1>Dashboard</h1>
+                    <div class="adm-hero__sub">Overview of revenue, orders and customers across Shiōrra.</div>
+                </div>
+                <div class="adm-hero__actions">
+                    <a href="/admin/reports" class="btn btn--ghost btn--sm">Reports</a>
+                    <a href="/admin/orders" class="btn btn--sm">View orders →</a>
+                </div>
             </div>
         </div>
 
@@ -56,18 +69,18 @@
         </div>
 
         <!-- ============== CHART + STATUS ROW ============== -->
-        <div class="admin__panels admin__panels--wide">
+        <div class="admin__panels admin__panels--wide" style="margin-bottom:24px">
             <section class="admin__panel">
-                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+                <div class="adm-card__head">
                     <h3>Sales · last 30 days</h3>
-                    <small style="color:var(--c-text-3)">Revenue and orders</small>
+                    <small>Revenue and orders</small>
                 </div>
                 <div class="chart-wrap"><canvas id="salesChart" height="120"></canvas></div>
             </section>
             <section class="admin__panel">
-                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+                <div class="adm-card__head">
                     <h3>Order pipeline</h3>
-                    <small style="color:var(--c-text-3)">By status</small>
+                    <small>By status</small>
                 </div>
                 <div class="chart-wrap chart-wrap--donut"><canvas id="statusChart"></canvas></div>
                 <ul class="legend">
@@ -81,33 +94,42 @@
         </div>
 
         <!-- ============== TABLES ROW ============== -->
-        <div class="admin__panels admin__panels--equal">
+        <div class="admin__panels admin__panels--equal" style="margin-bottom:24px">
             <section class="admin__panel">
-                <h3>Top products · last 30 days</h3>
+                <div class="adm-card__head">
+                    <h3>Top products</h3>
+                    <small>Last 30 days</small>
+                </div>
                 <% if (topProducts.length === 0) { %>
-                    <p style="color:var(--c-text-3);margin-top:12px">No sales yet in the last 30 days.</p>
+                    <p style="color:var(--adm-ink-3);margin-top:12px">No sales yet in the last 30 days.</p>
                 <% } else { %>
+                    <div class="adm-table-scroll">
                     <table class="data-table data-table--cozy">
-                        <thead><tr><th>Product</th><th>Units</th><th>Revenue</th></tr></thead>
+                        <thead><tr><th>Product</th><th class="adm-num">Units</th><th class="adm-num">Revenue</th></tr></thead>
                         <tbody>
                         <% topProducts.forEach(function(p) { %>
                             <tr>
                                 <td><a href="/admin/products"><strong><%= p.name %></strong></a></td>
-                                <td><%= p.unitsSold %></td>
-                                <td><%= formatINR(p.revenueInPaise) %></td>
+                                <td class="adm-num"><%= p.unitsSold %></td>
+                                <td class="adm-num adm-money"><%= formatINR(p.revenueInPaise) %></td>
                             </tr>
                         <% }); %>
                         </tbody>
                     </table>
+                    </div>
                 <% } %>
             </section>
             <section class="admin__panel">
-                <h3>Top customers</h3>
+                <div class="adm-card__head">
+                    <h3>Top customers</h3>
+                    <small>All time</small>
+                </div>
                 <% if (topCustomers.length === 0) { %>
-                    <p style="color:var(--c-text-3);margin-top:12px">No paid orders yet.</p>
+                    <p style="color:var(--adm-ink-3);margin-top:12px">No paid orders yet.</p>
                 <% } else { %>
+                    <div class="adm-table-scroll">
                     <table class="data-table data-table--cozy">
-                        <thead><tr><th>Customer</th><th>Orders</th><th>Lifetime</th></tr></thead>
+                        <thead><tr><th>Customer</th><th class="adm-num">Orders</th><th class="adm-num">Lifetime</th></tr></thead>
                         <tbody>
                         <% topCustomers.forEach(function(c) { %>
                             <tr>
@@ -115,15 +137,16 @@
                                     <% if (c.user) { %>
                                         <a href="/admin/users/<%= c.user.id %>"><strong><%= c.user.name || c.user.email %></strong></a>
                                     <% } else { %>
-                                        <span style="color:var(--c-text-3)">Unknown user</span>
+                                        <span style="color:var(--adm-ink-3)">Unknown user</span>
                                     <% } %>
                                 </td>
-                                <td><%= c.orderCount %></td>
-                                <td><%= formatINR(c.lifetimeInPaise) %></td>
+                                <td class="adm-num"><%= c.orderCount %></td>
+                                <td class="adm-num adm-money"><%= formatINR(c.lifetimeInPaise) %></td>
                             </tr>
                         <% }); %>
                         </tbody>
                     </table>
+                    </div>
                 <% } %>
             </section>
         </div>
@@ -131,36 +154,44 @@
         <!-- ============== RECENT ROW ============== -->
         <div class="admin__panels admin__panels--equal">
             <section class="admin__panel">
-                <h3>Latest orders</h3>
+                <div class="adm-card__head">
+                    <h3>Latest orders</h3>
+                    <small><a href="/admin/orders" style="color:var(--adm-sage);text-decoration:none">View all →</a></small>
+                </div>
                 <% if (latestOrders.length === 0) { %>
-                    <p style="color:var(--c-text-3);margin-top:12px">No orders yet.</p>
+                    <p style="color:var(--adm-ink-3);margin-top:12px">No orders yet.</p>
                 <% } else { %>
+                    <div class="adm-table-scroll">
                     <table class="data-table data-table--cozy">
-                        <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th></th></tr></thead>
+                        <thead><tr><th>Order</th><th>Customer</th><th class="adm-num">Total</th><th>Status</th><th></th></tr></thead>
                         <tbody>
                         <% latestOrders.forEach(function(o) { %>
                             <tr>
                                 <td><strong><%= o.orderNumber %></strong></td>
                                 <td><%= o.user.name || o.user.email %></td>
-                                <td><%= formatINR(o.totalInPaise) %></td>
+                                <td class="adm-num adm-money"><%= formatINR(o.totalInPaise) %></td>
                                 <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
-                                <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a></td>
+                                <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm btn--ghost">Open</a></td>
                             </tr>
                         <% }); %>
                         </tbody>
                     </table>
+                    </div>
                 <% } %>
             </section>
             <section class="admin__panel">
-                <h3>Recent sign-ups</h3>
+                <div class="adm-card__head">
+                    <h3>Recent sign-ups</h3>
+                    <small><a href="/admin/users" style="color:var(--adm-sage);text-decoration:none">View all →</a></small>
+                </div>
                 <% if (recentUsers.length === 0) { %>
-                    <p style="color:var(--c-text-3);margin-top:12px">No new users yet.</p>
+                    <p style="color:var(--adm-ink-3);margin-top:12px">No new users yet.</p>
                 <% } else { %>
                     <ul class="activity">
                         <% recentUsers.forEach(function(u) { %>
                             <li>
                                 <div>
-                                    <a href="/admin/users/<%= u.id %>"><strong><%= u.name || u.email %></strong></a>
+                                    <a href="/admin/users/<%= u.id %>" style="color:var(--adm-ink);text-decoration:none"><strong><%= u.name || u.email %></strong></a>
                                     <span class="badge badge--<%= u.role.toLowerCase() %>"><%= u.role %></span>
                                 </div>
                                 <small><%= u.createdAt.toISOString().slice(0,16).replace('T',' ') %></small>
@@ -170,13 +201,16 @@
                 <% } %>
 
                 <% if (lowStock.length) { %>
-                    <h3 style="margin-top:24px">Low stock</h3>
+                    <div class="adm-card__head" style="margin-top:24px">
+                        <h3>Low stock</h3>
+                        <small style="color:#B07A00">Action needed</small>
+                    </div>
                     <ul class="lowstock-list">
                         <% lowStock.forEach(function(p) { %>
                             <li>
                                 <span><%= p.name %></span>
                                 <span class="badge badge--<%= p.stock <= 3 ? 'cancelled' : 'pending' %>"><%= p.stock %></span>
-                                <a href="/admin/products/<%= p.id %>/edit" class="btn btn--sm">Edit</a>
+                                <a href="/admin/products/<%= p.id %>/edit" class="btn btn--sm btn--ghost">Edit</a>
                             </li>
                         <% }); %>
                     </ul>
@@ -198,9 +232,7 @@
         Cancelled: <%= statusBreakdown.cancelled %>,
     };
 
-    const fmtINR = (n) => '₹' + Math.round(n / 100).toLocaleString('en-IN');
-
-    // 30-day combined bar+line
+    // 30-day combined bar+line — polished palette (sage primary, ink secondary)
     const sCtx = document.getElementById('salesChart');
     if (sCtx) {
         new Chart(sCtx, {
@@ -212,7 +244,8 @@
                         type: 'bar',
                         label: 'Revenue',
                         data: SERIES.map((s) => s.revenueInPaise / 100),
-                        backgroundColor: 'rgba(255,61,142,0.65)',
+                        backgroundColor: 'rgba(35,134,127,0.78)',
+                        hoverBackgroundColor: 'rgba(27,106,101,1)',
                         borderRadius: 6,
                         yAxisID: 'y',
                     },
@@ -220,11 +253,12 @@
                         type: 'line',
                         label: 'Orders',
                         data: SERIES.map((s) => s.orders),
-                        borderColor: '#282828',
-                        backgroundColor: 'rgba(40,40,40,0.08)',
+                        borderColor: '#1A1F2B',
+                        backgroundColor: 'rgba(26,31,43,0.08)',
                         borderWidth: 2,
-                        tension: 0.3,
-                        pointRadius: 2,
+                        tension: 0.35,
+                        pointRadius: 2.5,
+                        pointBackgroundColor: '#1A1F2B',
                         yAxisID: 'y1',
                     },
                 ],
@@ -234,8 +268,13 @@
                 maintainAspectRatio: false,
                 interaction: { mode: 'index', intersect: false },
                 plugins: {
-                    legend: { display: true, position: 'bottom', labels: { boxWidth: 10 } },
+                    legend: { display: true, position: 'bottom', labels: { boxWidth: 10, color: '#6B7280', font: { size: 11 } } },
                     tooltip: {
+                        backgroundColor: '#1A1F2B',
+                        padding: 10,
+                        titleFont: { size: 11, weight: '600' },
+                        bodyFont: { size: 12 },
+                        cornerRadius: 6,
                         callbacks: {
                             label: (ctx) =>
                                 ctx.dataset.label === 'Revenue'
@@ -248,22 +287,24 @@
                     y: {
                         position: 'left',
                         beginAtZero: true,
-                        ticks: { callback: (v) => '₹' + (v / 1000).toFixed(0) + 'k' },
-                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        ticks: { callback: (v) => '₹' + (v / 1000).toFixed(0) + 'k', color: '#6B7280', font: { size: 10 } },
+                        grid: { color: 'rgba(15,23,42,0.05)' },
+                        border: { display: false },
                     },
                     y1: {
                         position: 'right',
                         beginAtZero: true,
-                        ticks: { precision: 0 },
+                        ticks: { precision: 0, color: '#6B7280', font: { size: 10 } },
                         grid: { drawOnChartArea: false },
+                        border: { display: false },
                     },
-                    x: { grid: { display: false } },
+                    x: { grid: { display: false }, ticks: { color: '#6B7280', font: { size: 10 } }, border: { display: false } },
                 },
             },
         });
     }
 
-    // Status donut
+    // Status donut — refined palette
     const dCtx = document.getElementById('statusChart');
     if (dCtx) {
         const labels = Object.keys(STATUS);
@@ -277,15 +318,23 @@
                     {
                         data: allZero ? [1] : values,
                         backgroundColor: allZero
-                            ? ['#E5E5E7']
-                            : ['#FFB100', '#2C4FB8', '#7C3AED', '#1E9E5C', '#C21B62'],
+                            ? ['#ECECEC']
+                            : ['#FFB100', '#2C4FB8', '#7C3AED', '#23867F', '#C21B62'],
                         borderWidth: 0,
+                        hoverOffset: 4,
                     },
                 ],
             },
             options: {
-                cutout: '64%',
-                plugins: { legend: { display: false } },
+                cutout: '68%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1A1F2B',
+                        padding: 10,
+                        cornerRadius: 6,
+                    },
+                },
                 maintainAspectRatio: false,
             },
         });

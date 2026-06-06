@@ -1,19 +1,34 @@
+<%- include('./_styles') %>
 <div class="admin">
     <%- include('./_nav') %>
     <div class="admin__main">
-        <div class="admin__head">
-            <h1>Reports</h1>
-            <div style="display:flex;gap:8px;align-items:center">
-                <% [7, 14, 30, 60, 90, 180, 365].forEach(function(d) { %>
-                    <a href="/admin/reports?days=<%= d %>" class="btn btn--sm <%= d === days ? '' : 'btn--ghost' %>"><%= d %>d</a>
-                <% }); %>
-                <a href="/admin/reports.csv?days=<%= days %>" class="btn btn--sm btn--ghost">Export CSV</a>
+
+        <div class="adm-hero">
+            <div class="adm-crumbs">
+                <a href="/admin">Admin</a>
+                <span class="sep">/</span>
+                <strong>Reports</strong>
+            </div>
+            <div class="adm-hero__row">
+                <div>
+                    <h1>Reports</h1>
+                    <div class="adm-hero__sub">Revenue, shipping, discounts and product performance over the selected window.</div>
+                </div>
+                <div class="adm-hero__actions">
+                    <div style="display:inline-flex;background:#fff;border:1px solid var(--adm-line);border-radius:8px;padding:3px;gap:2px">
+                        <% [7, 14, 30, 60, 90, 180, 365].forEach(function(d) { %>
+                            <a href="/admin/reports?days=<%= d %>"
+                               style="padding:6px 10px;font-size:0.78rem;font-weight:600;border-radius:6px;text-decoration:none;<%= d === days ? 'background:var(--adm-ink);color:#fff' : 'color:var(--adm-ink-2)' %>"><%= d %>d</a>
+                        <% }); %>
+                    </div>
+                    <a href="/admin/reports.csv?days=<%= days %>" class="btn btn--sm btn--ghost">Export CSV</a>
+                </div>
             </div>
         </div>
 
         <div class="kpis kpis--small">
             <div class="kpi kpi--accent">
-                <span class="kpi__label">Paid revenue · last <%= days %>d</span>
+                <span class="kpi__label">Paid revenue · <%= days %>d</span>
                 <span class="kpi__num"><%= formatINR(paidRevInPaise) %></span>
                 <span class="kpi__delta is-muted"><%= paidOrderCount %> paid orders</span>
             </div>
@@ -35,32 +50,43 @@
         </div>
 
         <section class="admin__panel" style="margin-top:16px">
-            <h3>Revenue &amp; orders · last <%= days %> days</h3>
+            <div class="adm-card__head">
+                <h3>Revenue &amp; orders</h3>
+                <small>Last <%= days %> days</small>
+            </div>
             <div class="chart-wrap"><canvas id="revChart" height="120"></canvas></div>
         </section>
 
-        <section class="admin__panel" style="margin-top:16px">
-            <h3>By product · last <%= days %> days</h3>
+        <section class="admin__panel" style="margin-top:20px">
+            <div class="adm-card__head">
+                <h3>By product</h3>
+                <small>Last <%= days %> days · ranked by revenue</small>
+            </div>
             <% if (!byProduct.length) { %>
-                <p style="color:var(--c-text-3);margin-top:12px">No sales in the window.</p>
+                <p style="color:var(--adm-ink-3);margin-top:12px">No sales in the window.</p>
             <% } else { %>
+                <div class="adm-table-scroll">
                 <table class="data-table data-table--cozy">
-                    <thead><tr><th>Product</th><th>Units</th><th>Revenue</th><th>Share</th></tr></thead>
+                    <thead><tr><th>Product</th><th class="adm-num">Units</th><th class="adm-num">Revenue</th><th>Share</th></tr></thead>
                     <tbody>
                     <% const totalRev = byProduct.reduce((n, p) => n + p.revenueInPaise, 0); %>
                     <% byProduct.forEach(function(p) { %>
+                        <% const pct = totalRev ? Math.round((p.revenueInPaise / totalRev) * 100) : 0; %>
                         <tr>
                             <td><strong><%= p.name %></strong></td>
-                            <td><%= p.units %></td>
-                            <td><%= formatINR(p.revenueInPaise) %></td>
+                            <td class="adm-num"><%= p.units %></td>
+                            <td class="adm-num adm-money"><%= formatINR(p.revenueInPaise) %></td>
                             <td>
-                                <div class="share-bar"><span style="width:<%= totalRev ? Math.round((p.revenueInPaise / totalRev) * 100) : 0 %>%"></span></div>
-                                <small><%= totalRev ? Math.round((p.revenueInPaise / totalRev) * 100) : 0 %>%</small>
+                                <div style="display:flex;align-items:center;gap:10px">
+                                    <div class="share-bar" style="flex:1"><span style="width:<%= pct %>%"></span></div>
+                                    <small style="color:var(--adm-ink-2);font-weight:600;font-variant-numeric:tabular-nums;min-width:32px;text-align:right"><%= pct %>%</small>
+                                </div>
                             </td>
                         </tr>
                     <% }); %>
                     </tbody>
                 </table>
+                </div>
             <% } %>
         </section>
     </div>
@@ -81,7 +107,8 @@
                     type: 'bar',
                     label: 'Revenue (₹)',
                     data: SERIES.map((s) => s.revenueInPaise / 100),
-                    backgroundColor: 'rgba(255,61,142,0.65)',
+                    backgroundColor: 'rgba(35,134,127,0.78)',
+                    hoverBackgroundColor: 'rgba(27,106,101,1)',
                     borderRadius: 6,
                     yAxisID: 'y',
                 },
@@ -89,11 +116,12 @@
                     type: 'line',
                     label: 'Orders',
                     data: SERIES.map((s) => s.orders),
-                    borderColor: '#282828',
-                    backgroundColor: 'rgba(40,40,40,0.08)',
+                    borderColor: '#1A1F2B',
+                    backgroundColor: 'rgba(26,31,43,0.08)',
                     borderWidth: 2,
-                    tension: 0.3,
-                    pointRadius: 2,
+                    tension: 0.35,
+                    pointRadius: 2.5,
+                    pointBackgroundColor: '#1A1F2B',
                     yAxisID: 'y1',
                 },
             ],
@@ -102,11 +130,14 @@
             responsive: true,
             maintainAspectRatio: false,
             interaction: { mode: 'index', intersect: false },
-            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10 } } },
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 10, color: '#6B7280', font: { size: 11 } } },
+                tooltip: { backgroundColor: '#1A1F2B', padding: 10, cornerRadius: 6 },
+            },
             scales: {
-                y: { position: 'left', beginAtZero: true, ticks: { callback: (v) => '₹' + (v / 1000).toFixed(0) + 'k' }, grid: { color: 'rgba(0,0,0,0.04)' } },
-                y1: { position: 'right', beginAtZero: true, ticks: { precision: 0 }, grid: { drawOnChartArea: false } },
-                x: { grid: { display: false } },
+                y: { position: 'left', beginAtZero: true, ticks: { callback: (v) => '₹' + (v / 1000).toFixed(0) + 'k', color: '#6B7280', font: { size: 10 } }, grid: { color: 'rgba(15,23,42,0.05)' }, border: { display: false } },
+                y1: { position: 'right', beginAtZero: true, ticks: { precision: 0, color: '#6B7280', font: { size: 10 } }, grid: { drawOnChartArea: false }, border: { display: false } },
+                x: { grid: { display: false }, ticks: { color: '#6B7280', font: { size: 10 } }, border: { display: false } },
             },
         },
     });

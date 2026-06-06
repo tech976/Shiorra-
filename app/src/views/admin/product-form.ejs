@@ -1,14 +1,33 @@
+<%- include('./_styles') %>
 <div class="admin">
     <%- include('./_nav') %>
     <div class="admin__main">
-        <div class="admin__head">
-            <h1><%= product ? 'Edit product' : 'New product' %></h1>
-            <a href="/admin/products" class="btn btn--ghost btn--sm">← All products</a>
+
+        <div class="adm-hero">
+            <div class="adm-crumbs">
+                <a href="/admin">Admin</a>
+                <span class="sep">/</span>
+                <a href="/admin/products">Products</a>
+                <span class="sep">/</span>
+                <strong><%= product ? (product.name || 'Edit') : 'New product' %></strong>
+            </div>
+            <div class="adm-hero__row">
+                <div>
+                    <h1><%= product ? 'Edit product' : 'New product' %></h1>
+                    <div class="adm-hero__sub"><%= product ? 'Update details, pricing or media.' : 'Add a new SKU to your catalogue.' %></div>
+                </div>
+                <div class="adm-hero__actions">
+                    <a href="/admin/products" class="btn btn--ghost btn--sm">← All products</a>
+                    <% if (product) { %>
+                        <a href="/product/<%= product.slug %>" target="_blank" class="btn btn--ghost btn--sm">View on store ↗</a>
+                    <% } %>
+                </div>
+            </div>
         </div>
 
         <% if (errors) { %>
             <div class="alert alert--error">
-                <strong>Please fix:</strong>
+                <strong>Please fix the following:</strong>
                 <ul>
                     <% errors.forEach(function(e) { %><li><%= e.path.join('.') %>: <%= e.message %></li><% }); %>
                 </ul>
@@ -49,16 +68,22 @@
             <label>SEO description<input name="metaDesc" value="<%= values.metaDesc || '' %>" maxlength="220"></label>
 
             <fieldset class="form-grid__full">
-                <legend>Images</legend>
-                <input type="file" name="images" accept="image/*" multiple>
-                <p class="form-hint">JPEG / PNG / WEBP, up to 8 files. First image is the hero.</p>
+                <legend>Media</legend>
+                <label style="display:block;border:2px dashed var(--adm-line);border-radius:10px;padding:24px;background:#fff;text-align:center;cursor:pointer;transition:border-color 0.15s,background 0.15s">
+                    <div style="font-size:1.8rem;color:#C9CDD6;margin-bottom:6px">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                    </div>
+                    <div style="text-transform:none;letter-spacing:normal;color:var(--adm-ink);font-size:0.92rem;font-weight:600">Click to upload images</div>
+                    <div style="color:var(--adm-ink-3);font-size:0.78rem;text-transform:none;letter-spacing:normal;font-weight:400;margin-top:4px">JPEG, PNG or WEBP · up to 8 files · first image is the hero</div>
+                    <input type="file" name="images" accept="image/*" multiple style="display:none">
+                </label>
                 <% if (product && product.images && product.images.length) { %>
-                    <div class="product-images-grid">
+                    <div class="product-images-grid" style="margin-top:16px">
                         <% product.images.forEach(function(img) { %>
-                            <div class="product-image-card">
-                                <img src="<%= img.url %>" alt="">
-                                <form action="/admin/products/<%= product.id %>/images/<%= img.id %>?_method=DELETE" method="post">
-                                    <button class="btn btn--sm btn--danger">Delete</button>
+                            <div class="product-image-card" style="border:1px solid var(--adm-line);border-radius:10px;padding:6px;background:#fff">
+                                <img src="<%= img.url %>" alt="" style="border-radius:6px">
+                                <form action="/admin/products/<%= product.id %>/images/<%= img.id %>?_method=DELETE" method="post" style="margin-top:6px">
+                                    <button class="btn btn--sm btn--danger" style="width:100%">Delete</button>
                                 </form>
                             </div>
                         <% }); %>
@@ -66,8 +91,10 @@
                 <% } %>
             </fieldset>
 
-            <div class="form-grid__full">
-                <button class="btn btn--lg" type="submit"><%= product ? 'Save changes' : 'Create product' %></button>
+            <div class="form-grid__full adm-save-bar" style="grid-column:1/-1">
+                <span class="adm-save-bar__hint">All fields auto-saved when you click <%= product ? 'Save changes' : 'Create' %>.</span>
+                <a href="/admin/products" class="btn btn--sm btn--ghost">Cancel</a>
+                <button class="btn btn--sm adm-btn-accent" type="submit"><%= product ? 'Save changes' : 'Create product' %></button>
             </div>
         </form>
     </div>

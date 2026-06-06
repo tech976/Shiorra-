@@ -1,48 +1,92 @@
+<%- include('./_styles') %>
 <div class="admin">
     <%- include('./_nav') %>
     <div class="admin__main">
-        <div class="admin__head">
-            <h1>Order <%= order.orderNumber %></h1>
-            <div style="display:flex;gap:8px">
-                <a href="/admin/orders" class="btn btn--ghost btn--sm">← All orders</a>
-                <a href="/admin/orders/<%= order.id %>/invoice" target="_blank" class="btn btn--sm">Print invoice</a>
+
+        <div class="adm-hero">
+            <div class="adm-crumbs">
+                <a href="/admin">Admin</a>
+                <span class="sep">/</span>
+                <a href="/admin/orders">Orders</a>
+                <span class="sep">/</span>
+                <strong><%= order.orderNumber %></strong>
+            </div>
+            <div class="adm-hero__row">
+                <div>
+                    <h1>Order <%= order.orderNumber %></h1>
+                    <div class="adm-hero__sub" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                        <span><%= order.createdAt.toISOString().slice(0,16).replace('T',' ') %></span>
+                        <span style="color:#CBD5E1">·</span>
+                        <span class="badge badge--<%= order.status.toLowerCase() %>"><%= order.status %></span>
+                        <span class="badge badge--<%= order.paymentStatus.toLowerCase() %>"><%= order.paymentStatus %></span>
+                    </div>
+                </div>
+                <div class="adm-hero__actions">
+                    <a href="/admin/orders" class="btn btn--ghost btn--sm">← All orders</a>
+                    <a href="/admin/orders/<%= order.id %>/invoice" target="_blank" class="btn btn--sm">Print invoice</a>
+                </div>
             </div>
         </div>
 
         <div class="admin__panels">
             <section class="admin__panel">
-                <h3>Items</h3>
+                <div class="adm-card__head">
+                    <h3>Items</h3>
+                    <small><%= order.items.length %> line<%= order.items.length === 1 ? '' : 's' %></small>
+                </div>
+                <div class="adm-table-scroll">
                 <table class="data-table">
-                    <thead><tr><th>Product</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead>
+                    <thead><tr><th>Product</th><th class="adm-num">Qty</th><th class="adm-num">Unit</th><th class="adm-num">Total</th></tr></thead>
                     <tbody>
                     <% order.items.forEach(function(it) { %>
-                        <tr><td><%= it.name %></td><td><%= it.quantity %></td><td><%= formatINR(it.priceInPaise) %></td><td><%= formatINR(it.totalInPaise) %></td></tr>
+                        <tr>
+                            <td><strong><%= it.name %></strong></td>
+                            <td class="adm-num"><%= it.quantity %></td>
+                            <td class="adm-num"><%= formatINR(it.priceInPaise) %></td>
+                            <td class="adm-num adm-money"><%= formatINR(it.totalInPaise) %></td>
+                        </tr>
                     <% }); %>
                     </tbody>
                 </table>
-                <div class="cart__row"><span>Subtotal</span><span><%= formatINR(order.subtotalInPaise) %></span></div>
-                <div class="cart__row"><span>Shipping</span><span><%= formatINR(order.shippingInPaise) %></span></div>
-                <% if (order.discountInPaise > 0) { %>
-                    <div class="cart__row"><span>Discount<% if (order.couponCode) { %> · 🎟 <%= order.couponCode %><% } %></span><span style="color:var(--c-success)">-<%= formatINR(order.discountInPaise) %></span></div>
-                <% } %>
-                <div class="cart__row cart__row--total"><span>Total</span><span><%= formatINR(order.totalInPaise) %></span></div>
+                </div>
 
-                <h3 style="margin-top:24px">Admin notes (private)</h3>
-                <form action="/admin/orders/<%= order.id %>/notes" method="post" class="form-grid">
-                    <label class="form-grid__full">Internal notes — only admins see this
+                <div style="margin-top:18px;padding:18px 20px;background:var(--adm-line-2);border-radius:10px">
+                    <div class="cart__row"><span>Subtotal</span><span class="adm-money"><%= formatINR(order.subtotalInPaise) %></span></div>
+                    <div class="cart__row"><span>Shipping</span><span class="adm-money"><%= formatINR(order.shippingInPaise) %></span></div>
+                    <% if (order.discountInPaise > 0) { %>
+                        <div class="cart__row"><span>Discount<% if (order.couponCode) { %> · 🎟 <%= order.couponCode %><% } %></span><span style="color:var(--c-success);font-weight:600">-<%= formatINR(order.discountInPaise) %></span></div>
+                    <% } %>
+                    <div class="cart__row cart__row--total"><span>Total</span><span class="adm-money" style="font-size:1.1rem"><%= formatINR(order.totalInPaise) %></span></div>
+                </div>
+
+                <hr class="adm-divider">
+
+                <div class="adm-card__head">
+                    <h3>Admin notes</h3>
+                    <small>Private · Internal only</small>
+                </div>
+                <form action="/admin/orders/<%= order.id %>/notes" method="post" class="form-grid form-grid--admin" style="padding:18px">
+                    <label class="form-grid__full">Internal notes
                         <textarea name="adminNotes" rows="3" placeholder="e.g. customer requested gift wrap; out of stock — restock by Fri…"><%= order.adminNotes || '' %></textarea>
                     </label>
-                    <div class="form-grid__full"><button class="btn btn--sm">Save notes</button></div>
+                    <div class="form-grid__full" style="text-align:right"><button class="btn btn--sm">Save notes</button></div>
                 </form>
             </section>
 
             <section class="admin__panel">
-                <h3>Customer</h3>
-                <p><strong><a href="/admin/users/<%= order.user.id %>"><%= order.user.name || order.user.email %></a></strong><br><%= order.user.email %><br><%= order.user.phone || '' %></p>
+                <div class="adm-card__head">
+                    <h3>Customer</h3>
+                    <small><a href="/admin/users/<%= order.user.id %>" style="color:var(--adm-sage);text-decoration:none">Profile →</a></small>
+                </div>
+                <p style="line-height:1.7">
+                    <strong style="color:var(--adm-ink);font-size:0.96rem"><%= order.user.name || order.user.email %></strong><br>
+                    <span style="color:var(--adm-ink-2)"><%= order.user.email %></span><br>
+                    <span style="color:var(--adm-ink-3)"><%= order.user.phone || '—' %></span>
+                </p>
 
                 <% if (order.shippingAddress) { %>
-                    <h4 style="margin-top:14px">Shipping to</h4>
-                    <address class="address-block">
+                    <h4 style="margin-top:18px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:var(--adm-ink-3);font-weight:700">Shipping to</h4>
+                    <address class="address-block" style="margin-top:8px">
                         <%= order.shippingAddress.fullName %><br>
                         <%= order.shippingAddress.line1 %><br>
                         <% if (order.shippingAddress.line2) { %><%= order.shippingAddress.line2 %><br><% } %>
@@ -52,22 +96,35 @@
                     </address>
                 <% } %>
 
-                <h3 style="margin-top:18px">Status</h3>
-                <form action="/admin/orders/<%= order.id %>/status" method="post" class="form-grid form-grid--inline">
-                    <select name="status">
+                <hr class="adm-divider">
+
+                <div class="adm-card__head">
+                    <h3>Update status</h3>
+                </div>
+                <form action="/admin/orders/<%= order.id %>/status" method="post" class="form-grid form-grid--inline" style="gap:8px">
+                    <select name="status" style="flex:1;padding:9px 12px;border:1px solid var(--adm-line);border-radius:8px;background:#fff;color:var(--adm-ink);font-size:0.9rem">
                         <% ['PENDING','PAID','PROCESSING','SHIPPED','DELIVERED','CANCELLED','REFUNDED'].forEach(function(s) { %>
                             <option value="<%= s %>" <%= order.status === s ? 'selected' : '' %>><%= s %></option>
                         <% }); %>
                     </select>
-                    <button class="btn">Update</button>
+                    <button class="btn btn--sm">Update</button>
                 </form>
 
-                <h3 style="margin-top:18px">Payment</h3>
-                <p>Razorpay order: <code><%= order.razorpayOrderId || '—' %></code></p>
-                <p>Payment id: <code><%= order.razorpayPaymentId || '—' %></code></p>
-                <p>Status: <span class="badge badge--<%= order.paymentStatus.toLowerCase() %>"><%= order.paymentStatus %></span></p>
+                <hr class="adm-divider">
+
+                <div class="adm-card__head">
+                    <h3>Payment</h3>
+                </div>
+                <dl class="kvp">
+                    <dt>Razorpay order</dt>
+                    <dd><code style="background:var(--adm-line-2);padding:2px 7px;border-radius:5px;font-size:0.78rem;color:var(--adm-ink-2)"><%= order.razorpayOrderId || '—' %></code></dd>
+                    <dt>Payment id</dt>
+                    <dd><code style="background:var(--adm-line-2);padding:2px 7px;border-radius:5px;font-size:0.78rem;color:var(--adm-ink-2)"><%= order.razorpayPaymentId || '—' %></code></dd>
+                    <dt>Status</dt>
+                    <dd><span class="badge badge--<%= order.paymentStatus.toLowerCase() %>"><%= order.paymentStatus %></span></dd>
+                </dl>
                 <% if (order.notes) { %>
-                    <p style="color:var(--c-text-3);font-size:0.84rem"><em><%= order.notes %></em></p>
+                    <p style="color:var(--adm-ink-3);font-size:0.84rem;margin-top:10px;padding:10px 12px;background:var(--adm-line-2);border-radius:8px"><em><%= order.notes %></em></p>
                 <% } %>
             </section>
         </div>

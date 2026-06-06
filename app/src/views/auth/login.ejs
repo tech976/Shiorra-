@@ -1,50 +1,191 @@
 <style>
-  /* Scoped mobile-UX tuning for login (does not touch shared app.css) */
-  .auth-page .container--narrow { max-width: 480px; min-width: 0; }
-  .auth-page h1 {
-    font-size: clamp(26px, 4vw, 34px);
-    letter-spacing: -.01em;
-    margin: 0 0 4px;
+  /* ============================================================
+     Login — premium card layout (Apple / Stripe quality)
+     Scoped to .auth-page so it cannot leak into app.css
+     ============================================================ */
+  .auth-page {
+    background: #FAFAFA;
+    padding: 64px 20px 96px;
+    min-height: calc(100vh - 160px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
   }
-  .auth-page .auth__form { gap: 16px; margin: 28px 0 18px; }
-  .auth-page .auth__form label { gap: 8px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
+  .auth-page .auth-card {
+    position: relative;
+    width: 100%;
+    max-width: 448px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 20px;
+    padding: 44px 40px 36px;
+    box-shadow:
+      0 1px 2px rgba(15,23,42,0.04),
+      0 12px 32px -8px rgba(15,23,42,0.08),
+      0 32px 64px -16px rgba(15,23,42,0.10);
+  }
+  .auth-page .auth-card::before {
+    content: "";
+    position: absolute;
+    inset: -80px -60px auto auto;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(35,134,127,0.18) 0%, rgba(35,134,127,0) 70%);
+    filter: blur(8px);
+    z-index: -1;
+    pointer-events: none;
+  }
+  .auth-page .auth-card__logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .auth-page .auth-card__logo img {
+    height: 28px;
+    width: auto;
+    display: block;
+  }
+  .auth-page h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #0F172A;
+    text-align: center;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+  .auth-page .auth-card__sub {
+    text-align: center;
+    color: #64748B;
+    font-size: 14.5px;
+    line-height: 1.5;
+    margin: 0 0 32px;
+  }
+  .auth-page .auth__form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0 0 24px;
+  }
+  .auth-page .auth__form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #475569;
+  }
+  .auth-page .auth__form .label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .auth-page .auth__form .label-row a {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    font-weight: 500;
+    color: #23867F;
+    text-decoration: none;
+  }
+  .auth-page .auth__form .label-row a:hover { text-decoration: underline; }
   .auth-page .auth__form input {
     height: 50px;
-    padding: 14px 16px;
-    font-size: 16px;            /* prevent iOS zoom on focus */
+    padding: 0 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #0F172A;
+    background: #fff;
+    border: 1px solid #E2E8F0;
     border-radius: 12px;
-    transition: border-color .15s ease, box-shadow .15s ease;
+    transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    -webkit-appearance: none;
+    appearance: none;
   }
+  .auth-page .auth__form input::placeholder { color: #94A3B8; }
+  .auth-page .auth__form input:hover { border-color: #CBD5E1; }
   .auth-page .auth__form input:focus {
     outline: none;
     border-color: #23867F;
-    box-shadow: 0 0 0 4px rgba(35,134,127,.14);
+    box-shadow: 0 0 0 4px rgba(35,134,127,0.10);
+    background: #fff;
   }
   .auth-page .auth__form button[type="submit"] {
     width: 100%;
-    min-height: 52px;
+    height: 52px;
+    margin-top: 8px;
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
-    margin-top: 6px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: #fff;
+    background: #0F172A;
+    border: 0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background .15s ease, transform .12s ease, box-shadow .15s ease;
   }
-  .auth-page .auth__alt { font-size: 14.5px; margin-top: 20px; }
-  .auth-page .auth__alt a { padding: 6px 2px; display: inline-block; }
+  .auth-page .auth__form button[type="submit"]:hover {
+    background: #1E293B;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px -4px rgba(15,23,42,0.30);
+  }
+  .auth-page .auth__form button[type="submit"]:active { transform: translateY(0); }
+  .auth-page .auth__alt {
+    text-align: center;
+    margin: 0;
+    padding-top: 4px;
+    font-size: 14px;
+    color: #64748B;
+  }
+  .auth-page .auth__alt a {
+    color: #23867F;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 6px 2px;
+  }
+  .auth-page .auth__alt a:hover { text-decoration: underline; }
+
+  /* Hide footer top padding bleed on auth pages */
+  body:has(.auth-page) .site-footer { margin-top: 0; }
 
   @media (max-width: 640px) {
-    .auth-page { padding: 36px 0 56px; }
-    .auth-page h1 { font-size: 26px; }
-    .auth-page .auth__form { gap: 18px; }
+    .auth-page { padding: 32px 16px 56px; min-height: auto; }
+    .auth-page .auth-card { padding: 36px 24px 28px; border-radius: 18px; }
+    .auth-page .auth-card::before { display: none; }
+    .auth-page h1 { font-size: 24px; }
+    .auth-page .auth-card__sub { margin-bottom: 28px; font-size: 14px; }
+    .auth-page .auth__form { gap: 16px; }
     .auth-page .auth__form input { height: 52px; font-size: 16px; }
-    .auth-page .auth__form button[type="submit"] { min-height: 54px; font-size: 17px; }
+    .auth-page .auth__form button[type="submit"] { height: 54px; font-size: 16px; }
   }
 </style>
 <section class="auth auth-page">
-    <div class="container container--narrow">
-        <h1>Log in</h1>
-        <form action="/login" method="post" class="auth__form">
-            <label>Email<input type="email" name="email" required autocomplete="email" inputmode="email"></label>
-            <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
-            <button type="submit" class="btn btn--lg btn--full">Log in</button>
+    <div class="auth-card">
+        <div class="auth-card__logo">
+            <img src="/img/logo/logo-green.png" alt="Shiorra">
+        </div>
+        <h1>Log in to your account</h1>
+        <p class="auth-card__sub">Welcome back. Enter your details to continue.</p>
+        <form action="/login" method="post" class="auth__form" novalidate>
+            <label>
+                Email
+                <input type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@example.com">
+            </label>
+            <label>
+                <span class="label-row">
+                    <span>Password</span>
+                    <a href="/forgot-password" tabindex="-1">Forgot password?</a>
+                </span>
+                <input type="password" name="password" required autocomplete="current-password" placeholder="••••••••">
+            </label>
+            <button type="submit">Log in</button>
         </form>
-        <p class="auth__alt">No account yet? <a href="/register">Create one</a>.</p>
+        <p class="auth__alt">Don't have an account? <a href="/register">Sign up</a></p>
     </div>
 </section>

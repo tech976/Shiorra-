@@ -1,11 +1,59 @@
 <aside class="admin__nav">
-    <h4>Admin</h4>
-    <a href="/admin" class="<%= currentPath === '/admin' ? 'active' : '' %>">Dashboard</a>
-    <a href="/admin/products" class="<%= currentPath.startsWith('/admin/products') ? 'active' : '' %>">Products</a>
-    <a href="/admin/orders" class="<%= currentPath.startsWith('/admin/orders') ? 'active' : '' %>">Orders</a>
-    <a href="/admin/users" class="<%= currentPath.startsWith('/admin/users') ? 'active' : '' %>">Users</a>
-    <a href="/admin/coupons" class="<%= currentPath.startsWith('/admin/coupons') ? 'active' : '' %>">Coupons</a>
-    <a href="/admin/reports" class="<%= currentPath.startsWith('/admin/reports') ? 'active' : '' %>">Reports</a>
+    <div class="adm-nav-brand">
+        <span class="adm-dot"></span>
+        <span>
+            Shiōrra
+            <small>Admin Console</small>
+        </span>
+    </div>
+
+    <div class="adm-nav-section">Overview</div>
+    <a href="/admin" class="<%= currentPath === '/admin' ? 'active' : '' %>">
+        <span class="adm-ico" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        </span>
+        Dashboard
+    </a>
+    <a href="/admin/reports" class="<%= currentPath.startsWith('/admin/reports') ? 'active' : '' %>">
+        <span class="adm-ico" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+        </span>
+        Reports
+    </a>
+
+    <div class="adm-nav-section">Store</div>
+    <a href="/admin/orders" class="<%= currentPath.startsWith('/admin/orders') ? 'active' : '' %>">
+        <span class="adm-ico" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </span>
+        Orders
+    </a>
+    <a href="/admin/products" class="<%= currentPath.startsWith('/admin/products') ? 'active' : '' %>">
+        <span class="adm-ico" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8.5v7a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 15.5v-7a2 2 0 0 1 1-1.73l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8.5z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+        </span>
+        Products
+    </a>
+    <a href="/admin/coupons" class="<%= currentPath.startsWith('/admin/coupons') ? 'active' : '' %>">
+        <span class="adm-ico" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a2 2 0 0 1 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M9 11v2"/><path d="M15 11v2"/></svg>
+        </span>
+        Coupons
+    </a>
+
+    <div class="adm-nav-section">People</div>
+    <a href="/admin/users" class="<%= currentPath.startsWith('/admin/users') ? 'active' : '' %>">
+        <span class="adm-ico" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </span>
+        Customers
+    </a>
+
     <hr>
-    <a href="/" class="admin__nav-back">← Back to site</a>
+    <a href="/" class="admin__nav-back">
+        <span class="adm-ico" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </span>
+        Back to store
+    </a>
 </aside>
