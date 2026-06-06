@@ -11,6 +11,7 @@ router.post('/profile', ctrl.updateProfile);
 router.post('/password', ctrl.changePassword);
 router.get('/orders', ctrl.orders);
 router.get('/orders/:orderNumber', ctrl.orderDetail);
+router.get('/orders/:orderNumber/invoice', ctrl.orderInvoice);
 
 router.get('/addresses', ctrl.addresses);
 router.get('/addresses/new', ctrl.addressNew);

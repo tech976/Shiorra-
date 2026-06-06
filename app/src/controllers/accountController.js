@@ -47,6 +47,28 @@ exports.orderDetail = async (req, res, next) => {
   }
 };
 
+// Customer-facing invoice — reuses the polished admin/order-invoice template
+// (it's just a printable document; no admin chrome in the view). Scoped to
+// the current user so people can't view each other's invoices by guessing
+// order numbers.
+exports.orderInvoice = async (req, res, next) => {
+  try {
+    const order = await prisma.order.findFirst({
+      where: { orderNumber: req.params.orderNumber, userId: req.user.id },
+      include: { user: true, items: true, shippingAddress: true, coupon: true },
+    });
+    if (!order)
+      return res.status(404).render('pages/error', { title: 'Not found', status: 404, message: 'Order not found.' });
+    res.render('admin/order-invoice', {
+      title: `Invoice · ${order.orderNumber}`,
+      order,
+      layout: false,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.addresses = async (req, res, next) => {
   try {
     const addresses = await prisma.address.findMany({
