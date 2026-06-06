@@ -413,6 +413,84 @@ select {
         min-height: 44px;
     }
 }
+
+/* =========================================================
+   Global mobile-density patch — sweep ≤540px so content fits
+   without overflow on Indian-mobile (360-414px). Aggressive
+   reductions to typography, padding, and gaps that pages may
+   set generously for desktop without thinking about narrow
+   phones. Override-strength selectors with !important so the
+   patch wins over inline page styles.
+   ========================================================= */
+@media (max-width: 540px) {
+    /* Cap every h1/h2 so flat font-size declarations don't overflow */
+    h1, .page-hero h1, .acct-hero h1, .ed-hero h1 {
+        font-size: clamp(26px, 7.4vw, 34px) !important;
+        line-height: 1.12 !important;
+        word-wrap: break-word;
+        max-width: 100% !important;
+    }
+    h2 { font-size: clamp(22px, 6.2vw, 28px) !important; line-height: 1.18 !important; word-wrap: break-word; }
+    h3 { font-size: clamp(18px, 5.2vw, 22px) !important; line-height: 1.2 !important; }
+
+    /* Container horizontal padding stays tight so cards aren't cramped */
+    .container { padding-left: 16px !important; padding-right: 16px !important; }
+
+    /* Page-hero / section-hero blocks: cut padding ~50% so content
+       reaches the fold faster. Pages that set their own hero padding
+       still inherit this floor due to !important. */
+    .page-hero, .acct-hero {
+        padding-top: 36px !important;
+        padding-bottom: 24px !important;
+    }
+    .page-hero p, .acct-hero p { font-size: 14.5px !important; line-height: 1.55 !important; }
+
+    /* Sections in general: tighten vertical breathing */
+    .section, section.s, .acct-shell {
+        padding-top: clamp(32px, 8vw, 48px) !important;
+        padding-bottom: clamp(32px, 8vw, 48px) !important;
+    }
+
+    /* Cards / panels: reduce internal padding so content area is generous */
+    .acct-panel, .card, .product-card__body,
+    .symptom-card, .power-card, .bvit-card, .mn-card,
+    .tl-card, .root-card, .summary-card, .co-section,
+    .acct-card, .acct-stat {
+        padding: 18px !important;
+    }
+
+    /* Grids: shrink gaps */
+    .acct-grid, .acct-stats, .acct-orders,
+    .symptoms-grid, .power-grid, .bvit-grid, .mn-grid,
+    .formula-list, .timeline-grid, .root-grid {
+        gap: 14px !important;
+    }
+
+    /* Long product titles, order numbers, emails — never overflow */
+    body, p, li, span, td, a { overflow-wrap: anywhere; }
+
+    /* Tables in admin or order pages — let them scroll horizontally */
+    .adm-table-wrap, .so-card, .od-section-card, table {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Floor text size on body copy — never below 14px */
+    p, li { font-size: 14.5px; line-height: 1.55; }
+
+    /* Buttons: full-width inside content where they make sense */
+    .btn { padding: 12px 18px; font-size: 14px; }
+}
+
+/* Very-narrow phones (320px-360px) — one more step tighter */
+@media (max-width: 380px) {
+    .container { padding-left: 14px !important; padding-right: 14px !important; }
+    h1, .page-hero h1, .acct-hero h1, .ed-hero h1 {
+        font-size: clamp(24px, 7vw, 30px) !important;
+    }
+    .acct-panel, .card, .summary-card, .acct-card { padding: 16px !important; }
+}
 .form-grid input:focus,
 .form-grid textarea:focus,
 .form-grid select:focus {
