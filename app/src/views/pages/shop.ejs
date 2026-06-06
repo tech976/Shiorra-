@@ -1,3 +1,29 @@
+<style>
+  /* shop.ejs — mobile-first surgical augmentations.
+     Base layout lives in /css/style.css; this only tunes <=720px viewports. */
+  .page-hero h1{font-size:clamp(34px,8vw,64px);line-height:1.05;letter-spacing:-0.02em}
+  .page-hero .eyebrow{font-size:clamp(11px,2.6vw,13px)}
+  .page-hero{padding:clamp(40px,9vw,96px) 0 clamp(24px,6vw,48px)}
+
+  /* Product grid stacks to 1-col on phones, 2-col on small tablets */
+  @media (max-width: 1024px){
+    .product-grid{grid-template-columns:repeat(2,1fr)!important;gap:clamp(16px,3vw,28px)!important}
+  }
+  @media (max-width: 720px){
+    .product-grid{grid-template-columns:1fr!important;gap:clamp(18px,5vw,24px)!important}
+    .section{padding:clamp(40px,10vw,80px) 0!important}
+    .container{padding-left:clamp(16px,5vw,24px);padding-right:clamp(16px,5vw,24px)}
+  }
+  /* Touch-target safety for every card-level link/button reused on this page */
+  @media (max-width: 720px){
+    .product-card__cta,
+    .product-card a.btn,
+    .product-card__media{min-height:44px}
+    .product-card__cta{padding:14px 18px;min-height:48px}
+    .product-card__name{font-size:clamp(17px,4.4vw,21px)}
+  }
+</style>
+
 <section class="page-hero">
     <div class="container">
         <span class="eyebrow">Shop</span>

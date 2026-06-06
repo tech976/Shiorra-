@@ -1,8 +1,47 @@
-<section class="auth">
+<style>
+  /* Scoped mobile-UX tuning for login (does not touch shared app.css) */
+  .auth-page .container--narrow { max-width: 480px; min-width: 0; }
+  .auth-page h1 {
+    font-size: clamp(26px, 4vw, 34px);
+    letter-spacing: -.01em;
+    margin: 0 0 4px;
+  }
+  .auth-page .auth__form { gap: 16px; margin: 28px 0 18px; }
+  .auth-page .auth__form label { gap: 8px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
+  .auth-page .auth__form input {
+    height: 50px;
+    padding: 14px 16px;
+    font-size: 16px;            /* prevent iOS zoom on focus */
+    border-radius: 12px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .auth-page .auth__form input:focus {
+    outline: none;
+    border-color: #23867F;
+    box-shadow: 0 0 0 4px rgba(35,134,127,.14);
+  }
+  .auth-page .auth__form button[type="submit"] {
+    width: 100%;
+    min-height: 52px;
+    font-size: 16px;
+    margin-top: 6px;
+  }
+  .auth-page .auth__alt { font-size: 14.5px; margin-top: 20px; }
+  .auth-page .auth__alt a { padding: 6px 2px; display: inline-block; }
+
+  @media (max-width: 640px) {
+    .auth-page { padding: 36px 0 56px; }
+    .auth-page h1 { font-size: 26px; }
+    .auth-page .auth__form { gap: 18px; }
+    .auth-page .auth__form input { height: 52px; font-size: 16px; }
+    .auth-page .auth__form button[type="submit"] { min-height: 54px; font-size: 17px; }
+  }
+</style>
+<section class="auth auth-page">
     <div class="container container--narrow">
         <h1>Log in</h1>
         <form action="/login" method="post" class="auth__form">
-            <label>Email<input type="email" name="email" required autocomplete="email"></label>
+            <label>Email<input type="email" name="email" required autocomplete="email" inputmode="email"></label>
             <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
             <button type="submit" class="btn btn--lg btn--full">Log in</button>
         </form>

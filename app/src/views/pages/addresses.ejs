@@ -213,6 +213,55 @@
     .acct-addr--new:hover .acct-addr--new__plus { border-color: var(--acct-accent); }
     .acct-addr--new__lbl { font-size: 14.5px; font-weight: 600; letter-spacing: -0.005em; }
     .acct-addr--new__sub { font-size: 12.5px; color: var(--acct-muted-2); }
+
+    /* ───────── Mobile tightening ───────── */
+    @media (max-width: 720px) {
+        .acct-hero { padding: 40px 0 28px; }
+        .acct-hero__eyebrow { margin-bottom: 12px; }
+        .acct-hero h1 { font-size: 28px; margin-bottom: 10px; }
+        .acct-hero p { font-size: 14.5px; }
+
+        .acct-shell { padding: 24px 0 56px; }
+
+        .acct-nav__card { padding: 14px 12px; border-radius: 18px; }
+        .acct-nav__head { padding: 4px 8px 12px; margin-bottom: 8px; }
+        .acct-nav__item, .acct-nav__signout {
+            padding: 13px 12px;
+            min-height: 44px;
+            font-size: 15px;
+        }
+
+        .acct-panel { padding: 20px 18px; border-radius: 18px; }
+        .acct-panel__head { margin-bottom: 16px; }
+        .acct-panel__title { font-size: 17px; }
+        .acct-panel__sub { font-size: 13.5px; }
+
+        /* Address grid: tighter gap */
+        .acct-addrgrid { gap: 14px; }
+        .acct-addr { padding: 20px 18px 16px; border-radius: 18px; }
+        .acct-addr__top { margin-bottom: 12px; }
+        .acct-addr__actions {
+            gap: 8px;
+            padding-top: 14px;
+            margin-top: 14px;
+        }
+
+        /* Buttons: ≥44px tap target everywhere */
+        .acct-btn { min-height: 44px; padding: 12px 20px; font-size: 14.5px; }
+        .acct-btn--sm { min-height: 40px; padding: 10px 16px; font-size: 13px; }
+
+        /* Each action button takes its share of the row for easy thumb reach */
+        .acct-addr__actions .acct-btn,
+        .acct-addr__actions .acct-inline-form { flex: 1 1 auto; }
+        .acct-addr__actions .acct-inline-form .acct-btn { width: 100%; }
+
+        .acct-addr--new { min-height: 160px; }
+    }
+
+    /* Full-width address cards on narrow phones */
+    @media (max-width: 480px) {
+        .acct-addrgrid { grid-template-columns: 1fr; }
+    }
 </style>
 
 <section class="acct-hero">

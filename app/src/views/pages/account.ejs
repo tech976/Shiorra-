@@ -377,6 +377,76 @@
         color: var(--acct-accent);
     }
     .acct-addr--new__lbl { font-size: 14.5px; font-weight: 600; letter-spacing: -0.005em; }
+
+    /* ───────── Mobile tightening (≤720px / ≤520px / ≤380px) ───────── */
+    @media (max-width: 720px) {
+        /* Hero: reclaim above-the-fold real estate */
+        .acct-hero { padding: 40px 0 28px; }
+        .acct-hero__eyebrow { margin-bottom: 12px; }
+        .acct-hero h1 { font-size: 28px; margin-bottom: 10px; }
+        .acct-hero p { font-size: 14.5px; }
+
+        /* Shell: tighter top/bottom rhythm */
+        .acct-shell { padding: 24px 0 56px; }
+
+        /* Sidebar nav: smaller padding so it doesn't dominate */
+        .acct-nav__card { padding: 14px 12px; border-radius: 18px; }
+        .acct-nav__head { padding: 4px 8px 12px; margin-bottom: 8px; }
+        .acct-nav__item, .acct-nav__signout {
+            padding: 13px 12px;
+            min-height: 44px;
+            font-size: 15px;
+        }
+
+        /* Panels: tighter horizontal padding */
+        .acct-panel { padding: 20px 18px; border-radius: 18px; }
+        .acct-panel__head { margin-bottom: 16px; }
+        .acct-panel__title { font-size: 17px; }
+        .acct-panel__sub { font-size: 13.5px; }
+
+        /* Stat cards: 2-up so orders + addresses sit side by side, admin wraps below */
+        .acct-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .acct-stat { padding: 18px 16px 16px; border-radius: 16px; }
+        .acct-stat__num { font-size: 24px; }
+        .acct-stat__lbl { font-size: 12px; }
+        .acct-stat__arrow { top: 14px; right: 14px; }
+
+        /* Form inputs: 16px = no iOS zoom on focus; bigger tap padding */
+        .acct-field input,
+        .acct-field select,
+        .acct-field textarea {
+            font-size: 16px;
+            padding: 14px 14px;
+        }
+
+        /* Buttons fill row on mobile for confident tap targets */
+        .acct-btn { padding: 14px 22px; font-size: 15px; min-height: 44px; }
+        .acct-actions .acct-btn { flex: 1 1 auto; }
+
+        /* Order list rows: name+pill on row 1, date+total on row 2 */
+        .acct-orderlist a {
+            grid-template-columns: 1fr auto;
+            row-gap: 6px;
+            padding: 14px 2px;
+            min-height: 44px;
+        }
+        .acct-order__num { font-size: 14px; }
+        .acct-order__date { font-size: 12.5px; }
+        .acct-order__total { font-size: 14px; }
+        .acct-pill { font-size: 11px; padding: 4px 9px; }
+    }
+
+    @media (max-width: 520px) {
+        /* 3-up KPI grid: keep orders/addresses side-by-side, admin spans full row below */
+        .acct-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .acct-stats > a:nth-child(3) { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 380px) {
+        /* Hard fallback: stack everything for narrow viewports */
+        .acct-stats { grid-template-columns: 1fr; }
+        .acct-stats > a:nth-child(3) { grid-column: auto; }
+    }
 </style>
 
 <section class="acct-hero">

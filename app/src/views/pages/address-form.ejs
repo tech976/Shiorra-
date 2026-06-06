@@ -170,6 +170,45 @@
     .acct-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(40,40,40,0.16); background: #000; border-color: #000; color: #fff; }
     .acct-btn--ghost { background: transparent; color: var(--acct-ink); border-color: var(--acct-line); }
     .acct-btn--ghost:hover { background: var(--acct-bg-soft); color: var(--acct-ink); border-color: #D8D8D8; box-shadow: none; }
+
+    /* ───────── Mobile tightening ───────── */
+    @media (max-width: 720px) {
+        .acct-hero { padding: 36px 0 24px; }
+        .acct-hero__eyebrow { margin-bottom: 12px; font-size: 10.5px; }
+        .acct-hero h1 { font-size: 26px; margin-bottom: 8px; }
+        .acct-hero p { font-size: 14.5px; }
+
+        .acct-shell { padding: 24px 0 56px; }
+
+        .acct-nav__card { padding: 14px 12px; border-radius: 18px; }
+        .acct-nav__head { padding: 4px 8px 12px; margin-bottom: 8px; }
+        .acct-nav__item, .acct-nav__signout {
+            padding: 13px 12px;
+            min-height: 44px;
+            font-size: 15px;
+        }
+
+        .acct-panel { padding: 22px 18px; border-radius: 18px; max-width: none; }
+        .acct-panel__head { margin-bottom: 18px; }
+        .acct-panel__title { font-size: 17px; }
+        .acct-panel__sub { font-size: 13.5px; }
+
+        /* Form: 16px font-size prevents iOS auto-zoom on focus */
+        .acct-form { gap: 16px; }
+        .acct-field { gap: 7px; }
+        .acct-field__lbl { font-size: 11px; letter-spacing: 0.08em; }
+        .acct-field input,
+        .acct-field select,
+        .acct-field textarea {
+            font-size: 16px;
+            padding: 14px 14px;
+            border-radius: 12px;
+        }
+
+        .acct-btn { padding: 15px 26px; font-size: 15px; min-height: 48px; }
+        .acct-actions { flex-direction: column-reverse; gap: 10px; }
+        .acct-actions .acct-btn { width: 100%; }
+    }
 </style>
 
 <section class="acct-hero">

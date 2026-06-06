@@ -258,6 +258,103 @@
   .sticky-btn{background:var(--charcoal);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
   .sticky-btn:hover{background:var(--charcoal-2)}
   @media(max-width:680px){.sticky-text{display:none}}
+
+  /* ============================================================
+     MOBILE UX PASS — surgical augmentations only.
+     Targets <=720px viewports (Indian mobile 360–414px primary).
+     ============================================================ */
+  @media (max-width: 720px){
+    .wrap{padding:0 clamp(16px,4.5vw,24px)}
+
+    .marquee{padding:8px 0}
+    .marquee-track{gap:32px;font-size:11.5px}
+
+    .microbar{padding:8px 0;font-size:11px}
+    .microbar-inner{gap:14px 18px;justify-content:flex-start;overflow-x:auto;
+      -webkit-overflow-scrolling:touch;white-space:nowrap;flex-wrap:nowrap;
+      padding-bottom:2px}
+    .microbar-item{flex:0 0 auto}
+
+    .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
+    .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
+    .product-hero-grid{gap:24px}
+    .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
+    .pi-sub{font-size:15.5px;line-height:1.5;margin-bottom:18px}
+    .pi-points{grid-template-columns:1fr;gap:10px}
+    .pi-points li{font-size:14px;min-height:24px}
+    .pi-tag{font-size:10.5px;padding:5px 9px}
+    .pi-now{font-size:32px}
+    .pi-mrp{font-size:16px}
+
+    .float-badge{padding:7px 11px;font-size:11px;border-radius:12px;gap:6px}
+    .float-1-icon{width:24px;height:24px;font-size:12px}
+    .float-1{top:10px;left:10px}
+    .float-2{bottom:10px;right:10px}
+
+    .gallery-thumbs{gap:6px;margin-top:8px}
+    .gallery-thumb{min-height:44px;border-radius:10px;border-width:1.25px}
+
+    .pi-buy-row{gap:8px;margin:16px 0}
+    .pi-qty{border-radius:11px}
+    .pi-qty button{width:44px;height:48px}
+    .pi-qty input{width:42px;height:48px;font-size:15px}
+    .pi-add{height:50px;font-size:14px;border-radius:11px;min-height:50px}
+
+    section.s{padding:clamp(40px,10vw,72px) 0}
+    .s-title{font-size:clamp(26px,7vw,38px);line-height:1.1}
+    .s-sub{font-size:15px;line-height:1.55}
+    .s-head{margin-bottom:28px}
+
+    .power-card{padding:24px}
+    .power-card h3{font-size:22px}
+    .power-card .pc-icon{width:60px;height:60px;border-radius:18px}
+    .power-card .pc-icon svg{width:30px;height:30px}
+    .symptom-card{padding:22px 20px}
+    .symptom-card .ic{width:60px;height:60px}
+    .symptom-card .ic svg{width:28px;height:28px}
+    .symptom-card h4{font-size:16px}
+    .root-card{padding:22px 20px}
+    .tl-card{padding:24px 22px}
+    .tl-card h4{font-size:20px;max-width:100%;margin:18px 0 12px}
+    .tl-step{top:14px;right:14px;font-size:10.5px}
+    .tl-stat{padding:20px 22px;flex-direction:column;align-items:flex-start;text-align:left}
+    .tl-stat strong{font-size:20px;line-height:1.25}
+
+    .cc{padding:12px 14px;font-size:13.5px}
+
+    .bvit-help-card{padding:20px 18px}
+    .bvit-help-card .bv-icon{width:56px;height:56px;border-radius:14px}
+    .bvit-help-card .bv-icon svg{width:26px;height:26px}
+
+    .reminder{padding:48px 0}
+    .reminder p{font-size:15px}
+    .final{padding:56px 0}
+    .final p{font-size:15px}
+    .final-cta{padding:14px 24px;font-size:13.5px;min-height:50px}
+
+    .sticky-cta{padding:8px 0}
+    .sticky-cta-inner{gap:10px}
+    .sticky-now{font-size:16px}
+    .sticky-mrp{font-size:11px}
+    .sticky-btn{padding:12px 16px;font-size:12.5px;border-radius:10px;min-height:44px}
+
+    .site-header .nav__menu a,.site-header .nav__toggle{min-height:44px}
+  }
+
+  @media (max-width: 380px){
+    .float-badge{font-size:10.5px;padding:6px 9px}
+    .float-1{top:8px;left:8px}
+    .float-2{bottom:8px;right:8px}
+    .pi-now{font-size:28px}
+    .pi-mrp{font-size:14px}
+    .pi-save{font-size:10px;padding:3px 8px}
+    .gallery-thumb{border-radius:8px}
+  }
+
+  @media (max-width: 580px){
+    .symptoms-grid{grid-template-columns:1fr;gap:12px}
+    .bvit-help{grid-template-columns:1fr;gap:12px}
+  }
 </style>
 </head>
 <body>

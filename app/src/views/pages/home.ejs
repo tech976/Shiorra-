@@ -8,6 +8,147 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="/img/logo/logo-green.png">
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+      /* home.ejs — surgical mobile augmentations (page-scoped).
+         Base layout/typography lives in /css/style.css; these rules only
+         fire <=720px (and 360px) to tighten the storefront on Indian-mobile. */
+
+      /* Promo strip: prevent two-line clipping on narrow widths */
+      @media (max-width: 720px){
+        .promo{padding:7px 14px;font-size:11.5px;line-height:1.35}
+        .promo span{display:inline-block;text-align:center}
+      }
+
+      /* Hero banner — make sure the rotator never collapses below a
+         readable height on phones and never overflows horizontally. */
+      @media (max-width: 720px){
+        .hero--banners,.hero-banners{width:100%;overflow:hidden}
+        .hero-banners__track,.hero-banners__slide{aspect-ratio:4/5}
+        .hero-banners__slide img{width:100%;height:100%;object-fit:cover;object-position:center}
+        .hero-banners__dots{bottom:14px;gap:8px}
+        .hero-banners__dot{min-width:14px;min-height:14px;padding:0}
+      }
+
+      /* Products row — force 1-col stack on phones with tappable CTAs */
+      @media (max-width: 720px){
+        .products-row{padding:clamp(48px,11vw,96px) 0}
+        .products-row__grid{grid-template-columns:1fr!important;gap:clamp(20px,5vw,32px)!important}
+        .products-row__title{font-size:clamp(28px,7vw,42px);line-height:1.1}
+        .products-row__sub{font-size:14.5px}
+        .product-card__cta{min-height:48px;padding:14px 18px;font-size:14px}
+        .product-card__name{font-size:clamp(18px,4.6vw,22px)}
+        .product-card__desc{font-size:14.5px;line-height:1.5}
+      }
+
+      /* Trust row — 4-col → 2-col → 1-col with readable type */
+      @media (max-width: 1024px){
+        .trust-row__inner{grid-template-columns:repeat(2,1fr)!important;gap:20px!important}
+      }
+      @media (max-width: 540px){
+        .trust-row__inner{grid-template-columns:1fr!important;gap:16px!important;text-align:left}
+        .trust-item{justify-content:flex-start}
+      }
+
+      /* Trust grid — 3 col → 1 col on phones */
+      @media (max-width: 720px){
+        .trust-grid{padding:clamp(48px,10vw,96px) 0}
+        .trust-grid__cols{grid-template-columns:1fr!important;gap:18px!important}
+        .trust-grid h2{font-size:clamp(28px,7vw,42px);line-height:1.1}
+        .trust-cell{padding:24px}
+      }
+
+      /* Quick-nav pills — keep tappable (≥44px) */
+      @media (max-width: 720px){
+        .quick-nav{padding:14px 0}
+        .quick-nav__inner{gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+          padding:4px 0;flex-wrap:nowrap;justify-content:flex-start}
+        .quick-nav a{flex:0 0 auto;min-height:44px;padding:10px 14px;font-size:13px}
+        .quick-nav__icon{width:28px;height:28px}
+      }
+
+      /* Company facts — 4 col → 2 col */
+      @media (max-width: 720px){
+        .company{padding:clamp(48px,11vw,96px) 0}
+        .company__grid{gap:32px}
+        .company__title{font-size:clamp(30px,7.5vw,46px);line-height:1.1}
+        .company__lede{font-size:15px}
+        .company__facts{grid-template-columns:repeat(2,1fr)!important;gap:14px!important}
+        .company__fact{padding:18px}
+        .company__fact-num{font-size:clamp(26px,6vw,36px)}
+        .company__fact-lbl{font-size:12px}
+      }
+
+      /* Claims grid — 4 col → 2 col → 1 col */
+      @media (max-width: 1024px){
+        .claims__grid{grid-template-columns:repeat(2,1fr)!important;gap:18px!important}
+      }
+      @media (max-width: 560px){
+        .claims__grid{grid-template-columns:1fr!important;gap:16px!important}
+        .claims h2{font-size:clamp(28px,7vw,42px);line-height:1.1}
+        .claim{padding:24px}
+        .claims__stat{font-size:clamp(36px,9vw,56px)}
+        .claims__stat-copy{font-size:14.5px}
+      }
+
+      /* Featured product editorial — 2 col → 1 col, reset reverse order */
+      @media (max-width: 880px){
+        .fp-feature{padding:clamp(48px,11vw,96px) 0}
+        .fp-feature__layout{grid-template-columns:1fr!important;gap:28px!important}
+        .fp-feature--reverse .fp-feature__layout{direction:ltr}
+        .fp-feature__title{font-size:clamp(40px,10vw,72px)}
+        .fp-feature__deck{font-size:15.5px;line-height:1.55}
+        .fp-feature__specs{grid-template-columns:repeat(2,1fr)!important;gap:14px!important}
+        .fp-feature__cta{flex-direction:column;align-items:stretch;gap:10px}
+        .fp-feature__cta .btn{width:100%;min-height:50px;display:inline-flex;align-items:center;justify-content:center}
+      }
+
+      /* Stands grid — 4 col → 1 col, generous touch areas */
+      @media (max-width: 720px){
+        #stands.section{padding:clamp(48px,11vw,96px) 0}
+        .stands__grid{grid-template-columns:1fr!important;gap:18px!important}
+        .stands__head h2{font-size:clamp(28px,7vw,42px);line-height:1.1}
+        .stands__head .lead{font-size:15px}
+        .stand{padding:24px}
+      }
+
+      /* CTA band — buttons full width, headline scales */
+      @media (max-width: 720px){
+        .cta-band{padding:clamp(48px,11vw,96px) 0}
+        .cta-band__grid{grid-template-columns:1fr!important;gap:24px!important;text-align:left}
+        .cta-band h2{font-size:clamp(28px,7.5vw,44px);line-height:1.1}
+        .cta-band__cta{flex-direction:column;align-items:stretch;gap:10px}
+        .cta-band__cta .btn{width:100%;min-height:50px;display:inline-flex;align-items:center;justify-content:center}
+      }
+
+      /* Footer — columns stack, tappable links */
+      @media (max-width: 720px){
+        .footer__top{grid-template-columns:1fr 1fr!important;gap:28px!important}
+        .footer__brand{grid-column:1/-1}
+        .site-footer a,.footer__col a{min-height:36px;display:inline-block;line-height:36px}
+        .footer__bottom{flex-direction:column;align-items:flex-start;gap:8px;text-align:left}
+      }
+      @media (max-width: 420px){
+        .footer__top{grid-template-columns:1fr!important;gap:24px!important}
+      }
+
+      /* Header — nav icons tappable; the mobile menu lives in style.css */
+      @media (max-width: 980px){
+        .nav__icons a,.nav__toggle{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+        .nav__cta .btn{min-height:44px;display:inline-flex;align-items:center}
+      }
+
+      /* Mobile nav slide-down: ensure Shop sub-items are tappable */
+      @media (max-width: 980px){
+        .nav__menu.is-open .nav__sub a,
+        .nav__menu .nav__sub a{min-height:44px;padding-top:10px;padding-bottom:10px;display:flex;align-items:center}
+        .nav__menu li > a{min-height:44px;display:flex;align-items:center}
+      }
+
+      /* Back-to-top — tappable target */
+      @media (max-width: 720px){
+        .back-to-top{width:48px;height:48px}
+      }
+    </style>
 </head>
 <body>
 

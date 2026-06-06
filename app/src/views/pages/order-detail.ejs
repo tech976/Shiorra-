@@ -203,6 +203,83 @@
         font-size: 13px; color: #4A4F55;
         display: flex; gap: 10px; align-items: flex-start;
     }
+
+    /* ───────── Mobile tightening (order detail) ───────── */
+    @media (max-width: 720px) {
+        /* Hero/back row trim */
+        .page-hero { padding: 28px 0 12px !important; }
+        .od-head__back { font-size: 13px; min-height: 44px; display: inline-flex; align-items: center; }
+
+        /* Header strip: order# + total stack cleanly */
+        .od-head {
+            padding-bottom: 18px;
+            margin-bottom: 22px;
+            gap: 12px;
+        }
+        .od-head__num { font-size: 22px; }
+        .od-head__meta { font-size: 12.5px; gap: 8px; }
+
+        /* Grid gap tighter when stacked */
+        .od-grid { gap: 18px; }
+
+        /* Section card: tighter padding on mobile */
+        .od-section { padding: 20px 18px; border-radius: 14px; margin-bottom: 16px; }
+        .od-section__title { font-size: 13px; margin-bottom: 14px; }
+
+        /* Timeline stays vertical (already is) — slight tightening */
+        .od-timeline__item { padding-left: 28px; padding-bottom: 18px; }
+        .od-timeline__lbl { font-size: 13.5px; }
+        .od-timeline__sub { font-size: 11.5px; }
+        .status-pill { font-size: 11.5px; padding: 5px 10px; }
+
+        /* Items list reflow: thumb + name on row 1, qty/price + line total on row 2 */
+        .od-item {
+            grid-template-columns: 52px 1fr;
+            grid-template-areas:
+                "thumb name"
+                "thumb meta";
+            gap: 4px 14px;
+            padding: 14px 0;
+            align-items: start;
+        }
+        .od-item__thumb {
+            grid-area: thumb;
+            width: 52px; height: 52px;
+            align-self: center;
+        }
+        .od-item > div { grid-area: name; min-width: 0; }
+        .od-item__total {
+            grid-area: meta;
+            justify-self: start;
+            font-size: 13.5px;
+            margin-top: 2px;
+        }
+        .od-item__name { font-size: 13.5px; }
+        .od-item__sub { font-size: 12px; }
+
+        /* Address & payment readable but compact */
+        .od-address { font-size: 13.5px; }
+        .od-payment { font-size: 13.5px; }
+
+        /* Summary: NOT sticky on mobile (it's already inline because @media min-width 961 gate) */
+        .od-aside { position: static !important; }
+
+        /* Summary buttons full-width and tappable */
+        .od-actions { gap: 10px; }
+        .od-actions .btn {
+            flex: 1 1 100% !important;
+            min-width: 0 !important;
+            min-height: 48px;
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .od-help { display: inline-flex; align-items: center; min-height: 44px; }
+    }
+
+    @media (max-width: 380px) {
+        .od-head__num { font-size: 20px; }
+        .od-item__thumb { width: 46px; height: 46px; }
+        .od-item { grid-template-columns: 46px 1fr; }
+    }
 </style>
 
 <%

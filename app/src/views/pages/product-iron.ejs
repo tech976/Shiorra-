@@ -389,6 +389,115 @@
   .sticky-btn{background:var(--charcoal);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
   .sticky-btn:hover{background:var(--charcoal-2)}
   @media(max-width:680px){.sticky-text{display:none}}
+
+  /* ============================================================
+     MOBILE UX PASS — surgical augmentations only.
+     Targets <=720px viewports (Indian mobile 360–414px primary).
+     ============================================================ */
+  @media (max-width: 720px){
+    /* Horizontal page padding scales smoothly */
+    .wrap{padding:0 clamp(16px,4.5vw,24px)}
+
+    /* Marquee — keep readable */
+    .marquee{padding:8px 0}
+    .marquee-track{gap:32px;font-size:11.5px}
+
+    /* Microbar — let copy wrap, tighten gap */
+    .microbar{padding:8px 0;font-size:11px}
+    .microbar-inner{gap:14px 18px;justify-content:flex-start;overflow-x:auto;
+      -webkit-overflow-scrolling:touch;white-space:nowrap;flex-wrap:nowrap;
+      padding-bottom:2px}
+    .microbar-item{flex:0 0 auto}
+
+    /* Hero — tighten padding, scale title with clamp */
+    .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
+    .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
+    .product-hero-grid{gap:24px}
+    .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
+    .pi-sub{font-size:15.5px;line-height:1.5;margin-bottom:18px}
+    .pi-points{grid-template-columns:1fr;gap:10px}
+    .pi-points li{font-size:14px;min-height:24px}
+    .pi-tag{font-size:10.5px;padding:5px 9px}
+    .pi-now{font-size:32px}
+    .pi-mrp{font-size:16px}
+
+    /* Float-badges — keep visible but smaller so they don't crop the product */
+    .float-badge{padding:7px 11px;font-size:11px;border-radius:12px;gap:6px}
+    .float-1{top:10px;left:10px}
+    .float-2{bottom:10px;right:10px}
+
+    /* Gallery thumbs — keep horizontal at 360px, ~64-72px tall */
+    .gallery-thumbs{gap:6px;margin-top:8px}
+    .gallery-thumb{min-height:44px;border-radius:10px;border-width:1.25px}
+
+    /* Buy row — keep touch targets ≥44px and CTA full-width */
+    .pi-buy-row{gap:8px;margin:16px 0}
+    .pi-qty{border-radius:11px}
+    .pi-qty button{width:44px;height:48px}
+    .pi-qty input{width:42px;height:48px;font-size:15px}
+    .pi-add{height:50px;font-size:14px;border-radius:11px;min-height:50px}
+
+    /* Section padding scales */
+    section.s{padding:clamp(40px,10vw,72px) 0}
+    .s-title{font-size:clamp(26px,7vw,38px);line-height:1.1}
+    .s-sub{font-size:15px;line-height:1.55}
+    .s-head{margin-bottom:28px}
+
+    /* Symptom + min cards — single column on small phones for readability */
+    .power-card{padding:24px}
+    .symptom-card{padding:22px 20px}
+    .symptom-card h4{font-size:16px}
+    .min-card{padding:22px 20px}
+    .root-card{padding:22px 20px}
+    .tl-card{padding:24px 22px}
+    .tl-card h4{font-size:20px;max-width:100%;margin:18px 0 12px}
+    .tl-step{top:14px;right:14px;font-size:10.5px}
+    .tl-stat{padding:20px 22px;flex-direction:column;align-items:flex-start;text-align:left}
+    .tl-stat strong{font-size:20px;line-height:1.25}
+
+    /* Compare table — bigger touch label rows */
+    .cc{padding:12px 14px;font-size:13.5px}
+
+    /* B vitamins help cards — keep icon chip large enough to read */
+    .bvit-help-card{padding:20px 18px}
+    .bvit-help-card .ic{width:56px;height:56px;border-radius:14px}
+    .bvit-help-card .ic svg{width:26px;height:26px}
+
+    /* Reminder + final */
+    .reminder{padding:48px 0}
+    .reminder p{font-size:15px}
+    .final{padding:56px 0}
+    .final p{font-size:15px}
+    .final-cta{padding:14px 24px;font-size:13.5px;min-height:50px}
+
+    /* Sticky CTA — tight price + button, no overflow */
+    .sticky-cta{padding:8px 0}
+    .sticky-cta-inner{gap:10px}
+    .sticky-now{font-size:16px}
+    .sticky-mrp{font-size:11px}
+    .sticky-btn{padding:12px 16px;font-size:12.5px;border-radius:10px;min-height:44px}
+
+    /* Tappable nav & links inherited from layout — reinforce here */
+    .site-header .nav__menu a,.site-header .nav__toggle{min-height:44px}
+  }
+
+  /* Extra-narrow phones (~360px) — only tighten where necessary */
+  @media (max-width: 380px){
+    .float-badge{font-size:10.5px;padding:6px 9px}
+    .float-1{top:8px;left:8px}
+    .float-2{bottom:8px;right:8px}
+    .pi-now{font-size:28px}
+    .pi-mrp{font-size:14px}
+    .pi-save{font-size:10px;padding:3px 8px}
+    .gallery-thumb{border-radius:8px}
+  }
+
+  /* Single-column at 580px for symptom + B vitamins (8 cards is a lot) */
+  @media (max-width: 580px){
+    .symptoms-grid{grid-template-columns:1fr;gap:12px}
+    .bvit-help{grid-template-columns:1fr;gap:12px}
+    .min-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  }
 </style>
 </head>
 <body>

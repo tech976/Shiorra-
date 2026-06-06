@@ -383,8 +383,35 @@ em { font-style: italic; color: var(--c-pink); font-weight: 500; }
     border: 1px solid var(--c-line);
     border-radius: var(--r-md);
     font: inherit;
+    /* 16px on mobile prevents iOS auto-zoom on focus — critical UX fix. */
+    font-size: 16px;
     background: #fff;
     color: var(--c-charcoal);
+}
+
+/* Site-wide iOS zoom prevention — applied to every form control because
+   iOS Safari zooms in whenever a focused input is < 16px. Visible padding
+   stays modest; only the rendered text is 16px. */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+input[type="date"],
+input[type="time"],
+textarea,
+select {
+    font-size: 16px;
+}
+
+/* Mobile touch target floor — every link, button, and form control should
+   have a 44px minimum tap area (Apple HIG / Google Material guidelines). */
+@media (max-width: 720px) {
+    .btn, button:not(.nav__toggle):not([class*="qty"]):not(.gallery-thumb) {
+        min-height: 44px;
+    }
 }
 .form-grid input:focus,
 .form-grid textarea:focus,

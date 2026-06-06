@@ -315,6 +315,80 @@
     transition: opacity .15s ease;
   }
   .sh-btn-primary:hover { opacity: .9; color: #fff; }
+
+  /* ============== MOBILE UX TUNING ============== */
+  @media (max-width: 960px) {
+    /* Summary toggle: ≥44px tap target with comfortable padding */
+    .summary-collapse-toggle {
+      min-height: 52px;
+      padding: 14px 18px;
+      font-size: 15px;
+    }
+    /* Order: items first, summary after — grid is single-col by 960px,
+       and aside is the second grid child, so it naturally stacks below. */
+    .sh-cart-grid > aside { order: 2; }
+    .sh-cart-grid > .sh-items-card { order: 1; }
+  }
+
+  @media (max-width: 640px) {
+    .sh-flow-hero { padding: 28px 0 4px; }
+    .sh-flow-hero .sh-steps { gap: 10px; font-size: 11.5px; margin-top: 14px; flex-wrap: wrap; }
+    .sh-flow-hero .sh-steps em { width: 16px; }
+
+    .sh-items-head { padding: 18px 18px 12px; }
+    .sh-items-head h2 { font-size: 17px; }
+
+    /* qty stepper — 44×44 tap targets, 16px input to prevent iOS zoom */
+    .qty-stepper { height: 44px; border-radius: 999px; }
+    .qty-stepper button { width: 44px; min-width: 44px; min-height: 44px; font-size: 22px; }
+    .qty-stepper input { width: 44px; font-size: 16px; height: 44px; }
+
+    /* Remove button — bigger tap zone */
+    .sh-remove { padding: 12px 8px; font-size: 14px; min-height: 44px; }
+
+    .sh-item__controls { gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+    .sh-item__title { font-size: 15.5px; }
+    .sh-item__line { font-size: 16px; }
+
+    .sh-foot-links { flex-direction: column; gap: 10px; align-items: flex-start; padding: 16px 18px; }
+    .sh-foot-links a { min-height: 44px; align-items: center; }
+
+    /* Summary card padding */
+    .summary-card { padding: 22px 18px; border-radius: 14px; }
+    .summary-card__title { font-size: 16px; margin-bottom: 16px; }
+
+    /* Coupon row: stack input above button, both ≥48px, 16px font */
+    .coupon-row { flex-direction: column; gap: 10px; }
+    .coupon-row input {
+      width: 100%; height: 48px; font-size: 16px; padding: 0 16px;
+    }
+    .coupon-row button { width: 100%; height: 48px; font-size: 15px; }
+
+    .summary-row { font-size: 14.5px; padding: 11px 0; }
+    .summary-row--total strong { font-size: 22px; }
+
+    /* Primary CTA — full-width, ≥48px, 17px+ */
+    .summary-cta {
+      padding: 18px 20px; font-size: 17px; min-height: 52px;
+      border-radius: 14px;
+    }
+
+    .summary-trust { font-size: 13px; gap: 12px; margin-top: 20px; }
+    .summary-trust svg { width: 16px; height: 16px; }
+
+    /* Empty state — illustration cap, stacked full-width CTAs */
+    .sh-empty { padding: 44px 18px 40px; border-radius: 14px; }
+    .sh-empty svg.bag { width: 96px; height: 96px; max-width: 120px; }
+    .sh-empty h2 { font-size: 22px; margin-top: 14px; }
+    .sh-empty p { font-size: 14.5px; margin-bottom: 22px; }
+    .sh-empty .empty-cta { flex-direction: column; gap: 10px; }
+    .sh-empty .empty-cta .sh-btn-primary,
+    .sh-empty .empty-cta .sh-btn-outline {
+      width: 100%; justify-content: center;
+      padding: 14px 22px; min-height: 48px; font-size: 15px;
+    }
+    .sh-empty-recs { margin-top: 40px; }
+  }
 </style>
 
 <section class="page-hero sh-flow-hero">
