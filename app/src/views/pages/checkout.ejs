@@ -382,9 +382,51 @@
     .coupon-chip { font-size: 12.5px; padding: 8px 12px; }
   }
 
+  /* Saved-address pre-fill banner — quick reassurance the form is auto-filled */
+  .co-saved-addr-banner {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #F4F9F8;
+    border: 1px solid #DDECEB;
+    color: var(--sh-ink);
+    font-size: 13.5px;
+    margin-bottom: 16px;
+  }
+  .co-saved-addr-banner svg { flex-shrink: 0; color: #23867F; }
+
   /* Larger phones — small spacing tweak */
   @media (max-width: 480px) {
     .co-section { padding: 20px 16px; }
+
+    /* Sticky bottom "Place order" bar on mobile — always visible, never
+       requires scrolling to find. Friction-killer. */
+    .co-mobile-place {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      background: #fff;
+      border-top: 1px solid var(--sh-line);
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 -6px 20px rgba(0,0,0,0.06);
+      z-index: 50;
+    }
+    .co-mobile-place__price { display: flex; flex-direction: column; line-height: 1.2; }
+    .co-mobile-place__price small { font-size: 11px; color: var(--sh-mute); text-transform: uppercase; letter-spacing: 0.06em; }
+    .co-mobile-place__price strong { font-size: 18px; color: var(--sh-ink); font-weight: 700; }
+    .co-mobile-place__btn {
+      flex: 1; height: 52px;
+      background: var(--sh-ink); color: #fff;
+      border: 0; border-radius: 12px;
+      font-weight: 700; font-size: 15px;
+      letter-spacing: .05em; text-transform: uppercase;
+      cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    /* push form content above the sticky bar (this <style> only loads on
+       /checkout, so scoping isn't needed). */
+    body { padding-bottom: 96px; }
+  }
+  @media (min-width: 641px) {
+    .co-mobile-place { display: none; }
     .summary-card { padding: 20px 16px; }
   }
 </style>
@@ -438,38 +480,45 @@
             </div>
           </div>
 
+          <% const defAddr = (addresses && addresses.length) ? addresses[0] : null; %>
+          <% if (defAddr) { %>
+            <div class="co-saved-addr-banner">
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 6.5c0 4-5.5 7.5-5.5 7.5S2.5 10.5 2.5 6.5a5.5 5.5 0 1 1 11 0Z"/><circle cx="8" cy="6.5" r="2"/></svg>
+              <span>Using your saved address — edit any field to ship somewhere new.</span>
+            </div>
+          <% } %>
           <div class="co-fields">
             <div class="co-field">
               <label for="co-name">Full name</label>
-              <input id="co-name" name="address[fullName]" autocomplete="name" required value="<%= (currentUser && currentUser.name) ? currentUser.name : '' %>">
+              <input id="co-name" name="address[fullName]" autocomplete="name" required value="<%= defAddr ? defAddr.fullName : ((currentUser && currentUser.name) ? currentUser.name : '') %>">
             </div>
             <div class="co-field">
               <label for="co-phone">Phone</label>
-              <input id="co-phone" name="address[phone]" autocomplete="tel" required value="<%= (currentUser && currentUser.phone) ? currentUser.phone : '' %>">
+              <input id="co-phone" name="address[phone]" autocomplete="tel" required value="<%= defAddr ? defAddr.phone || '' : ((currentUser && currentUser.phone) ? currentUser.phone : '') %>">
             </div>
             <div class="co-field co-full">
               <label for="co-line1">Address line 1</label>
-              <input id="co-line1" name="address[line1]" autocomplete="address-line1" placeholder="House / flat, street" required>
+              <input id="co-line1" name="address[line1]" autocomplete="address-line1" placeholder="House / flat, street" required value="<%= defAddr ? defAddr.line1 : '' %>">
             </div>
             <div class="co-field co-full">
               <label for="co-line2">Apartment, suite, landmark <span style="text-transform:none; letter-spacing:0; color:var(--sh-mute); font-weight:400;">(optional)</span></label>
-              <input id="co-line2" name="address[line2]" autocomplete="address-line2" placeholder="Apt, suite, landmark">
+              <input id="co-line2" name="address[line2]" autocomplete="address-line2" placeholder="Apt, suite, landmark" value="<%= defAddr ? defAddr.line2 || '' : '' %>">
             </div>
             <div class="co-field">
               <label for="co-city">City</label>
-              <input id="co-city" name="address[city]" autocomplete="address-level2" required>
+              <input id="co-city" name="address[city]" autocomplete="address-level2" required value="<%= defAddr ? defAddr.city : '' %>">
             </div>
             <div class="co-field">
               <label for="co-state">State</label>
-              <input id="co-state" name="address[state]" autocomplete="address-level1" required>
+              <input id="co-state" name="address[state]" autocomplete="address-level1" required value="<%= defAddr ? defAddr.state : '' %>">
             </div>
             <div class="co-field">
               <label for="co-postcode">Postal code</label>
-              <input id="co-postcode" name="address[postcode]" autocomplete="postal-code" inputmode="numeric" required>
+              <input id="co-postcode" name="address[postcode]" autocomplete="postal-code" inputmode="numeric" required value="<%= defAddr ? defAddr.postcode : '' %>">
             </div>
             <div class="co-field">
               <label for="co-country">Country</label>
-              <input id="co-country" name="address[country]" autocomplete="country-name" value="India" required>
+              <input id="co-country" name="address[country]" autocomplete="country-name" value="<%= defAddr ? defAddr.country : 'India' %>" required>
             </div>
           </div>
         </div>
@@ -549,6 +598,20 @@
           </div>
         </div>
       </form>
+
+      <!-- MOBILE-ONLY sticky bottom Place Order bar (always visible — no need
+           to scroll to the section-4 button OR expand the summary). The button
+           submits the main checkout form via form="checkoutForm". -->
+      <div class="co-mobile-place" aria-hidden="false">
+        <div class="co-mobile-place__price">
+          <small>Total</small>
+          <strong><%= formatINR(totals.totalInPaise) %></strong>
+        </div>
+        <button type="submit" form="checkoutForm" class="co-mobile-place__btn">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>
+          Place order
+        </button>
+      </div>
 
       <!-- RIGHT: order summary -->
       <aside aria-label="Order summary">
