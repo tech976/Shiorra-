@@ -103,7 +103,10 @@
   .pi-qty button{width:38px;height:46px;font-size:18px;color:var(--ink);font-weight:700}
   .pi-qty input{width:44px;height:46px;border:0;text-align:center;font-size:15px;font-weight:700;font-family:inherit;background:transparent}
   .pi-qty input::-webkit-inner-spin-button{display:none}
-  .pi-add{flex:1;height:46px;display:inline-flex;align-items:center;justify-content:center;background:var(--charcoal);color:#fff;font-weight:700;font-size:14px;letter-spacing:.04em;border-radius:12px;text-transform:uppercase;transition:background .2s,transform .2s}
+  .pi-add{flex:1;height:50px;display:inline-flex;align-items:center;justify-content:center;background:var(--charcoal);color:#fff;font-weight:700;font-size:14px;letter-spacing:.04em;border-radius:12px;text-transform:uppercase;transition:background .2s,transform .2s;border:0;cursor:pointer}
+  .pi-add:hover{background:var(--charcoal-2);transform:translateY(-1px)}
+  .pi-add-secondary{height:38px;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--ink-soft);font-weight:600;font-size:12.5px;letter-spacing:.04em;border:0;cursor:pointer;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;transition:color .2s}
+  .pi-add-secondary:hover{color:var(--charcoal)}
   .pi-add:hover{background:var(--charcoal-2);transform:translateY(-1px)}
   .pi-trust-line{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:8px}
   .pi-trust-line svg{width:14px;height:14px;color:var(--honey)}
@@ -458,10 +461,10 @@
             <input type="number" name="quantity" value="1" min="1" max="9" form="addToCartForm">
             <button type="button" data-q="+">+</button>
           </div>
-          <form action="/cart/add" method="post" id="addToCartForm" style="flex:1;display:flex;margin:0">
+          <form action="/cart/buy-now" method="post" id="addToCartForm" style="flex:1;display:flex;flex-direction:column;gap:8px;margin:0">
             <input type="hidden" name="productId" value="<%= product.id %>">
-            
-            <button type="submit" class="pi-add">Add to cart · <%= formatINR(product.priceInPaise) %></button>
+            <button type="submit" class="pi-add">Buy now · <%= formatINR(product.priceInPaise) %></button>
+            <button type="submit" formaction="/cart/add" class="pi-add-secondary">Or add to cart</button>
           </form>
         </div>
         <p class="pi-trust-line">
@@ -727,7 +730,11 @@
       <span class="sticky-now">₹ 599</span>
       <span class="sticky-mrp">₹ 699</span>
     </div>
-    <a href="#buy" class="sticky-btn">Buy now</a>
+    <form action="/cart/buy-now" method="post" style="margin:0">
+      <input type="hidden" name="productId" value="<%= product.id %>">
+      <input type="hidden" name="quantity" value="1">
+      <button type="submit" class="sticky-btn">Buy now</button>
+    </form>
   </div>
 </div>
 

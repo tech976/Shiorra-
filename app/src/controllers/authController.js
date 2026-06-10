@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const { z } = require('zod');
 const passport = require('../config/passport');
 const prisma = require('../config/db');
+const { mergeGuestCart } = require('./cartController');
 
 const registerSchema = z.object({
   name: z.string().min(2).max(80),
@@ -27,18 +28,7 @@ exports.login = (req, res, next) => {
     }
     req.logIn(user, async (loginErr) => {
       if (loginErr) return next(loginErr);
-      // Merge any guest cart into the user's DB cart
-      const guestCart = req.session.guestCart || [];
-      if (guestCart.length) {
-        for (const item of guestCart) {
-          await prisma.cartItem.upsert({
-            where: { userId_productId: { userId: user.id, productId: item.productId } },
-            update: { quantity: { increment: item.quantity } },
-            create: { userId: user.id, productId: item.productId, quantity: item.quantity },
-          });
-        }
-        delete req.session.guestCart;
-      }
+      await mergeGuestCart(req, user.id);
       const dest = req.session.returnTo || '/account';
       delete req.session.returnTo;
       req.flash('success', `Welcome back, ${user.name || user.email}.`);
@@ -69,10 +59,15 @@ exports.register = async (req, res, next) => {
         passwordHash,
       },
     });
-    req.logIn(user, (err) => {
+    req.logIn(user, async (err) => {
       if (err) return next(err);
+      // Same as login: merge guest cart + honour returnTo so a guest who
+      // came in via "Buy now → Sign up" lands on /checkout with their cart.
+      await mergeGuestCart(req, user.id);
+      const dest = req.session.returnTo || '/account';
+      delete req.session.returnTo;
       req.flash('success', 'Account created.');
-      res.redirect('/account');
+      res.redirect(dest);
     });
   } catch (err) {
     next(err);

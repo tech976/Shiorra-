@@ -74,6 +74,25 @@ exports.summarise = summarise;
 exports.resolveSessionCoupon = resolveSessionCoupon;
 exports.computeDiscount = computeDiscount;
 
+// Merge a guest's session cart into a freshly-logged-in user's database cart.
+// Called from authController.login + authController.register so items added
+// while logged-out aren't stranded after sign-in.
+async function mergeGuestCart(req, userId) {
+  const guest = req.session?.guestCart || [];
+  if (!guest.length) return;
+  for (const g of guest) {
+    try {
+      await prisma.cartItem.upsert({
+        where: { userId_productId: { userId, productId: g.productId } },
+        update: { quantity: { increment: g.quantity } },
+        create: { userId, productId: g.productId, quantity: g.quantity },
+      });
+    } catch (_) { /* product deleted while in session — skip silently */ }
+  }
+  delete req.session.guestCart;
+}
+exports.mergeGuestCart = mergeGuestCart;
+
 exports.view = async (req, res, next) => {
   try {
     const items = await loadCart(req);
@@ -120,6 +139,36 @@ exports.add = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+// "Buy now" shortcut: identical to .add but skips the cart page and goes
+// straight to /checkout. For guests, sets returnTo so they land on
+// /checkout after sign-in (cart preserved by mergeGuestCart).
+exports.buyNow = async (req, res, next) => {
+  try {
+    const { productId, quantity = 1 } = req.body;
+    const qty = Math.max(1, Math.min(99, parseInt(quantity, 10) || 1));
+    const product = await prisma.product.findUnique({ where: { id: productId } });
+    if (!product || !product.active) {
+      req.flash('error', 'Product not found.');
+      return res.redirect('/shop');
+    }
+    if (req.user) {
+      await prisma.cartItem.upsert({
+        where: { userId_productId: { userId: req.user.id, productId } },
+        update: { quantity: { increment: qty } },
+        create: { userId: req.user.id, productId, quantity: qty },
+      });
+      return res.redirect('/checkout');
+    }
+    req.session.guestCart = req.session.guestCart || [];
+    const existing = req.session.guestCart.find((g) => g.productId === productId);
+    if (existing) existing.quantity = Math.min(99, existing.quantity + qty);
+    else req.session.guestCart.push({ productId, quantity: qty });
+    req.session.returnTo = '/checkout';
+    req.flash('info', 'Sign in or create an account to complete your order.');
+    res.redirect('/login');
+  } catch (err) { next(err); }
 };
 
 exports.update = async (req, res, next) => {

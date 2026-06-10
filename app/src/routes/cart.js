@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/', ctrl.view);
 router.post('/add', ctrl.add);
+router.post('/buy-now', ctrl.buyNow);
 router.post('/coupon', ctrl.applyCoupon);
 router.post('/coupon/remove', ctrl.removeCoupon);
 router.post('/items/:productId', ctrl.update);
