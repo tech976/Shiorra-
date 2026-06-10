@@ -14,11 +14,11 @@
             <div class="adm-hero__row">
                 <div>
                     <h1><%= u.name || u.email %></h1>
-                    <div class="adm-hero__sub" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <div class="adm-hero__sub adm-hero__sub--inline">
                         <span><%= u.email %></span>
-                        <span style="color:#CBD5E1">·</span>
+                        <span class="adm-hero__sep">·</span>
                         <span class="badge badge--<%= u.role.toLowerCase() %>"><%= u.role %></span>
-                        <span style="color:#CBD5E1">·</span>
+                        <span class="adm-hero__sep">·</span>
                         <span>Joined <%= u.createdAt.toISOString().slice(0,10) %></span>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
             </div>
             <div class="kpi">
                 <span class="kpi__label">Last order</span>
-                <span class="kpi__num" style="font-size:1rem"><%= lastOrderAt ? lastOrderAt.toISOString().slice(0,10) : '—' %></span>
+                <span class="kpi__num kpi__num--date"><%= lastOrderAt ? lastOrderAt.toISOString().slice(0,10) : '—' %></span>
                 <span class="kpi__delta is-muted">Most recent paid</span>
             </div>
         </div>
@@ -93,14 +93,14 @@
                     <small><%= u.addresses.length %> on file</small>
                 </div>
                 <% if (!u.addresses.length) { %>
-                    <p style="color:var(--adm-ink-3)">No saved addresses.</p>
+                    <p class="adm-muted-line">No saved addresses.</p>
                 <% } else { %>
                     <ul class="address-list">
                         <% u.addresses.forEach(function(a) { %>
                             <li>
-                                <% if (a.isDefault) { %><span class="badge badge--paid">Default</span><br><% } %>
-                                <strong style="color:var(--adm-ink)"><%= a.fullName %></strong><br>
-                                <span style="color:var(--adm-ink-2)">
+                                <% if (a.isDefault) { %><span class="badge badge--paid">Default</span><% } %>
+                                <strong class="address-list__name"><%= a.fullName %></strong>
+                                <span class="address-list__body">
                                     <%= a.line1 %><br>
                                     <% if (a.line2) { %><%= a.line2 %><br><% } %>
                                     <%= a.city %>, <%= a.state %> <%= a.postcode %><br>
@@ -120,7 +120,7 @@
                 <small><%= u.orders.length %> total</small>
             </div>
             <% if (!u.orders.length) { %>
-                <p style="color:var(--adm-ink-3)">This customer hasn't placed an order yet.</p>
+                <p class="adm-muted-line">This customer hasn't placed an order yet.</p>
             <% } else { %>
                 <div class="adm-table-scroll">
                 <table class="data-table">
@@ -128,13 +128,13 @@
                     <tbody>
                     <% u.orders.forEach(function(o) { %>
                         <tr>
-                            <td><strong><%= o.orderNumber %></strong></td>
-                            <td style="color:var(--adm-ink-3);font-variant-numeric:tabular-nums;font-size:0.84rem"><%= o.createdAt.toISOString().slice(0,10) %></td>
+                            <td><a href="/admin/orders/<%= o.id %>"><strong><%= o.orderNumber %></strong></a></td>
+                            <td class="adm-cell-date"><%= o.createdAt.toISOString().slice(0,10) %></td>
                             <td class="adm-num"><%= o.items.length %></td>
                             <td class="adm-num adm-money"><%= formatINR(o.totalInPaise) %></td>
                             <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
                             <td><span class="badge badge--<%= o.paymentStatus.toLowerCase() %>"><%= o.paymentStatus %></span></td>
-                            <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a></td>
+                            <td class="data-table__actions"><a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a></td>
                         </tr>
                     <% }); %>
                     </tbody>

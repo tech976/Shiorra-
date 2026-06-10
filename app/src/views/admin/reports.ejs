@@ -15,10 +15,9 @@
                     <div class="adm-hero__sub">Revenue, shipping, discounts and product performance over the selected window.</div>
                 </div>
                 <div class="adm-hero__actions">
-                    <div style="display:inline-flex;background:#fff;border:1px solid var(--adm-line);border-radius:8px;padding:3px;gap:2px">
+                    <div class="adm-segment" role="tablist" aria-label="Window">
                         <% [7, 14, 30, 60, 90, 180, 365].forEach(function(d) { %>
-                            <a href="/admin/reports?days=<%= d %>"
-                               style="padding:6px 10px;font-size:0.78rem;font-weight:600;border-radius:6px;text-decoration:none;<%= d === days ? 'background:var(--adm-ink);color:#fff' : 'color:var(--adm-ink-2)' %>"><%= d %>d</a>
+                            <a href="/admin/reports?days=<%= d %>" class="<%= d === days ? 'is-active' : '' %>"><%= d %>d</a>
                         <% }); %>
                     </div>
                     <a href="/admin/reports.csv?days=<%= days %>" class="btn btn--sm btn--ghost">Export CSV</a>
@@ -49,7 +48,7 @@
             </div>
         </div>
 
-        <section class="admin__panel" style="margin-top:16px">
+        <section class="admin__panel adm-section-gap">
             <div class="adm-card__head">
                 <h3>Revenue &amp; orders</h3>
                 <small>Last <%= days %> days</small>
@@ -57,13 +56,13 @@
             <div class="chart-wrap"><canvas id="revChart" height="120"></canvas></div>
         </section>
 
-        <section class="admin__panel" style="margin-top:20px">
+        <section class="admin__panel adm-section-gap">
             <div class="adm-card__head">
                 <h3>By product</h3>
                 <small>Last <%= days %> days · ranked by revenue</small>
             </div>
             <% if (!byProduct.length) { %>
-                <p style="color:var(--adm-ink-3);margin-top:12px">No sales in the window.</p>
+                <p class="adm-muted-line">No sales in the window.</p>
             <% } else { %>
                 <div class="adm-table-scroll">
                 <table class="data-table data-table--cozy">
@@ -77,9 +76,9 @@
                             <td class="adm-num"><%= p.units %></td>
                             <td class="adm-num adm-money"><%= formatINR(p.revenueInPaise) %></td>
                             <td>
-                                <div style="display:flex;align-items:center;gap:10px">
-                                    <div class="share-bar" style="flex:1"><span style="width:<%= pct %>%"></span></div>
-                                    <small style="color:var(--adm-ink-2);font-weight:600;font-variant-numeric:tabular-nums;min-width:32px;text-align:right"><%= pct %>%</small>
+                                <div class="adm-share">
+                                    <div class="share-bar"><span style="width:<%= pct %>%"></span></div>
+                                    <small class="adm-share__pct"><%= pct %>%</small>
                                 </div>
                             </td>
                         </tr>

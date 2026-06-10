@@ -61,8 +61,8 @@
     .od-section {
         background: #FFFFFF;
         border: 1px solid #ECECEC;
-        border-radius: 14px;
-        padding: 28px 28px;
+        border-radius: 16px;
+        padding: 28px;
         margin-bottom: 20px;
     }
     .od-section__title {
@@ -81,17 +81,18 @@
     }
     .od-timeline__item:last-child { padding-bottom: 0; }
     .od-timeline__item::before {
-        /* connecting line */
+        /* connecting line — sits on the vertical centre of every 16px dot */
         content: ""; position: absolute;
-        left: 7px; top: 16px; bottom: -6px;
+        left: 7.5px; top: 20px; bottom: -2px;
         width: 1px; background: #E4E5E7;
     }
     .od-timeline__item:last-child::before { display: none; }
     .od-timeline__dot {
-        position: absolute; left: 0; top: 4px;
+        position: absolute; left: 0; top: 2px;
         width: 16px; height: 16px; border-radius: 50%;
         background: #FFFFFF; border: 1.5px solid #D6D9DD;
         display: inline-flex; align-items: center; justify-content: center;
+        box-sizing: border-box;
     }
     .od-timeline__item.is-done .od-timeline__dot {
         background: #23867F; border-color: #23867F;
@@ -207,7 +208,7 @@
     /* ───────── Mobile tightening (order detail) ───────── */
     @media (max-width: 720px) {
         /* Hero/back row trim */
-        .page-hero { padding: 28px 0 12px !important; }
+        .page-hero { padding: 36px 0 12px !important; }
         .od-head__back { font-size: 13px; min-height: 44px; display: inline-flex; align-items: center; }
 
         /* Header strip: order# + total stack cleanly */
@@ -223,7 +224,7 @@
         .od-grid { gap: 18px; }
 
         /* Section card: tighter padding on mobile */
-        .od-section { padding: 20px 18px; border-radius: 14px; margin-bottom: 16px; }
+        .od-section { padding: 22px 20px; border-radius: 16px; margin-bottom: 16px; }
         .od-section__title { font-size: 13px; margin-bottom: 14px; }
 
         /* Timeline stays vertical (already is) — slight tightening */

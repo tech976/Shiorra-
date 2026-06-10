@@ -61,8 +61,8 @@
     .acct-nav__card {
         background: var(--acct-bg);
         border: 1px solid var(--acct-line);
-        border-radius: var(--acct-radius);
-        padding: 22px 18px;
+        border-radius: 16px;
+        padding: 20px 16px;
         box-shadow: var(--acct-shadow-sm);
     }
     .acct-nav__head { padding: 6px 10px 18px; border-bottom: 1px solid var(--acct-line-2); margin-bottom: 12px; }
@@ -83,7 +83,7 @@
     .acct-nav__item:hover { background: var(--acct-bg-soft); color: var(--acct-ink); }
     .acct-nav__item.is-active { background: var(--acct-bg-soft); color: var(--acct-ink); font-weight: 600; }
     .acct-nav__item.is-active::before {
-        content: ""; position: absolute; left: 4px; top: 12px; bottom: 12px;
+        content: ""; position: absolute; left: 4px; top: 10px; bottom: 10px;
         width: 3px; border-radius: 3px; background: var(--acct-accent);
     }
     .acct-nav__item--alt { color: var(--acct-accent); }
@@ -103,8 +103,8 @@
     .acct-main { min-width: 0; display: flex; flex-direction: column; gap: clamp(20px, 2.4vw, 28px); }
     .acct-panel {
         background: var(--acct-bg); border: 1px solid var(--acct-line);
-        border-radius: var(--acct-radius);
-        padding: clamp(28px, 3.4vw, 44px);
+        border-radius: 16px;
+        padding: clamp(24px, 2.6vw, 32px);
         box-shadow: var(--acct-shadow-sm);
         max-width: 760px;
     }
@@ -135,7 +135,8 @@
     .acct-field select,
     .acct-field textarea {
         width: 100%; box-sizing: border-box;
-        padding: 13px 16px;
+        height: 50px;
+        padding: 14px 16px;
         font-family: inherit; font-size: 15px; color: var(--acct-ink);
         background: var(--acct-bg);
         border: 1px solid var(--acct-line);
@@ -143,6 +144,7 @@
         transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
         appearance: none;
     }
+    .acct-field textarea { height: auto; min-height: 96px; }
     .acct-field input::placeholder { color: var(--acct-muted-2); }
     .acct-field input:hover, .acct-field select:hover, .acct-field textarea:hover { border-color: #D8D8D8; }
     .acct-field input:focus, .acct-field select:focus, .acct-field textarea:focus {
@@ -180,7 +182,7 @@
 
         .acct-shell { padding: 24px 0 56px; }
 
-        .acct-nav__card { padding: 14px 12px; border-radius: 18px; }
+        .acct-nav__card { padding: 16px 12px; border-radius: 16px; }
         .acct-nav__head { padding: 4px 8px 12px; margin-bottom: 8px; }
         .acct-nav__item, .acct-nav__signout {
             padding: 13px 12px;
@@ -188,7 +190,7 @@
             font-size: 15px;
         }
 
-        .acct-panel { padding: 22px 18px; border-radius: 18px; max-width: none; }
+        .acct-panel { padding: 22px 20px; border-radius: 16px; max-width: none; }
         .acct-panel__head { margin-bottom: 18px; }
         .acct-panel__title { font-size: 17px; }
         .acct-panel__sub { font-size: 13.5px; }

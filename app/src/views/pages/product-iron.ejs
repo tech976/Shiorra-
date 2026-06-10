@@ -111,7 +111,7 @@
   .info{padding-top:8px}
   .pi-eyebrow-trust{display:inline-flex;align-items:center;gap:8px;background:var(--honey-soft);color:var(--honey-deep);font-size:11.5px;font-weight:800;padding:6px 12px;border-radius:20px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
   .pi-eyebrow-trust::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--honey)}
-  .pi-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:40px;font-weight:700;line-height:1.08;letter-spacing:-0.022em;color:var(--ink);margin-bottom:10px}
+  .pi-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:40px;font-weight:700;line-height:1.08;letter-spacing:-0.022em;color:var(--ink);margin-bottom:10px;text-wrap:balance}
   .pi-title em{font-style:italic;color:var(--honey);font-weight:500}
   @media(max-width:680px){.pi-title{font-size:32px}}
   .pi-sub{font-size:18px;color:var(--honey-deep);font-style:italic;font-weight:500;line-height:1.45;margin-bottom:22px;max-width:520px}
@@ -150,7 +150,7 @@
     color:var(--honey-deep);font-size:12px;font-weight:800;
     padding:8px 16px;border-radius:22px;letter-spacing:.10em;text-transform:uppercase;margin-bottom:16px;
   }
-  .s-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:48px;font-weight:700;line-height:1.05;letter-spacing:-0.025em;margin-bottom:16px;max-width:760px;color:var(--charcoal);position:relative}
+  .s-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:48px;font-weight:700;line-height:1.05;letter-spacing:-0.025em;margin-bottom:16px;max-width:760px;color:var(--charcoal);position:relative;text-wrap:balance}
   .s-title em{font-style:italic;color:var(--honey);font-weight:500}
   @media(max-width:680px){.s-title{font-size:36px}}
   .s-sub{font-size:17px;color:var(--ink-soft);max-width:640px;line-height:1.6}
@@ -170,7 +170,7 @@
 
   /* ---------- Symptom cards ---------- */
   .symptoms-bg{background:#fff}
-  .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
   .symptom-card{
     background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;
@@ -190,7 +190,7 @@
 
   /* ---------- Power team ---------- */
   .power-bg{background:linear-gradient(180deg,#fff,var(--surface) 100%)}
-  .power-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  .power-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;align-items:stretch}
   @media(max-width:880px){.power-grid{grid-template-columns:1fr}}
   .power-card{
     background:#fff;border:1px solid var(--line);border-radius:24px;padding:34px;
@@ -226,7 +226,7 @@
   .bvit-pill:hover{transform:translateY(-3px);box-shadow:0 12px 28px -14px rgba(40,40,40,.12)}
   .bvit-pill .name{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:18px;color:var(--honey-deep);letter-spacing:.02em}
   .bvit-pill .sub{font-size:11.5px;color:var(--honey-deep);opacity:.75;margin-top:4px;font-weight:600}
-  .bvit-help{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:36px}
+  .bvit-help{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:36px;align-items:stretch}
   @media(max-width:880px){.bvit-help{grid-template-columns:repeat(2,1fr)}}
   .bvit-help-card{
     background:#fff;border:1px solid var(--line);
@@ -236,21 +236,21 @@
   .bvit-help-card:hover{transform:translateY(-3px);border-color:var(--line);box-shadow:0 16px 32px -16px rgba(40,40,40,.12)}
   .bvit-help-card:hover .ic{transform:scale(1.04)}
   .bvit-help-card .ic{
-    width:60px;height:60px;border-radius:16px;
+    width:64px;height:64px;border-radius:18px;
     background:#F7F7F8;
     color:var(--ink);display:grid;place-items:center;margin-bottom:14px;
     transition:transform .35s cubic-bezier(.2,.7,.2,1);
   }
-  .bvit-help-card .ic svg{width:28px;height:28px;stroke-width:2.2}
+  .bvit-help-card .ic svg{width:30px;height:30px;stroke-width:2.2}
   .bvit-help-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;margin-bottom:6px;color:var(--ink);font-weight:700}
   .bvit-help-card p{font-size:13px;color:var(--muted);line-height:1.55}
 
   /* ---------- Minerals ---------- */
   .min-bg{background:linear-gradient(180deg,var(--surface),#fff 100%)}
-  .min-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .min-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.min-grid{grid-template-columns:repeat(2,1fr)}}
   .min-card{
-    background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;
+    background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;
     transition:transform .3s,box-shadow .3s,border-color .3s;
   }
   .min-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px -16px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
@@ -282,7 +282,7 @@
 
   /* ---------- Timeline ---------- */
   .timeline-bg{background:linear-gradient(180deg,#fff,var(--surface) 100%)}
-  .timeline-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:16px}
+  .timeline-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:16px;align-items:stretch}
   @media(max-width:880px){.timeline-grid{grid-template-columns:1fr}}
   .tl-card{
     background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px;position:relative;
@@ -332,7 +332,7 @@
 
   /* ---------- Root cards ---------- */
   .root-bg{background:linear-gradient(180deg,var(--surface),#fff 100%)}
-  .root-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px}
+  .root-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px;align-items:stretch}
   @media(max-width:980px){.root-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:580px){.root-grid{grid-template-columns:1fr}}
   .root-card{
@@ -356,7 +356,7 @@
     font-size:13px;font-weight:700;line-height:1.4;
   }
   .root-card .solve svg{
-    width:24px;height:24px;flex-shrink:0;color:var(--honey);
+    width:20px;height:20px;flex-shrink:0;color:var(--honey);stroke-width:2.4;
   }
 
   /* ---------- Reminder + final CTA ---------- */

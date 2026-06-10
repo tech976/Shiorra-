@@ -32,7 +32,7 @@
         <% } %>
 
         <form action="<%= coupon ? '/admin/coupons/' + coupon.id : '/admin/coupons' %>" method="post" class="form-grid form-grid--admin">
-            <label>Code<input name="code" required value="<%= values.code || '' %>" placeholder="WELCOME10" style="text-transform:uppercase;letter-spacing:0.05em;font-weight:600"></label>
+            <label>Code<input name="code" required value="<%= values.code || '' %>" placeholder="WELCOME10" class="adm-input-code"></label>
             <label>Type
                 <select name="type">
                     <option value="PERCENT" <%= values.type === 'PERCENT' ? 'selected' : '' %>>Percent off</option>
@@ -40,7 +40,7 @@
                 </select>
             </label>
             <label>Value<input name="value" required value="<%= values.value || '' %>" placeholder="10 for 10% or 100 for ₹100">
-                <small class="form-hint" style="text-transform:none;letter-spacing:normal;font-weight:400">Percent: 1-100 · Fixed: rupees off</small>
+                <small class="form-hint">Percent: 1-100 · Fixed: rupees off</small>
             </label>
             <label>Minimum subtotal (₹, optional)<input name="minSubtotal" value="<%= values.minSubtotal || '' %>" placeholder="0 for no minimum"></label>
             <label>Usage limit (optional)<input name="usageLimit" value="<%= values.usageLimit || '' %>" placeholder="Blank = unlimited"></label>

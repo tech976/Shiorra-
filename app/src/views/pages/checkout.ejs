@@ -79,8 +79,9 @@
   .co-field textarea {
     appearance: none;
     width: 100%;
-    height: 48px;
-    padding: 0 16px;
+    height: 50px;
+    padding: 14px 16px;
+    box-sizing: border-box;
     border: 1px solid var(--sh-line-strong);
     border-radius: 12px;
     background: #fff;
@@ -300,12 +301,12 @@
   }
 
   @media (max-width: 640px) {
-    .sh-flow-hero { padding: 28px 0 4px; }
+    .sh-flow-hero { padding: 36px 0 4px; }
     .sh-flow-hero .sh-steps { gap: 10px; font-size: 11.5px; margin-top: 14px; flex-wrap: wrap; }
     .sh-flow-hero .sh-steps em { width: 16px; }
 
     .co-form { gap: 22px; }
-    .co-section { padding: 22px 18px; border-radius: 14px; }
+    .co-section { padding: 24px 20px; border-radius: 16px; }
 
     /* Section numbered circles: 40px → 32px (already 32) — keep readable title */
     .co-step { width: 32px; height: 32px; font-size: 14px; }
@@ -365,7 +366,7 @@
     .co-trust__s { font-size: 12.5px; }
 
     /* Summary card */
-    .summary-card { padding: 22px 18px; border-radius: 14px; }
+    .summary-card { padding: 24px 20px; border-radius: 16px; }
     .summary-card__title { font-size: 16px; margin-bottom: 16px; }
 
     /* Mini items: typography readable, name ≥14px, meta ≥13px */
@@ -397,7 +398,7 @@
 
   /* Larger phones — small spacing tweak */
   @media (max-width: 480px) {
-    .co-section { padding: 20px 16px; }
+    .co-section { padding: 22px 18px; }
 
     /* Sticky bottom "Place order" bar on mobile — always visible, never
        requires scrolling to find. Friction-killer. */
@@ -427,7 +428,6 @@
   }
   @media (min-width: 641px) {
     .co-mobile-place { display: none; }
-    .summary-card { padding: 20px 16px; }
   }
 </style>
 

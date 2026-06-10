@@ -77,8 +77,8 @@
     .acct-nav__card {
         background: var(--acct-bg);
         border: 1px solid var(--acct-line);
-        border-radius: var(--acct-radius);
-        padding: 22px 18px;
+        border-radius: 16px;
+        padding: 20px 16px;
         box-shadow: var(--acct-shadow-sm);
     }
     .acct-nav__head { padding: 6px 10px 18px; border-bottom: 1px solid var(--acct-line-2); margin-bottom: 12px; }
@@ -115,7 +115,7 @@
         font-weight: 600;
     }
     .acct-nav__item.is-active::before {
-        content: ""; position: absolute; left: 4px; top: 12px; bottom: 12px;
+        content: ""; position: absolute; left: 4px; top: 10px; bottom: 10px;
         width: 3px; border-radius: 3px; background: var(--acct-accent);
     }
     .acct-nav__item--alt { color: var(--acct-accent); }
@@ -145,8 +145,8 @@
     .acct-panel {
         background: var(--acct-bg);
         border: 1px solid var(--acct-line);
-        border-radius: var(--acct-radius);
-        padding: clamp(24px, 3vw, 36px);
+        border-radius: 16px;
+        padding: clamp(24px, 2.6vw, 32px);
         box-shadow: var(--acct-shadow-sm);
     }
     .acct-panel__head {
@@ -170,17 +170,17 @@
     .acct-stat {
         position: relative;
         display: flex; flex-direction: column; gap: 10px;
-        padding: 26px 26px 24px;
+        padding: 24px;
         background: var(--acct-bg);
         border: 1px solid var(--acct-line);
-        border-radius: 20px;
+        border-radius: 16px;
         text-decoration: none;
         color: inherit;
         box-shadow: var(--acct-shadow-sm);
         transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
     }
     .acct-stat:hover {
-        transform: translateY(-2px);
+        transform: translateY(-3px);
         box-shadow: var(--acct-shadow);
         border-color: #E0E0E0;
     }
@@ -198,7 +198,7 @@
     .acct-stat__num--accent { color: var(--acct-accent); }
     .acct-stat__lbl { font-size: 13px; color: var(--acct-muted); letter-spacing: 0.01em; }
     .acct-stat__arrow {
-        position: absolute; top: 22px; right: 22px;
+        position: absolute; top: 20px; right: 20px;
         color: var(--acct-muted-2);
         transition: color 200ms ease, transform 200ms ease;
     }
@@ -257,7 +257,8 @@
     .acct-field select,
     .acct-field textarea {
         width: 100%; box-sizing: border-box;
-        padding: 13px 16px;
+        height: 50px;
+        padding: 14px 16px;
         font-family: inherit; font-size: 15px; color: var(--acct-ink);
         background: var(--acct-bg);
         border: 1px solid var(--acct-line);
@@ -265,6 +266,7 @@
         transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
         appearance: none;
     }
+    .acct-field textarea { height: auto; min-height: 96px; }
     .acct-field input::placeholder { color: var(--acct-muted-2); }
     .acct-field input:hover, .acct-field select:hover, .acct-field textarea:hover { border-color: #D8D8D8; }
     .acct-field input:focus, .acct-field select:focus, .acct-field textarea:focus {
@@ -329,12 +331,12 @@
         display: flex; flex-direction: column;
         background: var(--acct-bg);
         border: 1px solid var(--acct-line);
-        border-radius: 20px;
-        padding: 24px 24px 20px;
+        border-radius: 16px;
+        padding: 24px;
         box-shadow: var(--acct-shadow-sm);
         transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
     }
-    .acct-addr:hover { transform: translateY(-2px); box-shadow: var(--acct-shadow); border-color: #E0E0E0; }
+    .acct-addr:hover { transform: translateY(-3px); box-shadow: var(--acct-shadow); border-color: #E0E0E0; }
     .acct-addr__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
     .acct-addr__label {
         font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
@@ -367,7 +369,7 @@
         border-color: var(--acct-accent);
         color: var(--acct-accent);
         background: var(--acct-accent-soft);
-        transform: translateY(-2px); box-shadow: var(--acct-shadow-sm);
+        transform: translateY(-3px); box-shadow: var(--acct-shadow-sm);
     }
     .acct-addr--new__inner { display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .acct-addr--new__plus {
@@ -390,7 +392,7 @@
         .acct-shell { padding: 24px 0 56px; }
 
         /* Sidebar nav: smaller padding so it doesn't dominate */
-        .acct-nav__card { padding: 14px 12px; border-radius: 18px; }
+        .acct-nav__card { padding: 16px 12px; border-radius: 16px; }
         .acct-nav__head { padding: 4px 8px 12px; margin-bottom: 8px; }
         .acct-nav__item, .acct-nav__signout {
             padding: 13px 12px;
@@ -399,14 +401,14 @@
         }
 
         /* Panels: tighter horizontal padding */
-        .acct-panel { padding: 20px 18px; border-radius: 18px; }
+        .acct-panel { padding: 22px 20px; border-radius: 16px; }
         .acct-panel__head { margin-bottom: 16px; }
         .acct-panel__title { font-size: 17px; }
         .acct-panel__sub { font-size: 13.5px; }
 
         /* Stat cards: 2-up so orders + addresses sit side by side, admin wraps below */
         .acct-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-        .acct-stat { padding: 18px 16px 16px; border-radius: 16px; }
+        .acct-stat { padding: 20px; border-radius: 16px; }
         .acct-stat__num { font-size: 24px; }
         .acct-stat__lbl { font-size: 12px; }
         .acct-stat__arrow { top: 14px; right: 14px; }

@@ -23,9 +23,10 @@
         <% if (!coupons.length) { %>
             <div class="adm-empty">
                 <div class="adm-empty__art">
-                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 12a2 2 0 0 1 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M9 11v2"/><path d="M15 11v2"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a2 2 0 0 1 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M9 11v2"/><path d="M15 11v2"/></svg>
                 </div>
-                <p>No coupons yet. Create one to give customers a discount at checkout.</p>
+                <h4>No coupons yet</h4>
+                <p>Create one to give customers a discount at checkout.</p>
                 <a href="/admin/coupons/new" class="btn btn--sm">Create your first coupon</a>
             </div>
         <% } else { %>
@@ -45,7 +46,7 @@
                             <% } %>
                         </td>
                         <td class="adm-num"><%= c.minSubtotal > 0 ? formatINR(c.minSubtotal) : '—' %></td>
-                        <td class="adm-num"><%= c.usedCount %><% if (c.usageLimit) { %> <span style="color:var(--adm-ink-3)">/ <%= c.usageLimit %></span><% } %></td>
+                        <td class="adm-num"><%= c.usedCount %><% if (c.usageLimit) { %> <span class="adm-cell-mute">/ <%= c.usageLimit %></span><% } %></td>
                         <td>
                             <% const isExpired = c.expiresAt && new Date(c.expiresAt) < new Date(); %>
                             <% if (!c.active) { %>
@@ -56,11 +57,11 @@
                                 <span class="badge badge--paid">Active</span>
                             <% } %>
                         </td>
-                        <td style="color:var(--adm-ink-3);font-variant-numeric:tabular-nums;font-size:0.84rem"><%= c.expiresAt ? c.expiresAt.toISOString().slice(0,10) : '—' %></td>
+                        <td class="adm-cell-date"><%= c.expiresAt ? c.expiresAt.toISOString().slice(0,10) : '—' %></td>
                         <td class="data-table__actions">
                             <a href="/admin/coupons/<%= c.id %>/edit" class="btn btn--sm">Edit</a>
-                            <form action="/admin/coupons/<%= c.id %>?_method=DELETE" method="post" onsubmit="return confirm('Delete coupon <%= c.code %>?');" style="display:inline">
-                                <button class="btn btn--sm btn--danger">Delete</button>
+                            <form action="/admin/coupons/<%= c.id %>?_method=DELETE" method="post" onsubmit="return confirm('Delete coupon <%= c.code %>?');" class="adm-inline-toggle">
+                                <button class="btn btn--sm btn--danger" type="submit">Delete</button>
                             </form>
                         </td>
                     </tr>

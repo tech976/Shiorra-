@@ -39,9 +39,10 @@
         <% if (!orders.length) { %>
             <div class="adm-empty">
                 <div class="adm-empty__art">
-                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 </div>
-                <p>No orders match your filter.</p>
+                <h4>No orders match your filter</h4>
+                <p>Try adjusting the search, status or date window above.</p>
                 <% if (q || activeStatus || from || to) { %><a href="/admin/orders" class="btn btn--sm">Clear filters</a><% } %>
             </div>
         <% } else { %>
@@ -80,25 +81,23 @@
                             <td><input type="checkbox" name="ids" value="<%= o.id %>" class="bulk-row"></td>
                             <td>
                                 <a href="/admin/orders/<%= o.id %>"><strong><%= o.orderNumber %></strong></a>
-                                <% if (o.couponCode) { %><br><small style="color:var(--adm-ink-3)">🎟 <%= o.couponCode %></small><% } %>
+                                <% if (o.couponCode) { %><br><small class="adm-cell-sub">🎟 <%= o.couponCode %></small><% } %>
                             </td>
                             <td>
                                 <a href="/admin/users/<%= o.userId %>"><%= o.user.name || o.user.email %></a><br>
-                                <small style="color:var(--adm-ink-3)"><%= o.user.email %></small>
+                                <small class="adm-cell-sub"><%= o.user.email %></small>
                             </td>
                             <td class="adm-num"><%= o.items.length %></td>
                             <td class="adm-num adm-money">
                                 <%= formatINR(o.totalInPaise) %>
-                                <% if (o.discountInPaise > 0) { %><br><small style="color:var(--c-success);font-weight:500">-<%= formatINR(o.discountInPaise) %></small><% } %>
+                                <% if (o.discountInPaise > 0) { %><br><small class="adm-cell-discount">-<%= formatINR(o.discountInPaise) %></small><% } %>
                             </td>
                             <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
                             <td><span class="badge badge--<%= o.paymentStatus.toLowerCase() %>"><%= o.paymentStatus %></span></td>
-                            <td style="color:var(--adm-ink-3);font-size:0.84rem;font-variant-numeric:tabular-nums"><%= o.createdAt.toISOString().slice(0,10) %></td>
-                            <td>
-                                <div style="display:flex;gap:6px">
-                                    <a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a>
-                                    <a href="/admin/orders/<%= o.id %>/invoice" target="_blank" class="btn btn--sm btn--ghost">Invoice</a>
-                                </div>
+                            <td class="adm-cell-date"><%= o.createdAt.toISOString().slice(0,10) %></td>
+                            <td class="data-table__actions">
+                                <a href="/admin/orders/<%= o.id %>" class="btn btn--sm">Open</a>
+                                <a href="/admin/orders/<%= o.id %>/invoice" target="_blank" class="btn btn--sm btn--ghost">Invoice</a>
                             </td>
                         </tr>
                     <% }); %>

@@ -27,9 +27,7 @@
             <div class="kpi kpi--accent">
                 <span class="kpi__label">Revenue · Today</span>
                 <span class="kpi__num"><%= formatINR(kpis.revTodayInPaise) %></span>
-                <span class="kpi__delta <%= kpis.revDeltaPct >= 0 ? 'is-up' : 'is-down' %>">
-                    <%= kpis.revDeltaPct >= 0 ? '▲' : '▼' %> <%= Math.abs(kpis.revDeltaPct) %>% vs yesterday
-                </span>
+                <span class="kpi__delta <%= kpis.revDeltaPct >= 0 ? 'is-up' : 'is-down' %>"><span aria-hidden="true"><%= kpis.revDeltaPct >= 0 ? '▲' : '▼' %></span> <%= Math.abs(kpis.revDeltaPct) %>% vs yesterday</span>
             </div>
             <div class="kpi">
                 <span class="kpi__label">Revenue · This month</span>
@@ -59,7 +57,7 @@
             <div class="kpi">
                 <span class="kpi__label">Active SKUs</span>
                 <span class="kpi__num"><%= kpis.productCount %></span>
-                <span class="kpi__delta is-muted"><a href="/admin/products" style="color:inherit;text-decoration:underline">Manage</a></span>
+                <span class="kpi__delta is-muted"><a href="/admin/products" class="adm-link-muted">Manage</a></span>
             </div>
             <div class="kpi kpi--warn">
                 <span class="kpi__label">Abandoned carts</span>
@@ -101,7 +99,7 @@
                     <small>Last 30 days</small>
                 </div>
                 <% if (topProducts.length === 0) { %>
-                    <p style="color:var(--adm-ink-3);margin-top:12px">No sales yet in the last 30 days.</p>
+                    <p class="adm-muted-line">No sales yet in the last 30 days.</p>
                 <% } else { %>
                     <div class="adm-table-scroll">
                     <table class="data-table data-table--cozy">
@@ -125,7 +123,7 @@
                     <small>All time</small>
                 </div>
                 <% if (topCustomers.length === 0) { %>
-                    <p style="color:var(--adm-ink-3);margin-top:12px">No paid orders yet.</p>
+                    <p class="adm-muted-line">No paid orders yet.</p>
                 <% } else { %>
                     <div class="adm-table-scroll">
                     <table class="data-table data-table--cozy">
@@ -156,10 +154,10 @@
             <section class="admin__panel">
                 <div class="adm-card__head">
                     <h3>Latest orders</h3>
-                    <small><a href="/admin/orders" style="color:var(--adm-sage);text-decoration:none">View all →</a></small>
+                    <small><a href="/admin/orders" class="adm-link-accent">View all →</a></small>
                 </div>
                 <% if (latestOrders.length === 0) { %>
-                    <p style="color:var(--adm-ink-3);margin-top:12px">No orders yet.</p>
+                    <p class="adm-muted-line">No orders yet.</p>
                 <% } else { %>
                     <div class="adm-table-scroll">
                     <table class="data-table data-table--cozy">
@@ -185,7 +183,7 @@
                     <small><a href="/admin/users" style="color:var(--adm-sage);text-decoration:none">View all →</a></small>
                 </div>
                 <% if (recentUsers.length === 0) { %>
-                    <p style="color:var(--adm-ink-3);margin-top:12px">No new users yet.</p>
+                    <p class="adm-muted-line">No new users yet.</p>
                 <% } else { %>
                     <ul class="activity">
                         <% recentUsers.forEach(function(u) { %>
