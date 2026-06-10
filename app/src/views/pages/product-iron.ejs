@@ -560,6 +560,28 @@
   </div>
 </div>
 
+<!-- EDITORIAL MASTHEAD — reviews-page DNA -->
+<div class="pi-masthead">
+  <div class="wrap">
+    <div class="pi-masthead__inner reveal">
+      <span class="pi-masthead__edition">Iron+ · Volume One</span>
+      <span class="pi-masthead__pub">Shiōrra Reader Edition</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Editorial masthead — borrows the reviews.ejs rv-hero__masthead language */
+  .pi-masthead{background:#fff;border-bottom:1px solid var(--line);padding:18px 0}
+  .pi-masthead__inner{display:flex;justify-content:space-between;align-items:center;gap:24px;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--c-text-3,#8A8A8A)}
+  .pi-masthead__edition{color:var(--ink)}
+  .pi-masthead__pub{color:var(--honey-deep)}
+  @media (max-width:560px){
+    .pi-masthead{padding:14px 0}
+    .pi-masthead__inner{font-size:10px;letter-spacing:.18em}
+  }
+</style>
+
 <!-- HERO -->
 <section class="product-hero" id="buy">
   <div class="wrap">
@@ -643,11 +665,48 @@
   </div>
 </section>
 
+<!-- FEATURED READER LETTER — full-bleed editorial pull quote -->
+<section class="pi-feature" aria-label="Featured reader letter">
+  <div class="wrap">
+    <span class="rv-marker rv-marker--light reveal">Featured · Reader Letter 01</span>
+    <blockquote class="pi-feature__quote reveal">
+      <span class="pi-feature__open" aria-hidden="true">"</span>
+      I came off two iron tablets that left me nauseous and exhausted. My OB suggested Shiōrra Iron+. By week four my energy was back, my Hb was rising, and for the first time in this pregnancy I wasn't dreading the morning capsule.
+      <span class="pi-feature__close" aria-hidden="true">"</span>
+    </blockquote>
+    <div class="pi-feature__attr reveal">
+      <div class="pi-feature__author">Priya M.</div>
+      <div class="pi-feature__meta">Mumbai · 24 weeks · verified purchase</div>
+      <div class="pi-feature__rating" aria-label="5 star rating">★ ★ ★ ★ ★</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Featured pull-quote — mirrors the reviews.ejs .rv-feature DNA */
+  .pi-feature{background:var(--charcoal,#282828);color:#fff;padding:clamp(72px,10vw,120px) 0;position:relative;overflow:hidden}
+  .pi-feature .wrap{max-width:880px;text-align:center}
+  .pi-feature .rv-marker{margin-bottom:32px}
+  .pi-feature__quote{font-family:'Helvetica Neue','Helvetica',Arial,sans-serif;font-size:clamp(24px,3.4vw,36px);line-height:1.32;letter-spacing:-0.015em;font-weight:400;color:#fff;margin:0 auto 36px;max-width:760px;text-wrap:balance;position:relative}
+  .pi-feature__open,.pi-feature__close{font-family:'Helvetica Neue',Georgia,serif;font-size:1.4em;font-weight:300;color:var(--honey,#E11D48);opacity:.7;display:inline-block;line-height:0;position:relative;top:.1em}
+  .pi-feature__open{margin-right:.08em}
+  .pi-feature__close{margin-left:.04em}
+  .pi-feature__attr{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .pi-feature__author{font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+  .pi-feature__meta{font-size:12.5px;color:rgba(255,255,255,.6);letter-spacing:.04em}
+  .pi-feature__rating{color:var(--honey,#E11D48);font-size:13px;letter-spacing:.18em;margin-top:4px}
+  @media (max-width:640px){
+    .pi-feature{padding:clamp(56px,12vw,96px) 0}
+    .pi-feature__quote{font-size:clamp(20px,5.4vw,28px);line-height:1.36}
+  }
+</style>
+
 <!-- WHY IRON ALONE ISN'T ENOUGH -->
 <section class="s symptoms-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">The hidden pregnancy crisis</span>
+      <span class="rv-marker">The crisis · 01</span>
+      <span class="s-eyebrow" style="display:none">The hidden pregnancy crisis</span>
       <h2 class="s-title">Why <em>iron alone</em> isn't enough.</h2>
       <p class="s-sub">Conventional iron tablets are harsh, poorly absorbed, and miss the co-factors your body needs to actually use the iron. Here's what most moms quietly live with.</p>
     </div>
@@ -668,7 +727,7 @@
 <section class="s power-bg" id="composition">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">Meet the power team</span>
+      <span class="rv-marker">The team · 02</span><span class="s-eyebrow" style="display:none">Meet the power team</span>
       <h2 class="s-title">Two lead actives, <em>built to absorb</em>.</h2>
       <p class="s-sub">Iron+ pairs chelated Ferrous Bisglycinate with active L-methylfolate — so your body actually gets both into the bloodstream, not just into the tablet.</p>
     </div>
@@ -705,7 +764,7 @@
 <section class="s bvit-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">The B-vitamin co-factors</span>
+      <span class="rv-marker">B-vitamins · 03</span><span class="s-eyebrow" style="display:none">The B-vitamin co-factors</span>
       <h2 class="s-title">The actives that <em>unlock</em> iron.</h2>
       <p class="s-sub">Iron isn't absorbed in a vacuum. The B-complex actives are the spark plugs that convert iron into hemoglobin and protect the baby's development.</p>
     </div>
@@ -730,7 +789,7 @@
 <section class="s min-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">The mineral team</span>
+      <span class="rv-marker">Minerals · 04</span><span class="s-eyebrow" style="display:none">The mineral team</span>
       <h2 class="s-title">Tiny amounts, <em>big jobs</em>.</h2>
       <p class="s-sub">Zinc, copper and selenium round out the formula — the supporting minerals that help iron actually do its work and protect baby's development.</p>
     </div>
@@ -747,7 +806,7 @@
 <section class="s formula-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">Inside every vegecap</span>
+      <span class="rv-marker">The formula · 05</span><span class="s-eyebrow" style="display:none">Inside every vegecap</span>
       <h2 class="s-title">9 actives, <em>working together</em>.</h2>
       <p class="s-sub">Every nutrient bioavailable without enzymatic conversion. One vegecap, daily, gets all of it into your bloodstream.</p>
     </div>
@@ -770,7 +829,7 @@
 <section class="s timeline-bg" id="timeline">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">Your six-month trail</span>
+      <span class="rv-marker">The trail · 06</span><span class="s-eyebrow" style="display:none">Your six-month trail</span>
       <h2 class="s-title">Hb climbs gently, <em>visibly</em>.</h2>
       <p class="s-sub">From base camp (10.0 g/dL) to summit (12.6+ g/dL · WHO normal). Here's what most women report as the weeks add up — individual experiences may vary.</p>
     </div>
@@ -814,7 +873,7 @@
 <section class="s why-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">Why moms switch to Shiōrra</span>
+      <span class="rv-marker">The switch · 07</span><span class="s-eyebrow" style="display:none">Why moms switch to Shiōrra</span>
       <h2 class="s-title">A tablet that <em>actually works</em>.</h2>
       <p class="s-sub">Most iron tablets use ferrous sulfate — harsh, poorly absorbed, missing co-factors. Iron+ was built differently.</p>
     </div>
@@ -835,7 +894,7 @@
 <section class="s root-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">Why you may feel tired</span>
+      <span class="rv-marker">The why · 08</span><span class="s-eyebrow" style="display:none">Why you may feel tired</span>
       <h2 class="s-title">Root cause, met with the <em>right nutrient</em>.</h2>
       <p class="s-sub">Pregnancy fatigue isn't laziness — it's biology. Iron+ pairs the right nutrient with each underlying cause.</p>
     </div>
