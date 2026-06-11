@@ -358,10 +358,12 @@
   .tl-stat .ref{font-size:11.5px;opacity:.85;font-style:italic}
 
   /* ---------- Compare ---------- */
-  /* Switch section: white background to match symptoms / B-vitamins.
-     Image still sits flush at the top of the section bracket. */
-  .why-bg{background:#fff;padding-top:0 !important}
+  /* Switch section: white bg, small breathing room above the image. */
+  .why-bg{background:#fff;padding-top:16px !important}
   .why-bg .wrap{padding-top:0}
+  @media (max-width:720px){
+    .why-bg{padding-top:12px !important}
+  }
   .compare-table{margin-top:14px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
   .compare-row{display:grid;grid-template-columns:1.2fr 1fr 1fr}
   .compare-row + .compare-row{border-top:1px solid var(--line-soft)}
