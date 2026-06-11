@@ -203,6 +203,16 @@
   .switch-figure{margin:0;border-radius:0;overflow:visible;background:transparent}
   .switch-figure picture{display:block}
   .switch-figure img{display:block;width:100%;height:auto}
+  /* MOBILE: break the switch image out of .wrap's horizontal padding so it
+     spans full viewport width — "zoomed in" so headline + comparison are
+     bigger and more legible on phones. */
+  @media (max-width: 720px){
+    .switch-figure{
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+    }
+  }
   .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
   .symptom-card{
