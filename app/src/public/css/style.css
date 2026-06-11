@@ -7599,10 +7599,55 @@ body.aw-cursor-out .aw-cursor-ring {
     box-shadow: 0 10px 24px rgba(0,0,0,.12);
 }
 
-/* === Buy form layout — qty + Buy Now on one row, Or add to cart full-width beneath === */
-.pi-buy-form { display: flex; flex-direction: column; gap: 10px; margin: 0; }
-.pi-buy-form .pi-buy-row { display: flex; align-items: stretch; gap: 12px; }
-.pi-buy-form .pi-add { flex: 1; }
+/* === Buy form layout — Flipkart/Myntra/Bombay Shaving pattern
+   Row 1: Qty label + compact stepper (left-aligned)
+   Row 2: ADD TO CART (ghost) + BUY NOW (filled) side-by-side, equal weight === */
+.pi-buy-form { display: flex; flex-direction: column; gap: 14px; margin: 0; }
+.pi-buy-form .pi-qty-row { display: flex; align-items: center; gap: 14px; }
+.pi-buy-form .pi-qty-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(26,26,26,0.55);
+}
+.pi-buy-form .pi-buy-row { display: flex; align-items: stretch; gap: 10px; }
+.pi-buy-form .pi-buy-row .pi-add,
+.pi-buy-form .pi-buy-row .pi-add-secondary { flex: 1 1 0; min-width: 0; }
+
+/* When .pi-add-secondary is INSIDE .pi-buy-row, it's an equal-weight ghost
+   button (matches primary Buy Now geometry, distinguished by outline vs fill).
+   This overrides the standalone "tertiary" rule below. */
+.pi-buy-form .pi-buy-row .pi-add-secondary {
+    height: 52px !important;
+    min-height: 52px !important;
+    padding: 0 18px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: .04em !important;
+    text-transform: uppercase !important;
+    border: 1px solid #1A1A1A !important;
+    border-radius: 12px !important;
+    background: transparent !important;
+    color: #1A1A1A !important;
+    width: auto !important;
+}
+.pi-buy-form .pi-buy-row .pi-add-secondary:hover {
+    background: #1A1A1A !important;
+    color: #fff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0,0,0,.12);
+}
+@media (max-width: 640px) {
+    .pi-buy-form .pi-buy-row .pi-add-secondary {
+        height: 56px !important;
+        min-height: 56px !important;
+        font-size: 14.5px !important;
+        padding: 0 12px !important;
+    }
+    /* on very narrow phones, keep tracking tight so labels fit */
+    .pi-buy-form .pi-buy-row .pi-add { padding: 0 12px !important; letter-spacing: .03em !important; }
+}
 
 /* === TERTIARY CTA — "Or add to cart" on product PDPs ===
    Premium-ecomm pattern (Apple, Allbirds, Glossier, Lululemon,

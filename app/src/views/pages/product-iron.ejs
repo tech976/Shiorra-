@@ -622,15 +622,18 @@
         </div>
         <form action="/cart/buy-now" method="post" id="addToCartForm" class="pi-buy-form">
           <input type="hidden" name="productId" value="<%= product.id %>">
-          <div class="pi-buy-row">
+          <div class="pi-qty-row">
+            <span class="pi-qty-label">Qty</span>
             <div class="pi-qty">
-              <button type="button" data-q="-">−</button>
-              <input type="number" name="quantity" value="1" min="1" max="9" form="addToCartForm">
-              <button type="button" data-q="+">+</button>
+              <button type="button" data-q="-" aria-label="Decrease quantity">−</button>
+              <input type="number" name="quantity" value="1" min="1" max="9" form="addToCartForm" aria-label="Quantity">
+              <button type="button" data-q="+" aria-label="Increase quantity">+</button>
             </div>
+          </div>
+          <div class="pi-buy-row">
+            <button type="submit" formaction="/cart/add" class="pi-add-secondary">Add to cart</button>
             <button type="submit" class="pi-add">Buy now · <%= formatINR(product.priceInPaise) %></button>
           </div>
-          <button type="submit" formaction="/cart/add" class="pi-add-secondary">Or add to cart</button>
         </form>
         <p class="pi-trust-line">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
