@@ -7478,8 +7478,10 @@ body.aw-cursor-out .aw-cursor-ring {
    bg gradient continues the scroll-seq's bottom edge tone (#F5F5F5) so
    the studio merge stays seamless. !important overrides the per-page
    #fff that .symptoms-bg etc. carry. */
-.scroll-seq + section,
-.scroll-seq + .s {
+/* Excludes .pi-feature — that section sets its own bg + padding and
+   shouldn't inherit the studio gradient. */
+.scroll-seq + section:not(.pi-feature),
+.scroll-seq + .s:not(.pi-feature) {
     padding-top: clamp(48px, 7vw, 96px);
     background: linear-gradient(180deg, #F5F5F5 0%, #FAFAFA 18%, #FFFFFF 45%) !important;
 }
