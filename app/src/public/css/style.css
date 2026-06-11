@@ -7599,12 +7599,18 @@ body.aw-cursor-out .aw-cursor-ring {
     box-shadow: 0 10px 24px rgba(0,0,0,.12);
 }
 
+/* === Buy form layout — qty + Buy Now on one row, Or add to cart full-width beneath === */
+.pi-buy-form { display: flex; flex-direction: column; gap: 10px; margin: 0; }
+.pi-buy-form .pi-buy-row { display: flex; align-items: stretch; gap: 12px; }
+.pi-buy-form .pi-add { flex: 1; }
+
 /* === TERTIARY CTA — "Or add to cart" on product PDPs ===
    Premium-ecomm pattern (Apple, Allbirds, Glossier, Lululemon,
    Bombay Shaving): when there's a hero Buy Now CTA, the secondary
    add-to-cart action is visually LIGHTER. Compact outlined button,
-   smaller text, no uppercase shout. Still 44px+ for thumb-tap. */
+   smaller text, no uppercase shout. Spans full row width beneath. */
 .pi-add-secondary {
+    width: 100% !important;
     height: 42px !important;
     min-height: 42px !important;
     padding: 0 18px !important;
