@@ -7611,26 +7611,41 @@ body.aw-cursor-out .aw-cursor-ring {
     text-transform: uppercase;
     color: rgba(26,26,26,0.55);
 }
-.pi-buy-form .pi-buy-row { display: flex; align-items: stretch; gap: 10px; }
+.pi-buy-form .pi-buy-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: stretch; }
 .pi-buy-form .pi-buy-row .pi-add,
-.pi-buy-form .pi-buy-row .pi-add-secondary { flex: 1 1 0; min-width: 0; }
+.pi-buy-form .pi-buy-row .pi-add-secondary {
+    width: 100% !important;
+    min-width: 0;
+    box-sizing: border-box !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 /* When .pi-add-secondary is INSIDE .pi-buy-row, it's an equal-weight ghost
    button (matches primary Buy Now geometry, distinguished by outline vs fill).
-   This overrides the standalone "tertiary" rule below. */
+   Padding/font/letter-spacing match .pi-add exactly so both buttons feel
+   identical inside, not just outside. */
+.pi-buy-form .pi-buy-row .pi-add,
 .pi-buy-form .pi-buy-row .pi-add-secondary {
     height: 52px !important;
     min-height: 52px !important;
-    padding: 0 18px !important;
+    padding: 0 20px !important;
     font-size: 14px !important;
     font-weight: 700 !important;
     letter-spacing: .04em !important;
     text-transform: uppercase !important;
-    border: 1px solid #1A1A1A !important;
     border-radius: 12px !important;
+}
+.pi-buy-form .pi-buy-row .pi-add-secondary {
+    border: 1px solid #1A1A1A !important;
     background: transparent !important;
     color: #1A1A1A !important;
-    width: auto !important;
+}
+.pi-buy-form .pi-buy-row .pi-add {
+    border: 1px solid #1A1A1A !important;  /* match the secondary's 1px border so heights are pixel-identical */
+    background: #1A1A1A !important;
+    color: #fff !important;
 }
 .pi-buy-form .pi-buy-row .pi-add-secondary:hover {
     background: #1A1A1A !important;
