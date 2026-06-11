@@ -152,6 +152,9 @@
   .pi-points li{display:flex;align-items:center;gap:12px;font-size:14.5px;list-style:none;color:var(--ink);font-weight:500;line-height:1.35}
   .pi-points__check{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--honey-soft);color:var(--honey-deep);flex-shrink:0}
   .pi-points__check svg{width:12px;height:12px}
+  /* Benefits illustration — single composite graphic that replaces the 4-bullet list */
+  .pi-benefits{margin:20px 0 0;border-radius:14px;overflow:hidden;background:#fff}
+  .pi-benefits img{display:block;width:100%;height:auto}
 
   /* ---------- Section ---------- */
   section.s{padding:72px 0;font-size:17px;position:relative}
@@ -674,12 +677,9 @@
             </div>
           </div>
         </div>
-        <ul class="pi-points">
-          <li><span class="pi-points__check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Boosts hemoglobin gently</li>
-          <li><span class="pi-points__check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Reduces pregnancy fatigue</li>
-          <li><span class="pi-points__check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Supports fetal brain</li>
-          <li><span class="pi-points__check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>One vegecap, daily</li>
-        </ul>
+        <figure class="pi-benefits">
+          <img src="/img/products/iron-benefits.png" alt="Iron+ benefits — boosts hemoglobin gently, reduces pregnancy fatigue, supports fetal brain, one vegecap daily" loading="lazy">
+        </figure>
       </div>
     </div>
   </div>
