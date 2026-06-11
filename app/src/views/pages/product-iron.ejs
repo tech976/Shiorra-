@@ -184,20 +184,23 @@
   .ic-chip svg{width:30px;height:30px;stroke-width:2.2}
 
   /* ---------- Symptom cards ---------- */
-  .symptoms-bg{background:#fff}
-  .symptoms-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
-  .symptoms-figure picture{display:block}
-  .symptoms-figure img{display:block;width:100%;height:auto}
-  .actives-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
-  .actives-figure picture{display:block}
-  .actives-figure img{display:block;width:100%;height:auto}
-  .bvitamins-figure{margin:0 0 32px;border-radius:18px;overflow:hidden;background:#fff}
-  .bvitamins-figure img{display:block;width:100%;height:auto}
-  .trail-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
-  .trail-figure picture{display:block}
-  .trail-figure img{display:block;width:100%;height:auto}
-  .switch-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .symptoms-bg{background:var(--honey-soft)}
+  /* Photo figures sit flush with their section background — no rounded card,
+     no white fill, no shadow. Section bg matches the image's pale-pink edges
+     so each figure reads as "the section is the image", not a card inside it. */
+  .symptoms-figure,
+  .actives-figure,
+  .bvitamins-figure,
+  .trail-figure,
+  .switch-figure{margin:0;border-radius:0;overflow:visible;background:transparent}
+  .symptoms-figure picture,
+  .actives-figure picture,
+  .trail-figure picture,
   .switch-figure picture{display:block}
+  .symptoms-figure img,
+  .actives-figure img,
+  .bvitamins-figure img,
+  .trail-figure img,
   .switch-figure img{display:block;width:100%;height:auto}
   .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
@@ -218,7 +221,7 @@
   .symptom-card p{font-size:14px;color:var(--muted);line-height:1.5}
 
   /* ---------- Power team ---------- */
-  .power-bg{background:linear-gradient(180deg,#fff,var(--surface) 100%)}
+  .power-bg{background:var(--honey-soft)}
   .power-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;align-items:stretch}
   @media(max-width:880px){.power-grid{grid-template-columns:1fr}}
   .power-card{
@@ -243,7 +246,7 @@
   .power-card .pc-tag{margin-top:18px;font-size:12.5px;color:var(--muted);font-style:italic;padding-top:14px;border-top:1px solid var(--line-soft)}
 
   /* ---------- B Vitamins ---------- */
-  .bvit-bg{background:#fff}
+  .bvit-bg{background:var(--honey-soft)}
   .bvit-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:18px}
   @media(max-width:980px){.bvit-grid{grid-template-columns:repeat(3,1fr)}}
   @media(max-width:520px){.bvit-grid{grid-template-columns:repeat(2,1fr)}}
@@ -310,7 +313,7 @@
   @media(max-width:680px){.formula-row{grid-template-columns:1fr}.fc-amt{font-size:13px}.formula-row:first-child{display:none}}
 
   /* ---------- Timeline ---------- */
-  .timeline-bg{background:linear-gradient(180deg,#fff,var(--surface) 100%)}
+  .timeline-bg{background:var(--honey-soft)}
   .timeline-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:16px;align-items:stretch}
   @media(max-width:880px){.timeline-grid{grid-template-columns:1fr}}
   .tl-card{
@@ -341,7 +344,7 @@
   .tl-stat .ref{font-size:11.5px;opacity:.85;font-style:italic}
 
   /* ---------- Compare ---------- */
-  .why-bg{background:#fff}
+  .why-bg{background:var(--honey-soft)}
   .compare-table{margin-top:14px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
   .compare-row{display:grid;grid-template-columns:1.2fr 1fr 1fr}
   .compare-row + .compare-row{border-top:1px solid var(--line-soft)}
