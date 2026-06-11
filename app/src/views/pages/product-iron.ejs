@@ -107,53 +107,40 @@
   }
   .pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--honey)}
 
-  /* Product info */
+  /* Product info — "quiet pharmacy editorial": every claim once, one voice
+     leading. Stack: kicker → H1 → one-sentence sub → proof line → claims
+     line → (price+qty → CTAs) → trust footnote → benefits image. */
   .info{padding-top:8px}
-  .pi-eyebrow-trust{display:inline-flex;align-items:center;gap:8px;background:var(--honey-soft);color:var(--honey-deep);font-size:11.5px;font-weight:800;padding:6px 12px;border-radius:20px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
-  .pi-eyebrow-trust::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--honey)}
-  .pi-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:40px;font-weight:700;line-height:1.05;letter-spacing:-0.024em;color:var(--ink);margin-bottom:12px;text-wrap:balance}
-  .pi-title em{font-style:normal;color:var(--ink);font-weight:700}
-  @media(max-width:680px){.pi-title{font-size:32px}}
-  .pi-sub{font-size:17px;color:var(--ink-soft);font-style:normal;font-weight:400;line-height:1.55;margin-bottom:20px;max-width:560px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal}
-  .pi-tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-  .pi-tag{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;color:var(--ink-soft);background:#fff;border:1px solid var(--line);padding:5px 10px;border-radius:14px;letter-spacing:.06em;text-transform:uppercase}
-  .pi-tag.ven{background:#fff;color:var(--ink-soft);border-color:var(--line)}
-  .pi-tag.ven::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
-  .pi-rating{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-  .stars{display:inline-flex;gap:1px;color:var(--honey);font-size:17px;letter-spacing:1.5px}
-  .pi-rating-n{font-weight:700;font-size:15px}
-  .pi-rating-c{font-size:13px;color:var(--muted);text-decoration:underline}
-  .pi-price{display:flex;align-items:baseline;gap:12px;margin:6px 0 18px;flex-wrap:wrap}
-  .pi-now{font-family:'Helvetica Neue',Arial,sans-serif;font-size:38px;font-weight:700;color:var(--ink);letter-spacing:-0.02em}
-  .pi-mrp{font-size:18px;color:var(--muted);text-decoration:line-through}
-  .pi-save{font-size:10.5px;font-weight:700;color:var(--honey-deep);background:transparent;border:1px solid var(--honey-deep);padding:3px 8px;border-radius:6px;letter-spacing:.06em;text-transform:uppercase}
-  .pi-buy-row{display:flex;gap:10px;margin:18px 0}
+  .pi-kicker{display:block;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--honey-deep);margin-bottom:10px}
+  .pi-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:52px;font-weight:700;line-height:1.02;letter-spacing:-0.03em;color:var(--ink);margin-bottom:14px;text-wrap:balance}
+  .pi-title em{font-style:normal;color:var(--honey);font-weight:700}
+  @media(max-width:680px){.pi-title{font-size:38px}}
+  .pi-sub{font-size:16px;color:var(--ink-soft);font-style:normal;font-weight:400;line-height:1.6;margin-bottom:20px;max-width:520px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal}
+  .pi-proof{display:flex;align-items:baseline;gap:7px;margin-bottom:10px;font-size:13px;line-height:1}
+  .pi-proof__star{color:var(--honey);font-size:13px}
+  .pi-proof__score{font-weight:600;color:var(--ink)}
+  .pi-proof__count{font-weight:400;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+  .pi-proof__count:hover{color:var(--ink)}
+  .pi-claims{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A8A8A;margin-bottom:28px;line-height:1.8}
+  /* Commerce block — price coupled to the decision, not floating as a poster */
+  .pi-commerce{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .pi-price-line{display:flex;flex-direction:column;gap:3px}
+  .pi-price-now{font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.01em;color:var(--ink);line-height:1}
+  .pi-price-meta{font-size:13px;color:#8A8A8A;font-weight:400}
+  .pi-price-meta s{text-decoration:line-through}
   .pi-qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
   .pi-qty button{width:38px;height:46px;font-size:18px;color:var(--ink);font-weight:700}
   .pi-qty input{width:44px;height:46px;border:0;text-align:center;font-size:15px;font-weight:700;font-family:inherit;background:transparent}
   .pi-qty input::-webkit-inner-spin-button{display:none}
+  .pi-buy-row{display:flex;gap:10px;margin:0}
   .pi-add{flex:1;height:50px;display:inline-flex;align-items:center;justify-content:center;background:var(--charcoal);color:#fff;font-weight:700;font-size:14px;letter-spacing:.04em;border-radius:12px;text-transform:uppercase;transition:background .2s,transform .2s;border:0;cursor:pointer}
   .pi-add:hover{background:var(--charcoal-2);transform:translateY(-1px)}
-  .pi-add-secondary{height:38px;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--ink-soft);font-weight:600;font-size:12.5px;letter-spacing:.04em;border:0;cursor:pointer;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;transition:color .2s}
-  .pi-add-secondary:hover{color:var(--charcoal)}
-  /* Trust signals — 2-up grid card. Soft hairline panel that sits between the
-     buy CTAs and the benefit bullets. Each cell: icon-tile + label/meta stack. */
-  .pi-trust-grid{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .pi-trust-cell{display:flex;align-items:center;gap:12px;padding:14px 14px}
-  .pi-trust-cell + .pi-trust-cell{border-left:1px solid var(--line)}
-  .pi-trust-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:var(--honey-soft);color:var(--honey-deep);flex-shrink:0}
-  .pi-trust-icon svg{width:18px;height:18px}
-  .pi-trust-text{display:flex;flex-direction:column;gap:2px;min-width:0}
-  .pi-trust-label{font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-.005em;line-height:1.2}
-  .pi-trust-meta{font-size:11.5px;color:var(--muted);line-height:1.3}
-  /* Benefit bullets — soft circular check + clean type. List, not grid, so long
-     copy can breathe without truncating. */
-  .pi-points{margin-top:18px;display:flex;flex-direction:column;gap:10px;padding:0}
-  .pi-points li{display:flex;align-items:center;gap:12px;font-size:14.5px;list-style:none;color:var(--ink);font-weight:500;line-height:1.35}
-  .pi-points__check{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--honey-soft);color:var(--honey-deep);flex-shrink:0}
-  .pi-points__check svg{width:12px;height:12px}
-  /* Benefits illustration — single composite graphic that replaces the 4-bullet list */
-  .pi-benefits{margin:20px 0 0;border-radius:14px;overflow:hidden;background:#fff}
+  .pi-add-secondary{height:50px;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.04em;border:1px solid var(--ink);border-radius:12px;cursor:pointer;text-transform:uppercase;transition:background .2s,color .2s}
+  .pi-add-secondary:hover{background:var(--ink);color:#fff}
+  /* Trust footnote — one quiet hairline-ruled line, replaces the bordered card */
+  .pi-footnote{margin-top:20px;padding-top:16px;border-top:1px solid var(--line-soft,#EFEFEF);font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:#8A8A8A;line-height:1.7}
+  /* Benefits illustration */
+  .pi-benefits{margin:28px 0 0;border-radius:14px;overflow:hidden;background:#fff}
   .pi-benefits img{display:block;width:100%;height:auto}
 
   /* ---------- Section ---------- */
@@ -522,48 +509,29 @@
     .marquee{padding:8px 0}
     .marquee-track{gap:32px;font-size:11.5px}
 
-    /* Microbar — let copy wrap, tighten gap */
-    .microbar{padding:8px 0;font-size:11px}
-    .microbar-inner{gap:14px 18px;justify-content:flex-start;overflow-x:auto;
-      -webkit-overflow-scrolling:touch;white-space:nowrap;flex-wrap:nowrap;
-      padding-bottom:2px}
-    .microbar-item{flex:0 0 auto}
-
     /* Hero — tighten padding, scale title with clamp */
     .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
     .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
     .product-hero-grid{gap:24px}
-    .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
-    .pi-sub{font-size:15px;line-height:1.55;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
-    .pi-trust-grid{margin-top:16px;border-radius:12px}
-    .pi-trust-cell{padding:12px 12px;gap:10px}
-    .pi-trust-icon{width:34px;height:34px;border-radius:9px}
-    .pi-trust-icon svg{width:17px;height:17px}
-    .pi-trust-label{font-size:12.5px}
-    .pi-trust-meta{font-size:11px}
-    .pi-points{margin-top:16px;gap:11px}
-    .pi-points li{font-size:14.5px;min-height:24px}
-    .pi-points__check{width:22px;height:22px}
-    .pi-tag{font-size:10.5px;padding:5px 9px}
-    .pi-now{font-size:32px}
-    .pi-mrp{font-size:16px}
-
-    /* Float-badges — keep visible but smaller so they don't crop the product */
-    .float-badge{padding:7px 11px;font-size:11px;border-radius:12px;gap:6px}
-    .float-1{top:10px;left:10px}
-    .float-2{bottom:10px;right:10px}
+    .pi-kicker{font-size:10px;letter-spacing:.18em;margin-bottom:8px}
+    .pi-title{font-size:clamp(32px,9vw,40px);line-height:1.04;margin-bottom:12px}
+    .pi-sub{font-size:15px;line-height:1.6;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
+    .pi-claims{font-size:11px;letter-spacing:.12em;margin-bottom:24px}
+    .pi-price-now{font-size:20px}
+    .pi-price-meta{font-size:12.5px}
+    .pi-footnote{margin-top:18px;padding-top:14px;font-size:11px}
 
     /* Gallery thumbs — keep horizontal at 360px, ~64-72px tall */
     .gallery-thumbs{gap:6px;margin-top:8px}
     .gallery-thumb{min-height:44px;border-radius:10px;border-width:1.25px}
 
-    /* Buy row — keep touch targets ≥44px and CTA full-width */
-    .pi-buy-row{gap:8px;margin:16px 0}
+    /* Buy row — keep touch targets ≥44px; global CTA standard (style.css)
+       handles the 56px heights, equal-width grid, fonts. */
+    .pi-buy-row{gap:8px;margin:0}
     .pi-qty{border-radius:11px}
     .pi-qty button{width:44px;height:48px}
     .pi-qty input{width:42px;height:48px;font-size:15px}
-    .pi-add{height:58px;font-size:16px;font-weight:800;letter-spacing:.06em;border-radius:14px;min-height:58px;padding:0 16px;white-space:nowrap}
-    .pi-add-secondary{height:40px;font-size:13px}
+    .pi-commerce{gap:12px}
 
     /* Section padding scales — tightened for mobile so two sections aren't
        100+ px apart vertically. Each section gets 28px top/bottom (56px gap
@@ -617,12 +585,8 @@
 
   /* Extra-narrow phones (~360px) — only tighten where necessary */
   @media (max-width: 380px){
-    .float-badge{font-size:10.5px;padding:6px 9px}
-    .float-1{top:8px;left:8px}
-    .float-2{bottom:8px;right:8px}
-    .pi-now{font-size:28px}
-    .pi-mrp{font-size:14px}
-    .pi-save{font-size:10px;padding:3px 8px}
+    .pi-title{font-size:30px}
+    .pi-price-now{font-size:19px}
     .gallery-thumb{border-radius:8px}
   }
 
@@ -640,15 +604,14 @@
 <div class="marquee">
   <div class="marquee-track">
     <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping on orders over <span class="accent">₹999</span></span>
-    <span class="marquee-item">Ferrous Bisglycinate · 2-4× better absorption</span>
-    <span class="marquee-item">Gentle on stomach · No metallic aftertaste</span>
-    <span class="marquee-item">Doctor recommended · Made in India</span>
-    <span class="marquee-item">FSSAI · GMP certified</span>
+    <span class="marquee-item">30-day money-back guarantee</span>
+    <span class="marquee-item">Made in India</span>
     <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping on orders over <span class="accent">₹999</span></span>
-    <span class="marquee-item">Ferrous Bisglycinate · 2-4× better absorption</span>
-    <span class="marquee-item">Gentle on stomach · No metallic aftertaste</span>
-    <span class="marquee-item">Doctor recommended · Made in India</span>
-    <span class="marquee-item">FSSAI · GMP certified</span>
+    <span class="marquee-item">30-day money-back guarantee</span>
+    <span class="marquee-item">Made in India</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping on orders over <span class="accent">₹999</span></span>
+    <span class="marquee-item">30-day money-back guarantee</span>
+    <span class="marquee-item">Made in India</span>
   </div>
 </div>
 
@@ -681,16 +644,6 @@
     </div>
 </header>
 
-<!-- MICROBAR -->
-<div class="microbar">
-  <div class="wrap microbar-inner">
-    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Ferrous Bisglycinate (chelated)</span>
-    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 2-4× Higher Absorption</span>
-    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> No Metallic Aftertaste</span>
-    <span class="microbar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Doctor Recommended</span>
-  </div>
-</div>
-
 <!-- EDITORIAL MASTHEAD — reviews-page DNA -->
 <div class="pi-masthead">
   <div class="wrap">
@@ -719,8 +672,6 @@
     <div class="product-hero-grid">
       <div class="gallery">
         <div class="gallery-main">
-          <div class="float-badge float-1"><span class="float-1-icon">★</span><span>4.9/5 · 1,240+ reviews</span></div>
-          <div class="float-badge float-2"><span class="pulse-dot"></span><span>10,000+ moms</span></div>
           <img id="galleryMain" src="/img/products/iron-1.jpg" alt="Shiōrra Advanced Iron+ — 30 vegecaps for pregnancy and lactation">
         </div>
         <div class="gallery-thumbs" id="galleryThumbs">
@@ -732,29 +683,22 @@
         </div>
       </div>
       <div class="info">
-        <span class="pi-eyebrow-trust">Trusted by Moms</span>
-        <h1 class="pi-title">Advanced <em>Iron+</em></h1>
-        <p class="pi-sub">A complete hematinic system for pregnancy &amp; lactation — Ferrous Bisglycinate 27 mg with active Folate, B12, B6, Zinc, Copper &amp; Selenium. Gentle on the stomach, no metallic aftertaste.</p>
-        <div class="pi-tagrow">
-          <span class="pi-tag">Doctor Recommended</span>
-          <span class="pi-tag">Chelated Iron</span>
-          <span class="pi-tag">FSSAI &amp; GMP</span>
-          <span class="pi-tag ven">100% Veg</span>
+        <span class="pi-kicker">Daily Prenatal Iron · 30 Vegecaps</span>
+        <h1 class="pi-title">Advanced Iron<em>+</em></h1>
+        <p class="pi-sub">Chelated Ferrous Bisglycinate 27 mg with active Folate, B12 &amp; Zinc — gentle on the stomach, no metallic aftertaste.</p>
+        <div class="pi-proof">
+          <span class="pi-proof__star" aria-hidden="true">★</span>
+          <span class="pi-proof__score">4.9</span>
+          <a href="/reviews" class="pi-proof__count">1,240+ reviews</a>
         </div>
-        <div class="pi-rating">
-          <span class="stars">★★★★★</span>
-          <span class="pi-rating-n">4.9</span>
-          <a href="/reviews" class="pi-rating-c">1,240+ reviews</a>
-        </div>
-        <div class="pi-price">
-          <span class="pi-now">₹ 749</span>
-          <span class="pi-mrp">₹ 899</span>
-          <span class="pi-save">Save 17%</span>
-        </div>
+        <p class="pi-claims">Doctor recommended · FSSAI &amp; GMP · 100% vegetarian</p>
         <form action="/cart/buy-now" method="post" id="addToCartForm" class="pi-buy-form">
           <input type="hidden" name="productId" value="<%= product.id %>">
-          <div class="pi-qty-row">
-            <span class="pi-qty-label">Qty</span>
+          <div class="pi-commerce">
+            <div class="pi-price-line">
+              <span class="pi-price-now">₹749</span>
+              <span class="pi-price-meta">MRP <s>₹899</s> · 17% off</span>
+            </div>
             <div class="pi-qty">
               <button type="button" data-q="-" aria-label="Decrease quantity">−</button>
               <input type="number" name="quantity" value="1" min="1" max="9" form="addToCartForm" aria-label="Quantity">
@@ -766,26 +710,7 @@
             <button type="submit" class="pi-add">Buy now</button>
           </div>
         </form>
-        <div class="pi-trust-grid">
-          <div class="pi-trust-cell">
-            <span class="pi-trust-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg>
-            </span>
-            <div class="pi-trust-text">
-              <span class="pi-trust-label">Free shipping</span>
-              <span class="pi-trust-meta">On orders over ₹999</span>
-            </div>
-          </div>
-          <div class="pi-trust-cell">
-            <span class="pi-trust-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 9 9 9"/></svg>
-            </span>
-            <div class="pi-trust-text">
-              <span class="pi-trust-label">30-day returns</span>
-              <span class="pi-trust-meta">Money-back guarantee</span>
-            </div>
-          </div>
-        </div>
+        <p class="pi-footnote">Free shipping over ₹999 · 30-day money-back guarantee</p>
         <figure class="pi-benefits">
           <img src="/img/products/iron-benefits.png" alt="Iron+ benefits — boosts hemoglobin gently, reduces pregnancy fatigue, supports fetal brain, one vegecap daily" loading="lazy">
         </figure>
