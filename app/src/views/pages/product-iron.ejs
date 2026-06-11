@@ -111,13 +111,14 @@
   .info{padding-top:8px}
   .pi-eyebrow-trust{display:inline-flex;align-items:center;gap:8px;background:var(--honey-soft);color:var(--honey-deep);font-size:11.5px;font-weight:800;padding:6px 12px;border-radius:20px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
   .pi-eyebrow-trust::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--honey)}
-  .pi-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:40px;font-weight:700;line-height:1.08;letter-spacing:-0.022em;color:var(--ink);margin-bottom:10px;text-wrap:balance}
-  .pi-title em{font-style:italic;color:var(--honey);font-weight:500}
+  .pi-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:40px;font-weight:700;line-height:1.05;letter-spacing:-0.024em;color:var(--ink);margin-bottom:12px;text-wrap:balance}
+  .pi-title em{font-style:normal;color:var(--ink);font-weight:700}
   @media(max-width:680px){.pi-title{font-size:32px}}
-  .pi-sub{font-size:18px;color:var(--honey-deep);font-style:normal;font-weight:500;line-height:1.55;margin-bottom:22px;max-width:560px;text-align:justify;text-justify:inter-word;hyphens:auto}
-  .pi-tagrow{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
-  .pi-tag{font-size:11px;font-weight:700;color:var(--ink-soft);background:#fff;border:1px solid var(--line);padding:5px 10px;border-radius:14px;letter-spacing:.06em;text-transform:uppercase}
-  .pi-tag.ven{background:var(--green);color:#fff;border-color:var(--green)}
+  .pi-sub{font-size:17px;color:var(--ink-soft);font-style:normal;font-weight:400;line-height:1.55;margin-bottom:20px;max-width:560px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal}
+  .pi-tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+  .pi-tag{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;color:var(--ink-soft);background:#fff;border:1px solid var(--line);padding:5px 10px;border-radius:14px;letter-spacing:.06em;text-transform:uppercase}
+  .pi-tag.ven{background:#fff;color:var(--ink-soft);border-color:var(--line)}
+  .pi-tag.ven::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
   .pi-rating{display:flex;align-items:center;gap:10px;margin-bottom:18px}
   .stars{display:inline-flex;gap:1px;color:var(--honey);font-size:17px;letter-spacing:1.5px}
   .pi-rating-n{font-weight:700;font-size:15px}
@@ -125,7 +126,7 @@
   .pi-price{display:flex;align-items:baseline;gap:12px;margin:6px 0 18px;flex-wrap:wrap}
   .pi-now{font-family:'Helvetica Neue',Arial,sans-serif;font-size:38px;font-weight:700;color:var(--ink);letter-spacing:-0.02em}
   .pi-mrp{font-size:18px;color:var(--muted);text-decoration:line-through}
-  .pi-save{font-size:11px;font-weight:800;color:#fff;background:var(--honey);padding:4px 10px;border-radius:8px;letter-spacing:.06em;text-transform:uppercase}
+  .pi-save{font-size:10.5px;font-weight:700;color:var(--honey-deep);background:transparent;border:1px solid var(--honey-deep);padding:3px 8px;border-radius:6px;letter-spacing:.06em;text-transform:uppercase}
   .pi-buy-row{display:flex;gap:10px;margin:18px 0}
   .pi-qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
   .pi-qty button{width:38px;height:46px;font-size:18px;color:var(--ink);font-weight:700}
@@ -416,7 +417,7 @@
     .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
     .product-hero-grid{gap:24px}
     .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
-    .pi-sub{font-size:15.5px;line-height:1.55;margin-bottom:18px;text-align:left}
+    .pi-sub{font-size:15px;line-height:1.55;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
     .pi-points{grid-template-columns:1fr;gap:10px}
     .pi-points li{font-size:14px;min-height:24px}
     .pi-tag{font-size:10.5px;padding:5px 9px}
