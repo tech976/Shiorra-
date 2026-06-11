@@ -355,10 +355,11 @@
   .tl-stat .ref{font-size:11.5px;opacity:.85;font-style:italic}
 
   /* ---------- Compare ---------- */
-  /* Horizontal gradient matches the switch image: white on the left
-     (headline + product box), pale rose on the right (comparison + 'Better
-     results' card). Image dissolves edge-to-edge into the section. */
-  .why-bg{background:linear-gradient(90deg,#fff 0%,#fff 35%,var(--honey-soft) 100%)}
+  /* Switch section: no background fill, image sits flush at the top — the
+     illustration carries its own visual treatment, so the section just
+     hosts it without competing chrome. */
+  .why-bg{background:transparent;padding-top:0 !important}
+  .why-bg .wrap{padding-top:0}
   .compare-table{margin-top:14px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
   .compare-row{display:grid;grid-template-columns:1.2fr 1fr 1fr}
   .compare-row + .compare-row{border-top:1px solid var(--line-soft)}
