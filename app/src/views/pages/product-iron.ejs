@@ -198,16 +198,19 @@
   .actives-figure img,
   .bvitamins-figure img,
   .trail-figure img{display:block;width:100%;height:auto}
-  /* Switch figure sits FLUSH with its white→pink gradient section bg —
-     no card frame, image edges dissolve directly into the gradient. */
-  .switch-figure{margin:0;border-radius:0;overflow:visible;background:transparent}
+  /* Switch + Root figures sit FLUSH with their section bg — no card frame,
+     image edges dissolve directly into the section. */
+  .switch-figure,
+  .root-figure{margin:0;border-radius:0;overflow:visible;background:transparent}
   .switch-figure picture{display:block}
-  .switch-figure img{display:block;width:100%;height:auto}
-  /* MOBILE: break the switch image out of .wrap's horizontal padding so it
-     spans full viewport width — "zoomed in" so headline + comparison are
-     bigger and more legible on phones. */
+  .switch-figure img,
+  .root-figure img{display:block;width:100%;height:auto}
+  /* MOBILE: break image out of .wrap's horizontal padding so it spans full
+     viewport width — "zoomed in" so text inside the illustration is bigger
+     and more legible on phones. */
   @media (max-width: 720px){
-    .switch-figure{
+    .switch-figure,
+    .root-figure{
       width: 100vw;
       margin-left: calc(50% - 50vw);
       margin-right: calc(50% - 50vw);
@@ -377,7 +380,10 @@
   }
 
   /* ---------- Root cards ---------- */
-  .root-bg{background:linear-gradient(180deg,var(--surface),#fff 100%)}
+  /* Root section: white bg + collapsed top padding so image sits flush
+     at the section bracket — same treatment as .why-bg / switch section. */
+  .root-bg{background:#fff;padding-top:0 !important}
+  .root-bg .wrap{padding-top:0}
   .root-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px;align-items:stretch}
   @media(max-width:980px){.root-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:580px){.root-grid{grid-template-columns:1fr}}
@@ -849,22 +855,9 @@
 <!-- ROOT CAUSE -->
 <section class="s root-bg">
   <div class="wrap">
-    <div class="s-head center">
-      <span class="rv-marker">The why · 06</span><span class="s-eyebrow" style="display:none">Why you may feel tired</span>
-      <h2 class="s-title">Root cause, met with the <em>right nutrient</em>.</h2>
-      <p class="s-sub">Pregnancy fatigue isn't laziness — it's biology. Iron+ pairs the right nutrient with each underlying cause.</p>
-    </div>
-    <div class="root-grid">
-      <div class="root-card"><div class="rc-eye">Low hemoglobin</div><h5>Iron stores depleted</h5><p>Pregnancy doubles iron demand. Fatigue is the first sign.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 27 mg chelated iron, daily.</div></div>
-      <div class="root-card"><div class="rc-eye">Poor absorption</div><h5>Iron doesn't reach the blood</h5><p>Most iron salts pass right through. Hb stays low despite the tablet.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Ferrous Bisglycinate — 2-4× absorption.</div></div>
-      <div class="root-card"><div class="rc-eye">Stomach upset</div><h5>Tablets cause nausea</h5><p>50-80% of women on ferrous sulfate report GI side-effects.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Chelated form, ~90% gentler.</div></div>
-      <div class="root-card"><div class="rc-eye">Missing folate</div><h5>Body can't build new cells</h5><p>Folate is essential for neural-tube formation and red-cell production.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 570 mcg L-methylfolate.</div></div>
-      <div class="root-card"><div class="rc-eye">Low B12</div><h5>Hemoglobin stalls</h5><p>Without B12, iron alone can't be assembled into hemoglobin.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Methylcobalamin · ready to use.</div></div>
-      <div class="root-card"><div class="rc-eye">Pregnancy nausea</div><h5>First-trimester queasiness</h5><p>Many moms feel sick taking iron — especially early in pregnancy.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Active B6 (P5P) eases nausea.</div></div>
-      <div class="root-card"><div class="rc-eye">Low immunity</div><h5>Pregnancy lowers defenses</h5><p>Zinc supports immune health and fetal development.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 14.5 mg Zinc Sulphate.</div></div>
-      <div class="root-card"><div class="rc-eye">Iron can't move</div><h5>Body can't use the iron</h5><p>Copper is required for iron to be released into circulation.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Cupric Sulphate as a co-factor.</div></div>
-      <div class="root-card"><div class="rc-eye">Oxidative stress</div><h5>Pregnancy raises demand</h5><p>Iron supplementation increases the need for antioxidant defence.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 40 mcg Selenomethionine.</div></div>
-    </div>
+    <figure class="root-figure">
+      <img src="/img/products/iron-root.png" alt="Root cause, met with the right nutrient — Iron+ pairs each underlying cause of pregnancy fatigue with the right nutrient. Low hemoglobin: pregnancy doubles iron demand, fatigue is the first sign — 27 mg chelated iron daily. Poor absorption: iron doesn't reach the blood, most iron salts pass right through — Ferrous Bisglycinate, 2-4× absorption. Stomach upset: tablets cause nausea, 50-80% of women on ferrous sulfate report GI side-effects — chelated form, ~90% gentler. Missing folate: body can't build new cells, folate is essential for neural-tube formation and red-cell production — 570 mcg L-methylfolate. Low B12: hemoglobin stalls, without B12 iron alone can't be assembled into hemoglobin — Methylcobalamin, ready to use. Pregnancy nausea: first-trimester queasiness, many moms feel sick taking iron especially early in pregnancy — Active B6 (P5P) eases nausea. Low immunity: pregnancy lowers defenses, Zinc supports immune health and fetal development — 14.5 mg Zinc Sulphate. Iron can't move: body can't use the iron, Copper is required for iron to be released into circulation — Cupric Sulphate as a co-factor. Oxidative stress: pregnancy raises demand, iron supplementation increases the need for antioxidant defence — 40 mcg Selenomethionine." loading="lazy">
+    </figure>
   </div>
 </section>
 
