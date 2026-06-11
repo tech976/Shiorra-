@@ -473,11 +473,17 @@
     .pi-add{height:58px;font-size:16px;font-weight:800;letter-spacing:.06em;border-radius:14px;min-height:58px;padding:0 16px;white-space:nowrap}
     .pi-add-secondary{height:40px;font-size:13px}
 
-    /* Section padding scales */
-    section.s{padding:clamp(40px,10vw,72px) 0}
-    .s-title{font-size:clamp(26px,7vw,38px);line-height:1.1}
+    /* Section padding scales — tightened for mobile so two sections aren't
+       100+ px apart vertically. Each section gets 28px top/bottom (56px gap
+       between two sections, ~half the previous gap). Heading-to-content
+       margin trimmed from 28 → 18. */
+    section.s{padding:28px 0}
+    .s-title{font-size:clamp(26px,7vw,38px);line-height:1.1;margin-bottom:10px}
     .s-sub{font-size:15px;line-height:1.55}
-    .s-head{margin-bottom:28px}
+    .s-head{margin-bottom:18px}
+    .pi-feature{padding:36px 0}
+    .reminder{padding:32px 0}
+    .scroll-seq{padding:0}
 
     /* Symptom + min cards — single column on small phones for readability */
     .power-card{padding:24px}
@@ -500,9 +506,9 @@
     .bvit-help-card .ic svg{width:26px;height:26px}
 
     /* Reminder + final */
-    .reminder{padding:48px 0}
+    .reminder{padding:32px 0}
     .reminder p{font-size:15px}
-    .final{padding:56px 0}
+    .final{padding:36px 0}
     .final p{font-size:15px}
     .final-cta{padding:14px 24px;font-size:13.5px;min-height:50px}
 
@@ -745,7 +751,7 @@
   .pi-feature__meta{font-size:12.5px;color:rgba(255,255,255,.6);letter-spacing:.04em}
   .pi-feature__rating{color:var(--honey,#E11D48);font-size:13px;letter-spacing:.18em;margin-top:4px}
   @media (max-width:640px){
-    .pi-feature{padding:clamp(56px,12vw,96px) 0}
+    .pi-feature{padding:36px 0}
     .pi-feature__quote{font-size:clamp(20px,5.4vw,28px);line-height:1.36}
   }
 </style>
