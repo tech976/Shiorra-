@@ -358,12 +358,11 @@
   .tl-stat .ref{font-size:11.5px;opacity:.85;font-style:italic}
 
   /* ---------- Compare ---------- */
-  /* Switch section: top portion blends from pi-feature's white into the
-     image's pale-rose edge tone — vertical gradient ramps over ~120px so
-     the seam between Featured Reader Letter and the switch image is
-     invisible. Image sits flush at the top (no padding). */
+  /* Switch section: thin 60px gradient strip ONLY at the top seam — small
+     pale-rose wash that bridges from pi-feature above, fades to white
+     within ~1 inch, then the rest of the section is pure white. */
   .why-bg{
-    background: linear-gradient(180deg, #fff 0%, #fff 12%, var(--honey-soft) 60%, #fff 100%);
+    background: linear-gradient(180deg, var(--honey-soft) 0px, #fff 60px) top/100% no-repeat, #fff;
     padding-top: 0 !important;
   }
   .why-bg .wrap{padding-top:0}
