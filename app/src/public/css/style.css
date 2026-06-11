@@ -7565,9 +7565,10 @@ body.aw-cursor-out .aw-cursor-ring {
     box-shadow: 0 1px 2px rgba(0,0,0,.06);
 }
 
-/* === SECONDARY CTA (ghost: outlined charcoal) === */
-/* Promote pi-add-secondary from tiny text-link to proper outlined CTA */
-.pi-add-secondary,
+/* === SECONDARY CTA (ghost: outlined charcoal) ===
+   Same geometry as primary — used for full-weight secondary actions
+   (Cancel, Edit address, etc). NOT used for product PDP's "Or add to
+   cart" — that's tertiary (see next block) so Buy Now reads as hero. */
 .btn--ghost,
 .acct-btn.acct-btn--ghost {
     height: 52px !important;
@@ -7590,13 +7591,68 @@ body.aw-cursor-out .aw-cursor-ring {
     transition: transform 180ms cubic-bezier(.2,.7,.2,1), background 180ms ease, color 180ms ease, box-shadow 180ms ease;
     white-space: nowrap;
 }
-.pi-add-secondary:hover,
 .btn--ghost:hover,
 .acct-btn.acct-btn--ghost:hover {
     background: #1A1A1A !important;
     color: #fff !important;
     transform: translateY(-1px);
     box-shadow: 0 10px 24px rgba(0,0,0,.12);
+}
+
+/* === TERTIARY CTA — "Or add to cart" on product PDPs ===
+   Premium-ecomm pattern (Apple, Allbirds, Glossier, Lululemon,
+   Bombay Shaving): when there's a hero Buy Now CTA, the secondary
+   add-to-cart action is visually LIGHTER. Compact outlined button,
+   smaller text, no uppercase shout. Still 44px+ for thumb-tap. */
+.pi-add-secondary {
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 0 18px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    color: #1A1A1A !important;
+    border: 1px solid rgba(26,26,26,0.22) !important;
+    border-radius: 10px !important;
+    font-family: inherit;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: .02em !important;
+    text-transform: none !important;
+    text-decoration: none !important;
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+    white-space: nowrap;
+}
+.pi-add-secondary:hover {
+    border-color: #1A1A1A !important;
+    background: rgba(26,26,26,0.04) !important;
+    color: #1A1A1A !important;
+}
+
+/* === QTY STEPPER — tighter, premium pattern (Apple/Allbirds style) === */
+.pi-qty {
+    height: 48px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(26,26,26,0.18) !important;
+}
+.pi-qty button {
+    width: 38px !important;
+    height: 46px !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    background: transparent !important;
+    color: #1A1A1A !important;
+    border: 0 !important;
+    cursor: pointer;
+}
+.pi-qty button:hover { background: rgba(26,26,26,0.04) !important; }
+.pi-qty input {
+    width: 40px !important;
+    height: 46px !important;
+    font-size: 14.5px !important;
+    font-weight: 700 !important;
 }
 
 /* === STICKY BOTTOM BAR CTAs (slightly shorter — they live in a 60px-tall strip) === */
@@ -7621,7 +7677,8 @@ body.aw-cursor-out .aw-cursor-ring {
 }
 .sticky-btn:hover { background: #000 !important; transform: translateY(-1px); }
 
-/* === MOBILE: bump primary CTAs to 56px for thumb-friendly tap targets === */
+/* === MOBILE: bump primary CTAs to 56px for thumb-friendly tap targets ===
+   pi-add-secondary deliberately excluded — it's tertiary, stays compact. */
 @media (max-width: 640px) {
     .pi-add,
     .summary-cta,
@@ -7630,7 +7687,6 @@ body.aw-cursor-out .aw-cursor-ring {
     .auth-page .auth__form button[type="submit"],
     .final-cta,
     .co-mobile-place__btn,
-    .pi-add-secondary,
     .btn--ghost,
     .acct-btn.acct-btn--ghost {
         height: 56px !important;
@@ -7639,6 +7695,16 @@ body.aw-cursor-out .aw-cursor-ring {
         padding: 0 24px !important;
         border-radius: 12px !important;
     }
+    /* tertiary stays compact but bumps to 46px for thumb-tap on mobile */
+    .pi-add-secondary {
+        height: 46px !important;
+        min-height: 46px !important;
+        font-size: 13.5px !important;
+    }
+    /* qty stepper a touch taller on mobile (still compact) */
+    .pi-qty { height: 50px !important; }
+    .pi-qty button { height: 48px !important; width: 42px !important; font-size: 18px !important; }
+    .pi-qty input { height: 48px !important; width: 42px !important; }
     .sticky-btn {
         height: 46px !important;
         min-height: 46px !important;
