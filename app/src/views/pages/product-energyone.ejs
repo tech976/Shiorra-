@@ -122,12 +122,13 @@
   .pi-eyebrow-trust{display:inline-flex;align-items:center;gap:8px;background:var(--honey-soft);color:var(--honey-deep);font-size:11.5px;font-weight:800;padding:6px 12px;border-radius:20px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
   .pi-eyebrow-trust::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--honey)}
   .pi-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:40px;font-weight:700;line-height:1.08;letter-spacing:-0.022em;color:var(--ink);margin-bottom:10px;text-wrap:balance}
-  .pi-title em{font-style:italic;color:var(--honey);font-weight:500}
+  .pi-title em{font-style:normal;color:var(--ink);font-weight:700}
   @media(max-width:680px){.pi-title{font-size:32px}}
-  .pi-sub{font-size:18px;color:var(--honey-deep);font-style:italic;font-weight:500;line-height:1.45;margin-bottom:22px;max-width:520px}
-  .pi-tagrow{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
-  .pi-tag{font-size:11px;font-weight:700;color:var(--ink-soft);background:#fff;border:1px solid var(--line);padding:5px 10px;border-radius:14px;letter-spacing:.06em;text-transform:uppercase}
-  .pi-tag.ven{background:var(--green);color:#fff;border-color:var(--green)}
+  .pi-sub{font-size:17px;color:var(--ink-soft);font-style:normal;font-weight:400;line-height:1.55;margin-bottom:20px;max-width:560px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal}
+  .pi-tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+  .pi-tag{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;color:var(--ink-soft);background:#fff;border:1px solid var(--line);padding:5px 10px;border-radius:14px;letter-spacing:.06em;text-transform:uppercase}
+  .pi-tag.ven{background:#fff;color:var(--ink-soft);border-color:var(--line)}
+  .pi-tag.ven::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
   .pi-rating{display:flex;align-items:center;gap:10px;margin-bottom:18px}
   .stars{display:inline-flex;gap:1px;color:var(--honey);font-size:17px;letter-spacing:1.5px}
   .pi-rating-n{font-weight:700;font-size:15px}
@@ -137,7 +138,7 @@
   .pi-price{display:flex;align-items:baseline;gap:12px;margin:6px 0 18px;flex-wrap:wrap}
   .pi-now{font-family:'Helvetica Neue',Arial,sans-serif;font-size:38px;font-weight:700;color:var(--ink);letter-spacing:-0.02em}
   .pi-mrp{font-size:18px;color:var(--muted);text-decoration:line-through}
-  .pi-save{font-size:11px;font-weight:800;color:#fff;background:var(--honey);padding:4px 10px;border-radius:8px;letter-spacing:.06em;text-transform:uppercase}
+  .pi-save{font-size:10.5px;font-weight:700;color:var(--honey-deep);background:transparent;border:1px solid var(--honey-deep);padding:3px 8px;border-radius:6px;letter-spacing:.06em;text-transform:uppercase}
 
   .pi-buy-row{display:flex;gap:10px;margin:18px 0}
   .pi-qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
@@ -149,12 +150,22 @@
   .pi-add-secondary{height:38px;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--ink-soft);font-weight:600;font-size:12.5px;letter-spacing:.04em;border:0;cursor:pointer;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;transition:color .2s}
   .pi-add-secondary:hover{color:var(--charcoal)}
 
-  .pi-trust-line{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:8px}
-  .pi-trust-line svg{width:14px;height:14px;color:var(--honey)}
-
-  .pi-points{margin-top:24px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-  .pi-points li{display:flex;align-items:center;gap:8px;font-size:13.5px;list-style:none;color:var(--ink-soft)}
-  .pi-points li svg{width:16px;height:16px;color:var(--honey);flex-shrink:0}
+  /* Trust signals — 2-up grid card. Soft hairline panel that sits between the
+     buy CTAs and the benefit bullets. Each cell: icon-tile + label/meta stack. */
+  .pi-trust-grid{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .pi-trust-cell{display:flex;align-items:center;gap:12px;padding:14px 14px}
+  .pi-trust-cell + .pi-trust-cell{border-left:1px solid var(--line)}
+  .pi-trust-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:var(--honey-soft);color:var(--honey-deep);flex-shrink:0}
+  .pi-trust-icon svg{width:18px;height:18px}
+  .pi-trust-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .pi-trust-label{font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-.005em;line-height:1.2}
+  .pi-trust-meta{font-size:11.5px;color:var(--muted);line-height:1.3}
+  /* Benefit bullets — soft circular check + clean type. List, not grid, so long
+     copy can breathe without truncating. */
+  .pi-points{margin-top:18px;display:flex;flex-direction:column;gap:10px;padding:0}
+  .pi-points li{display:flex;align-items:center;gap:12px;font-size:14.5px;list-style:none;color:var(--ink);font-weight:500;line-height:1.35}
+  .pi-points__check{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--honey-soft);color:var(--honey-deep);flex-shrink:0}
+  .pi-points__check svg{width:12px;height:12px}
 
   /* ---------- Generic section ---------- */
   section.s{padding:72px 0;font-size:17px;position:relative;overflow:hidden}
@@ -410,9 +421,16 @@
     .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
     .product-hero-grid{gap:24px}
     .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
-    .pi-sub{font-size:15.5px;line-height:1.5;margin-bottom:18px}
-    .pi-points{grid-template-columns:1fr;gap:10px}
-    .pi-points li{font-size:14px;min-height:24px}
+    .pi-sub{font-size:15px;line-height:1.55;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
+    .pi-trust-grid{margin-top:16px;border-radius:12px}
+    .pi-trust-cell{padding:12px 12px;gap:10px}
+    .pi-trust-icon{width:34px;height:34px;border-radius:9px}
+    .pi-trust-icon svg{width:17px;height:17px}
+    .pi-trust-label{font-size:12.5px}
+    .pi-trust-meta{font-size:11px}
+    .pi-points{margin-top:16px;gap:11px}
+    .pi-points li{font-size:14.5px;min-height:24px}
+    .pi-points__check{width:22px;height:22px}
     .pi-tag{font-size:10.5px;padding:5px 9px}
     .pi-now{font-size:32px}
     .pi-mrp{font-size:16px}
@@ -551,6 +569,28 @@
   </div>
 </div>
 
+<!-- EDITORIAL MASTHEAD — reviews-page DNA -->
+<div class="pi-masthead">
+  <div class="wrap">
+    <div class="pi-masthead__inner reveal">
+      <span class="pi-masthead__edition">EnergyOne+ · Volume One</span>
+      <span class="pi-masthead__pub">Shiōrra Reader Edition</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Editorial masthead — borrows the reviews.ejs rv-hero__masthead language */
+  .pi-masthead{background:#fff;border-bottom:1px solid var(--line);padding:18px 0}
+  .pi-masthead__inner{display:flex;justify-content:space-between;align-items:center;gap:24px;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--c-text-3,#8A8A8A)}
+  .pi-masthead__edition{color:var(--ink)}
+  .pi-masthead__pub{color:var(--honey-deep)}
+  @media (max-width:560px){
+    .pi-masthead{padding:14px 0}
+    .pi-masthead__inner{font-size:10px;letter-spacing:.18em}
+  }
+</style>
+
 <!-- ============= HERO ============= -->
 <section class="product-hero" id="buy">
   <div class="wrap">
@@ -603,29 +643,46 @@
           <span class="pi-save">Save 18%</span>
         </div>
 
-        <div class="pi-buy-row">
-          <div class="pi-qty" aria-label="quantity">
-            <button type="button" data-q="-">−</button>
-            <input type="number" name="quantity" value="1" min="1" max="9" form="addToCartForm">
-            <button type="button" data-q="+">+</button>
+        <form action="/cart/buy-now" method="post" id="addToCartForm" class="pi-buy-form">
+          <input type="hidden" name="productId" value="<%= product.id %>">
+          <div class="pi-qty-row">
+            <span class="pi-qty-label">Qty</span>
+            <div class="pi-qty">
+              <button type="button" data-q="-" aria-label="Decrease quantity">−</button>
+              <input type="number" name="quantity" value="1" min="1" max="9" form="addToCartForm" aria-label="Quantity">
+              <button type="button" data-q="+" aria-label="Increase quantity">+</button>
+            </div>
           </div>
-          <form action="/cart/buy-now" method="post" id="addToCartForm" style="flex:1;display:flex;flex-direction:column;gap:8px;margin:0">
-            <input type="hidden" name="productId" value="<%= product.id %>">
-            <button type="submit" class="pi-add">Buy now · <%= formatINR(product.priceInPaise) %></button>
-            <button type="submit" formaction="/cart/add" class="pi-add-secondary">Or add to cart</button>
-          </form>
+          <div class="pi-buy-row">
+            <button type="submit" formaction="/cart/add" class="pi-add-secondary">Add to cart</button>
+            <button type="submit" class="pi-add">Buy now</button>
+          </div>
+        </form>
+        <div class="pi-trust-grid">
+          <div class="pi-trust-cell">
+            <span class="pi-trust-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg>
+            </span>
+            <div class="pi-trust-text">
+              <span class="pi-trust-label">Free shipping</span>
+              <span class="pi-trust-meta">On orders over ₹999</span>
+            </div>
+          </div>
+          <div class="pi-trust-cell">
+            <span class="pi-trust-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 9 9 9"/></svg>
+            </span>
+            <div class="pi-trust-text">
+              <span class="pi-trust-label">30-day returns</span>
+              <span class="pi-trust-meta">Money-back guarantee</span>
+            </div>
+          </div>
         </div>
-
-        <p class="pi-trust-line">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-          Free shipping over ₹999 · 30-day money-back guarantee
-        </p>
-
         <ul class="pi-points">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Supports daily energy metabolism</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Helps with focus &amp; mental alertness</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Gentle, non-stimulant support</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> One vegecap, once a day</li>
+          <li><span class="pi-points__check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Supports daily energy metabolism</li>
+          <li><span class="pi-points__check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Helps with focus &amp; mental alertness</li>
+          <li><span class="pi-points__check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Gentle, non-stimulant support</li>
+          <li><span class="pi-points__check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>One vegecap, once a day</li>
         </ul>
       </div>
 
@@ -651,11 +708,48 @@
   </div>
 </section>
 
+<!-- FEATURED READER LETTER — full-bleed editorial pull quote -->
+<section class="pi-feature" aria-label="Featured reader letter">
+  <div class="wrap">
+    <span class="rv-marker rv-marker--light reveal">Featured · Reader Letter 01</span>
+    <blockquote class="pi-feature__quote reveal">
+      <span class="pi-feature__open" aria-hidden="true">"</span>
+      I used to need two coffees just to get through the 3 p.m. wall — and then I'd feel wired and hollow by evening. EnergyOne+ gave me something different: a steady, even-keeled clarity that lasted right through the workday. Three weeks in, no afternoon crash, sharper focus in meetings, and I'm sleeping better at night.
+      <span class="pi-feature__close" aria-hidden="true">"</span>
+    </blockquote>
+    <div class="pi-feature__attr reveal">
+      <div class="pi-feature__author">Arjun K.</div>
+      <div class="pi-feature__meta">Bengaluru · daily user · verified purchase</div>
+      <div class="pi-feature__rating" aria-label="5 star rating">★ ★ ★ ★ ★</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Featured pull-quote — mirrors the reviews.ejs .rv-feature DNA */
+  .pi-feature{background:var(--charcoal,#282828);color:#fff;padding:clamp(72px,10vw,120px) 0;position:relative;overflow:hidden}
+  .pi-feature .wrap{max-width:880px;text-align:center}
+  .pi-feature .rv-marker{margin-bottom:32px}
+  .pi-feature__quote{font-family:'Helvetica Neue','Helvetica',Arial,sans-serif;font-size:clamp(24px,3.4vw,36px);line-height:1.32;letter-spacing:-0.015em;font-weight:400;color:#fff;margin:0 auto 36px;max-width:760px;text-wrap:balance;position:relative}
+  .pi-feature__open,.pi-feature__close{font-family:'Helvetica Neue',Georgia,serif;font-size:1.4em;font-weight:300;color:var(--honey,#E11D48);opacity:.7;display:inline-block;line-height:0;position:relative;top:.1em}
+  .pi-feature__open{margin-right:.08em}
+  .pi-feature__close{margin-left:.04em}
+  .pi-feature__attr{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .pi-feature__author{font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+  .pi-feature__meta{font-size:12.5px;color:rgba(255,255,255,.6);letter-spacing:.04em}
+  .pi-feature__rating{color:var(--honey,#E11D48);font-size:13px;letter-spacing:.18em;margin-top:4px}
+  @media (max-width:640px){
+    .pi-feature{padding:clamp(56px,12vw,96px) 0}
+    .pi-feature__quote{font-size:clamp(20px,5.4vw,28px);line-height:1.36}
+  }
+</style>
+
 <!-- ============= WHY DO WE FEEL TIRED ============= -->
 <section class="s symptoms-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">Why do we feel tired</span>
+      <span class="rv-marker">The drain · 01</span>
+      <span class="s-eyebrow" style="display:none">Why do we feel tired</span>
       <h2 class="s-title">Energy is not just <em>about sleep</em>.</h2>
       <p class="s-sub">Modern life constantly demands energy, focus and stamina — yet several daily factors quietly drain you long before bedtime catches up.</p>
     </div>
@@ -708,7 +802,8 @@
 <section class="s power-bg" id="composition">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">Meet the power team</span>
+      <span class="rv-marker">The team · 02</span>
+      <span class="s-eyebrow" style="display:none">Meet the power team</span>
       <h2 class="s-title">Two actives, <em>thoughtfully paired</em>.</h2>
       <p class="s-sub">EnergyOne+ pairs the amino acid Taurine with standardized Ginseng extract — two of the most respected nutritional supports for everyday vitality.</p>
     </div>
@@ -748,7 +843,8 @@
 <section class="s bvit-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">The energy vitamins</span>
+      <span class="rv-marker">The spark · 03</span>
+      <span class="s-eyebrow" style="display:none">The energy vitamins</span>
       <h2 class="s-title">B vitamins, the <em>spark plugs</em> of energy.</h2>
       <p class="s-sub">B vitamins help convert food into usable energy. Without enough of them, your body may not fully tap into the nutrients you already eat.</p>
     </div>
@@ -792,7 +888,8 @@
 <section class="s min-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">The importance of minerals</span>
+      <span class="rv-marker">Minerals · 04</span>
+      <span class="s-eyebrow" style="display:none">The importance of minerals</span>
       <h2 class="s-title">Tiny amounts, <em>big jobs</em>.</h2>
       <p class="s-sub">Minerals are needed in small quantities but support essential functions every day — from immunity to muscle to oxygen transport.</p>
     </div>
@@ -814,7 +911,8 @@
 <section class="s amino-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">Why amino acids matter</span>
+      <span class="rv-marker">Building blocks · 05</span>
+      <span class="s-eyebrow" style="display:none">Why amino acids matter</span>
       <h2 class="s-title">The <em>building blocks</em> your body uses daily.</h2>
       <p class="s-sub">Your body uses amino acids every day for growth, repair and normal functioning. EnergyOne+ includes a thoughtfully selected set.</p>
     </div>
@@ -844,7 +942,8 @@
 <section class="s timeline-bg" id="timeline">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">With regular use</span>
+      <span class="rv-marker">The trail · 06</span>
+      <span class="s-eyebrow" style="display:none">With regular use</span>
       <h2 class="s-title">What you may <em>notice</em>.</h2>
       <p class="s-sub">Supplements work best as part of a routine — here's what people typically report as the weeks add up. Individual experiences may vary.</p>
     </div>
@@ -895,7 +994,8 @@
 <section class="s why-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">Why EnergyOne+</span>
+      <span class="rv-marker">The switch · 07</span>
+      <span class="s-eyebrow" style="display:none">Why EnergyOne+</span>
       <h2 class="s-title">Not a <em>spike</em>. A daily support.</h2>
       <p class="s-sub">Most energy drinks rely on caffeine and sugar for a brief lift. EnergyOne+ is built around nutrition — for sustained daily wellness instead of a short-lived buzz.</p>
     </div>
@@ -917,7 +1017,8 @@
 <section class="s root-bg">
   <div class="wrap">
     <div class="s-head center">
-      <span class="s-eyebrow">Why you may feel tired</span>
+      <span class="rv-marker">The why · 08</span>
+      <span class="s-eyebrow" style="display:none">Why you may feel tired</span>
       <h2 class="s-title">Root cause, met with the <em>right nutrient</em>.</h2>
       <p class="s-sub">For every common cause of fatigue, EnergyOne+ pairs a nutritional support that's well-matched to the way the body actually uses it.</p>
     </div>
