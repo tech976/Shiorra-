@@ -279,6 +279,9 @@
     .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
     .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
     .product-hero-grid{gap:24px}
+    /* Benefits image goes edge-to-edge (zoomed) on phones — breaks out of
+       .wrap + .info padding so it touches both screen borders. */
+    .pi-benefits{margin:24px 0 0;border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
     .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
     .pi-sub{font-size:15px;line-height:1.55;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
     .pi-kicker{font-size:10px;letter-spacing:.18em;margin-bottom:8px}
