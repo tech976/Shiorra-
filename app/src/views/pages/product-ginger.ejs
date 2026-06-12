@@ -226,7 +226,12 @@
   }
 
   /* Root cards */
-  .root-bg{background:linear-gradient(180deg,var(--surface),#fff 100%)}
+  /* Root section: white bg + flush figure (image carries its own heading) */
+  .root-bg{background:#fff;padding-top:0 !important}
+  .root-bg .wrap{padding-top:0}
+  .root-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff;max-width:980px;margin-left:auto;margin-right:auto}
+  .root-figure picture{display:block}
+  .root-figure img{display:block;width:100%;height:auto}
   .root-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px;align-items:stretch}
   @media(max-width:980px){.root-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:580px){.root-grid{grid-template-columns:1fr}}
@@ -288,7 +293,7 @@
     /* Benefits + symptoms images go edge-to-edge (zoomed) on phones —
        break out of .wrap padding so they touch both screen borders. */
     .pi-benefits{margin:24px 0 0;border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-    .symptoms-figure,.actives-figure,.bvitamins-figure,.trail-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+    .symptoms-figure,.actives-figure,.bvitamins-figure,.trail-figure,.root-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
     .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
     .pi-sub{font-size:15px;line-height:1.55;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
     .pi-kicker{font-size:10px;letter-spacing:.18em;margin-bottom:8px}
@@ -575,22 +580,12 @@
 <!-- ROOT CAUSE -->
 <section class="s root-bg">
   <div class="wrap">
-    <div class="s-head center">
-      <span class="rv-marker">The why · 05</span><span class="s-eyebrow" style="display:none">Why nausea hits</span>
-      <h2 class="s-title">Root cause, met with the <em>right active</em>.</h2>
-      <p class="s-sub">First-trimester nausea has biological roots. Ginger+ pairs the right nutrient with each underlying cause.</p>
-    </div>
-    <div class="root-grid">
-      <div class="root-card"><div class="rc-eye">Pregnancy nausea</div><h5>Hormonal queasiness</h5><p>hCG and changing hormones trigger morning sickness in 80% of pregnancies.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Standardized Ginger + B6.</div></div>
-      <div class="root-card"><div class="rc-eye">Slow digestion</div><h5>Gut moves more slowly</h5><p>Pregnancy slows gastric emptying, which can amplify nausea and bloating.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Ginger supports gentle movement.</div></div>
-      <div class="root-card"><div class="rc-eye">Low B6 stores</div><h5>Body needs more B6</h5><p>Pregnancy raises B6 demand — and B6 is a well-studied nausea co-factor.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Active B6 (P5P), daily.</div></div>
-      <div class="root-card"><div class="rc-eye">Muscle tension</div><h5>Smooth muscle spasms</h5><p>Magnesium helps the gentle relaxation your body's looking for.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 60 mg Magnesium Bisglycinate.</div></div>
-      <div class="root-card"><div class="rc-eye">Energy dips</div><h5>Nausea drains the day</h5><p>Even brief queasiness saps energy and makes meals feel like effort.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> B1 supports daily energy.</div></div>
-      <div class="root-card"><div class="rc-eye">Sleep disruption</div><h5>Night-time queasiness</h5><p>Nausea breaks sleep — and tired mornings make it worse the next day.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Calmer evenings + steady support.</div></div>
-      <div class="root-card"><div class="rc-eye">Iron intolerance</div><h5>Hard to keep iron down</h5><p>Nausea makes iron tablets even harder to tolerate. Hb slides further.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Pairs perfectly with Iron+.</div></div>
-      <div class="root-card"><div class="rc-eye">Skipped meals</div><h5>Empty stomach worsens it</h5><p>The nausea cycle is sharper when meals are skipped.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Daily support, with or without food.</div></div>
-      <div class="root-card"><div class="rc-eye">Anxiety</div><h5>Stress amplifies nausea</h5><p>Low B6 and magnesium can quietly worsen mood and stress.</p><div class="solve"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> B-complex + magnesium support.</div></div>
-    </div>
+    <figure class="root-figure">
+      <picture>
+        <source media="(max-width: 720px)" srcset="/img/products/ginger-root-mobile.png">
+        <img src="/img/products/ginger-root-desktop.png" alt="Why nausea keeps coming back — and how the right nutrients help break the cycle. Hormonal changes trigger morning sickness; eating becomes harder as smells and foods feel unbearable; energy drops through the day; sleep disruption from night-time nausea; stress builds up; iron becomes harder to tolerate. Ginger + B6 ease nausea and queasiness, B1 supports energy production, and Magnesium supports muscle relaxation and better sleep." loading="lazy">
+      </picture>
+    </figure>
   </div>
 </section>
 
