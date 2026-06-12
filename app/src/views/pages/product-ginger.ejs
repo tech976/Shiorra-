@@ -131,6 +131,8 @@
 
   /* Symptoms */
   .symptoms-bg{background:#fff}
+  .symptoms-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .symptoms-figure img{display:block;width:100%;height:auto}
   .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
   .symptom-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;transition:transform .3s ease,box-shadow .3s ease;position:relative}
@@ -279,9 +281,10 @@
     .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
     .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
     .product-hero-grid{gap:24px}
-    /* Benefits image goes edge-to-edge (zoomed) on phones — breaks out of
-       .wrap + .info padding so it touches both screen borders. */
+    /* Benefits + symptoms images go edge-to-edge (zoomed) on phones —
+       break out of .wrap padding so they touch both screen borders. */
     .pi-benefits{margin:24px 0 0;border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+    .symptoms-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
     .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
     .pi-sub{font-size:15px;line-height:1.55;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
     .pi-kicker{font-size:10px;letter-spacing:.18em;margin-bottom:8px}
@@ -513,16 +516,9 @@
       <h2 class="s-title">Pregnancy nausea is <em>quietly draining</em>.</h2>
       <p class="s-sub">Up to 80% of women report nausea or queasiness in the first trimester. The right support — gentle, nutritionally backed — can change the day.</p>
     </div>
-    <div class="symptoms-grid">
-      <div class="symptom-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5" fill="rgba(46,139,87,.10)"/><path d="M3 14c2 1.4 4 1.4 6 0s4-1.4 6 0 4 1.4 6 0"/><circle cx="9" cy="10" r="1.1" fill="currentColor"/><circle cx="15" cy="10" r="1.1" fill="currentColor"/></svg></div><h4>Morning queasiness</h4><p>Waves of nausea — often worst on an empty stomach, dragging the morning out.</p></div>
-      <div class="symptom-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4c4 0 6 2.5 6 5.5s-2 5-2 5 4 0 4 3.5-2 4-4 4-4-1.5-4-4" fill="rgba(46,139,87,.10)"/><circle cx="7.5" cy="11.5" r="1" fill="currentColor"/></svg></div><h4>Digestive discomfort</h4><p>Slower digestion through pregnancy can leave you feeling bloated and heavy.</p></div>
-      <div class="symptom-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2 5 13h6l-1 9 9-12h-6z" fill="rgba(46,139,87,.12)"/></svg></div><h4>Energy dips</h4><p>Even small bouts of nausea can sap energy for hours afterwards.</p></div>
-      <div class="symptom-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16 M6 19c0-3 2.7-5 6-5s6 2 6 5" fill="rgba(46,139,87,.10)"/><circle cx="12" cy="9" r="3.5" fill="rgba(46,139,87,.10)"/><path d="M9 6.5c0-1 1-2 3-2s3 1 3 2"/></svg></div><h4>Missed meals</h4><p>When nausea sets in, eating becomes harder — which makes the cycle worse.</p></div>
-      <div class="symptom-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2.8" fill="rgba(46,139,87,.12)"/><circle cx="17" cy="9" r="2.2" fill="rgba(46,139,87,.10)"/><circle cx="11" cy="16" r="2.5" fill="rgba(46,139,87,.10)"/><circle cx="18" cy="17" r="1.8" fill="rgba(46,139,87,.10)"/><path d="M10.5 8.5 14.5 9 M9.5 10.5l1.5 4 M13 16l3.5 .8 M13 14l3.5 2"/></svg></div><h4>Low B6 stores</h4><p>Vitamin B6 is the natural anti-nausea co-factor — many women run low in pregnancy.</p></div>
-      <div class="symptom-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 13.5A8.5 8.5 0 1 1 10.5 3a7 7 0 0 0 10.5 10.5z" fill="rgba(46,139,87,.12)"/></svg></div><h4>Disrupted sleep</h4><p>Night-time nausea breaks rest, leaving you flatter the next day.</p></div>
-      <div class="symptom-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0" /><path d="M3 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M3 7c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg></div><h4>Anxiety creeps in</h4><p>Constant low-grade nausea can quietly raise anxiety and mood swings.</p></div>
-      <div class="symptom-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 4.5-3.2 8.5-8 9.5-4.8-1-8-5-8-9.5V7z" fill="rgba(46,139,87,.12)"/><path d="M9 12.5l2 2 4-4"/></svg></div><h4>Skipped iron</h4><p>Nausea makes iron tablets even harder to keep down — hemoglobin slides further.</p></div>
-    </div>
+    <figure class="symptoms-figure">
+      <img src="/img/products/ginger-symptoms.png" alt="Pregnancy nausea symptoms Ginger+ supports — morning queasiness (waves of nausea, often worst on an empty stomach), digestive discomfort (slower digestion leaves you bloated and heavy), energy dips (small bouts of nausea sap energy for hours), missed meals (nausea makes eating harder, worsening the cycle), low B6 stores (vitamin B6 is the natural anti-nausea co-factor, many women run low in pregnancy), disrupted sleep (night-time nausea breaks rest), anxiety creeps in (constant low-grade nausea raises anxiety and mood swings), skipped iron (nausea makes iron tablets harder to keep down, hemoglobin slides further)" loading="lazy">
+    </figure>
   </div>
 </section>
 
