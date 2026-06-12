@@ -266,8 +266,8 @@
 
   /* ---------- Minerals + Amino Acids ---------- */
   .min-bg{background:#fff}
-  .minerals-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
-  .minerals-figure img{display:block;width:100%;height:auto}
+  .minerals-figure,.switch-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .minerals-figure img,.switch-figure img{display:block;width:100%;height:auto}
   .min-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.min-grid{grid-template-columns:repeat(2,1fr)}}
   .min-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s;position:relative;overflow:hidden}
@@ -399,7 +399,7 @@
     .marquee-track{gap:32px;font-size:11.5px}
 
     /* Section illustrations go edge-to-edge (zoomed) on phones */
-    .symptoms-figure,.actives-figure,.bvitamins-figure,.minerals-figure,.trail-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+    .symptoms-figure,.actives-figure,.bvitamins-figure,.minerals-figure,.trail-figure,.switch-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
 
     .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
     .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
@@ -760,16 +760,9 @@
       <p class="s-sub">Most energy drinks rely on caffeine and sugar for a brief lift. EnergyOne+ is built around nutrition — for sustained daily wellness instead of a short-lived buzz.</p>
     </div>
 
-    <div class="compare-table">
-      <div class="compare-row head"><div class="cc"></div><div class="cc">EnergyOne+</div><div class="cc">Typical energy drinks</div></div>
-      <div class="compare-row"><div class="cc lbl">Approach</div><div class="cc us">Nutritional support</div><div class="cc them">Temporary stimulation</div></div>
-      <div class="compare-row"><div class="cc lbl">Effect</div><div class="cc us">Sustained daily support</div><div class="cc them">Spike-then-crash</div></div>
-      <div class="compare-row"><div class="cc lbl">Caffeine</div><div class="cc us">Caffeine-free</div><div class="cc them">Often caffeine-dependent</div></div>
-      <div class="compare-row"><div class="cc lbl">Coverage</div><div class="cc us">Energy + focus + nutrition</div><div class="cc them">Focus on alertness only</div></div>
-      <div class="compare-row"><div class="cc lbl">Nutrients</div><div class="cc us">Vitamins, minerals &amp; amino acids</div><div class="cc them">May not provide essentials</div></div>
-      <div class="compare-row"><div class="cc lbl">Sugar</div><div class="cc us">No added sugar</div><div class="cc them">Often high in sugar</div></div>
-      <div class="compare-row"><div class="cc lbl">Formula</div><div class="cc us">Multi-nutrient</div><div class="cc them">One-dimensional</div></div>
-    </div>
+    <figure class="switch-figure">
+      <img src="/img/products/energy-switch.png" alt="EnergyOne+ vs typical energy drinks. Approach: nutritional support vs temporary stimulation. Effect: sustained daily support vs spike-then-crash. Caffeine: caffeine-free vs often caffeine-dependent. Coverage: energy plus focus plus nutrition vs focus on alertness only. Nutrients: vitamins, minerals and amino acids vs may not provide essentials. Sugar: no added sugar vs often high in sugar. Formula: multi-nutrient vs one-dimensional. Clean. Complete. Sustained — energy that supports you, every day." loading="lazy">
+    </figure>
   </div>
 </section>
 
