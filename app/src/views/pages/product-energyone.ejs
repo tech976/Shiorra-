@@ -190,9 +190,9 @@
 
   /* ---------- Why tired (problem) ---------- */
   .symptoms-bg{background:#fff}
-  .symptoms-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
-  .symptoms-figure picture{display:block}
-  .symptoms-figure img{display:block;width:100%;height:auto}
+  .symptoms-figure,.actives-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .symptoms-figure picture,.actives-figure picture{display:block}
+  .symptoms-figure img,.actives-figure img{display:block;width:100%;height:auto}
   .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
   .symptom-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s;position:relative;overflow:hidden}
@@ -395,7 +395,7 @@
     .marquee-track{gap:32px;font-size:11.5px}
 
     /* Section illustrations go edge-to-edge (zoomed) on phones */
-    .symptoms-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+    .symptoms-figure,.actives-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
 
     .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
     .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
@@ -666,34 +666,12 @@
       <p class="s-sub">EnergyOne+ pairs the amino acid Taurine with standardized Ginseng extract — two of the most respected nutritional supports for everyday vitality.</p>
     </div>
 
-    <div class="power-grid">
-      <div class="power-card">
-        <div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-60 12 12)"/></svg></div>
-        <span class="pc-eye">Amino acid</span>
-        <h3>Taurine</h3>
-        <p class="pc-lede">A naturally occurring amino acid found throughout the body. Popular with people seeking daily nutritional support for active lifestyles.</p>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Cellular energy processes</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Nervous system function</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Muscle function</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Overall vitality</li>
-        </ul>
-        <p class="pc-tag">Trusted nutritional support for active lifestyles.</p>
-      </div>
-      <div class="power-card">
-        <div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20c-4 0-7-3-7-7 0-2 1-4 3-5 0-3 2-5 5-5s5 2 5 5c2 1 3 3 3 5 0 4-3 7-7 7"/><path d="M11 20v-7"/><path d="M11 13l-3-2"/><path d="M11 13l3-2"/><path d="M11 9l-2-1"/><path d="M11 9l2-1"/></svg></div>
-        <span class="pc-eye">Adaptogenic herb</span>
-        <h3>Ginseng Extract</h3>
-        <p class="pc-lede">Valued in traditional wellness practices for centuries. Modern research suggests ginseng may help support focus and daily vitality.</p>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Mental alertness</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Focus and concentration</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Daily vitality</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Physical endurance</li>
-        </ul>
-        <p class="pc-tag">One of nature's most respected adaptogenic herbs.</p>
-      </div>
-    </div>
+    <figure class="actives-figure">
+      <picture>
+        <source media="(max-width: 720px)" srcset="/img/products/energy-actives-mobile.png">
+        <img src="/img/products/energy-actives-desktop.png" alt="EnergyOne+ two lead actives — Taurine (amino acid; a naturally occurring amino acid supporting your body's everyday performance: cellular energy processes, nervous system function, muscle function, overall vitality) and Ginseng Extract (adaptogenic herb; a traditional herb used for centuries to support focus, energy and daily vitality: mental alertness, focus and concentration, daily vitality, physical endurance)" loading="lazy">
+      </picture>
+    </figure>
   </div>
 </section>
 
