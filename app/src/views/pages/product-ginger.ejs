@@ -131,8 +131,8 @@
 
   /* Symptoms */
   .symptoms-bg{background:#fff}
-  .symptoms-figure,.actives-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
-  .symptoms-figure img,.actives-figure img{display:block;width:100%;height:auto}
+  .symptoms-figure,.actives-figure,.bvitamins-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .symptoms-figure img,.actives-figure img,.bvitamins-figure img{display:block;width:100%;height:auto}
   .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
   .symptom-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;transition:transform .3s ease,box-shadow .3s ease;position:relative}
@@ -284,7 +284,7 @@
     /* Benefits + symptoms images go edge-to-edge (zoomed) on phones —
        break out of .wrap padding so they touch both screen borders. */
     .pi-benefits{margin:24px 0 0;border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-    .symptoms-figure,.actives-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+    .symptoms-figure,.actives-figure,.bvitamins-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
     .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
     .pi-sub{font-size:15px;line-height:1.55;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
     .pi-kicker{font-size:10px;letter-spacing:.18em;margin-bottom:8px}
@@ -544,18 +544,9 @@
       <h2 class="s-title">A formula that <em>finishes the job</em>.</h2>
       <p class="s-sub">Ginger and B6 lead. Vitamin B1 and magnesium round it out — together supporting digestion, nerve function and gentle daily calm.</p>
     </div>
-    <div class="bvit-grid">
-      <div class="bvit-pill"><div class="name">Ginger</div><div class="sub">Standardized extract</div></div>
-      <div class="bvit-pill"><div class="name">B6</div><div class="sub">P5P · active</div></div>
-      <div class="bvit-pill"><div class="name">B1</div><div class="sub">Thiamine</div></div>
-      <div class="bvit-pill"><div class="name">Mg</div><div class="sub">Bisglycinate</div></div>
-    </div>
-    <div class="bvit-help">
-      <div class="bvit-help-card"><div class="bv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0" /><path d="M3 14c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M3 19c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke-opacity=".5"/></svg></div><h5>Nausea relief</h5><p>Ginger + B6 (P5P) — the two evidence-backed actives for pregnancy nausea.</p></div>
-      <div class="bvit-help-card"><div class="bv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4c4 0 6 2.5 6 5.5s-2 5-2 5 4 0 4 3.5-2 4-4 4-4-1.5-4-4" fill="rgba(46,139,87,.10)"/><circle cx="7.5" cy="11.5" r="1" fill="currentColor"/></svg></div><h5>Digestive comfort</h5><p>Warming ginger helps gentle movement; magnesium relaxes smooth muscle.</p></div>
-      <div class="bvit-help-card"><div class="bv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2 5 13h6l-1 9 9-12h-6z" fill="rgba(46,139,87,.12)"/></svg></div><h5>Energy &amp; mood</h5><p>B1 and B6 together support steady energy and a calmer mood through the day.</p></div>
-      <div class="bvit-help-card"><div class="bv-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-2 4-5 6-5 10a5 5 0 0 0 10 0c0-4-3-6-5-10z" fill="rgba(46,139,87,.14)"/><path d="M12 13c-1.2 0-2 .8-2 2"/></svg></div><h5>Gentle absorption</h5><p>Magnesium as bisglycinate — chelated, gentler on the stomach, well-absorbed.</p></div>
-    </div>
+    <figure class="bvitamins-figure">
+      <img src="/img/products/ginger-supporting.png" alt="Ginger+ supporting actives — Ginger (standardized extract), B6 (P5P active form), B1 (Thiamine) and Mg (Magnesium Bisglycinate). Nausea relief: Ginger + B6 P5P, the two evidence-backed actives for pregnancy nausea. Digestive comfort: warming ginger helps gentle movement, magnesium relaxes smooth muscle. Energy and mood: B1 and B6 together support steady energy and calmer mood through the day. Gentle absorption: magnesium as bisglycinate, chelated, gentler on the stomach, well-absorbed." loading="lazy">
+    </figure>
   </div>
 </section>
 
