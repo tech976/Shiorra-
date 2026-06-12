@@ -131,8 +131,8 @@
 
   /* Symptoms */
   .symptoms-bg{background:#fff}
-  .symptoms-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
-  .symptoms-figure img{display:block;width:100%;height:auto}
+  .symptoms-figure,.actives-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .symptoms-figure img,.actives-figure img{display:block;width:100%;height:auto}
   .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
   .symptom-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;transition:transform .3s ease,box-shadow .3s ease;position:relative}
@@ -284,7 +284,7 @@
     /* Benefits + symptoms images go edge-to-edge (zoomed) on phones —
        break out of .wrap padding so they touch both screen borders. */
     .pi-benefits{margin:24px 0 0;border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-    .symptoms-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+    .symptoms-figure,.actives-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
     .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
     .pi-sub{font-size:15px;line-height:1.55;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
     .pi-kicker{font-size:10px;letter-spacing:.18em;margin-bottom:8px}
@@ -530,34 +530,9 @@
       <h2 class="s-title">Two actives, <em>built for the first trimester</em>.</h2>
       <p class="s-sub">Ginger+ pairs a standardized ginger extract with the active form of vitamin B6 — the two most evidence-backed pregnancy nausea supports, together in one capsule.</p>
     </div>
-    <div class="power-grid">
-      <div class="power-card">
-        <div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3c0 2-1 3-3 3s-3-1-3-3" fill="rgba(46,139,87,.10)"/><path d="M11 6c1 0 2 .5 2.5 1.5L17 13c.8 1.5.4 3.5-1 4.5l-3 2c-1.5 1-3.5.5-4.5-1L5 13c-.8-1.5-.4-3.5 1-4.5l3-2C9.5 6.3 10.3 6 11 6z" fill="rgba(46,139,87,.14)"/><path d="M9 11c1 .5 2 .5 3 0 M10.5 14c.8.4 1.7.4 2.5 0"/></svg></div>
-        <span class="pc-eye">Lead extract · 250 mg</span>
-        <h3>Standardized Ginger</h3>
-        <p class="pc-lede">A standardized ginger extract — concentrated, consistent, and gentle. Studied for centuries, validated by modern research for pregnancy nausea support.</p>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Eases morning queasiness</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Supports gentle digestion</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Warming, comforting effect</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Pregnancy-friendly dose</li>
-        </ul>
-        <p class="pc-tag">Trusted across traditional and modern wellness.</p>
-      </div>
-      <div class="power-card">
-        <div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5" fill="rgba(46,139,87,.18)"/><circle cx="18" cy="12" r="2.5" fill="rgba(46,139,87,.18)"/><circle cx="12" cy="5" r="2.5" fill="rgba(46,139,87,.18)"/><circle cx="12" cy="19" r="2.5" fill="rgba(46,139,87,.18)"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M8.3 12h3.7 M16 12h-3.7 M12 6.8v3.7 M12 17.2v-3.7"/></svg></div>
-        <span class="pc-eye">Active B6 · 2.3 mg</span>
-        <h3>Pyridoxal-5-Phosphate (P5P)</h3>
-        <p class="pc-lede">The active form of vitamin B6 — well-studied for nausea support during pregnancy. No conversion required; ready to use the moment it's absorbed.</p>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Eases pregnancy nausea</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Supports energy &amp; mood</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Co-factor in hemoglobin</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Active form, no conversion</li>
-        </ul>
-        <p class="pc-tag">Why "any B6" isn't always enough.</p>
-      </div>
-    </div>
+    <figure class="actives-figure">
+      <img src="/img/products/ginger-actives.png" alt="Ginger+ two lead actives — Standardized Ginger 250 mg (concentrated, consistent, gentle; eases morning queasiness, supports gentle digestion, warming comforting effect, pregnancy-friendly dose) and Active B6 2.3 mg as Pyridoxal-5-Phosphate P5P (the active form, no conversion needed; eases pregnancy nausea, supports energy and mood, co-factor in hemoglobin, ready to use the moment it's absorbed)" loading="lazy">
+    </figure>
   </div>
 </section>
 
