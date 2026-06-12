@@ -131,8 +131,10 @@
 
   /* Symptoms */
   .symptoms-bg{background:#fff}
-  .symptoms-figure,.actives-figure,.bvitamins-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
-  .symptoms-figure img,.actives-figure img,.bvitamins-figure img{display:block;width:100%;height:auto}
+  .symptoms-figure,.actives-figure,.bvitamins-figure,.trail-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .symptoms-figure img,.actives-figure img,.bvitamins-figure img,.trail-figure img{display:block;width:100%;height:auto}
+  .trail-figure picture{display:block}
+  .tl-disclaimer{margin:18px auto 0;text-align:center;font-size:12.5px;font-style:italic;color:var(--muted);max-width:560px}
   .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
   .symptom-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;transition:transform .3s ease,box-shadow .3s ease;position:relative}
@@ -284,7 +286,7 @@
     /* Benefits + symptoms images go edge-to-edge (zoomed) on phones —
        break out of .wrap padding so they touch both screen borders. */
     .pi-benefits{margin:24px 0 0;border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-    .symptoms-figure,.actives-figure,.bvitamins-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+    .symptoms-figure,.actives-figure,.bvitamins-figure,.trail-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
     .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
     .pi-sub{font-size:15px;line-height:1.55;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
     .pi-kicker{font-size:10px;letter-spacing:.18em;margin-bottom:8px}
@@ -558,42 +560,13 @@
       <h2 class="s-title">Gentle, <em>day by day</em>.</h2>
       <p class="s-sub">Ginger+ is a daily routine — not a quick fix. Here's what most women report as the weeks add up. Individual experiences may vary.</p>
     </div>
-    <div class="timeline-grid">
-      <div class="tl-card">
-        <span class="tl-step">Week 1</span>
-        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" fill="rgba(46,139,87,.10)"/><path d="M12 4a8 8 0 0 0-3 15.5"/><path d="M9 12l2 2 4-4"/></svg></div>
-        <h4>Easing in</h4>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> First sense of relief</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Better routine consistency</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Warmer, calmer feeling</li>
-        </ul>
-      </div>
-      <div class="tl-card">
-        <span class="tl-step">Week 2-4</span>
-        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14c2-2 4-2 6 0s4 2 6 0 4-2 6 0" /><path d="M3 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke-opacity=".55"/><circle cx="6" cy="14" r="1.3" fill="currentColor"/><circle cx="18" cy="14" r="1.3" fill="currentColor"/></svg></div>
-        <h4>Steady support</h4>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Less morning queasiness</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Better digestion</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Easier meals</li>
-        </ul>
-      </div>
-      <div class="tl-card">
-        <span class="tl-step">Continued</span>
-        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-11a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.5-7 11-7 11z" fill="rgba(46,139,87,.14)"/><path d="M9 11c1 1 2 1 3 0s2-1 3 0"/></svg></div>
-        <h4>Daily wellness</h4>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Steady daily comfort</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Calmer through trimesters</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Easier to keep iron down</li>
-        </ul>
-      </div>
-    </div>
-    <div class="tl-stat">
-      <div><strong>Designed for first-trimester nausea — gentle enough for daily use.</strong></div>
-      <div class="ref">If symptoms persist, always check with your gynaecologist.</div>
-    </div>
+    <figure class="trail-figure">
+      <picture>
+        <source media="(max-width: 720px)" srcset="/img/products/ginger-trail-mobile.png">
+        <img src="/img/products/ginger-trail-desktop.png" alt="Ginger+ timeline — Start: easing in, first relief, better routine, calmer mornings. Week 2-4: steady support, less queasiness, better digestion, easier meals. Continued: daily comfort, steady comfort, calmer through trimesters, easier iron intake. Designed for first-trimester nausea, gentle enough for daily use." loading="lazy">
+      </picture>
+    </figure>
+    <p class="tl-disclaimer">If symptoms persist, always check with your gynaecologist.</p>
   </div>
 </section>
 
