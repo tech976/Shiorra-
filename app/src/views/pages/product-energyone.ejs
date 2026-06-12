@@ -303,7 +303,9 @@
   .amino-list li svg{width:20px;height:20px;color:var(--honey);flex-shrink:0;stroke-width:2.4}
 
   /* ---------- Timeline (what you'll notice) ---------- */
-  .timeline-bg{background:linear-gradient(180deg,#fff,var(--surface) 100%)}
+  .timeline-bg{background:#fff}
+  .trail-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff;max-width:1000px;margin-left:auto;margin-right:auto}
+  .trail-figure img{display:block;width:100%;height:auto}
   .timeline-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:16px;align-items:stretch}
   @media(max-width:880px){.timeline-grid{grid-template-columns:1fr}}
   .tl-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px;position:relative;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s;overflow:hidden}
@@ -397,7 +399,7 @@
     .marquee-track{gap:32px;font-size:11.5px}
 
     /* Section illustrations go edge-to-edge (zoomed) on phones */
-    .symptoms-figure,.actives-figure,.bvitamins-figure,.minerals-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+    .symptoms-figure,.actives-figure,.bvitamins-figure,.minerals-figure,.trail-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
 
     .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
     .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
@@ -742,45 +744,9 @@
       <p class="s-sub">Supplements work best as part of a routine — here's what people typically report as the weeks add up. Individual experiences may vary.</p>
     </div>
 
-    <div class="timeline-grid">
-      <div class="tl-card">
-        <span class="tl-step">Week 1–2</span>
-        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div>
-        <h4>Settling into the routine</h4>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Feeling more supported nutritionally</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Better daily routine consistency</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Improved sense of wellness</li>
-        </ul>
-      </div>
-      <div class="tl-card">
-        <span class="tl-step">Week 3–4</span>
-        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 4 14h7l-1 7 9-11h-7z"/></svg></div>
-        <h4>Energy &amp; focus support</h4>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Better energy support</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Improved focus and alertness</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Feeling more active through the day</li>
-        </ul>
-      </div>
-      <div class="tl-card">
-        <span class="tl-step">Continued</span>
-        <div class="tl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 9 11l4 4 8-8"/><polyline points="14 7 21 7 21 14"/></svg></div>
-        <h4>Long-term wellness</h4>
-        <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Long-term nutritional support</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Consistent daily wellness</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Support for an active lifestyle</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="tl-stat">
-      <div>
-        <strong>Notable improvement in Energy &amp; Fatigue scores by week 2.</strong>
-      </div>
-      <div class="ref">Reference: Chhaya G, et al. Medical Research Archives. 2024 Sep 30;12(9).</div>
-    </div>
+    <figure class="trail-figure">
+      <img src="/img/products/energy-trail.png" alt="EnergyOne+ timeline — Week 1-2: settling into the routine (feeling more supported nutritionally, better daily routine consistency, improved sense of wellness). Week 3-4: energy and focus support (better energy support, improved focus and alertness, feeling more active through the day). Continued: long-term wellness (long-term nutritional support, consistent daily wellness, support for an active lifestyle). Notable improvement in Energy and Fatigue scores by week 2. Reference: Chhaya G, et al. Medical Research Archives. 2024 Sep 30;12(9)." loading="lazy">
+    </figure>
   </div>
 </section>
 
