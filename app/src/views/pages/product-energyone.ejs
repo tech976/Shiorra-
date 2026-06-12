@@ -265,7 +265,9 @@
   .bvit-help-card p{font-size:13px;color:var(--muted);line-height:1.5}
 
   /* ---------- Minerals + Amino Acids ---------- */
-  .min-bg{background:linear-gradient(180deg,var(--surface),#fff 100%)}
+  .min-bg{background:#fff}
+  .minerals-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .minerals-figure img{display:block;width:100%;height:auto}
   .min-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.min-grid{grid-template-columns:repeat(2,1fr)}}
   .min-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s;position:relative;overflow:hidden}
@@ -395,7 +397,7 @@
     .marquee-track{gap:32px;font-size:11.5px}
 
     /* Section illustrations go edge-to-edge (zoomed) on phones */
-    .symptoms-figure,.actives-figure,.bvitamins-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+    .symptoms-figure,.actives-figure,.bvitamins-figure,.minerals-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
 
     .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
     .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
@@ -724,16 +726,9 @@
       <p class="s-sub">Minerals are needed in small quantities but support essential functions every day — from immunity to muscle to oxygen transport.</p>
     </div>
 
-    <div class="min-grid">
-      <div class="min-card"><div class="ic">Zn</div><h5>Zinc</h5><p>Supports immune function and overall wellness.</p></div>
-      <div class="min-card"><div class="ic">Mg</div><h5>Magnesium</h5><p>Supports muscle function and energy metabolism.</p></div>
-      <div class="min-card"><div class="ic">Fe</div><h5>Iron</h5><p>Supports oxygen transport in the body.</p></div>
-      <div class="min-card"><div class="ic">Se</div><h5>Selenium</h5><p>Contributes to normal antioxidant defence.</p></div>
-      <div class="min-card"><div class="ic">Cu</div><h5>Copper</h5><p>Supports energy metabolism and iron utilisation.</p></div>
-      <div class="min-card"><div class="ic">Cr</div><h5>Chromium</h5><p>Helps maintain normal macronutrient metabolism.</p></div>
-      <div class="min-card"><div class="ic">I</div><h5>Iodine</h5><p>Supports normal thyroid function and energy production.</p></div>
-      <div class="min-card"><div class="ic">+</div><h5>Plus B-complex</h5><p>Working together to support your natural energy systems.</p></div>
-    </div>
+    <figure class="minerals-figure">
+      <img src="/img/products/energy-minerals.png" alt="EnergyOne+ essential minerals — Zinc (supports immune function and overall wellness), Magnesium (supports muscle function and energy metabolism), Iron (supports oxygen transport), Selenium (contributes to normal antioxidant defence), Copper (supports energy metabolism and iron utilisation), Chromium (helps maintain normal macronutrient metabolism), Iodine (supports normal thyroid function and energy production), plus B-complex working together to support your natural energy systems" loading="lazy">
+    </figure>
   </div>
 </section>
 
