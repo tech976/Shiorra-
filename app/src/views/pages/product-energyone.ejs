@@ -190,6 +190,9 @@
 
   /* ---------- Why tired (problem) ---------- */
   .symptoms-bg{background:#fff}
+  .symptoms-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .symptoms-figure picture{display:block}
+  .symptoms-figure img{display:block;width:100%;height:auto}
   .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
   .symptom-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s;position:relative;overflow:hidden}
@@ -390,6 +393,9 @@
 
     .marquee{padding:8px 0}
     .marquee-track{gap:32px;font-size:11.5px}
+
+    /* Section illustrations go edge-to-edge (zoomed) on phones */
+    .symptoms-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
 
     .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
     .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
@@ -641,48 +647,12 @@
       <h2 class="s-title">Energy is not just <em>about sleep</em>.</h2>
       <p class="s-sub">Modern life constantly demands energy, focus and stamina — yet several daily factors quietly drain you long before bedtime catches up.</p>
     </div>
-    <div class="symptoms-grid">
-      <div class="symptom-card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18"/><path d="M8 2v4"/><path d="M16 2v4"/><circle cx="12" cy="15" r="1.4" fill="currentColor"/></svg></div>
-        <h4>Busy schedules</h4>
-        <p>Back-to-back meetings, long commutes, late nights — the day never quite ends.</p>
-      </div>
-      <div class="symptom-card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3a3.5 3.5 0 0 0-3.5 3.5v.5a3 3 0 0 0-2 5.66V14a3 3 0 0 0 3.5 2.96V18a3 3 0 0 0 5.5 1.66"/><path d="M14.5 3a3.5 3.5 0 0 1 3.5 3.5v.5a3 3 0 0 1 2 5.66V14a3 3 0 0 1-3.5 2.96V18a3 3 0 0 1-5.5 1.66"/><path d="M12 6v15"/></svg></div>
-        <h4>Mental workload</h4>
-        <p>Your brain uses large amounts of energy through the day — focus is a finite resource.</p>
-      </div>
-      <div class="symptom-card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3"/><path d="M12 18v3"/><path d="M3 12h3"/><path d="M18 12h3"/></svg></div>
-        <h4>Irregular eating</h4>
-        <p>Skipped meals and on-the-go eating reduce the nutrients your body has to work with.</p>
-      </div>
-      <div class="symptom-card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2.5"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 10h5"/><path d="M7 13h3"/></svg></div>
-        <h4>Long screen time</h4>
-        <p>Hours of screen exposure quietly tax mental stamina and visual focus.</p>
-      </div>
-      <div class="symptom-card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h3l1.5-3 2 6 1.5-3h2"/></svg></div>
-        <h4>Nutritional gaps</h4>
-        <p>Even a balanced diet may not fully cover the actives your body needs daily.</p>
-      </div>
-      <div class="symptom-card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 4 14h7l-1 7 9-11h-7z"/></svg></div>
-        <h4>Daily stress</h4>
-        <p>Stress increases your body's nutrient demand — without replacing it, energy dips.</p>
-      </div>
-      <div class="symptom-card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18"/><path d="M5 18a7 7 0 0 1 14 0"/><path d="M12 4v3"/><path d="M5 7l2 2"/><path d="M19 7l-2 2"/></svg></div>
-        <h4>Mid-day slump</h4>
-        <p>By afternoon many people feel mentally drained — focus and motivation both drop.</p>
-      </div>
-      <div class="symptom-card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13a3 3 0 0 1 3 3v0a3 3 0 0 1-3 3h-1"/><path d="M4 8v8a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V8"/><path d="M8 2v3"/><path d="M12 2v3"/><line x1="3" y1="3" x2="21" y2="21" stroke-width="2.4"/></svg></div>
-        <h4>Caffeine cycle</h4>
-        <p>Stimulants give a short lift, then leave you flatter than before. Not nourishment.</p>
-      </div>
-    </div>
+    <figure class="symptoms-figure">
+      <picture>
+        <source media="(max-width: 720px)" srcset="/img/products/energy-symptoms-mobile.png">
+        <img src="/img/products/energy-symptoms-desktop.png" alt="Why we feel drained — busy schedules (back-to-back meetings, long commutes, late nights), mental workload (your brain uses large amounts of energy, focus is finite), irregular eating (skipped meals reduce available nutrients), long screen time (taxes mental stamina and visual focus), nutritional gaps (even a balanced diet may not cover daily actives), daily stress (raises nutrient demand, energy dips), mid-day slump (afternoon focus and motivation drop), caffeine cycle (stimulants give a short lift then leave you flatter)" loading="lazy">
+      </picture>
+    </figure>
   </div>
 </section>
 
