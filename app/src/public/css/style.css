@@ -7210,10 +7210,10 @@ body.aw-cursor-out .aw-cursor-ring {
 }
 .company__grid{
     display: grid;
-    grid-template-columns: 1.1fr 1fr;
+    grid-template-columns: 1fr;
     gap: clamp(40px, 6vw, 96px);
     align-items: center;
-    max-width: 1180px;
+    max-width: 820px;
     margin: 0 auto;
 }
 .company__head .eyebrow{
