@@ -378,6 +378,15 @@
   .final p{font-size:16px;color:var(--muted);max-width:540px;margin:0 auto 24px}
   .final-cta{display:inline-flex;align-items:center;gap:10px;background:var(--charcoal);color:#fff;padding:16px 32px;border-radius:14px;font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;transition:transform .2s,background .2s}
   .final-cta:hover{transform:translateY(-2px);background:var(--charcoal-2)}
+  /* Blend with benefits — closing trust trio */
+  .blend-bg{background:#fff}
+  .blend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:840px;margin:0 auto}
+  @media(max-width:720px){.blend-grid{grid-template-columns:1fr;gap:12px}}
+  .blend-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;background:var(--surface);border:1px solid var(--line-soft);border-radius:18px;padding:32px 24px;transition:transform .25s,box-shadow .25s,border-color .25s}
+  .blend-card:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(40,40,40,.09);border-color:var(--honey)}
+  .blend-card .ic{width:52px;height:52px;border-radius:14px;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center}
+  .blend-card .ic svg{width:26px;height:26px;stroke-width:2}
+  .blend-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;color:var(--ink);margin:0;letter-spacing:-0.005em}
 
   /* Sticky buy bar — Myntra/Nykaa dual-button standard */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(40,40,40,.08);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:40}
@@ -758,22 +767,6 @@
 </section>
 
 
-<!-- ============= GENTLE REMINDER ============= -->
-<section class="reminder">
-  <div class="wrap">
-    <span class="eye">A gentle reminder</span>
-    <h2>You don't have to wait until you're <em>exhausted</em>.</h2>
-    <p>Supplements work best alongside the basics. Build the rest into your daily routine, and let EnergyOne+ help fill in the rest.</p>
-    <div class="rem-row">
-      <span class="rem-chip">Balanced diet</span>
-      <span class="rem-chip">Adequate sleep</span>
-      <span class="rem-chip">Hydration</span>
-      <span class="rem-chip">Regular exercise</span>
-      <span class="rem-chip">Stress management</span>
-    </div>
-  </div>
-</section>
-
 <!-- ============= FINAL CTA ============= -->
 <section class="final">
   <div class="wrap">
@@ -783,6 +776,29 @@
       Try EnergyOne+ today
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </a>
+  </div>
+</section>
+
+<!-- ============= BLEND WITH BENEFITS ============= -->
+<section class="s blend-bg">
+  <div class="wrap">
+    <div class="s-head center">
+      <h2 class="s-title">Blend with <em>benefits</em>.</h2>
+    </div>
+    <div class="blend-grid">
+      <div class="blend-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l1 3H8z"/><path d="M8 6v4l-4 8a2 2 0 0 0 1.8 3h12.4A2 2 0 0 0 20 18l-4-8V6"/><path d="M9.5 16.5l1.5 1.5 3-3"/></svg></div>
+        <h5>Clinically proven ingredients</h5>
+      </div>
+      <div class="blend-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h5>Hypoallergenic</h5>
+      </div>
+      <div class="blend-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 9-9 3 0 6 1 7 2-2 8-6 12-9 14z"/><path d="M8 16c3-4 6-6 9-7"/></svg></div>
+        <h5>100% vegetarian</h5>
+      </div>
+    </div>
   </div>
 </section>
 
