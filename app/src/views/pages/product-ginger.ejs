@@ -261,6 +261,19 @@
   .final p{font-size:16px;color:var(--muted);max-width:540px;margin:0 auto 24px}
   .final-cta{display:inline-flex;align-items:center;gap:10px;background:var(--charcoal);color:#fff;padding:16px 32px;border-radius:14px;font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;transition:transform .2s,background .2s}
   .final-cta:hover{transform:translateY(-2px);background:var(--charcoal-2)}
+  /* FAQ accordion */
+  .faq-sec{background:#fff}
+  .fq-list{display:grid;gap:12px;max-width:820px;margin:0 auto}
+  .fq-item{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+  .fq-item:hover{border-color:var(--honey)}
+  .fq-item[open]{box-shadow:0 8px 24px rgba(40,40,40,.06)}
+  .fq-q{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:16px;color:var(--ink);list-style:none;gap:14px}
+  .fq-q::-webkit-details-marker{display:none}
+  .fq-q .plus{width:28px;height:28px;border-radius:50%;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;font-size:18px;font-weight:700;flex-shrink:0;transition:transform .3s,background .2s,color .2s}
+  .fq-item[open] .fq-q .plus{transform:rotate(45deg);background:var(--honey);color:#fff}
+  .fq-a{padding:0 22px 22px;color:var(--ink-soft);line-height:1.65;font-size:14.5px}
+  .fq-a strong{color:var(--ink)}
+  @media(max-width:640px){.fq-q{font-size:15px;padding:16px 18px}.fq-a{padding:0 18px 18px}}
 
   /* Sticky buy bar — Myntra/Nykaa dual-button standard */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(40,40,40,.08);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:40}
@@ -576,6 +589,22 @@
         <img src="/img/products/ginger-root-desktop.png" alt="Why nausea keeps coming back — and how the right nutrients help break the cycle. Hormonal changes trigger morning sickness; eating becomes harder as smells and foods feel unbearable; energy drops through the day; sleep disruption from night-time nausea; stress builds up; iron becomes harder to tolerate. Ginger + B6 ease nausea and queasiness, B1 supports energy production, and Magnesium supports muscle relaxation and better sleep." loading="lazy">
       </picture>
     </figure>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="s faq-sec">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="rv-marker">FAQ</span>
+      <h2 class="s-title">Questions, <em>answered</em>.</h2>
+    </div>
+    <div class="fq-list">
+      <details class="fq-item"><summary class="fq-q">What's in Ginger+?<span class="plus">+</span></summary><div class="fq-a">Standardized Ginger Extract (250 mg) + active <strong>B6 as P5P</strong> (2.3 mg) + Vitamin B1 + Magnesium Bisglycinate. Built specifically for first-trimester nausea and gentle daily digestion.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is Ginger+ safe in the first trimester?<span class="plus">+</span></summary><div class="fq-a">Yes — Ginger+ was built specifically for first-trimester nausea. The doses of ginger and B6 are pregnancy-friendly. If symptoms are severe or persistent, please consult your gynaecologist.</div></details>
+      <details class="fq-item"><summary class="fq-q">When should I take Ginger+?<span class="plus">+</span></summary><div class="fq-a">Once a day, anytime. Many women take it in the morning when nausea tends to peak. You can take it with or without food.</div></details>
+      <details class="fq-item"><summary class="fq-q">Can I take Iron+ and Ginger+ together?<span class="plus">+</span></summary><div class="fq-a">Yes — they pair well. Many moms take Ginger+ in the morning (for nausea) and Iron+ later in the day. Both are gentle enough for daily use.</div></details>
+    </div>
   </div>
 </section>
 

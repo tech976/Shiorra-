@@ -378,6 +378,19 @@
   .final p{font-size:16px;color:var(--muted);max-width:540px;margin:0 auto 24px}
   .final-cta{display:inline-flex;align-items:center;gap:10px;background:var(--charcoal);color:#fff;padding:16px 32px;border-radius:14px;font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;transition:transform .2s,background .2s}
   .final-cta:hover{transform:translateY(-2px);background:var(--charcoal-2)}
+  /* FAQ accordion */
+  .faq-sec{background:#fff}
+  .fq-list{display:grid;gap:12px;max-width:820px;margin:0 auto}
+  .fq-item{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+  .fq-item:hover{border-color:var(--honey)}
+  .fq-item[open]{box-shadow:0 8px 24px rgba(40,40,40,.06)}
+  .fq-q{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:16px;color:var(--ink);list-style:none;gap:14px}
+  .fq-q::-webkit-details-marker{display:none}
+  .fq-q .plus{width:28px;height:28px;border-radius:50%;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;font-size:18px;font-weight:700;flex-shrink:0;transition:transform .3s,background .2s,color .2s}
+  .fq-item[open] .fq-q .plus{transform:rotate(45deg);background:var(--honey);color:#fff}
+  .fq-a{padding:0 22px 22px;color:var(--ink-soft);line-height:1.65;font-size:14.5px}
+  .fq-a strong{color:var(--ink)}
+  @media(max-width:640px){.fq-q{font-size:15px;padding:16px 18px}.fq-a{padding:0 18px 18px}}
   /* Blend with benefits — closing trust trio */
   .blend-bg{background:#fff}
   .blend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:840px;margin:0 auto}
@@ -766,6 +779,22 @@
   </div>
 </section>
 
+
+<!-- ============= FAQ ============= -->
+<section class="s faq-sec">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="rv-marker">FAQ</span>
+      <h2 class="s-title">Questions, <em>answered</em>.</h2>
+    </div>
+    <div class="fq-list">
+      <details class="fq-item"><summary class="fq-q">Is EnergyOne+ caffeine-free?<span class="plus">+</span></summary><div class="fq-a">Yes — 100% caffeine-free. It uses Taurine + Ginseng extract + B-Complex + minerals + amino acids to support your body's natural energy systems. Not a stimulant, not a crash.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is EnergyOne+ safe in pregnancy?<span class="plus">+</span></summary><div class="fq-a">EnergyOne+ contains ginseng extract, which is typically <strong>not recommended during pregnancy</strong>. For pregnant or breastfeeding women, we recommend Iron+ and/or Ginger+ instead — and a chat with your doctor before adding any new supplement.</div></details>
+      <details class="fq-item"><summary class="fq-q">When should I take EnergyOne+?<span class="plus">+</span></summary><div class="fq-a">Once a day, anytime. Most people take it in the morning. Caffeine-free, so it won't interfere with sleep if you take it later in the day.</div></details>
+      <details class="fq-item"><summary class="fq-q">How long until I notice a difference?<span class="plus">+</span></summary><div class="fq-a">Most people report feeling more supported within 1-2 weeks, with steadier daily energy and focus building over 3-4 weeks of consistent use. Individual experiences may vary.</div></details>
+    </div>
+  </div>
+</section>
 
 <!-- ============= FINAL CTA ============= -->
 <section class="final">
