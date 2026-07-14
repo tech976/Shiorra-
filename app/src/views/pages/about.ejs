@@ -125,6 +125,18 @@
   .story-copy h2 em{font-style:italic;color:var(--honey);font-weight:500}
   @media(max-width:680px){.story-copy h2{font-size:32px}}
   .story-copy p{font-size:16px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px}
+  /* Founders */
+  .founders{margin-top:56px;text-align:center}
+  .founders__title{font-family:'Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:700;letter-spacing:-0.02em;color:var(--charcoal);margin:8px 0 32px}
+  .founders__title em{font-style:italic;color:var(--honey);font-weight:500}
+  .founders__grid{display:flex;flex-wrap:wrap;justify-content:center;gap:24px}
+  .founder{flex:0 1 240px;background:#fff;border:1px solid var(--line-soft);border-radius:20px;padding:30px 24px;transition:transform .25s,box-shadow .25s,border-color .25s}
+  .founder:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(40,40,40,.10);border-color:var(--honey)}
+  .founder__avatar{width:96px;height:96px;border-radius:50%;margin:0 auto 16px;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:30px;letter-spacing:.02em;overflow:hidden}
+  .founder__avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .founder__name{font-family:'Helvetica Neue',Arial,sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:3px}
+  .founder__role{font-size:12.5px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--honey-deep)}
+  @media(max-width:680px){.founders{margin-top:40px}.founders__title{font-size:24px}}
   .story-quote{background:#fff;border:1px solid var(--line);border-left:4px solid var(--honey);padding:28px;border-radius:14px;box-shadow:0 8px 24px rgba(40,40,40,.06)}
   .story-quote .kanji{font-family:'Noto Serif',serif;font-size:clamp(44px,9vw,80px);line-height:1;color:var(--honey-deep);margin-bottom:14px}
   .story-quote .word{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);margin-bottom:8px}
@@ -329,6 +341,23 @@
         <div class="kanji">栞</div>
         <div class="word">Shiori — a guide</div>
         <p>"Shiori" is the Japanese word for a bookmark — a quiet companion that holds your place and helps you find your way back. That's the kind of brand we wanted to build.</p>
+      </div>
+    </div>
+
+    <div class="founders">
+      <span class="s-eyebrow">The founders</span>
+      <h3 class="founders__title">The women <em>behind Shiōrra</em>.</h3>
+      <div class="founders__grid">
+        <div class="founder">
+          <div class="founder__avatar" aria-hidden="true">SP</div>
+          <div class="founder__name">Shivangi Patel</div>
+          <div class="founder__role">Co-founder</div>
+        </div>
+        <div class="founder">
+          <div class="founder__avatar" aria-hidden="true">IP</div>
+          <div class="founder__name">Ishita Patel</div>
+          <div class="founder__role">Co-founder</div>
+        </div>
       </div>
     </div>
   </div>
