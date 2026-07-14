@@ -129,13 +129,14 @@
   .founders{margin-top:56px;text-align:center}
   .founders__title{font-family:'Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:700;letter-spacing:-0.02em;color:var(--charcoal);margin:8px 0 32px}
   .founders__title em{font-style:italic;color:var(--honey);font-weight:500}
-  .founders__grid{display:flex;flex-wrap:wrap;justify-content:center;gap:24px}
-  .founder{flex:0 1 240px;background:#fff;border:1px solid var(--line-soft);border-radius:20px;padding:30px 24px;transition:transform .25s,box-shadow .25s,border-color .25s}
+  .founders__grid{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;align-items:stretch}
+  .founder{flex:0 1 360px;display:flex;flex-direction:column;align-items:center;background:#fff;border:1px solid var(--line-soft);border-radius:20px;padding:32px 28px;transition:transform .25s,box-shadow .25s,border-color .25s}
   .founder:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(40,40,40,.10);border-color:var(--honey)}
-  .founder__avatar{width:96px;height:96px;border-radius:50%;margin:0 auto 16px;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:30px;letter-spacing:.02em;overflow:hidden}
+  .founder__avatar{width:96px;height:96px;border-radius:50%;margin:0 auto 16px;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:30px;letter-spacing:.02em;overflow:hidden;flex-shrink:0}
   .founder__avatar img{width:100%;height:100%;object-fit:cover;display:block}
   .founder__name{font-family:'Helvetica Neue',Arial,sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:3px}
   .founder__role{font-size:12.5px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--honey-deep)}
+  .founder__bio{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin-top:14px;text-align:center}
   @media(max-width:680px){.founders{margin-top:40px}.founders__title{font-size:24px}}
   .story-quote{background:#fff;border:1px solid var(--line);border-left:4px solid var(--honey);padding:28px;border-radius:14px;box-shadow:0 8px 24px rgba(40,40,40,.06)}
   .story-quote .kanji{font-family:'Noto Serif',serif;font-size:clamp(44px,9vw,80px);line-height:1;color:var(--honey-deep);margin-bottom:14px}
@@ -352,6 +353,7 @@
           <div class="founder__avatar" aria-hidden="true">SP</div>
           <div class="founder__name">Shivangi Patel</div>
           <div class="founder__role">Co-founder</div>
+          <p class="founder__bio">A Pharmacology Ph.D. and NIPER Ahmedabad alumna with 7+ years in Medical Affairs — from leading K.C. Laboratories' neuropsychiatry portfolio to Deputy Manager, Medical Affairs at Cipla. She bridges clinical research and strategy, turning scientific evidence into better therapeutic outcomes.</p>
         </div>
         <div class="founder">
           <div class="founder__avatar" aria-hidden="true">IP</div>
