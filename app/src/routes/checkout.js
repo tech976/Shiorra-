@@ -10,6 +10,9 @@ router.get('/', ctrl.showCheckout);
 router.post('/create-order', ctrl.createOrder);
 router.post('/cod', ctrl.placeCod);
 router.post('/verify', ctrl.verifyPayment);
+// Razorpay redirects the browser here (POST, form-encoded) after payment —
+// see callback_url in the checkout page. Works even when the JS handler can't.
+router.post('/callback', ctrl.paymentCallback);
 router.get('/success/:orderNumber', ctrl.success);
 
 // Razorpay webhook expects raw body — register before json/urlencoded for this path

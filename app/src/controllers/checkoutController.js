@@ -295,6 +295,67 @@ exports.verifyPayment = async (req, res, next) => {
   }
 };
 
+// POST /checkout/callback
+// Razorpay posts here after payment because we set callback_url. This is far
+// more reliable than the JS handler alone: the handler needs to message the
+// parent window, which silently fails when 3-D Secure opens in a separate tab
+// (and on some mobile / UPI-intent flows). Symptom was a "payment succeeded"
+// screen on Razorpay's side while our order stayed PENDING forever.
+exports.paymentCallback = async (req, res, next) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+    // Razorpay posts error[...] fields here when the payment fails.
+    if (req.body.error || req.body['error[code]']) {
+      const desc = req.body['error[description]'] || 'Payment failed.';
+      req.flash('error', `${desc} If any money was debited it will be refunded automatically.`);
+      return res.redirect('/checkout');
+    }
+
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      req.flash('error', 'Payment could not be confirmed. Please try again.');
+      return res.redirect('/checkout');
+    }
+
+    const expected = crypto
+      .createHmac('sha256', env.razorpay.keySecret)
+      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .digest('hex');
+
+    if (expected !== razorpay_signature) {
+      req.flash('error', 'Payment verification failed. Please contact support if money was debited.');
+      return res.redirect('/checkout');
+    }
+
+    const order = await prisma.order.findFirst({ where: { razorpayOrderId: razorpay_order_id } });
+    if (!order) {
+      req.flash('error', 'Order not found.');
+      return res.redirect('/cart');
+    }
+
+    // Idempotent: the webhook may have marked this PAID already.
+    if (order.paymentStatus !== 'CAPTURED') {
+      await prisma.order.update({
+        where: { id: order.id },
+        data: {
+          razorpayPaymentId: razorpay_payment_id,
+          razorpaySignature: razorpay_signature,
+          status: 'PAID',
+          paymentStatus: 'CAPTURED',
+        },
+      });
+    }
+
+    await clearCart(req);
+    delete req.session.couponCode;
+    rememberGuestOrder(req, order.orderNumber);
+
+    res.redirect(`/checkout/success/${order.orderNumber}`);
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.success = async (req, res, next) => {
   try {
     const { orderNumber } = req.params;

@@ -766,17 +766,12 @@
                 order_id: data.orderId,
                 prefill: data.prefill,
                 theme: { color: '#23867F' },
-                handler: async function (resp) {
-                    msg.textContent = 'Verifying payment…';
-                    const v = await fetch('/checkout/verify', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify(resp),
-                    });
-                    const vd = await v.json();
-                    if (v.ok && vd.redirect) window.location.href = vd.redirect;
-                    else { msg.textContent = vd.error || 'Payment verification failed'; btn.disabled = false; }
-                },
+                // Let Razorpay redirect back to the server rather than relying on a
+                // JS handler. The handler needs to message the parent window, which
+                // silently fails when 3-D Secure opens in its own tab (and on some
+                // mobile/UPI flows) — the payment succeeds but the order is never
+                // confirmed. The server verifies the signature on /checkout/callback.
+                callback_url: window.location.origin + '/checkout/callback',
                 modal: {
                     ondismiss: function () {
                         msg.textContent = 'Payment cancelled. You can try again.';
