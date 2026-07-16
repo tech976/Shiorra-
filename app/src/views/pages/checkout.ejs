@@ -776,6 +776,13 @@
                 }
             };
             const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (resp) {
+                const e = (resp && resp.error) || {};
+                msg.textContent = e.description
+                    ? `Payment failed: ${e.description}`
+                    : 'Payment failed. No money was deducted — please try again.';
+                btn.disabled = false;
+            });
             rzp.open();
         } catch (err) {
             msg.textContent = err.message;

@@ -141,6 +141,10 @@ exports.createOrder = async (req, res, next) => {
     if (!rzp) {
       return res.status(500).json({ error: 'Payment gateway not configured. Add Razorpay keys to .env.' });
     }
+    // Razorpay rejects anything under 100 paise (₹1) — fail fast with a clear message.
+    if (totals.totalInPaise < 100) {
+      return res.status(400).json({ error: 'Order total must be at least ₹1.' });
+    }
 
     // Save the address
     const address = await prisma.address.create({
