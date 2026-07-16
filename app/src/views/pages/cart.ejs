@@ -186,6 +186,11 @@
   .coupon-chip button:hover { opacity: 1; }
 
   .summary-divider { height: 1px; background: var(--sh-line); margin: 0 0 18px; }
+  .free-ship-nudge { font-size: 13px; color: var(--sh-ink); background: var(--sh-sage-soft, #EAF5F1); border-radius: 10px; padding: 10px 12px; margin: 4px 0 14px; line-height: 1.4; }
+  .free-ship-nudge strong { color: var(--sh-sage, #2E8B57); font-weight: 700; }
+  .free-ship-nudge--won { color: var(--sh-sage, #2E8B57); font-weight: 600; }
+  .free-ship-bar { display: block; height: 5px; border-radius: 4px; background: rgba(46,139,87,.15); margin-top: 8px; overflow: hidden; }
+  .free-ship-bar > span { display: block; height: 100%; border-radius: 4px; background: var(--sh-sage, #2E8B57); transition: width .3s ease; }
 
   .summary-row {
     display: flex; justify-content: space-between; align-items: baseline;
@@ -503,12 +508,12 @@
 
         <!-- RIGHT: order summary (shared component) -->
         <aside aria-label="Order summary">
-          <button class="summary-collapse-toggle" type="button" aria-expanded="false" aria-controls="cart-summary-body" data-summary-toggle>
+          <button class="summary-collapse-toggle" type="button" aria-expanded="true" aria-controls="cart-summary-body" data-summary-toggle>
             <span>Order summary · <strong><%= formatINR(totals.totalInPaise) %></strong></span>
             <svg class="chev" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 4 4 4-4"/></svg>
           </button>
 
-          <div class="summary-card summary-collapse-body" id="cart-summary-body" hidden>
+          <div class="summary-card summary-collapse-body" id="cart-summary-body">
             <h3 class="summary-card__title">Order summary</h3>
 
             <% if (coupon) { %>
@@ -542,6 +547,15 @@
               <span>Shipping</span>
               <strong><%= totals.shippingInPaise === 0 ? 'Free' : formatINR(totals.shippingInPaise) %></strong>
             </div>
+            <% var freeShipGap = 99900 - totals.subtotalInPaise; %>
+            <% if (freeShipGap > 0) { %>
+              <div class="free-ship-nudge">
+                Add <strong><%= formatINR(freeShipGap) %></strong> more for <strong>free shipping</strong>
+                <span class="free-ship-bar"><span style="width:<%= Math.min(100, Math.round(totals.subtotalInPaise / 999)) %>%"></span></span>
+              </div>
+            <% } else { %>
+              <div class="free-ship-nudge free-ship-nudge--won">🎉 You've unlocked <strong>free shipping</strong></div>
+            <% } %>
             <div class="summary-row">
               <span>Tax</span>
               <span class="muted">Included</span>
@@ -568,7 +582,7 @@
               </div>
               <div class="row">
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a5 5 0 0 1 9-3"/><path d="M12 3v3h-3"/><path d="M13 8a5 5 0 0 1-9 3"/><path d="M4 13v-3h3"/></svg>
-                14-day easy returns · no questions asked
+                30-day money-back guarantee · no questions asked
               </div>
             </div>
           </div>

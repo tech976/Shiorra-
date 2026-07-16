@@ -27,7 +27,7 @@ const staticPages = {
       <h2>Health disclaimer</h2>
       <p>Shiōrra products are nutritional supplements, not medicines. They do not diagnose, treat, cure or prevent any disease. Always consult your doctor before starting any supplement, especially during pregnancy.</p>
       <h2>Returns &amp; refunds</h2>
-      <p>Unopened, sealed products may be returned within 14 days of delivery for a refund. Opened or used products cannot be returned for hygiene reasons.</p>
+      <p>Unopened, sealed products may be returned within 30 days of delivery for a refund. Opened or used products cannot be returned for hygiene reasons.</p>
       <h2>Contact</h2>
       <p>Questions? Email <a href="mailto:hello@shiorra.com">hello@shiorra.com</a>.</p>
     `,

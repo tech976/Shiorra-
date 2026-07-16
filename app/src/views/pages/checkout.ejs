@@ -500,7 +500,7 @@
             </div>
             <div class="co-field">
               <label for="co-phone">Phone</label>
-              <input id="co-phone" name="address[phone]" autocomplete="tel" required value="<%= defAddr ? defAddr.phone || '' : ((currentUser && currentUser.phone) ? currentUser.phone : '') %>">
+              <input id="co-phone" name="address[phone]" type="tel" inputmode="tel" autocomplete="tel" required value="<%= defAddr ? defAddr.phone || '' : ((currentUser && currentUser.phone) ? currentUser.phone : '') %>">
             </div>
             <div class="co-field co-full">
               <label for="co-line1">Address line 1</label>
@@ -522,10 +522,8 @@
               <label for="co-postcode">Postal code</label>
               <input id="co-postcode" name="address[postcode]" autocomplete="postal-code" inputmode="numeric" required value="<%= defAddr ? defAddr.postcode : '' %>">
             </div>
-            <div class="co-field">
-              <label for="co-country">Country</label>
-              <input id="co-country" name="address[country]" autocomplete="country-name" value="<%= defAddr ? defAddr.country : 'India' %>" required>
-            </div>
+            <!-- India-only store: country isn't asked, submitted as a hidden field. -->
+            <input type="hidden" name="address[country]" value="India">
           </div>
         </div>
 
