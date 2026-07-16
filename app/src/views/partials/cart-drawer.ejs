@@ -1,0 +1,312 @@
+<!-- ============================================================
+     Slide-out cart drawer — site-wide mini cart.
+     Self-contained (markup + CSS + JS). Included once per page:
+     via layouts/main.ejs for shared-layout pages, and directly in
+     each self-contained page (home, product-*, about, faq, reviews).
+     No server data needed — it hydrates itself from GET /cart/data.
+     ============================================================ -->
+<div class="cd-overlay" id="cdOverlay" hidden></div>
+<aside class="cd-panel" id="cdPanel" role="dialog" aria-label="Shopping cart" aria-hidden="true">
+  <header class="cd-head">
+    <h2 class="cd-title">Your cart<span class="cd-count" id="cdCount" hidden></span></h2>
+    <button type="button" class="cd-close" id="cdClose" aria-label="Close cart">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </header>
+
+  <div class="cd-ship" id="cdShip" hidden>
+    <p class="cd-ship__msg" id="cdShipMsg"></p>
+    <div class="cd-ship__bar"><span class="cd-ship__fill" id="cdShipFill"></span></div>
+  </div>
+
+  <div class="cd-body" id="cdBody" aria-live="polite">
+    <div class="cd-empty" id="cdEmpty">
+      <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+      <p>Your cart is empty.</p>
+      <a href="/shop" class="cd-empty__cta">Start shopping</a>
+    </div>
+    <ul class="cd-items" id="cdItems"></ul>
+  </div>
+
+  <footer class="cd-foot" id="cdFoot" hidden>
+    <div class="cd-subtotal">
+      <span>Subtotal</span>
+      <span id="cdSubtotal"></span>
+    </div>
+    <p class="cd-note">Shipping &amp; taxes calculated at checkout.</p>
+    <a href="/checkout" class="cd-checkout">Checkout</a>
+    <a href="/cart" class="cd-viewcart" data-cart-full>View full cart</a>
+  </footer>
+</aside>
+
+<style>
+  .cd-overlay{position:fixed;inset:0;background:rgba(15,23,42,.42);opacity:0;transition:opacity .28s ease;z-index:1400;}
+  .cd-overlay.is-open{opacity:1;}
+  .cd-panel{
+    position:fixed;top:0;right:0;height:100dvh;width:420px;max-width:92vw;
+    background:#fff;z-index:1401;display:flex;flex-direction:column;
+    transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+    box-shadow:-16px 0 48px rgba(15,23,42,.14);font-family:'Inter',system-ui,sans-serif;
+  }
+  .cd-panel.is-open{transform:translateX(0);}
+  .cd-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid #ECECEC;}
+  .cd-title{margin:0;font-size:17px;font-weight:600;letter-spacing:-0.01em;color:#15171A;}
+  .cd-count{margin-left:8px;font-size:12px;font-weight:600;color:#23867F;background:#EAF4F2;border-radius:999px;padding:2px 9px;}
+  .cd-close{border:0;background:transparent;color:#6A6F75;cursor:pointer;padding:6px;border-radius:8px;display:inline-flex;transition:background .15s,color .15s;}
+  .cd-close:hover{background:#F4F5F6;color:#15171A;}
+
+  .cd-ship{padding:14px 22px 6px;}
+  .cd-ship__msg{margin:0 0 8px;font-size:12.5px;color:#475569;}
+  .cd-ship__msg strong{color:#15171A;font-weight:600;}
+  .cd-ship__bar{height:5px;border-radius:999px;background:#EEF1F0;overflow:hidden;}
+  .cd-ship__fill{display:block;height:100%;width:0;background:linear-gradient(90deg,#2FA095,#23867F);transition:width .35s ease;border-radius:999px;}
+  .cd-ship.is-unlocked .cd-ship__fill{width:100%!important;}
+
+  .cd-body{flex:1;overflow-y:auto;padding:8px 22px 12px;}
+  .cd-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:56px 12px;color:#8A8F95;}
+  .cd-empty p{margin:0;font-size:15px;color:#6A6F75;}
+  .cd-empty__cta{display:inline-block;margin-top:4px;font-size:14px;font-weight:600;color:#fff;background:#15171A;border-radius:10px;padding:11px 22px;text-decoration:none;transition:background .15s;}
+  .cd-empty__cta:hover{background:#23867F;}
+
+  .cd-items{list-style:none;margin:0;padding:0;}
+  .cd-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid #F1F2F3;}
+  .cd-item:last-child{border-bottom:0;}
+  .cd-item__media{flex:0 0 66px;width:66px;height:66px;border-radius:10px;overflow:hidden;background:#F4F5F6;}
+  .cd-item__media img{width:100%;height:100%;object-fit:cover;display:block;}
+  .cd-item__main{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;}
+  .cd-item__name{font-size:14px;font-weight:600;color:#15171A;line-height:1.3;text-decoration:none;}
+  .cd-item__name:hover{color:#23867F;}
+  .cd-item__price{font-size:13px;color:#6A6F75;}
+  .cd-item__row{display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
+  .cd-qty{display:inline-flex;align-items:center;border:1px solid #E2E5E4;border-radius:9px;overflow:hidden;}
+  .cd-qty button{border:0;background:#fff;width:30px;height:30px;font-size:15px;color:#15171A;cursor:pointer;line-height:1;transition:background .12s;}
+  .cd-qty button:hover{background:#F4F5F6;}
+  .cd-qty button:disabled{color:#C4C8CC;cursor:not-allowed;}
+  .cd-qty__n{min-width:30px;text-align:center;font-size:13.5px;font-weight:600;color:#15171A;}
+  .cd-item__amt{font-size:14px;font-weight:600;color:#15171A;}
+  .cd-item__remove{border:0;background:transparent;color:#9AA0A6;font-size:12px;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px;transition:color .12s;align-self:flex-start;}
+  .cd-item__remove:hover{color:#C2410C;}
+
+  .cd-foot{padding:18px 22px calc(18px + env(safe-area-inset-bottom));border-top:1px solid #ECECEC;background:#fff;}
+  .cd-subtotal{display:flex;align-items:baseline;justify-content:space-between;font-size:16px;font-weight:600;color:#15171A;}
+  .cd-note{margin:6px 0 14px;font-size:12px;color:#8A8F95;}
+  .cd-checkout{display:flex;align-items:center;justify-content:center;height:52px;background:#15171A;color:#fff;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none;transition:background .15s,transform .1s;}
+  .cd-checkout:hover{background:#23867F;}
+  .cd-checkout:active{transform:translateY(1px);}
+  .cd-viewcart{display:block;text-align:center;margin-top:10px;font-size:13.5px;color:#6A6F75;text-decoration:none;}
+  .cd-viewcart:hover{color:#15171A;text-decoration:underline;}
+
+  .cd-panel.is-busy{pointer-events:none;}
+  .cd-panel.is-busy .cd-body{opacity:.55;transition:opacity .15s;}
+
+  @media (max-width:480px){
+    .cd-panel{width:100vw;max-width:100vw;}
+    .cd-head{padding:18px;}
+    .cd-body,.cd-ship,.cd-foot{padding-left:18px;padding-right:18px;}
+  }
+</style>
+
+<script>
+(function () {
+  if (window.__shiorraCartDrawer) return;
+  window.__shiorraCartDrawer = true;
+
+  var overlay = document.getElementById('cdOverlay');
+  var panel   = document.getElementById('cdPanel');
+  if (!overlay || !panel) return;
+
+  var closeBtn = document.getElementById('cdClose');
+  var itemsEl  = document.getElementById('cdItems');
+  var emptyEl  = document.getElementById('cdEmpty');
+  var footEl   = document.getElementById('cdFoot');
+  var countEl  = document.getElementById('cdCount');
+  var subtotalEl = document.getElementById('cdSubtotal');
+  var shipEl   = document.getElementById('cdShip');
+  var shipMsg  = document.getElementById('cdShipMsg');
+  var shipFill = document.getElementById('cdShipFill');
+
+  var lastData = null;
+
+  function inr(p) { return '₹' + Math.round((p || 0) / 100).toLocaleString('en-IN'); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  }); }
+
+  function open() {
+    overlay.hidden = false;
+    // next frame so the transition runs
+    requestAnimationFrame(function () {
+      overlay.classList.add('is-open');
+      panel.classList.add('is-open');
+    });
+    panel.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    overlay.classList.remove('is-open');
+    panel.classList.remove('is-open');
+    panel.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    setTimeout(function () { if (!panel.classList.contains('is-open')) overlay.hidden = true; }, 320);
+  }
+
+  // Reflect the item count on every nav cart icon (links to /cart that hold an svg).
+  function syncBadges(count) {
+    var links = document.querySelectorAll('a[href="/cart"]');
+    links.forEach(function (a) {
+      if (!a.querySelector('svg')) return; // skip plain text links (e.g. footer)
+      var dot = a.querySelector('.cart-dot');
+      if (count > 0) {
+        if (!dot) { dot = document.createElement('span'); dot.className = 'cart-dot'; a.appendChild(dot); }
+        dot.textContent = count;
+        dot.style.display = '';
+      } else if (dot) {
+        dot.style.display = 'none';
+      }
+    });
+  }
+
+  function render(data) {
+    lastData = data;
+    var count = (data.totals && data.totals.itemCount) || 0;
+    syncBadges(count);
+    countEl.textContent = count;
+    countEl.hidden = count === 0;
+
+    if (!data.items || !data.items.length) {
+      emptyEl.style.display = '';
+      itemsEl.innerHTML = '';
+      footEl.hidden = true;
+      shipEl.hidden = true;
+      return;
+    }
+    emptyEl.style.display = 'none';
+    footEl.hidden = false;
+
+    itemsEl.innerHTML = data.items.map(function (it) {
+      var img = it.image
+        ? '<img src="' + esc(it.image) + '" alt="' + esc(it.name) + '">'
+        : '';
+      return '' +
+        '<li class="cd-item" data-id="' + esc(it.productId) + '">' +
+          '<a class="cd-item__media" href="/product/' + esc(it.slug) + '">' + img + '</a>' +
+          '<div class="cd-item__main">' +
+            '<a class="cd-item__name" href="/product/' + esc(it.slug) + '">' + esc(it.name) + '</a>' +
+            '<span class="cd-item__price">' + inr(it.priceInPaise) + ' each</span>' +
+            '<div class="cd-item__row">' +
+              '<span class="cd-qty">' +
+                '<button type="button" data-act="dec" aria-label="Decrease quantity"' + (it.quantity <= 1 ? '' : '') + '>&minus;</button>' +
+                '<span class="cd-qty__n">' + it.quantity + '</span>' +
+                '<button type="button" data-act="inc" aria-label="Increase quantity">+</button>' +
+              '</span>' +
+              '<span class="cd-item__amt">' + inr(it.subtotalInPaise) + '</span>' +
+            '</div>' +
+            '<button type="button" class="cd-item__remove" data-act="remove">Remove</button>' +
+          '</div>' +
+        '</li>';
+    }).join('');
+
+    subtotalEl.textContent = inr(data.totals.subtotalInPaise);
+
+    // Free-shipping nudge
+    var remaining = data.freeShipRemaining != null ? data.freeShipRemaining : 0;
+    var threshold = data.freeShipThreshold || 99900;
+    shipEl.hidden = false;
+    if (remaining <= 0) {
+      shipEl.classList.add('is-unlocked');
+      shipMsg.innerHTML = '<strong>You’ve unlocked free shipping.</strong> 🎉';
+      shipFill.style.width = '100%';
+    } else {
+      shipEl.classList.remove('is-unlocked');
+      shipMsg.innerHTML = 'Add <strong>' + inr(remaining) + '</strong> more for free shipping.';
+      var pct = Math.min(100, Math.round((data.totals.subtotalInPaise / threshold) * 100));
+      shipFill.style.width = pct + '%';
+    }
+  }
+
+  function req(url, opts) {
+    opts = opts || {};
+    opts.headers = Object.assign({ 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }, opts.headers || {});
+    return fetch(url, opts).then(function (r) {
+      if (!r.ok) throw new Error('cart request failed');
+      return r.json();
+    });
+  }
+
+  function hydrate() {
+    return req('/cart/data').then(render).catch(function () {});
+  }
+
+  function busy(on) { panel.classList.toggle('is-busy', !!on); }
+
+  function addToCart(form, submitter) {
+    var fd = new FormData(form);
+    // If a specific button was clicked, honour its quantity field context.
+    open();
+    busy(true);
+    req('/cart/add', { method: 'POST', body: new URLSearchParams(fd) })
+      .then(render)
+      .catch(function () { hydrate(); })
+      .finally(function () { busy(false); });
+  }
+
+  function changeQty(productId, qty) {
+    busy(true);
+    if (qty <= 0) {
+      req('/cart/items/' + encodeURIComponent(productId), { method: 'DELETE' })
+        .then(render).catch(hydrate).finally(function () { busy(false); });
+    } else {
+      req('/cart/items/' + encodeURIComponent(productId), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'quantity=' + qty,
+      }).then(render).catch(hydrate).finally(function () { busy(false); });
+    }
+  }
+
+  // --- Wire up global interactions ------------------------------------------
+
+  // Open on any cart-icon link (but not the drawer's own "view full cart").
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href="/cart"]');
+    if (a && !a.hasAttribute('data-cart-full')) {
+      e.preventDefault();
+      open();
+      hydrate();
+    }
+  });
+
+  // Intercept add-to-cart form submits (shop cards, PDP buy box, help-me-choose).
+  document.addEventListener('submit', function (e) {
+    var form = e.target;
+    if (!form || form.tagName !== 'FORM') return;
+    var submitter = e.submitter;
+    var action = (submitter && (submitter.getAttribute('formaction') || submitter.formAction)) || form.getAttribute('action') || '';
+    if (!/\/cart\/add(\?|$)/.test(action)) return; // only real add-to-cart
+    e.preventDefault();
+    addToCart(form, submitter);
+  });
+
+  // Drawer item controls (qty +/- and remove)
+  itemsEl.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    var li = btn.closest('.cd-item');
+    if (!li) return;
+    var id = li.getAttribute('data-id');
+    var item = (lastData && lastData.items || []).find(function (x) { return x.productId === id; });
+    if (!item) return;
+    var act = btn.getAttribute('data-act');
+    if (act === 'inc') changeQty(id, item.quantity + 1);
+    else if (act === 'dec') changeQty(id, item.quantity - 1);
+    else if (act === 'remove') changeQty(id, 0);
+  });
+
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && panel.classList.contains('is-open')) close(); });
+
+  // Prime the badge count on load (no network cost beyond one small GET).
+  hydrate();
+})();
+</script>

@@ -4,6 +4,7 @@ const ctrl = require('../controllers/cartController');
 const router = express.Router();
 
 router.get('/', ctrl.view);
+router.get('/data', ctrl.json);
 router.post('/add', ctrl.add);
 router.post('/buy-now', ctrl.buyNow);
 router.post('/coupon', ctrl.applyCoupon);

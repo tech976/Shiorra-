@@ -74,6 +74,46 @@ exports.summarise = summarise;
 exports.resolveSessionCoupon = resolveSessionCoupon;
 exports.computeDiscount = computeDiscount;
 
+// ---- Mini-cart (slide-out drawer) JSON API ---------------------------------
+const FREE_SHIP_THRESHOLD = 99900; // ₹999 — keep in sync with summarise()
+
+// Everything the drawer needs to render itself, in one payload.
+async function cartPayload(req) {
+  const items = await loadCart(req);
+  const coupon = await resolveSessionCoupon(req);
+  const totals = summarise(items, coupon);
+  return {
+    ok: true,
+    cartCount: totals.itemCount,
+    items: items.map((it) => ({
+      productId: it.productId,
+      slug: it.product.slug,
+      name: it.product.name,
+      image: it.product.images && it.product.images[0] ? it.product.images[0].url : null,
+      priceInPaise: it.product.priceInPaise,
+      quantity: it.quantity,
+      subtotalInPaise: it.subtotalInPaise,
+    })),
+    totals,
+    freeShipThreshold: FREE_SHIP_THRESHOLD,
+    freeShipRemaining: Math.max(0, FREE_SHIP_THRESHOLD - totals.subtotalInPaise),
+  };
+}
+
+// The drawer sends X-Requested-With: XMLHttpRequest (→ req.xhr) + Accept JSON.
+function wantsCartJson(req) {
+  return req.xhr && !!req.accepts('json');
+}
+
+// GET /cart/data — current cart as JSON (used to hydrate the drawer on open).
+exports.json = async (req, res, next) => {
+  try {
+    res.json(await cartPayload(req));
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Merge a guest's session cart into a freshly-logged-in user's database cart.
 // Called from authController.login + authController.register so items added
 // while logged-out aren't stranded after sign-in.
@@ -130,10 +170,8 @@ exports.add = async (req, res, next) => {
       else req.session.guestCart.push({ productId, quantity: qty });
     }
 
-    if (req.accepts('json') && req.xhr) {
-      const items = await loadCart(req);
-      const coupon = await resolveSessionCoupon(req);
-      return res.json({ ok: true, cartCount: summarise(items, coupon).itemCount });
+    if (wantsCartJson(req)) {
+      return res.json(await cartPayload(req));
     }
     req.flash('success', `${product.name} added to cart.`);
     const ref = req.get('Referer') || '';
@@ -193,6 +231,9 @@ exports.update = async (req, res, next) => {
       req.session.guestCart = (req.session.guestCart || []).filter((g) => g.productId !== productId);
       if (qty > 0) req.session.guestCart.push({ productId, quantity: qty });
     }
+    if (wantsCartJson(req)) {
+      return res.json(await cartPayload(req));
+    }
     res.redirect('/cart');
   } catch (err) {
     next(err);
@@ -206,6 +247,9 @@ exports.remove = async (req, res, next) => {
       await prisma.cartItem.deleteMany({ where: { userId: req.user.id, productId } });
     } else {
       req.session.guestCart = (req.session.guestCart || []).filter((g) => g.productId !== productId);
+    }
+    if (wantsCartJson(req)) {
+      return res.json(await cartPayload(req));
     }
     res.redirect('/cart');
   } catch (err) {
