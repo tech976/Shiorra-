@@ -2,6 +2,8 @@ node_modules/
 .env
 .env.local
 .env.production
+.env.bak*
+.env.*.bak
 *.log
 npm-debug.log*
 .DS_Store

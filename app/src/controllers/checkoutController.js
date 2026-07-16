@@ -5,6 +5,7 @@ const env = require('../config/env');
 const { getRazorpay } = require('../config/razorpay');
 const cartController = require('./cartController');
 const { generateOrderNumber } = require('../utils/orderNumber');
+const mailer = require('../utils/mailer');
 
 const addressSchema = z.object({
   fullName: z.string().min(2).max(80),
@@ -56,7 +57,7 @@ function rememberGuestOrder(req, orderNumber) {
 // decremented on the first capture only, never twice.
 // Returns { notFound } | { alreadyCaptured, order } | { captured, order }.
 async function captureOrder({ razorpayOrderId, paymentId, signature }) {
-  return prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx) => {
     const order = await tx.order.findFirst({
       where: { razorpayOrderId },
       include: { items: true },
@@ -84,6 +85,14 @@ async function captureOrder({ razorpayOrderId, paymentId, signature }) {
     }
     return { captured: true, order };
   });
+
+  // Send the confirmation exactly once — only on the first capture. Callback
+  // and webhook both funnel through here, but alreadyCaptured returns above,
+  // so this never double-sends. Fire-and-forget: mail must not fail payment.
+  if (result.captured) {
+    mailer.sendOrderConfirmation(result.order.id).catch(() => {});
+  }
+  return result;
 }
 
 // Logged-in carts live in the DB; guest carts live in the session.
@@ -195,6 +204,9 @@ exports.placeCod = async (req, res, next) => {
     await clearCart(req);
     delete req.session.couponCode;
     rememberGuestOrder(req, order.orderNumber);
+
+    // Fire-and-forget: a mail hiccup must never fail a placed order.
+    mailer.sendOrderConfirmation(order.id).catch(() => {});
 
     req.flash('success', `Order ${order.orderNumber} placed — pay on delivery.`);
     res.redirect(`/checkout/success/${order.orderNumber}`);
@@ -318,18 +330,15 @@ exports.verifyPayment = async (req, res, next) => {
       return res.status(400).json({ error: 'Invalid signature.' });
     }
 
-    const order = await prisma.order.findFirst({ where: { razorpayOrderId: razorpay_order_id } });
-    if (!order) return res.status(404).json({ error: 'Order not found.' });
-
-    await prisma.order.update({
-      where: { id: order.id },
-      data: {
-        razorpayPaymentId: razorpay_payment_id,
-        razorpaySignature: razorpay_signature,
-        status: 'PAID',
-        paymentStatus: 'CAPTURED',
-      },
+    // Route through captureOrder so this path also decrements stock, sends the
+    // confirmation email, and stays idempotent vs the callback/webhook.
+    const result = await captureOrder({
+      razorpayOrderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+      signature: razorpay_signature,
     });
+    if (result.notFound) return res.status(404).json({ error: 'Order not found.' });
+    const order = result.order;
 
     // Empty the cart (DB cart for users, session cart for guests)
     await clearCart(req);

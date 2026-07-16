@@ -19,6 +19,19 @@ module.exports = {
     keySecret: process.env.RAZORPAY_KEY_SECRET,
     webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET,
   },
+  // Transactional email (order confirmations). Provider-agnostic SMTP so it
+  // works with Resend (smtp.resend.com, user "resend", pass = API key), Brevo,
+  // SES, Gmail, etc. With no host/pass configured the mailer is disabled and
+  // just logs — nothing is ever sent, and order flow never breaks.
+  mail: {
+    host: process.env.MAIL_HOST || '',
+    port: parseInt(process.env.MAIL_PORT, 10) || 465,
+    secure: process.env.MAIL_SECURE ? process.env.MAIL_SECURE === 'true' : true,
+    user: process.env.MAIL_USER || '',
+    pass: process.env.MAIL_PASS || '',
+    from: process.env.MAIL_FROM || 'Shiōrra <orders@shiorra.com>',
+    replyTo: process.env.MAIL_REPLY_TO || 'hello@shiorra.com',
+  },
   upload: {
     dir: process.env.UPLOAD_DIR || 'src/public/uploads',
     maxMb: parseInt(process.env.MAX_UPLOAD_MB, 10) || 8,
