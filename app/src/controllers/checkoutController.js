@@ -17,6 +17,38 @@ const addressSchema = z.object({
   country: z.string().min(2).max(60).default('India'),
 });
 
+const guestEmailSchema = z.string().email().max(160);
+
+// Guests have no account, so we need an email to send the receipt to and to
+// prefill Razorpay. Logged-in users already have one on their account.
+// Returns { email } or { error }.
+function resolveContactEmail(req) {
+  if (req.user) return { email: req.user.email };
+  const raw = (req.body.guestEmail || req.body.email || '').trim();
+  const parsed = guestEmailSchema.safeParse(raw);
+  if (!parsed.success) return { error: 'Please enter a valid email address.' };
+  return { email: parsed.data };
+}
+
+// A guest can't be looked up by userId, so remember which orders belong to
+// this session — that's what gates access to the success page.
+function rememberGuestOrder(req, orderNumber) {
+  if (req.user) return;
+  req.session.guestOrders = req.session.guestOrders || [];
+  if (!req.session.guestOrders.includes(orderNumber)) {
+    req.session.guestOrders.push(orderNumber);
+  }
+}
+
+// Logged-in carts live in the DB; guest carts live in the session.
+async function clearCart(req) {
+  if (req.user) {
+    await prisma.cartItem.deleteMany({ where: { userId: req.user.id } });
+  } else {
+    delete req.session.guestCart;
+  }
+}
+
 exports.showCheckout = async (req, res, next) => {
   try {
     const items = await cartController.loadCart(req);
@@ -36,6 +68,7 @@ exports.showCheckout = async (req, res, next) => {
       totals,
       addresses,
       coupon,
+      isGuest: !req.user,
       razorpayKeyId: env.razorpay.keyId || '',
       razorpayEnabled: !!(env.razorpay.keyId && env.razorpay.keySecret),
     });
@@ -48,7 +81,6 @@ exports.showCheckout = async (req, res, next) => {
 // configured, OR when the user explicitly picks COD).
 exports.placeCod = async (req, res, next) => {
   try {
-    if (!req.user) return res.redirect('/login');
     const items = await cartController.loadCart(req);
     if (!items.length) {
       req.flash('error', 'Your cart is empty.');
@@ -59,12 +91,17 @@ exports.placeCod = async (req, res, next) => {
       req.flash('error', 'Please complete the shipping address.');
       return res.redirect('/checkout');
     }
+    const contact = resolveContactEmail(req);
+    if (contact.error) {
+      req.flash('error', contact.error);
+      return res.redirect('/checkout');
+    }
     const addr = parsed.data;
     const coupon = await cartController.resolveSessionCoupon(req);
     const totals = cartController.summarise(items, coupon);
 
     const address = await prisma.address.create({
-      data: { ...addr, line2: addr.line2 || null, userId: req.user.id },
+      data: { ...addr, line2: addr.line2 || null, userId: req.user?.id || null },
     });
 
     const orderNumber = generateOrderNumber();
@@ -72,7 +109,8 @@ exports.placeCod = async (req, res, next) => {
       const created = await tx.order.create({
         data: {
           orderNumber,
-          userId: req.user.id,
+          userId: req.user?.id || null,
+          guestEmail: req.user ? null : contact.email,
           shippingAddressId: address.id,
           subtotalInPaise: totals.subtotalInPaise,
           shippingInPaise: totals.shippingInPaise,
@@ -108,8 +146,9 @@ exports.placeCod = async (req, res, next) => {
       return created;
     });
 
-    await prisma.cartItem.deleteMany({ where: { userId: req.user.id } });
+    await clearCart(req);
     delete req.session.couponCode;
+    rememberGuestOrder(req, order.orderNumber);
 
     req.flash('success', `Order ${order.orderNumber} placed — pay on delivery.`);
     res.redirect(`/checkout/success/${order.orderNumber}`);
@@ -123,9 +162,6 @@ exports.placeCod = async (req, res, next) => {
 // the data the Razorpay Checkout JS modal needs to open.
 exports.createOrder = async (req, res, next) => {
   try {
-    if (!req.user) {
-      return res.status(401).json({ error: 'Please log in to place an order.' });
-    }
     const items = await cartController.loadCart(req);
     if (!items.length) return res.status(400).json({ error: 'Cart is empty.' });
 
@@ -133,6 +169,8 @@ exports.createOrder = async (req, res, next) => {
     if (!parsed.success) {
       return res.status(400).json({ error: 'Invalid shipping address.', issues: parsed.error.issues });
     }
+    const contact = resolveContactEmail(req);
+    if (contact.error) return res.status(400).json({ error: contact.error });
     const addr = parsed.data;
     const coupon = await cartController.resolveSessionCoupon(req);
     const totals = cartController.summarise(items, coupon);
@@ -146,9 +184,9 @@ exports.createOrder = async (req, res, next) => {
       return res.status(400).json({ error: 'Order total must be at least ₹1.' });
     }
 
-    // Save the address
+    // Save the address (userId null for guests — not added to any address book)
     const address = await prisma.address.create({
-      data: { ...addr, line2: addr.line2 || null, userId: req.user.id },
+      data: { ...addr, line2: addr.line2 || null, userId: req.user?.id || null },
     });
 
     // Create Razorpay order
@@ -157,7 +195,7 @@ exports.createOrder = async (req, res, next) => {
       amount: totals.totalInPaise,
       currency: 'INR',
       receipt: orderNumber,
-      notes: { orderNumber, userId: req.user.id },
+      notes: { orderNumber, userId: req.user?.id || 'guest', email: contact.email },
     });
 
     // Persist local order in a transaction so items + order are atomic
@@ -165,7 +203,8 @@ exports.createOrder = async (req, res, next) => {
       const created = await tx.order.create({
         data: {
           orderNumber,
-          userId: req.user.id,
+          userId: req.user?.id || null,
+          guestEmail: req.user ? null : contact.email,
           shippingAddressId: address.id,
           subtotalInPaise: totals.subtotalInPaise,
           shippingInPaise: totals.shippingInPaise,
@@ -192,6 +231,7 @@ exports.createOrder = async (req, res, next) => {
       return created;
     });
     if (coupon) delete req.session.couponCode;
+    rememberGuestOrder(req, order.orderNumber);
 
     res.json({
       ok: true,
@@ -202,7 +242,11 @@ exports.createOrder = async (req, res, next) => {
       orderNumber: order.orderNumber,
       name: 'Shiorra',
       description: `Order ${order.orderNumber}`,
-      prefill: { name: req.user.name, email: req.user.email, contact: addr.phone },
+      prefill: {
+        name: req.user?.name || addr.fullName,
+        email: contact.email,
+        contact: addr.phone,
+      },
     });
   } catch (err) {
     next(err);
@@ -241,8 +285,9 @@ exports.verifyPayment = async (req, res, next) => {
       },
     });
 
-    // Empty the cart
-    await prisma.cartItem.deleteMany({ where: { userId: order.userId } });
+    // Empty the cart (DB cart for users, session cart for guests)
+    await clearCart(req);
+    rememberGuestOrder(req, order.orderNumber);
 
     res.json({ ok: true, redirect: `/checkout/success/${order.orderNumber}` });
   } catch (err) {
@@ -252,9 +297,20 @@ exports.verifyPayment = async (req, res, next) => {
 
 exports.success = async (req, res, next) => {
   try {
-    if (!req.user) return res.redirect('/login');
+    const { orderNumber } = req.params;
+    // Logged-in users can only see their own orders. Guests can only see
+    // orders created in this session — never someone else's by URL guessing.
+    const where = req.user
+      ? { orderNumber, userId: req.user.id }
+      : { orderNumber, userId: null };
+
+    const isOwnGuestOrder = !req.user && (req.session.guestOrders || []).includes(orderNumber);
+    if (!req.user && !isOwnGuestOrder) {
+      return res.status(404).render('pages/error', { title: 'Not found', status: 404, message: 'Order not found.' });
+    }
+
     const order = await prisma.order.findFirst({
-      where: { orderNumber: req.params.orderNumber, userId: req.user.id },
+      where,
       include: { items: true, shippingAddress: true },
     });
     if (!order) return res.status(404).render('pages/error', { title: 'Not found', status: 404, message: 'Order not found.' });

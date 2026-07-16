@@ -488,6 +488,12 @@
             </div>
           <% } %>
           <div class="co-fields">
+            <% if (isGuest) { %>
+              <div class="co-field co-full">
+                <label for="co-email">Email <small style="font-weight:400;color:var(--sh-mute)">— for your order confirmation</small></label>
+                <input id="co-email" name="guestEmail" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com">
+              </div>
+            <% } %>
             <div class="co-field">
               <label for="co-name">Full name</label>
               <input id="co-name" name="address[fullName]" autocomplete="name" required value="<%= defAddr ? defAddr.fullName : ((currentUser && currentUser.name) ? currentUser.name : '') %>">
@@ -738,6 +744,9 @@
         for (const [k, v] of fd.entries()) {
             const m = k.match(/^address\[(\w+)\]$/);
             if (m) payload.address[m[1]] = v;
+            // Guest checkout sends an email alongside the address so we can
+            // send a receipt and prefill Razorpay.
+            else if (k === 'guestEmail') payload.guestEmail = v;
         }
         try {
             const r = await fetch('/checkout/create-order', {

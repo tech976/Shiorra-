@@ -55,8 +55,10 @@ model User {
 
 model Address {
   id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Null for guest checkout — the address still needs to exist to ship the
+  // order, it just isn't saved to anyone's address book.
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   fullName  String
   phone     String
   line1     String
@@ -130,8 +132,11 @@ model CartItem {
 model Order {
   id                  String        @id @default(cuid())
   orderNumber         String        @unique
-  userId              String
-  user                User          @relation(fields: [userId], references: [id])
+  // Null for guest checkout (no account). guestEmail carries the contact
+  // address in that case so we can still send a receipt / look the order up.
+  userId              String?
+  user                User?         @relation(fields: [userId], references: [id])
+  guestEmail          String?
   shippingAddressId   String?
   shippingAddress     Address?      @relation("ShippingAddress", fields: [shippingAddressId], references: [id])
 

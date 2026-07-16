@@ -187,7 +187,7 @@
 
             <div class="os-headline">
                 <h1>Thank you for your order</h1>
-                <p>A confirmation has been sent to <strong><%= currentUser.email %></strong>.<br>We'll email you again the moment it ships.</p>
+                <p>A confirmation has been sent to <strong><%= (currentUser && currentUser.email) || order.guestEmail %></strong>.<br>We'll email you again the moment it ships.</p>
             </div>
 
             <span class="os-ordnum">Order #<%= order.orderNumber %></span>
