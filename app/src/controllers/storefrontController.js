@@ -80,3 +80,41 @@ exports.reviews = (req, res) =>
 
 exports.contact = (req, res) =>
   res.render('pages/contact', { title: 'Contact · Shiōrra' });
+
+// Guest order tracking. A guest has no account, so they look their order up
+// by order number + the email used at checkout. The email must match, so an
+// order number alone can't be enumerated.
+exports.trackForm = (req, res) =>
+  res.render('pages/track', { title: 'Track your order · Shiōrra' });
+
+exports.trackLookup = async (req, res, next) => {
+  try {
+    const orderNumber = String(req.body.orderNumber || '').trim().toUpperCase();
+    const email = String(req.body.email || '').trim().toLowerCase();
+    const values = { orderNumber, email };
+
+    if (!orderNumber || !email) {
+      return res.render('pages/track', { title: 'Track your order · Shiōrra', error: 'Please enter both your order number and email.', values });
+    }
+
+    const order = await prisma.order.findFirst({
+      where: { orderNumber },
+      include: { items: true, shippingAddress: true, user: { select: { email: true } } },
+    });
+
+    // Match the email against the guest email OR the account email. Generic
+    // "not found" message either way so an attacker can't tell which part failed.
+    const orderEmail = (order && (order.guestEmail || (order.user && order.user.email)) || '').toLowerCase();
+    if (!order || orderEmail !== email) {
+      return res.render('pages/track', {
+        title: 'Track your order · Shiōrra',
+        error: "We couldn't find an order with that number and email. Please check both and try again.",
+        values,
+      });
+    }
+
+    res.render('pages/track', { title: `Order ${order.orderNumber} · Shiōrra`, order });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -10,6 +10,8 @@ router.get('/about', ctrl.about);
 router.get('/faq', ctrl.faq);
 router.get('/reviews', ctrl.reviews);
 router.get('/contact', ctrl.contact);
+router.get('/track', ctrl.trackForm);
+router.post('/track', ctrl.trackLookup);
 
 // Static content pages — simple stubs so the polished footer's legal /
 // info links don't 404. Each renders pages/static.ejs with title + body.

@@ -267,7 +267,11 @@
 
             <!-- Actions -->
             <div class="os-actions">
-                <a href="/account/orders/<%= order.orderNumber %>" class="btn">Track this order</a>
+                <% if (currentUser) { %>
+                    <a href="/account/orders/<%= order.orderNumber %>" class="btn">Track this order</a>
+                <% } else { %>
+                    <a href="/track" class="btn">Track this order</a>
+                <% } %>
                 <a href="/shop" class="btn btn--ghost">Continue shopping</a>
             </div>
 

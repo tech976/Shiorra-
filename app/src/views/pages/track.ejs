@@ -1,0 +1,99 @@
+<style>
+  .track-page { background:#fff; padding: clamp(40px,7vw,80px) 0 clamp(56px,9vw,110px); min-height:60vh; }
+  .track-page .container { max-width: 640px; }
+  .track-page__eyebrow { display:inline-block; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#6B6B6B; margin-bottom:14px; }
+  .track-page h1 { font-family:'Helvetica Neue',Arial,sans-serif; font-size:clamp(30px,5vw,44px); font-weight:700; line-height:1.1; color:#1A1A1A; margin:0 0 10px; letter-spacing:-.02em; }
+  .track-page__sub { font-size:15.5px; color:#6B6B6B; margin:0 0 32px; line-height:1.6; }
+  .track-form { display:grid; gap:14px; max-width:460px; }
+  .track-form label { font-size:13px; font-weight:600; color:#282828; margin-bottom:6px; display:block; }
+  .track-form input { width:100%; height:50px; border:1px solid #E5E5E7; border-radius:12px; padding:0 16px; font-size:16px; font-family:inherit; background:#fff; }
+  .track-form input:focus { outline:none; border-color:#2E8B57; box-shadow:0 0 0 3px rgba(46,139,87,.12); }
+  .track-form button { height:52px; border:0; border-radius:12px; background:#1A1A1A; color:#fff; font-weight:700; font-size:15px; letter-spacing:.04em; text-transform:uppercase; cursor:pointer; transition:background .2s,transform .2s; }
+  .track-form button:hover { background:#000; transform:translateY(-1px); }
+  .track-err { background:#FDECEC; color:#9A1450; border-radius:10px; padding:12px 14px; font-size:14px; margin-bottom:20px; }
+  .track-result { border:1px solid #E5E5E7; border-radius:16px; padding:28px; margin-top:8px; }
+  .track-result__num { font-size:13px; color:#6B6B6B; letter-spacing:.02em; }
+  .track-result__num strong { color:#1A1A1A; }
+  .track-status { display:inline-flex; align-items:center; gap:8px; margin:12px 0 4px; font-weight:700; font-size:20px; color:#1A1A1A; font-family:'Helvetica Neue',Arial,sans-serif; }
+  .track-status__dot { width:10px; height:10px; border-radius:50%; background:#2E8B57; }
+  .track-steps { display:flex; gap:0; margin:26px 0 8px; }
+  .track-step { flex:1; text-align:center; position:relative; font-size:11.5px; color:#9A9A9A; letter-spacing:.02em; }
+  .track-step::before { content:""; display:block; width:18px; height:18px; border-radius:50%; background:#E5E5E7; margin:0 auto 8px; border:3px solid #fff; box-shadow:0 0 0 1px #E5E5E7; position:relative; z-index:1; }
+  .track-step::after { content:""; position:absolute; top:9px; left:-50%; width:100%; height:2px; background:#E5E5E7; z-index:0; }
+  .track-step:first-child::after { display:none; }
+  .track-step.done { color:#2E8B57; font-weight:600; }
+  .track-step.done::before { background:#2E8B57; box-shadow:0 0 0 1px #2E8B57; }
+  .track-step.done::after { background:#2E8B57; }
+  .track-items { margin-top:22px; border-top:1px solid #F0F0F2; padding-top:18px; }
+  .track-item { display:flex; justify-content:space-between; font-size:14px; color:#3A3A3A; padding:5px 0; }
+  .track-item strong { color:#1A1A1A; font-weight:600; }
+  .track-total { display:flex; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1px solid #F0F0F2; font-size:15px; }
+  .track-total strong { font-size:18px; }
+  .track-help { margin-top:22px; font-size:13px; color:#6B6B6B; }
+  .track-help a { color:#2E8B57; font-weight:600; }
+</style>
+
+<section class="track-page">
+  <div class="container">
+    <span class="track-page__eyebrow">Order status</span>
+    <h1>Track your order</h1>
+    <p class="track-page__sub">Enter your order number and the email you used at checkout. No account needed.</p>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="track-err"><%= error %></div>
+    <% } %>
+
+    <% if (typeof order !== 'undefined' && order) { %>
+      <%
+        var steps = ['PENDING','PAID','PROCESSING','SHIPPED','DELIVERED'];
+        var labels = { PENDING:'Placed', PAID:'Confirmed', PROCESSING:'Packing', SHIPPED:'Shipped', DELIVERED:'Delivered' };
+        var cur = order.status;
+        var cancelled = (cur === 'CANCELLED' || cur === 'REFUNDED');
+        var curIdx = steps.indexOf(cur === 'PAID' ? 'PAID' : cur);
+        // COD orders start at PROCESSING; treat PAID/PROCESSING as "confirmed+"
+        var reached = {};
+        var idx = steps.indexOf(cur);
+        if (idx < 0) idx = (cur === 'PAID') ? 1 : 0;
+      %>
+      <div class="track-result">
+        <div class="track-result__num">Order <strong>#<%= order.orderNumber %></strong> · placed <%= new Date(order.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) %></div>
+        <div class="track-status"><span class="track-status__dot"></span><%= cancelled ? (cur === 'REFUNDED' ? 'Refunded' : 'Cancelled') : (labels[cur] || cur) %></div>
+
+        <% if (!cancelled) { %>
+        <div class="track-steps">
+          <% steps.forEach(function(s, i) { %>
+            <div class="track-step <%= i <= idx ? 'done' : '' %>"><%= labels[s] %></div>
+          <% }) %>
+        </div>
+        <% } else { %>
+          <p style="color:#9A1450;font-size:14px;margin-top:8px">This order was <%= cur.toLowerCase() %>. If you have questions, contact us below.</p>
+        <% } %>
+
+        <div class="track-items">
+          <% order.items.forEach(function(it) { %>
+            <div class="track-item"><span><%= it.name %> × <%= it.quantity %></span><strong><%= formatINR(it.totalInPaise) %></strong></div>
+          <% }) %>
+        </div>
+        <div class="track-total"><span>Total</span><strong><%= formatINR(order.totalInPaise) %></strong></div>
+
+        <% if (order.shippingAddress) { %>
+          <p class="track-help">Shipping to <%= order.shippingAddress.fullName %>, <%= order.shippingAddress.city %> <%= order.shippingAddress.postcode %>.</p>
+        <% } %>
+      </div>
+      <p class="track-help">Wrong order? <a href="/track">Search again</a>.</p>
+    <% } else { %>
+      <form class="track-form" action="/track" method="post">
+        <div>
+          <label for="tk-num">Order number</label>
+          <input id="tk-num" name="orderNumber" required placeholder="SH-20260101-XXXXXX" value="<%= typeof values !== 'undefined' && values.orderNumber ? values.orderNumber : '' %>" autocomplete="off">
+        </div>
+        <div>
+          <label for="tk-email">Email</label>
+          <input id="tk-email" name="email" type="email" inputmode="email" required placeholder="you@example.com" value="<%= typeof values !== 'undefined' && values.email ? values.email : '' %>">
+        </div>
+        <button type="submit">Track order</button>
+      </form>
+      <p class="track-help">Have an account? <a href="/account/orders">See all your orders</a>.</p>
+    <% } %>
+  </div>
+</section>
