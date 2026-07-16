@@ -161,13 +161,13 @@ exports.buyNow = async (req, res, next) => {
       });
       return res.redirect('/checkout');
     }
+    // Guest: keep the item in the session cart and go straight to checkout.
+    // Guest checkout is supported, so we no longer bounce them to /login.
     req.session.guestCart = req.session.guestCart || [];
     const existing = req.session.guestCart.find((g) => g.productId === productId);
     if (existing) existing.quantity = Math.min(99, existing.quantity + qty);
     else req.session.guestCart.push({ productId, quantity: qty });
-    req.session.returnTo = '/checkout';
-    req.flash('info', 'Sign in or create an account to complete your order.');
-    res.redirect('/login');
+    res.redirect('/checkout');
   } catch (err) { next(err); }
 };
 
