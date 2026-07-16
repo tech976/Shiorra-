@@ -742,7 +742,7 @@
         try {
             const r = await fetch('/checkout/create-order', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify(payload),
             });
             const data = await r.json();
@@ -761,7 +761,7 @@
                     msg.textContent = 'Verifying payment…';
                     const v = await fetch('/checkout/verify', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                         body: JSON.stringify(resp),
                     });
                     const vd = await v.json();
