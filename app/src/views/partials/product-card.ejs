@@ -1,6 +1,9 @@
-<article class="product-card">
+<% var _soldOut = (typeof product.stock === 'number' && product.stock <= 0);
+   var _lowStock = (!_soldOut && typeof product.stock === 'number' && product.stock <= 10); %>
+<article class="product-card<%= _soldOut ? ' product-card--soldout' : '' %>">
     <a href="/product/<%= product.slug %>" class="product-card__media">
-        <% if (product.badge) { %><span class="product-card__badge"><%= product.badge %></span><% } %>
+        <% if (_soldOut) { %><span class="product-card__badge product-card__badge--soldout">Sold out</span>
+        <% } else if (product.badge) { %><span class="product-card__badge"><%= product.badge %></span><% } %>
         <% if (product.images && product.images[0]) { %>
             <img src="<%= product.images[0].url %>" alt="<%= product.images[0].alt || product.name %>">
         <% } else { %>
@@ -16,10 +19,15 @@
                 <span class="product-card__mrp"><%= formatINR(product.mrpInPaise) %></span>
             <% } %>
         </p>
+        <% if (_lowStock) { %><p class="product-card__stock">Only <%= product.stock %> left</p><% } %>
     </div>
-    <form action="/cart/add" method="post" class="product-card__form">
-        <input type="hidden" name="productId" value="<%= product.id %>">
-        <input type="hidden" name="quantity" value="1">
-        <button type="submit" class="btn btn--full">Add to cart</button>
-    </form>
+    <% if (_soldOut) { %>
+        <button type="button" class="btn btn--full" disabled aria-disabled="true">Sold out</button>
+    <% } else { %>
+        <form action="/cart/add" method="post" class="product-card__form">
+            <input type="hidden" name="productId" value="<%= product.id %>">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn btn--full">Add to cart</button>
+        </form>
+    <% } %>
 </article>

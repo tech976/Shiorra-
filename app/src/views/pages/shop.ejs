@@ -22,12 +22,25 @@
     .product-card__cta{padding:14px 18px;min-height:48px}
     .product-card__name{font-size:clamp(17px,4.4vw,21px)}
   }
+
+  /* Stock states */
+  .product-card__badge--soldout{background:#15171A!important;color:#fff!important}
+  .product-card--soldout .product-card__media img{opacity:.55;filter:grayscale(.2)}
+  .product-card__stock{margin:6px 0 0;font-size:12.5px;font-weight:600;color:#C2410C;letter-spacing:.01em}
 </style>
 
 <section class="page-hero">
     <div class="container">
         <span class="eyebrow">Shop</span>
         <h1>The full range.</h1>
+    </div>
+</section>
+
+<section class="section" style="padding-bottom:0;">
+    <div class="container">
+        <% if (products && products.length) { %>
+            <%- include('../partials/help-me-choose', { products: products }) %>
+        <% } %>
     </div>
 </section>
 

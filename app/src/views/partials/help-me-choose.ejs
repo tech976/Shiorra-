@@ -1,0 +1,183 @@
+<%
+  // Build a slug→product lookup for the client. `products` is the active range.
+  var _hmcBySlug = {};
+  (products || []).forEach(function (p) {
+    _hmcBySlug[p.slug] = {
+      slug: p.slug,
+      name: p.name,
+      tagline: p.tagline || '',
+      price: formatINR(p.priceInPaise),
+      mrp: (p.mrpInPaise && p.mrpInPaise > p.priceInPaise) ? formatINR(p.mrpInPaise) : '',
+      badge: p.badge || '',
+      img: (p.images && p.images[0]) ? p.images[0].url : '',
+      soldOut: (typeof p.stock === 'number' && p.stock <= 0),
+      id: p.id,
+    };
+  });
+  // Concern → recommended slug + one-line rationale.
+  var _hmcConcerns = [
+    { key: 'nausea',     label: 'Morning sickness or nausea', slug: 'advanced-ginger',    why: 'Standardised ginger eases pregnancy nausea, gently and daily.' },
+    { key: 'iron',       label: 'Low iron or pregnancy fatigue', slug: 'advanced-iron',   why: 'A complete hematinic system to lift haemoglobin without the heaviness.' },
+    { key: 'postpartum', label: 'Postpartum recovery',        slug: 'advanced-iron',      why: 'Replenishes iron stores after delivery, kind on digestion.' },
+    { key: 'energy',     label: 'Everyday energy & focus',    slug: 'advanced-energyone', why: 'Caffeine-free B-vitamins and minerals for steady daily vitality.' },
+  ];
+%>
+<section class="hmc" aria-label="Help me choose">
+  <div class="hmc__inner">
+    <div class="hmc__head">
+      <span class="hmc__eyebrow">Not sure which one?</span>
+      <h2 class="hmc__title">Find your Shiōrra in one tap.</h2>
+      <p class="hmc__sub">Tell us what's on your mind — we'll point you to the right formula.</p>
+    </div>
+
+    <div class="hmc__concerns" role="group" aria-label="What are you looking for?">
+      <% _hmcConcerns.forEach(function (c) { %>
+        <button type="button" class="hmc__chip" data-slug="<%= c.slug %>" data-why="<%= c.why %>"><%= c.label %></button>
+      <% }); %>
+    </div>
+
+    <div class="hmc__result" hidden aria-live="polite">
+      <a class="hmc__card-media" href="#"><img alt="" src=""></a>
+      <div class="hmc__card-body">
+        <span class="hmc__badge" hidden></span>
+        <h3 class="hmc__card-name"></h3>
+        <p class="hmc__why"></p>
+        <p class="hmc__price"><span class="hmc__price-now"></span> <span class="hmc__price-mrp"></span></p>
+        <div class="hmc__actions">
+          <a class="btn hmc__view" href="#">View product</a>
+          <form action="/cart/add" method="post" class="hmc__add-form">
+            <input type="hidden" name="productId" value="">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn btn--ghost hmc__add">Add to cart</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hmc { margin: 0 0 8px; }
+  .hmc__inner {
+    background: linear-gradient(180deg, #F7FAF9 0%, #FFFFFF 100%);
+    border: 1px solid #E7EDEB; border-radius: 20px;
+    padding: 36px 32px;
+  }
+  .hmc__head { text-align: center; max-width: 560px; margin: 0 auto 22px; }
+  .hmc__eyebrow {
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 600; color: #23867F;
+  }
+  .hmc__title {
+    font-size: clamp(22px, 4vw, 30px); font-weight: 600; letter-spacing: -0.02em;
+    color: #15171A; margin: 8px 0 6px; line-height: 1.15;
+  }
+  .hmc__sub { margin: 0; color: #6A6F75; font-size: 14.5px; line-height: 1.55; }
+
+  .hmc__concerns {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    max-width: 620px; margin: 0 auto;
+  }
+  .hmc__chip {
+    font-family: inherit; font-size: 14px; font-weight: 500; color: #15171A;
+    background: #FFFFFF; border: 1px solid #DFE5E3; border-radius: 999px;
+    padding: 11px 18px; cursor: pointer; min-height: 44px;
+    transition: border-color .15s ease, background .15s ease, transform .1s ease, box-shadow .15s ease;
+  }
+  .hmc__chip:hover { border-color: #23867F; box-shadow: 0 2px 10px rgba(35,134,127,0.10); }
+  .hmc__chip:active { transform: translateY(1px); }
+  .hmc__chip[aria-pressed="true"] {
+    background: #23867F; border-color: #23867F; color: #FFFFFF;
+  }
+
+  .hmc__result {
+    display: flex; gap: 22px; align-items: center;
+    margin: 26px auto 0; max-width: 620px;
+    background: #FFFFFF; border: 1px solid #ECECEC; border-radius: 16px;
+    padding: 18px; animation: hmcFade .25s ease;
+  }
+  @keyframes hmcFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .hmc__card-media {
+    flex: 0 0 108px; width: 108px; height: 108px; border-radius: 12px;
+    overflow: hidden; background: #F4F5F6; display: block;
+  }
+  .hmc__card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hmc__card-body { flex: 1; min-width: 0; }
+  .hmc__badge {
+    display: inline-block; font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase;
+    font-weight: 700; color: #23867F; background: #EAF4F2; border-radius: 6px;
+    padding: 3px 8px; margin-bottom: 8px;
+  }
+  .hmc__card-name { margin: 0 0 4px; font-size: 18px; font-weight: 600; color: #15171A; letter-spacing: -0.01em; }
+  .hmc__why { margin: 0 0 10px; font-size: 13.5px; color: #6A6F75; line-height: 1.5; }
+  .hmc__price { margin: 0 0 14px; font-size: 16px; font-weight: 600; color: #15171A; }
+  .hmc__price-mrp { color: #9AA0A6; font-weight: 400; text-decoration: line-through; font-size: 14px; margin-left: 4px; }
+  .hmc__actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hmc__actions .btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+  .hmc__add-form { margin: 0; }
+  .hmc__result.is-soldout .hmc__add { opacity: .5; pointer-events: none; }
+
+  @media (max-width: 720px) {
+    .hmc__inner { padding: 28px 18px; border-radius: 18px; }
+    .hmc__result { flex-direction: row; gap: 14px; padding: 14px; }
+    .hmc__card-media { flex-basis: 84px; width: 84px; height: 84px; }
+    .hmc__card-name { font-size: 16px; }
+    .hmc__actions .btn { flex: 1 1 auto; }
+  }
+  @media (max-width: 420px) {
+    .hmc__result { flex-direction: column; align-items: stretch; text-align: left; }
+    .hmc__card-media { width: 100%; height: 150px; flex-basis: auto; }
+  }
+</style>
+
+<script>
+  (function () {
+    var DATA = <%- JSON.stringify(_hmcBySlug).replace(/</g, '\\u003c') %>;
+    var section = document.querySelector('.hmc');
+    if (!section) return;
+    var chips = section.querySelectorAll('.hmc__chip');
+    var result = section.querySelector('.hmc__result');
+    var media = section.querySelector('.hmc__card-media');
+    var img = media.querySelector('img');
+    var badge = section.querySelector('.hmc__badge');
+    var name = section.querySelector('.hmc__card-name');
+    var why = section.querySelector('.hmc__why');
+    var priceNow = section.querySelector('.hmc__price-now');
+    var priceMrp = section.querySelector('.hmc__price-mrp');
+    var view = section.querySelector('.hmc__view');
+    var addForm = section.querySelector('.hmc__add-form');
+    var addBtn = section.querySelector('.hmc__add');
+    var pidInput = addForm.querySelector('input[name="productId"]');
+
+    function pick(slug, whyText) {
+      var p = DATA[slug];
+      if (!p) return;
+      var href = '/product/' + p.slug;
+      img.src = p.img; img.alt = p.name;
+      media.href = href; view.href = href;
+      name.textContent = p.name;
+      why.textContent = whyText || p.tagline;
+      priceNow.textContent = p.price;
+      priceMrp.textContent = p.mrp || '';
+      priceMrp.style.display = p.mrp ? '' : 'none';
+      if (p.badge) { badge.textContent = p.badge; badge.hidden = false; } else { badge.hidden = true; }
+      pidInput.value = p.id;
+      if (p.soldOut) {
+        result.classList.add('is-soldout');
+        addBtn.textContent = 'Sold out';
+      } else {
+        result.classList.remove('is-soldout');
+        addBtn.textContent = 'Add to cart';
+      }
+      result.hidden = false;
+    }
+
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        chips.forEach(function (c) { c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+        pick(chip.getAttribute('data-slug'), chip.getAttribute('data-why'));
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+  })();
+</script>
