@@ -19,6 +19,16 @@ const addressSchema = z.object({
 
 const guestEmailSchema = z.string().email().max(160);
 
+// Constant-time hex-signature compare. Returns false on any length/format
+// mismatch instead of throwing (timingSafeEqual requires equal-length buffers).
+function signaturesMatch(expectedHex, actualHex) {
+  if (typeof expectedHex !== 'string' || typeof actualHex !== 'string') return false;
+  const a = Buffer.from(expectedHex, 'utf8');
+  const b = Buffer.from(actualHex, 'utf8');
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
+}
+
 // Guests have no account, so we need an email to send the receipt to and to
 // prefill Razorpay. Logged-in users already have one on their account.
 // Returns { email } or { error }.
@@ -38,6 +48,42 @@ function rememberGuestOrder(req, orderNumber) {
   if (!req.session.guestOrders.includes(orderNumber)) {
     req.session.guestOrders.push(orderNumber);
   }
+}
+
+// Mark a Razorpay order captured EXACTLY ONCE, decrementing stock in the same
+// transaction. callback and webhook may both fire for one payment, so the
+// paymentStatus check inside the transaction makes this idempotent — stock is
+// decremented on the first capture only, never twice.
+// Returns { notFound } | { alreadyCaptured, order } | { captured, order }.
+async function captureOrder({ razorpayOrderId, paymentId, signature }) {
+  return prisma.$transaction(async (tx) => {
+    const order = await tx.order.findFirst({
+      where: { razorpayOrderId },
+      include: { items: true },
+    });
+    if (!order) return { notFound: true };
+    if (order.paymentStatus === 'CAPTURED') return { alreadyCaptured: true, order };
+
+    await tx.order.update({
+      where: { id: order.id },
+      data: {
+        status: 'PAID',
+        paymentStatus: 'CAPTURED',
+        razorpayPaymentId: paymentId,
+        ...(signature ? { razorpaySignature: signature } : {}),
+      },
+    });
+    // Decrement stock now — the paid path previously never did this, so online
+    // orders oversold indefinitely. COD still decrements at order creation.
+    for (const it of order.items) {
+      if (!it.productId) continue;
+      await tx.product.update({
+        where: { id: it.productId },
+        data: { stock: { decrement: it.quantity } },
+      });
+    }
+    return { captured: true, order };
+  });
 }
 
 // Logged-in carts live in the DB; guest carts live in the session.
@@ -268,7 +314,7 @@ exports.verifyPayment = async (req, res, next) => {
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest('hex');
 
-    if (expected !== razorpay_signature) {
+    if (!signaturesMatch(expected, razorpay_signature)) {
       return res.status(400).json({ error: 'Invalid signature.' });
     }
 
@@ -322,29 +368,22 @@ exports.paymentCallback = async (req, res, next) => {
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest('hex');
 
-    if (expected !== razorpay_signature) {
+    if (!signaturesMatch(expected, razorpay_signature)) {
       req.flash('error', 'Payment verification failed. Please contact support if money was debited.');
       return res.redirect('/checkout');
     }
 
-    const order = await prisma.order.findFirst({ where: { razorpayOrderId: razorpay_order_id } });
-    if (!order) {
+    // Marks PAID + decrements stock exactly once (idempotent vs the webhook).
+    const result = await captureOrder({
+      razorpayOrderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+      signature: razorpay_signature,
+    });
+    if (result.notFound) {
       req.flash('error', 'Order not found.');
       return res.redirect('/cart');
     }
-
-    // Idempotent: the webhook may have marked this PAID already.
-    if (order.paymentStatus !== 'CAPTURED') {
-      await prisma.order.update({
-        where: { id: order.id },
-        data: {
-          razorpayPaymentId: razorpay_payment_id,
-          razorpaySignature: razorpay_signature,
-          status: 'PAID',
-          paymentStatus: 'CAPTURED',
-        },
-      });
-    }
+    const order = result.order;
 
     await clearCart(req);
     delete req.session.couponCode;
@@ -386,14 +425,21 @@ exports.success = async (req, res, next) => {
 // of truth for payment status. We store the event id so retries are idempotent.
 exports.webhook = async (req, res, next) => {
   try {
+    // FAIL CLOSED. With no webhook secret configured, the HMAC key would be ""
+    // and any attacker could forge a valid signature — a verified free-order
+    // exploit. Never accept a webhook we cannot cryptographically verify.
+    if (!env.razorpay.webhookSecret) {
+      console.error('[webhook] RAZORPAY_WEBHOOK_SECRET is not set — rejecting webhook.');
+      return res.status(503).json({ error: 'Webhook not configured.' });
+    }
     const signature = req.headers['x-razorpay-signature'];
     if (!signature) return res.status(400).json({ error: 'Missing signature' });
     const raw = req.body;
     const expected = crypto
-      .createHmac('sha256', env.razorpay.webhookSecret || '')
+      .createHmac('sha256', env.razorpay.webhookSecret)
       .update(raw)
       .digest('hex');
-    if (expected !== signature) return res.status(400).json({ error: 'Invalid signature' });
+    if (!signaturesMatch(expected, signature)) return res.status(400).json({ error: 'Invalid signature' });
 
     const event = JSON.parse(raw.toString('utf8'));
     const eventId = event.id || `${event.event}-${event.created_at}-${event.payload?.payment?.entity?.id || 'na'}`;
@@ -410,19 +456,23 @@ exports.webhook = async (req, res, next) => {
 
     const payment = event.payload?.payment?.entity;
     if (payment) {
-      const order = await prisma.order.findFirst({ where: { razorpayOrderId: payment.order_id } });
-      if (order) {
-        const map = {
-          'payment.captured': { paymentStatus: 'CAPTURED', status: 'PAID' },
-          'payment.authorized': { paymentStatus: 'AUTHORIZED' },
-          'payment.failed': { paymentStatus: 'FAILED', status: 'CANCELLED' },
-        };
-        const update = map[event.event];
-        if (update) {
-          await prisma.order.update({
-            where: { id: order.id },
-            data: { ...update, razorpayPaymentId: payment.id },
-          });
+      if (event.event === 'payment.captured') {
+        // Shared path: marks PAID + decrements stock once (idempotent vs callback).
+        await captureOrder({ razorpayOrderId: payment.order_id, paymentId: payment.id });
+      } else {
+        const order = await prisma.order.findFirst({ where: { razorpayOrderId: payment.order_id } });
+        if (order && order.paymentStatus !== 'CAPTURED') {
+          const map = {
+            'payment.authorized': { paymentStatus: 'AUTHORIZED' },
+            'payment.failed': { paymentStatus: 'FAILED', status: 'CANCELLED' },
+          };
+          const update = map[event.event];
+          if (update) {
+            await prisma.order.update({
+              where: { id: order.id },
+              data: { ...update, razorpayPaymentId: payment.id },
+            });
+          }
         }
       }
     }

@@ -76,13 +76,25 @@
             <section class="admin__panel">
                 <div class="adm-card__head">
                     <h3>Customer</h3>
-                    <small><a href="/admin/users/<%= order.user.id %>" class="adm-link-accent">Profile →</a></small>
+                    <% if (order.user) { %>
+                        <small><a href="/admin/users/<%= order.user.id %>" class="adm-link-accent">Profile →</a></small>
+                    <% } else { %>
+                        <small>Guest checkout</small>
+                    <% } %>
                 </div>
+                <% if (order.user) { %>
                 <p class="adm-customer-block">
                     <strong><%= order.user.name || order.user.email %></strong><br>
                     <span class="adm-customer-block__email"><%= order.user.email %></span><br>
                     <span class="adm-customer-block__phone"><%= order.user.phone || '—' %></span>
                 </p>
+                <% } else { %>
+                <p class="adm-customer-block">
+                    <strong>Guest</strong><br>
+                    <span class="adm-customer-block__email"><%= order.guestEmail || '—' %></span><br>
+                    <span class="adm-customer-block__phone"><%= (order.shippingAddress && order.shippingAddress.phone) || '—' %></span>
+                </p>
+                <% } %>
 
                 <% if (order.shippingAddress) { %>
                     <h4 class="adm-side-label">Shipping to</h4>

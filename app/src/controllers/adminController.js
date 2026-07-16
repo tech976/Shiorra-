@@ -127,7 +127,10 @@ exports.dashboard = async (req, res, next) => {
       // Top customers by lifetime paid revenue
       prisma.order.groupBy({
         by: ['userId'],
-        where: PAID_FILTER,
+        // Only real accounts count as "top customers" — guest orders have a
+        // null userId and would otherwise (a) group into a phantom customer
+        // and (b) break the prisma.user.findMany({ id: { in: [null] } }) below.
+        where: { ...PAID_FILTER, userId: { not: null } },
         _sum: { totalInPaise: true },
         _count: { _all: true },
         orderBy: { _sum: { totalInPaise: 'desc' } },
@@ -171,8 +174,8 @@ exports.dashboard = async (req, res, next) => {
       series.push({ day: key, orders: row.orders, revenueInPaise: row.revenue });
     }
 
-    // Resolve names for top customers
-    const customerIds = topCustomers.map((c) => c.userId);
+    // Resolve names for top customers (filter nulls defensively — guest orders)
+    const customerIds = topCustomers.map((c) => c.userId).filter(Boolean);
     const topCustomerUsers = customerIds.length
       ? await prisma.user.findMany({ where: { id: { in: customerIds } }, select: { id: true, name: true, email: true } })
       : [];

@@ -76,6 +76,34 @@ const staticPages = {
       <p>More detail coming soon. In the meantime, learn more <a href="/about">about us</a>.</p>
     `,
   },
+  '/shipping': {
+    title: 'Shipping · Shiōrra',
+    heading: 'Shipping',
+    sub: 'Getting Shiōrra to your door',
+    body: `
+      <p>We ship across India. Orders are dispatched within 1–2 business days and typically arrive in 3–7 business days depending on your location.</p>
+      <h2>Shipping charges</h2>
+      <p>Free shipping on all orders over ₹999. Orders below ₹999 carry a flat ₹49 shipping fee, shown at checkout.</p>
+      <h2>Tracking</h2>
+      <p>Once your order ships, we'll email a tracking link so you can follow it to your door.</p>
+      <h2>Questions?</h2>
+      <p>Email <a href="mailto:hello@shiorra.com">hello@shiorra.com</a> and we'll help.</p>
+    `,
+  },
+  '/returns': {
+    title: 'Returns &amp; Refunds · Shiōrra',
+    heading: 'Returns & Refunds',
+    sub: 'Our 30-day promise',
+    body: `
+      <p>We want you to feel good about your order. If something isn't right, we're here to help.</p>
+      <h2>Returns</h2>
+      <p>Unopened, sealed products may be returned within 30 days of delivery for a full refund. For hygiene and safety reasons, opened or used products cannot be returned.</p>
+      <h2>How to start a return</h2>
+      <p>Email <a href="mailto:hello@shiorra.com">hello@shiorra.com</a> with your order number and we'll guide you through it.</p>
+      <h2>Refunds</h2>
+      <p>Once we receive the returned item, refunds are processed to your original payment method within 5–7 business days.</p>
+    `,
+  },
 };
 
 Object.entries(staticPages).forEach(([routePath, page]) => {

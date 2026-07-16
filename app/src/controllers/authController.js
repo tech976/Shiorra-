@@ -26,13 +26,16 @@ exports.login = (req, res, next) => {
       req.flash('error', info?.message || 'Login failed.');
       return res.redirect('/login');
     }
+    // Capture BEFORE req.logIn — passport 0.7 regenerates the session and
+    // wipes guestCart/returnTo, so read them now while they still exist.
+    const guestCart = req.session.guestCart || [];
+    const returnTo = req.session.returnTo || '/account';
     req.logIn(user, async (loginErr) => {
       if (loginErr) return next(loginErr);
-      await mergeGuestCart(req, user.id);
-      const dest = req.session.returnTo || '/account';
+      await mergeGuestCart(user.id, guestCart);
       delete req.session.returnTo;
       req.flash('success', `Welcome back, ${user.name || user.email}.`);
-      res.redirect(dest);
+      res.redirect(returnTo);
     });
   })(req, res, next);
 };
@@ -59,15 +62,17 @@ exports.register = async (req, res, next) => {
         passwordHash,
       },
     });
+    // Capture BEFORE req.logIn (passport 0.7 regenerates the session).
+    const guestCart = req.session.guestCart || [];
+    const returnTo = req.session.returnTo || '/account';
     req.logIn(user, async (err) => {
       if (err) return next(err);
       // Same as login: merge guest cart + honour returnTo so a guest who
       // came in via "Buy now → Sign up" lands on /checkout with their cart.
-      await mergeGuestCart(req, user.id);
-      const dest = req.session.returnTo || '/account';
+      await mergeGuestCart(user.id, guestCart);
       delete req.session.returnTo;
       req.flash('success', 'Account created.');
-      res.redirect(dest);
+      res.redirect(returnTo);
     });
   } catch (err) {
     next(err);

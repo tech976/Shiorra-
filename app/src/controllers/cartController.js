@@ -77,8 +77,13 @@ exports.computeDiscount = computeDiscount;
 // Merge a guest's session cart into a freshly-logged-in user's database cart.
 // Called from authController.login + authController.register so items added
 // while logged-out aren't stranded after sign-in.
-async function mergeGuestCart(req, userId) {
-  const guest = req.session?.guestCart || [];
+//
+// IMPORTANT: passport 0.7's req.logIn regenerates the session, which wipes
+// req.session.guestCart BEFORE this runs. So the caller must capture the cart
+// array *before* req.logIn and pass it in here — we no longer read it back off
+// the (now-empty) session.
+async function mergeGuestCart(userId, guestCart) {
+  const guest = Array.isArray(guestCart) ? guestCart : [];
   if (!guest.length) return;
   for (const g of guest) {
     try {
@@ -89,7 +94,6 @@ async function mergeGuestCart(req, userId) {
       });
     } catch (_) { /* product deleted while in session — skip silently */ }
   }
-  delete req.session.guestCart;
 }
 exports.mergeGuestCart = mergeGuestCart;
 

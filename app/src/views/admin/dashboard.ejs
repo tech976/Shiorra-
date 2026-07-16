@@ -166,7 +166,7 @@
                         <% latestOrders.forEach(function(o) { %>
                             <tr>
                                 <td><strong><%= o.orderNumber %></strong></td>
-                                <td><%= o.user.name || o.user.email %></td>
+                                <td><%= o.user ? (o.user.name || o.user.email) : (o.guestEmail || 'Guest') %></td>
                                 <td class="adm-num adm-money"><%= formatINR(o.totalInPaise) %></td>
                                 <td><span class="badge badge--<%= o.status.toLowerCase() %>"><%= o.status %></span></td>
                                 <td><a href="/admin/orders/<%= o.id %>" class="btn btn--sm btn--ghost">Open</a></td>

@@ -84,8 +84,13 @@
                                 <% if (o.couponCode) { %><br><small class="adm-cell-sub">🎟 <%= o.couponCode %></small><% } %>
                             </td>
                             <td>
-                                <a href="/admin/users/<%= o.userId %>"><%= o.user.name || o.user.email %></a><br>
-                                <small class="adm-cell-sub"><%= o.user.email %></small>
+                                <% if (o.user) { %>
+                                    <a href="/admin/users/<%= o.userId %>"><%= o.user.name || o.user.email %></a><br>
+                                    <small class="adm-cell-sub"><%= o.user.email %></small>
+                                <% } else { %>
+                                    <%= o.guestEmail || 'Guest' %><br>
+                                    <small class="adm-cell-sub">Guest checkout</small>
+                                <% } %>
                             </td>
                             <td class="adm-num"><%= o.items.length %></td>
                             <td class="adm-num adm-money">
