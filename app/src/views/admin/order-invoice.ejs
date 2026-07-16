@@ -278,6 +278,7 @@ body {
         <div>
             <h4>Bill to</h4>
             <address>
+                <% const billEmail = (order.user && order.user.email) || order.guestEmail || '—'; %>
                 <% if (order.shippingAddress) { %>
                     <strong><%= order.shippingAddress.fullName %></strong><br>
                     <%= order.shippingAddress.line1 %><br>
@@ -285,10 +286,10 @@ body {
                     <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.postcode %><br>
                     <%= order.shippingAddress.country %><br>
                     <%= order.shippingAddress.phone %><br>
-                    <%= order.user.email %>
+                    <%= billEmail %>
                 <% } else { %>
-                    <strong><%= order.user.name || order.user.email %></strong><br>
-                    <%= order.user.email %>
+                    <strong><%= order.user ? (order.user.name || order.user.email) : 'Guest' %></strong><br>
+                    <%= billEmail %>
                 <% } %>
             </address>
         </div>
