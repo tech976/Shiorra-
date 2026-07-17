@@ -117,6 +117,9 @@ a { color: inherit; text-decoration: none; transition: color .25s ease; }
 button { font: inherit; cursor: pointer; border: 0; background: none; }
 ul { list-style: none; padding: 0; margin: 0; }
 input, textarea { font: inherit; }
+/* Vitamin subscripts (B6, B12 …). line-height:0 keeps the lowered glyph from
+   stretching the line box, so mixed-case body copy stays on its baseline grid. */
+sub { font-size: 0.68em; line-height: 0; vertical-align: baseline; position: relative; bottom: -0.28em; }
 ::selection { background: var(--c-pink); color: var(--c-white); }
 
 h1, h2, h3, h4, h5, h6 {
@@ -6832,18 +6835,21 @@ body.aw-cursor-out .aw-cursor-ring {
 .fp-feature__features li {
     display: flex;
     align-items: baseline;
-    gap: 12px;
+    gap: 10px;
     font-family: var(--ff-body);
     font-size: 0.96rem;
     color: var(--c-charcoal);
 }
-.fp-feature__features li span {
-    font-family: var(--ff-display);
-    font-weight: 700;
-    font-size: 0.78rem;
-    color: var(--c-seagreen);
-    letter-spacing: 0.04em;
-    font-variant-numeric: tabular-nums;
+/* Bullet marker — sized in em so it tracks the text, nudged onto the
+   cap-height so it reads centred against the first line. */
+.fp-feature__features li::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: 50%;
+    background: var(--c-seagreen);
+    transform: translateY(-0.15em);
 }
 
 .fp-feature__cta {
