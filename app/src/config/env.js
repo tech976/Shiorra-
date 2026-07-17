@@ -24,6 +24,10 @@ module.exports = {
   // SES, Gmail, etc. With no host/pass configured the mailer is disabled and
   // just logs — nothing is ever sent, and order flow never breaks.
   mail: {
+    // Preferred transport: Resend's HTTP API over 443. VPS hosts routinely
+    // block outbound SMTP (25/465/587), so the API is the reliable path in
+    // production. SMTP below stays as a fallback for any other provider.
+    resendApiKey: process.env.RESEND_API_KEY || '',
     host: process.env.MAIL_HOST || '',
     port: parseInt(process.env.MAIL_PORT, 10) || 465,
     secure: process.env.MAIL_SECURE ? process.env.MAIL_SECURE === 'true' : true,

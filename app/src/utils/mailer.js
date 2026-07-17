@@ -15,7 +15,37 @@ const { formatINR } = require('./money');
 let transportPromise = null;
 
 function isEnabled() {
-  return !!(env.mail.host && env.mail.pass);
+  return !!(env.mail.resendApiKey || (env.mail.host && env.mail.pass));
+}
+
+// Resend's HTTP API. Preferred over SMTP because VPS providers commonly block
+// outbound mail ports, which fails silently in production; 443 always works.
+// Throws on a non-2xx so sendMail's existing catch reports the real reason.
+async function sendViaResend({ to, subject, html, text }) {
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.mail.resendApiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: env.mail.from,
+      reply_to: env.mail.replyTo || undefined,
+      to: [to],
+      subject,
+      html,
+      text: text || undefined,
+    }),
+    // Never let a hanging request pin an order request open.
+    signal: AbortSignal.timeout(10_000),
+  });
+
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    // Resend puts the actionable detail (e.g. unverified domain) in `message`.
+    throw new Error(body.message || `Resend responded ${res.status}`);
+  }
+  return body.id;
 }
 
 // Lazily build (and cache) the transport. Returns null when not configured.
@@ -38,23 +68,28 @@ function getTransport() {
 // { error } on failure — but never rejects, so callers can fire-and-forget.
 async function sendMail({ to, subject, html, text }) {
   if (!to) return { error: 'no recipient' };
-  const transport = getTransport();
-  if (!transport) {
+  if (!isEnabled()) {
     console.log(`[mailer] skipped (not configured) → would send "${subject}" to ${to}`);
     return { skipped: true };
   }
   try {
-    const t = await transport;
-    const info = await t.sendMail({
-      from: env.mail.from,
-      replyTo: env.mail.replyTo || undefined,
-      to,
-      subject,
-      text: text || undefined,
-      html,
-    });
-    console.log(`[mailer] sent "${subject}" to ${to} (${info.messageId})`);
-    return { sent: true, id: info.messageId };
+    let id;
+    if (env.mail.resendApiKey) {
+      id = await sendViaResend({ to, subject, html, text });
+    } else {
+      const t = await getTransport();
+      const info = await t.sendMail({
+        from: env.mail.from,
+        replyTo: env.mail.replyTo || undefined,
+        to,
+        subject,
+        text: text || undefined,
+        html,
+      });
+      id = info.messageId;
+    }
+    console.log(`[mailer] sent "${subject}" to ${to} (${id})`);
+    return { sent: true, id };
   } catch (err) {
     console.error(`[mailer] FAILED "${subject}" to ${to}:`, err.message);
     return { error: err.message };
