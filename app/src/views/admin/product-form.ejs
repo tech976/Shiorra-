@@ -17,9 +17,9 @@
                     <div class="adm-hero__sub"><%= product ? 'Update details, pricing or media.' : 'Add a new SKU to your catalogue.' %></div>
                 </div>
                 <div class="adm-hero__actions">
-                    <a href="/admin/products" class="btn btn--ghost btn--sm">← All products</a>
+                    <a href="/admin/products" class="btn btn--ghost btn--sm">All products</a>
                     <% if (product) { %>
-                        <a href="/product/<%= product.slug %>" target="_blank" class="btn btn--ghost btn--sm">View on store ↗</a>
+                        <a href="/product/<%= product.slug %>" target="_blank" class="btn btn--ghost btn--sm">View on store</a>
                     <% } %>
                 </div>
             </div>

@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="adm-hero__actions">
-                    <a href="/admin/orders" class="btn btn--ghost btn--sm">← All orders</a>
+                    <a href="/admin/orders" class="btn btn--ghost btn--sm">All orders</a>
                     <a href="/admin/orders/<%= order.id %>/invoice" target="_blank" class="btn btn--sm">Print invoice</a>
                 </div>
             </div>
@@ -77,7 +77,7 @@
                 <div class="adm-card__head">
                     <h3>Customer</h3>
                     <% if (order.user) { %>
-                        <small><a href="/admin/users/<%= order.user.id %>" class="adm-link-accent">Profile →</a></small>
+                        <small><a href="/admin/users/<%= order.user.id %>" class="adm-link-accent">Profile</a></small>
                     <% } else { %>
                         <small>Guest checkout</small>
                     <% } %>

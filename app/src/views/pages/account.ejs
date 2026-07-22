@@ -197,12 +197,6 @@
     }
     .acct-stat__num--accent { color: var(--acct-accent); }
     .acct-stat__lbl { font-size: 13px; color: var(--acct-muted); letter-spacing: 0.01em; }
-    .acct-stat__arrow {
-        position: absolute; top: 20px; right: 20px;
-        color: var(--acct-muted-2);
-        transition: color 200ms ease, transform 200ms ease;
-    }
-    .acct-stat:hover .acct-stat__arrow { color: var(--acct-accent); transform: translate(2px, -2px); }
 
     /* Order list */
     .acct-orderlist { list-style: none; margin: 0; padding: 0; }
@@ -411,7 +405,6 @@
         .acct-stat { padding: 20px; border-radius: 16px; }
         .acct-stat__num { font-size: 24px; }
         .acct-stat__lbl { font-size: 12px; }
-        .acct-stat__arrow { top: 14px; right: 14px; }
 
         /* Form inputs: 16px = no iOS zoom on focus; bigger tap padding */
         .acct-field input,
@@ -473,9 +466,6 @@
                         </span>
                         <span class="acct-stat__num"><%= orderCount %></span>
                         <span class="acct-stat__lbl">Orders placed</span>
-                        <span class="acct-stat__arrow" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
-                        </span>
                     </a>
                     <a href="/account/addresses" class="acct-stat">
                         <span class="acct-stat__icon" aria-hidden="true">
@@ -483,9 +473,6 @@
                         </span>
                         <span class="acct-stat__num"><%= addressCount %></span>
                         <span class="acct-stat__lbl">Saved addresses</span>
-                        <span class="acct-stat__arrow" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
-                        </span>
                     </a>
                     <% if (currentUser.role === 'ADMIN') { %>
                         <a href="/admin" class="acct-stat">
@@ -494,9 +481,6 @@
                             </span>
                             <span class="acct-stat__num acct-stat__num--accent">Admin</span>
                             <span class="acct-stat__lbl">Open admin panel</span>
-                            <span class="acct-stat__arrow" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
-                            </span>
                         </a>
                     <% } %>
                 </div>
