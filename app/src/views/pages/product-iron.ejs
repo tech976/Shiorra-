@@ -82,17 +82,25 @@
   }
   @media(max-width:880px){.product-hero-grid{grid-template-columns:1fr;gap:28px}}
 
-  .gallery{position:sticky;top:88px}
-  @media(max-width:880px){.gallery{position:static}}
-  /* These gallery slides are information-dense infographics, so they use
-     object-fit:contain — `cover` would crop the text off the edges. */
-  .gallery-main{aspect-ratio:2/3;width:100%;background:#fff;border-radius:22px;border:1px solid var(--line);
-    display:grid;place-items:center;overflow:hidden;position:relative;
+  /* Gallery — vertical thumb rail on the left, main image to its right.
+     The slides are text-dense infographics, so images use object-fit:contain
+     (`cover` crops the text off). The main frame stretches to the rail's
+     height, which keeps the whole block compact instead of very tall. */
+  .gallery{position:sticky;top:88px;display:flex;gap:12px;align-items:stretch}
+  .gallery-main{flex:1;min-width:0;background:#fff;border-radius:20px;border:1px solid var(--line);
+    display:grid;place-items:center;overflow:hidden;position:relative;padding:10px;max-height:620px;
   }
   .gallery-main img{width:100%;height:100%;object-fit:contain;object-position:center}
-  .gallery-thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-  .gallery-thumb{aspect-ratio:2/3;background:#fff;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;padding:0;transition:border-color .2s,transform .2s}
+  .gallery-thumbs{order:-1;flex:0 0 64px;display:flex;flex-direction:column;gap:8px}
+  .gallery-thumb{aspect-ratio:1/1;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;padding:3px;transition:border-color .2s,transform .2s}
   .gallery-thumb img{width:100%;height:100%;object-fit:contain;display:block;transition:transform .35s ease}
+  /* Below 880px the rail can't sit beside the image — stack it under, scrolling. */
+  @media(max-width:880px){
+    .gallery{position:static;flex-direction:column;gap:10px}
+    .gallery-main{flex:none;width:100%;max-height:none;aspect-ratio:4/5;padding:8px}
+    .gallery-thumbs{order:1;flex:none;flex-direction:row;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+    .gallery-thumb{flex:0 0 58px}
+  }
   .gallery-thumb:hover{border-color:var(--honey);transform:translateY(-1px)}
   .gallery-thumb.is-active{border-color:var(--honey);box-shadow:0 0 0 3px var(--honey-soft) inset}
   .float-badge{
