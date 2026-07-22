@@ -84,13 +84,15 @@
 
   .gallery{position:sticky;top:88px}
   @media(max-width:880px){.gallery{position:static}}
-  .gallery-main{aspect-ratio:4/5;width:100%;background:#fff;border-radius:22px;border:1px solid var(--line);
+  /* These gallery slides are information-dense infographics, so they use
+     object-fit:contain — `cover` would crop the text off the edges. */
+  .gallery-main{aspect-ratio:2/3;width:100%;background:#fff;border-radius:22px;border:1px solid var(--line);
     display:grid;place-items:center;overflow:hidden;position:relative;
   }
-  .gallery-main img{width:100%;height:100%;object-fit:cover;object-position:center}
-  .gallery-thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
-  .gallery-thumb{aspect-ratio:4/5;background:#fff;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;padding:0;transition:border-color .2s,transform .2s}
-  .gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+  .gallery-main img{width:100%;height:100%;object-fit:contain;object-position:center}
+  .gallery-thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+  .gallery-thumb{aspect-ratio:2/3;background:#fff;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;padding:0;transition:border-color .2s,transform .2s}
+  .gallery-thumb img{width:100%;height:100%;object-fit:contain;display:block;transition:transform .35s ease}
   .gallery-thumb:hover{border-color:var(--honey);transform:translateY(-1px)}
   .gallery-thumb.is-active{border-color:var(--honey);box-shadow:0 0 0 3px var(--honey-soft) inset}
   .float-badge{
@@ -669,14 +671,17 @@
     <div class="product-hero-grid">
       <div class="gallery">
         <div class="gallery-main">
-          <img id="galleryMain" src="/img/products/iron-1.jpg" alt="Shiōrra Advanced Iron+ — 30 vegecaps for pregnancy and lactation">
+          <img id="galleryMain" src="/img/products/iron-g1.jpg" alt="Shiōrra Advanced Iron+ pack with key benefits — boosts haemoglobin levels, enhances energy and reduces fatigue, improves iron absorption and utilisation, and supports foetal brain and organ development. Powered by ferrous bisglycinate, selenium, copper and zinc.">
         </div>
         <div class="gallery-thumbs" id="galleryThumbs">
-          <button type="button" class="gallery-thumb is-active" data-full="/img/products/iron-1.jpg" aria-label="Pack shot"><img src="/img/products/iron-1.jpg" alt=""></button>
-          <button type="button" class="gallery-thumb" data-full="/img/products/iron-2.jpg" aria-label="Product display"><img src="/img/products/iron-2.jpg" alt=""></button>
-          <button type="button" class="gallery-thumb" data-full="/img/products/iron-3.jpg" aria-label="Product display"><img src="/img/products/iron-3.jpg" alt=""></button>
-          <button type="button" class="gallery-thumb" data-full="/img/products/iron-4.jpg" aria-label="Product display"><img src="/img/products/iron-4.jpg" alt=""></button>
-          <button type="button" class="gallery-thumb" data-full="/img/products/iron-5.jpg" aria-label="Product details"><img src="/img/products/iron-5.jpg" alt=""></button>
+          <button type="button" class="gallery-thumb is-active" data-full="/img/products/iron-g1.jpg" aria-label="Key benefits"><img src="/img/products/iron-g1.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/iron-g2.jpg" aria-label="Pack and dosage"><img src="/img/products/iron-g2.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/iron-g7.jpg" aria-label="Key ingredients"><img src="/img/products/iron-g7.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/iron-g5.jpg" aria-label="What to expect"><img src="/img/products/iron-g5.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/iron-g6.jpg" aria-label="How it compares"><img src="/img/products/iron-g6.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/iron-g4.jpg" aria-label="Supplement facts"><img src="/img/products/iron-g4.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/iron-g3.jpg" aria-label="Back of pack"><img src="/img/products/iron-g3.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/iron-g8.jpg" aria-label="Our commitment"><img src="/img/products/iron-g8.jpg" alt="" loading="lazy"></button>
         </div>
       </div>
       <div class="info">
@@ -950,6 +955,10 @@
       thumbs.forEach((x) => x.classList.remove('is-active'));
       t.classList.add('is-active');
       main.src = url;
+      // Keep the alt in step with the slide, otherwise it stays stuck
+      // describing the first image for anyone using a screen reader.
+      const label = t.getAttribute('aria-label');
+      if (label) main.alt = 'Shiōrra Advanced Iron+ — ' + label;
     });
   });
 })();
