@@ -86,7 +86,10 @@
      The slides are text-dense infographics, so images use object-fit:contain
      (`cover` crops the text off). The main frame stretches to the rail's
      height, which keeps the whole block compact instead of very tall. */
-  .gallery{position:sticky;top:88px;display:flex;gap:12px;align-items:stretch}
+  /* min-width:0 is required: as a grid item this defaults to min-width:auto,
+     so on mobile the 8-thumb horizontal strip would blow the column out past
+     the viewport instead of scrolling inside it. */
+  .gallery{position:sticky;top:88px;display:flex;gap:12px;align-items:stretch;min-width:0}
   .gallery-main{flex:1;min-width:0;background:#fff;border-radius:20px;border:1px solid var(--line);
     display:grid;place-items:center;overflow:hidden;position:relative;padding:10px;max-height:620px;
   }
@@ -98,7 +101,8 @@
   @media(max-width:880px){
     .gallery{position:static;flex-direction:column;gap:10px}
     .gallery-main{flex:none;width:100%;max-height:none;aspect-ratio:4/5;padding:8px}
-    .gallery-thumbs{order:1;flex:none;flex-direction:row;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+    .gallery-thumbs{order:1;flex:none;flex-direction:row;width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none}
+    .gallery-thumbs::-webkit-scrollbar{display:none}
     .gallery-thumb{flex:0 0 58px}
   }
   .gallery-thumb:hover{border-color:var(--honey);transform:translateY(-1px)}
