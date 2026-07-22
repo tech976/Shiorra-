@@ -48,7 +48,7 @@
     --container:        1440px;
     --container-narrow: 1080px;
     --pad-x:            clamp(16px, 4.5vw, 56px);
-    --pad-y:            clamp(80px, 11vw, 160px);
+    --pad-y:            clamp(44px, 5.5vw, 80px);
 
     /* ============== 8px spacing system ============== */
     --s-1:  8px;   --s-2: 16px;  --s-3: 24px;  --s-4: 32px;  --s-5: 40px;
@@ -1052,7 +1052,7 @@ p { margin: 0; text-wrap: pretty; line-height: 1.5; }
    Numbered feature cards with rich hover animations
    ============================================================ */
 .claims {
-    padding: clamp(80px, 10vw, 130px) 0;
+    padding: clamp(40px, 5vw, 72px) 0;
     background: var(--c-cream);
     position: relative;
     overflow: hidden;
@@ -1588,7 +1588,7 @@ p { margin: 0; text-wrap: pretty; line-height: 1.5; }
    ============================================================ */
 .trust-grid {
     background: var(--c-cream);
-    padding: clamp(96px, 12vw, 160px) 0;
+    padding: clamp(44px, 5.5vw, 80px) 0;
     border-top: 1px solid var(--c-line);
     border-bottom: 1px solid var(--c-line);
 }
@@ -3439,7 +3439,7 @@ p { margin: 0; text-wrap: pretty; line-height: 1.5; }
 .cta-band {
     background: var(--c-pink);
     color: var(--c-white);
-    padding: clamp(64px, 10vw, 140px) 0;
+    padding: clamp(40px, 5vw, 72px) 0;
     overflow: hidden;
     position: relative;
 }
@@ -5402,7 +5402,7 @@ body.aw-cursor-out .aw-cursor-ring {
 .sj-chapter__split {
     display: grid;
     grid-template-columns: 1.05fr 1fr;
-    column-gap: clamp(40px, 6vw, 96px);
+    column-gap: clamp(28px, 3.5vw, 56px);
     align-items: center;
 }
 .sj-chapter__split--reverse { grid-template-columns: 1fr 1.05fr; }
@@ -6589,7 +6589,7 @@ body.aw-cursor-out .aw-cursor-ring {
    ============================================================ */
 .fp-feature {
     background: var(--c-cream);
-    padding: clamp(80px, 11vw, 160px) 0;
+    padding: clamp(40px, 5vw, 72px) 0;
     border-top: 1px solid var(--c-line);
     border-bottom: 1px solid var(--c-line);
     overflow: hidden;
@@ -6629,7 +6629,7 @@ body.aw-cursor-out .aw-cursor-ring {
 .fp-feature__layout {
     display: grid;
     grid-template-columns: 1.1fr 1fr;
-    column-gap: clamp(40px, 6vw, 96px);
+    column-gap: clamp(28px, 3.5vw, 56px);
     align-items: center;
 }
 @media (max-width: 900px) {
@@ -6641,9 +6641,9 @@ body.aw-cursor-out .aw-cursor-ring {
     position: relative;
     background: var(--c-white);
     border-radius: var(--r-lg);
-    padding: clamp(32px, 4vw, 64px);
+    padding: clamp(18px, 2.2vw, 32px);
     border: 1px solid var(--c-line);
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -6970,7 +6970,7 @@ body.aw-cursor-out .aw-cursor-ring {
    Brand-aligned: sea-green status pills, charcoal CTA, tinted shadow.
    ============================================================ */
 .products-row{
-    padding: clamp(64px, 9vw, 120px) 0;
+    padding: clamp(40px, 5vw, 72px) 0;
     background: var(--c-white);
 }
 .products-row__head{
@@ -7194,7 +7194,7 @@ body.aw-cursor-out .aw-cursor-ring {
    COMPANY · "Who we are" — multi-product brand frame
    ============================================================ */
 .company{
-    padding: clamp(72px, 10vw, 140px) 0;
+    padding: clamp(40px, 5vw, 72px) 0;
     background: var(--c-charcoal);
     color: var(--c-white);
 }

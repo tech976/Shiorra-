@@ -65,12 +65,8 @@
 
   /* ---------- Hero ---------- */
   .product-hero{
-    /* Short gradient that fades out just under the header, instead of a wash
-       running the full height of the hero. */
-    background-color:#fff;
-    background-image:linear-gradient(180deg,var(--honey-soft) 0%,#fff 100%);
-    background-repeat:no-repeat;
-    background-size:100% 220px;
+    /* Flat brand tint — no gradient wash. */
+    background:var(--honey-soft);
     padding:48px 0 64px;
     position:relative;
     overflow:hidden;
@@ -78,7 +74,7 @@
   .product-hero::before{
     content:'';position:absolute;top:-100px;right:-100px;
     width:420px;height:420px;border-radius:50%;
-    background:radial-gradient(circle,rgba(255,61,142,.18) 0%,transparent 70%);
+    background:transparent;
     pointer-events:none;
   }
   .product-hero-grid{
@@ -247,7 +243,7 @@
   .symptom-card p{font-size:14px;color:var(--muted);line-height:1.5}
 
   /* ---------- Power team ---------- */
-  .power-bg{background:linear-gradient(180deg,#fff,var(--surface) 100%)}
+  .power-bg{background:var(--surface)}
   .power-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;align-items:stretch}
   @media(max-width:880px){.power-grid{grid-template-columns:1fr}}
   .power-card{
@@ -304,7 +300,7 @@
   .bvit-help-card p{font-size:13px;color:var(--muted);line-height:1.55}
 
   /* ---------- Minerals ---------- */
-  .min-bg{background:linear-gradient(180deg,var(--surface),#fff 100%)}
+  .min-bg{background:var(--surface)}
   .min-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.min-grid{grid-template-columns:repeat(2,1fr)}}
   .min-card{
@@ -339,7 +335,7 @@
   @media(max-width:680px){.formula-row{grid-template-columns:1fr}.fc-amt{font-size:13px}.formula-row:first-child{display:none}}
 
   /* ---------- Timeline ---------- */
-  .timeline-bg{background:linear-gradient(180deg,#fff,var(--surface) 100%)}
+  .timeline-bg{background:var(--surface)}
   .timeline-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:16px;align-items:stretch}
   @media(max-width:880px){.timeline-grid{grid-template-columns:1fr}}
   .tl-card{
@@ -500,7 +496,7 @@
   .reminder .rem-chip{background:rgba(255,255,255,.07);color:#fff;font-size:12px;font-weight:600;padding:7px 14px;border-radius:20px}
   @media(max-width:680px){.reminder h2{font-size:32px}}
 
-  .final{background:linear-gradient(180deg,var(--honey-soft) 0%,#fff 100%);padding:80px 0;text-align:center;position:relative}
+  .final{background:var(--honey-soft);padding:80px 0;text-align:center;position:relative}
   .final h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:44px;font-weight:700;line-height:1.15;max-width:22ch;margin:0 auto 14px}
   .final h2 em{font-style:italic;color:var(--honey);font-weight:500}
   @media(max-width:680px){.final h2{font-size:32px}}
