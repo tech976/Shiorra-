@@ -29,15 +29,36 @@
         .hero-banners__dot{min-width:14px;min-height:14px;padding:0}
       }
 
-      /* Products row — force 1-col stack on phones with tappable CTAs */
+      /* Products row — swipeable carousel on phones: ~2.5 cards in view
+         (two full + a half-peek of the third to signal "swipe for more"). */
       @media (max-width: 720px){
-        .products-row{padding:clamp(48px,11vw,96px) 0}
-        .products-row__grid{grid-template-columns:1fr!important;gap:clamp(20px,5vw,32px)!important}
+        .products-row{padding:clamp(40px,10vw,72px) 0;overflow:hidden}
+        .products-row__grid{
+          display:flex!important;
+          grid-template-columns:none!important;
+          gap:12px!important;
+          max-width:none!important;
+          overflow-x:auto;
+          scroll-snap-type:x proximity;
+          -webkit-overflow-scrolling:touch;
+          scroll-padding-left:20px;
+          padding:6px 20px 16px;
+          margin-inline:calc(50% - 50vw);   /* full-bleed so the 3rd card can peek at the edge */
+          scrollbar-width:none;
+        }
+        .products-row__grid::-webkit-scrollbar{display:none}
+        .products-row__grid > .product-card{
+          flex:0 0 40%;
+          scroll-snap-align:start;
+          min-width:0;
+        }
         .products-row__title{font-size:clamp(28px,7vw,42px);line-height:1.1}
         .products-row__sub{font-size:14.5px}
-        .product-card__cta{min-height:48px;padding:14px 18px;font-size:14px}
-        .product-card__name{font-size:clamp(18px,4.6vw,22px)}
-        .product-card__desc{font-size:14.5px;line-height:1.5}
+        .product-card__body{padding:14px 14px 16px}
+        .product-card__cta{min-height:44px;padding:11px 12px;font-size:12.5px;letter-spacing:.02em}
+        .product-card__name{font-size:15.5px;line-height:1.2}
+        .product-card__desc{font-size:12.5px;line-height:1.4}
+        .product-card__rating{font-size:12px}
       }
 
       /* Trust row — 4-col → 2-col → 1-col with readable type */
