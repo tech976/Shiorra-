@@ -6600,7 +6600,7 @@ body.aw-cursor-out .aw-cursor-ring {
 .fp-feature + .fp-feature { border-top: 0; }
 
 /* Reversed layout — media on the right, copy on the left */
-.fp-feature--reverse .fp-feature__layout { grid-template-columns: 1fr 1.1fr; }
+.fp-feature--reverse .fp-feature__layout { grid-template-columns: 1.1fr 1fr; }
 .fp-feature--reverse .fp-feature__media { order: 2; }
 .fp-feature--reverse .fp-feature__copy  { order: 1; }
 @media (max-width: 900px) {
@@ -6628,7 +6628,7 @@ body.aw-cursor-out .aw-cursor-ring {
 
 .fp-feature__layout {
     display: grid;
-    grid-template-columns: 1.1fr 1fr;
+    grid-template-columns: 1fr 1.1fr;
     column-gap: clamp(28px, 3.5vw, 56px);
     align-items: center;
 }
@@ -6641,19 +6641,17 @@ body.aw-cursor-out .aw-cursor-ring {
     position: relative;
     background: var(--c-white);
     border-radius: var(--r-lg);
-    padding: clamp(18px, 2.2vw, 32px);
+    /* No padding: the images are 4:5, so a 4:5 frame fills edge to edge and the
+       border hugs the product image with no letterbox gap. */
     border: 1px solid var(--c-line);
-    aspect-ratio: 5 / 4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
 }
 .fp-feature__media img {
     width: 100%;
-    max-width: 520px;
-    height: auto;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
+    display: block;
     transition: transform 1s cubic-bezier(.2,.8,.2,1);
 }
 .fp-feature__media:hover img { transform: scale(1.03); }
@@ -7194,18 +7192,16 @@ body.aw-cursor-out .aw-cursor-ring {
    COMPANY · "Who we are" — multi-product brand frame
    ============================================================ */
 .company{
-    padding: clamp(40px, 5vw, 72px) 0;
+    padding: clamp(36px, 4.5vw, 60px) 0;
     background: var(--c-charcoal);
     color: var(--c-white);
 }
 .company__grid{
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(40px, 6vw, 96px);
-    align-items: center;
-    max-width: 820px;
+    max-width: 720px;
     margin: 0 auto;
+    text-align: center;
 }
+.company__head .eyebrow{ justify-content: center; }
 .company__head .eyebrow{
     color: var(--c-seagreen);
     margin-bottom: 18px;
@@ -7214,20 +7210,20 @@ body.aw-cursor-out .aw-cursor-ring {
 .company__title{
     font-family: var(--ff-display);
     font-weight: 700;
-    font-size: clamp(2.2rem, 4.6vw, 3.8rem);
-    line-height: 1.04;
-    letter-spacing: -0.025em;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     color: var(--c-white);
-    margin: 0 0 24px;
+    margin: 0 0 16px;
     text-wrap: balance;
 }
 .company__title .bold-pink{color: var(--c-seagreen);}
 .company__lede{
-    font-size: clamp(1.02rem, 1.2vw, 1.18rem);
-    line-height: 1.55;
-    color: #D8D8D8;
-    margin: 0 0 16px;
-    max-width: 52ch;
+    font-size: clamp(0.98rem, 1.1vw, 1.08rem);
+    line-height: 1.6;
+    color: #C8C8C8;
+    margin: 0 auto;
+    max-width: 56ch;
 }
 .company__lede--muted{color: #9F9F9F; font-size: 0.98rem;}
 .company__lede strong{color: var(--c-white); font-weight: 700;}
