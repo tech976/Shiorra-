@@ -65,17 +65,14 @@
 
   /* ---------- Hero ---------- */
   .product-hero{
-    /* Flat brand tint — no gradient wash. */
-    background:var(--honey-soft);
+    /* White hero with only a small gradient bar just below the header. */
+    background-color:#fff;
+    background-image:linear-gradient(180deg,var(--honey-soft) 0%,#fff 100%);
+    background-repeat:no-repeat;
+    background-size:100% 84px;
     padding:48px 0 64px;
     position:relative;
     overflow:hidden;
-  }
-  .product-hero::before{
-    content:'';position:absolute;top:-100px;right:-100px;
-    width:420px;height:420px;border-radius:50%;
-    background:transparent;
-    pointer-events:none;
   }
   .product-hero-grid{
     display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:start;
@@ -551,7 +548,6 @@
 
     /* Hero — tighten padding, scale title with clamp */
     .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
-    .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
     .product-hero-grid{gap:24px}
     .pi-kicker{font-size:10px;letter-spacing:.18em;margin-bottom:8px}
     .pi-title{font-size:clamp(32px,9vw,40px);line-height:1.04;margin-bottom:12px}
