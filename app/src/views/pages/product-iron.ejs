@@ -137,10 +137,23 @@
   .pi-proof__sep{color:#CBCBCB}
   .pi-proof__count{font-size:13.5px;color:var(--muted,#6B6B6B);text-decoration:none}
   .pi-proof__count:hover{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
-  /* Trust chips */
-  .pi-trust{list-style:none;margin:0 0 26px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
-  .pi-trust li{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#454545;background:#F6F7F7;border:1px solid var(--line-soft,#EFEFEF);border-radius:999px;padding:6px 12px}
-  .pi-trust li svg{width:13px;height:13px;color:#23867F;flex:0 0 13px}
+  /* Trust bar — one unified strip, evenly divided (no orphan chips) */
+  .pi-trust{
+    list-style:none;margin:0 0 26px;padding:0;
+    display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#FBFBFC;
+  }
+  .pi-trust li{
+    flex:1;min-width:0;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-align:center;
+    font-size:11.5px;font-weight:600;letter-spacing:-0.01em;color:#3F3F3F;line-height:1.2;white-space:nowrap;
+    padding:12px 8px;border-right:1px solid var(--line-soft,#EFEFEF);
+  }
+  .pi-trust li:last-child{border-right:0}
+  .pi-trust li svg{width:14px;height:14px;color:#23867F;flex:0 0 14px}
+  @media(max-width:600px){
+    .pi-trust{flex-direction:column}
+    .pi-trust li{justify-content:flex-start;text-align:left;border-right:0;border-bottom:1px solid var(--line-soft,#EFEFEF);padding:12px 16px}
+    .pi-trust li:last-child{border-bottom:0}
+  }
   /* keep old .pi-claims styling as a harmless fallback */
   .pi-claims{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A8A8A;margin-bottom:28px;line-height:1.8}
   /* Commerce block — price coupled to the decision, not floating as a poster */
@@ -754,7 +767,7 @@
           <a href="/reviews" class="pi-proof__count">1,240+ reviews</a>
         </div>
         <ul class="pi-trust" aria-label="Product assurances">
-          <% ['Doctor recommended', 'FSSAI & GMP certified', '100% vegetarian'].forEach(function (t) { %>
+          <% ['Doctor recommended', 'FSSAI & GMP', '100% vegetarian'].forEach(function (t) { %>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><%= t %></li>
           <% }); %>
         </ul>
