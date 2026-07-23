@@ -54,10 +54,33 @@ async function resolveSessionCoupon(req) {
   return coupon;
 }
 
+// Multi-pack bundle pricing (buy-more-save-more). Keyed by product slug →
+// { quantity: total price in paise for that many units }. The saving is applied
+// as a real discount (shown as a line, flows to the order + payment total), so
+// the displayed pack price always equals what the customer is actually charged.
+const BUNDLE_PRICES = {
+  'advanced-iron': { 2: 134900, 3: 189900 }, // ₹1,349 (60d) · ₹1,899 (90d)
+};
+
+// Total bundle saving across the cart = sum of (unit×qty − bundle price) for any
+// line whose quantity matches a defined bundle tier for that product.
+function computeBundleDiscount(items) {
+  let d = 0;
+  for (const it of items) {
+    const tiers = it.product && BUNDLE_PRICES[it.product.slug];
+    const target = tiers && tiers[it.quantity];
+    if (target != null) {
+      const gross = it.quantity * it.product.priceInPaise;
+      if (gross > target) d += gross - target;
+    }
+  }
+  return d;
+}
+
 function summarise(items, coupon) {
   const subtotal = items.reduce((n, it) => n + it.subtotalInPaise, 0);
   const shipping = subtotal >= 99900 ? 0 : 4900;
-  const discount = computeDiscount(coupon, subtotal);
+  const discount = computeDiscount(coupon, subtotal) + computeBundleDiscount(items);
   const total = Math.max(0, subtotal + shipping - discount);
   const itemCount = items.reduce((n, it) => n + it.quantity, 0);
   return {

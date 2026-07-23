@@ -154,6 +154,51 @@
   .pi-add-secondary:hover{background:var(--ink);color:#fff}
   /* Trust footnote — one quiet hairline-ruled line, replaces the bordered card */
   .pi-footnote{margin-top:20px;padding-top:16px;border-top:1px solid var(--line-soft,#EFEFEF);font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:#8A8A8A;line-height:1.7}
+
+  /* ---- Bundle / pack selector ---- */
+  .pi-bundles{border:0;padding:0;margin:22px 0 0;display:flex;flex-direction:column;gap:12px}
+  .pi-bundle{
+    position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px;
+    border:1.5px solid var(--line);border-radius:14px;padding:20px 22px;cursor:pointer;
+    background:#fff;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease;
+    overflow:hidden;
+  }
+  .pi-bundle:hover{border-color:#C9C9CE}
+  .pi-bundle input{position:absolute;opacity:0;pointer-events:none}
+  .pi-bundle.is-selected{border-color:var(--ink);background:#F5F5F6;box-shadow:0 1px 0 rgba(40,40,40,.03)}
+  .pi-bundle__rec{
+    position:absolute;top:0;left:0;background:var(--charcoal);color:#fff;
+    font-size:12px;font-weight:700;letter-spacing:.01em;padding:6px 14px;border-bottom-right-radius:10px;
+  }
+  .pi-bundle__badge{
+    position:absolute;top:0;right:0;background:#C0894A;color:#fff;
+    font-size:12px;font-weight:700;letter-spacing:.02em;padding:6px 12px;border-bottom-left-radius:10px;
+  }
+  .pi-bundle--rec{padding-top:34px}
+  .pi-bundle__left{display:flex;flex-direction:column;gap:2px}
+  .pi-bundle__days{font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.01em;color:var(--ink);line-height:1.05}
+  .pi-bundle__packs{font-size:13.5px;color:var(--muted,#6B6B6B)}
+  .pi-bundle__right{display:flex;flex-direction:column;gap:2px;text-align:left}
+  .pi-bundle__price{font-size:15px;color:var(--ink)}
+  .pi-bundle__price s{color:#9A9A9A;font-weight:400;margin-right:4px}
+  .pi-bundle__price strong{font-family:'Helvetica Neue',Arial,sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.01em}
+  .pi-bundle__tax{font-size:12px;color:#8A8A8A}
+
+  /* ---- Urgency box ---- */
+  .pi-urgency{margin:16px 0 0;border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:#fff}
+  .pi-urgency__hot{margin:0 0 10px;font-size:16px;color:#D33A2C;font-weight:400;display:flex;align-items:center;gap:8px}
+  .pi-urgency__hot strong{font-weight:800;letter-spacing:-0.01em}
+  .pi-urgency__viewers{margin:0;font-size:15px;color:var(--ink);display:flex;align-items:center;gap:8px}
+  .pi-urgency__viewers span{font-weight:700}
+
+  @media(max-width:560px){
+    .pi-bundle{padding:16px 16px;gap:10px}
+    .pi-bundle--rec{padding-top:32px}
+    .pi-bundle__days{font-size:19px}
+    .pi-bundle__price strong{font-size:18px}
+    .pi-bundle__right{text-align:right}
+  }
+
   /* Benefits illustration */
   .pi-benefits{margin:28px 0 0;border-radius:14px;overflow:hidden;background:#fff}
   .pi-benefits img{display:block;width:100%;height:auto}
@@ -709,16 +754,42 @@
         <p class="pi-claims">Doctor recommended · FSSAI &amp; GMP · 100% vegetarian</p>
         <form action="/cart/buy-now" method="post" id="addToCartForm" class="pi-buy-form">
           <input type="hidden" name="productId" value="<%= product.id %>">
-          <div class="pi-commerce">
-            <div class="pi-price-line">
-              <span class="pi-price-now">₹749</span>
-              <span class="pi-price-meta">MRP <s>₹899</s> · 17% off</span>
-            </div>
-            <div class="pi-qty">
-              <button type="button" data-q="-" aria-label="Decrease quantity">−</button>
-              <input type="number" name="quantity" value="1" min="1" max="9" form="addToCartForm" aria-label="Quantity">
-              <button type="button" data-q="+" aria-label="Increase quantity">+</button>
-            </div>
+          <input type="hidden" name="quantity" id="bundleQty" value="1">
+
+          <%
+            var _base = product.priceInPaise || 74900;
+            var _mrp = (product.mrpInPaise && product.mrpInPaise > _base) ? product.mrpInPaise : Math.round(_base * 1.2);
+            // Pack total prices in paise — MUST match BUNDLE_PRICES in cartController.
+            var _packs = [
+              { qty: 1, days: 30, price: _base },
+              { qty: 2, days: 60, price: 134900, rec: true },
+              { qty: 3, days: 90, price: 189900 },
+            ];
+            var _inr = function (p) { return '₹' + (p / 100).toLocaleString('en-IN'); };
+          %>
+          <fieldset class="pi-bundles" aria-label="Choose your pack">
+            <% _packs.forEach(function (pk, i) {
+                 var mrpTotal = _mrp * pk.qty;
+                 var off = Math.round((1 - pk.price / mrpTotal) * 100); %>
+              <label class="pi-bundle<%= pk.rec ? ' pi-bundle--rec' : '' %><%= i === 0 ? ' is-selected' : '' %>">
+                <input type="radio" name="bundle" value="<%= pk.qty %>" data-qty="<%= pk.qty %>" <%= i === 0 ? 'checked' : '' %>>
+                <% if (pk.rec) { %><span class="pi-bundle__rec">Expert Recommended</span><% } %>
+                <span class="pi-bundle__badge"><%= off %>% OFF</span>
+                <span class="pi-bundle__left">
+                  <span class="pi-bundle__days"><%= pk.days %> Days</span>
+                  <span class="pi-bundle__packs">Pack of <%= pk.qty %></span>
+                </span>
+                <span class="pi-bundle__right">
+                  <span class="pi-bundle__price"><s><%= _inr(mrpTotal) %></s> <strong><%= _inr(pk.price) %></strong></span>
+                  <span class="pi-bundle__tax">Price inclusive of all taxes</span>
+                </span>
+              </label>
+            <% }); %>
+          </fieldset>
+
+          <div class="pi-urgency">
+            <p class="pi-urgency__hot">🔥 <strong>Selling fast!</strong></p>
+            <p class="pi-urgency__viewers">👀 <span id="piViewers">18</span> people are viewing this right now</p>
           </div>
           <% var _soldOut = (typeof product.stock === 'number' && product.stock <= 0);
              var _lowStock = (!_soldOut && typeof product.stock === 'number' && product.stock <= 10); %>
@@ -977,18 +1048,27 @@
     if (canHover) t.addEventListener('mouseenter', () => select(t));
   });
 })();
+// Bundle selector — a pack radio sets the hidden quantity the cart uses.
 (function () {
-  document.querySelectorAll('.pi-qty').forEach((q) => {
-    const input = q.querySelector('input');
-    const min = parseInt(input.min, 10) || 1;
-    const max = parseInt(input.max, 10) || 9;
-    q.querySelectorAll('button[data-q]').forEach((b) => {
-      b.addEventListener('click', () => {
-        const v = parseInt(input.value, 10) || min;
-        input.value = b.dataset.q === '+' ? Math.min(max, v + 1) : Math.max(min, v - 1);
-      });
+  const qtyInput = document.getElementById('bundleQty');
+  const radios = document.querySelectorAll('.pi-bundle input[name="bundle"]');
+  if (!qtyInput || !radios.length) return;
+  const sync = () => {
+    radios.forEach((r) => {
+      const label = r.closest('.pi-bundle');
+      if (label) label.classList.toggle('is-selected', r.checked);
+      if (r.checked) qtyInput.value = r.getAttribute('data-qty') || '1';
     });
-  });
+  };
+  radios.forEach((r) => r.addEventListener('change', sync));
+  sync();
+})();
+
+// Social-proof viewer count — a fresh random 10-30 on each visit.
+(function () {
+  const el = document.getElementById('piViewers');
+  if (!el) return;
+  el.textContent = String(Math.floor(Math.random() * 21) + 10); // 10..30
 })();
 </script>
 <%- include('../partials/cart-drawer') %>
