@@ -60,6 +60,8 @@ async function resolveSessionCoupon(req) {
 // the displayed pack price always equals what the customer is actually charged.
 const BUNDLE_PRICES = {
   'advanced-iron': { 2: 134900, 3: 189900 }, // ₹1,349 (60d) · ₹1,899 (90d)
+  'advanced-ginger': { 2: 104900, 3: 146900 }, // ₹1,049 (60d) · ₹1,469 (90d)
+  'advanced-energyone': { 2: 124900, 3: 174900 }, // ₹1,249 (60d) · ₹1,749 (90d)
 };
 
 // Total bundle saving across the cart = sum of (unit×qty − bundle price) for any

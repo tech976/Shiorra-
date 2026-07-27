@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Advanced Ginger+ · Shiōrra · Gentle Pregnancy Support</title>
-<meta name="description" content="Shiōrra Advanced Ginger+ — Standardized Ginger Extract + Active Vitamin B6 (P5P) + Vitamin B1 + Magnesium Bisglycinate. Eases nausea, supports digestion, gentle on stomach. A trademark of K.C. Laboratories." />
+<title>Advanced Ginger+ · Shiōrra · Gentle Support for Morning Sickness</title>
+<meta name="description" content="Shiōrra Advanced Ginger+ — Standardized Ginger extract + active Vit. B6 (P5P), Vit. B1 & Magnesium. Gentle daily support for pregnancy nausea, digestion and calm. A trademark of K.C. Laboratories." />
 <link rel="shortcut icon" type="image/png" href="/img/logo/logo-green.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,7 @@
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
-    /* Ginger+ product accent — forest green (calm / digestive) */
+    /* Ginger+ product accent — forest green */
     --honey:#2E8B57;
     --honey-2:#1F6B43;
     --honey-deep:#144B30;
@@ -36,8 +36,12 @@
   html{scroll-behavior:smooth;overflow-x:clip}
   body{
     font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
-    color:var(--ink);background:#fff;line-height:1.55;font-size:15px;
-    overflow-x:clip;padding-bottom:88px;
+    color:var(--ink);
+    background:#fff;
+    line-height:1.55;
+    font-size:15px;
+    overflow-x:clip;
+    padding-bottom:88px;
   }
   @media(max-width:720px){body{padding-bottom:84px}}
   img{max-width:100%;display:block}
@@ -45,7 +49,7 @@
   button{font:inherit;cursor:pointer;border:0;background:none}
   .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
 
-  /* Marquee */
+  /* ---------- Marquee ---------- */
   .marquee{background:var(--charcoal);color:#fff;padding:10px 0;overflow:hidden;border-bottom:1px solid var(--line)}
   .marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 36s linear infinite;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
   .marquee-item{display:inline-flex;align-items:center;gap:8px}
@@ -53,45 +57,106 @@
   .marquee-item .accent{color:var(--honey)}
   @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-  /* Microbar */
+  /* ---------- Trust microbar ---------- */
   .microbar{background:var(--surface);border-bottom:1px solid var(--line);padding:8px 0;font-size:12px;color:var(--ink-soft);font-weight:500}
   .microbar-inner{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
   .microbar-item{display:inline-flex;align-items:center;gap:6px}
   .microbar-item svg{width:14px;height:14px;color:var(--honey)}
 
-  /* Hero */
-  .product-hero{background:var(--honey-soft);padding:48px 0 64px;position:relative;overflow:hidden}
-  .product-hero::before{content:'';position:absolute;top:-100px;right:-100px;width:420px;height:420px;border-radius:50%;background:transparent;pointer-events:none}
-  .product-hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:start;position:relative}
+  /* ---------- Hero ---------- */
+  .product-hero{
+    /* Plain white hero — no gradient. */
+    background:#fff;
+    padding:48px 0 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .product-hero-grid{
+    display:grid;grid-template-columns:1.22fr 1fr;gap:44px;align-items:start;
+    position:relative;
+  }
   @media(max-width:880px){.product-hero-grid{grid-template-columns:1fr;gap:28px}}
-  .gallery{position:sticky;top:88px}
-  @media(max-width:880px){.gallery{position:static}}
-  .gallery-main{aspect-ratio:4/5;width:100%;background:#fff;border-radius:22px;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;position:relative}
+
+  /* Gallery — vertical thumb rail on the left, main image to its right.
+     The slides are text-dense infographics, so images use object-fit:contain
+     (`cover` crops the text off). The main frame stretches to the rail's
+     height, which keeps the whole block compact instead of very tall. */
+  /* min-width:0 is required: as a grid item this defaults to min-width:auto,
+     so on mobile the 8-thumb horizontal strip would blow the column out past
+     the viewport instead of scrolling inside it. */
+  /* NOT sticky: .product-hero has overflow:hidden, which makes it the sticky
+     scroll container — so `top:88px` never actually stuck, it just pushed the
+     gallery 88px down and out of line with the kicker. Static + 8px to match
+     .info's padding-top, so the image starts level with "Daily Prenatal Iron". */
+  .gallery{position:static;padding-top:8px;display:flex;gap:12px;align-items:flex-start;min-width:0}
+  /* Frame matches the artwork's 2:3 ratio so the slides fill it edge to edge —
+     no letterbox bars, and nothing cropped off the top or bottom. */
+  .gallery-main{flex:1;min-width:0;aspect-ratio:4/5;background:#fff;border-radius:20px;border:1px solid var(--line);
+    display:grid;place-items:center;overflow:hidden;position:relative;
+  }
   .gallery-main img{width:100%;height:100%;object-fit:cover;object-position:center}
-  .gallery-thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
-  .gallery-thumb{aspect-ratio:4/5;background:#fff;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;padding:0;transition:border-color .2s,transform .2s}
+  .gallery-thumbs{order:-1;flex:0 0 64px;display:flex;flex-direction:column;gap:7px}
+  .gallery-thumb{aspect-ratio:1/1;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;padding:0;transition:border-color .2s,transform .2s}
   .gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+  /* Below 880px the rail can't sit beside the image — stack it under, scrolling. */
+  @media(max-width:880px){
+    .gallery{position:static;flex-direction:column;gap:10px}
+    .gallery-main{flex:none;width:100%;max-height:none;aspect-ratio:4/5;padding:0}
+    .gallery-thumbs{order:1;flex:none;flex-direction:row;width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none}
+    .gallery-thumbs::-webkit-scrollbar{display:none}
+    .gallery-thumb{flex:0 0 58px}
+  }
   .gallery-thumb:hover{border-color:var(--honey);transform:translateY(-1px)}
   .gallery-thumb.is-active{border-color:var(--honey);box-shadow:0 0 0 3px var(--honey-soft) inset}
-  .float-badge{position:absolute;background:#fff;border-radius:18px;padding:10px 16px;font-size:12px;font-weight:700;box-shadow:0 8px 22px rgba(40,40,40,.10);display:inline-flex;align-items:center;gap:10px;z-index:2;color:var(--ink)}
-  .float-1{top:18px;left:18px} .float-2{bottom:18px;right:18px}
-  .float-1-icon{width:28px;height:28px;border-radius:50%;background:var(--honey);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
-  .pulse-dot{width:10px;height:10px;border-radius:50%;background:var(--honey);animation:pulse 1.6s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .float-badge{
+    position:absolute;background:#fff;
+    border-radius:16px;padding:10px 16px;font-size:12.5px;font-weight:700;
+    box-shadow:0 8px 24px rgba(40,40,40,.10),0 2px 6px rgba(40,40,40,.06);
+    border:1px solid var(--line);
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .float-1{top:18px;left:18px}
+  .float-2{bottom:18px;right:18px}
+  .float-1-icon{
+    color:var(--honey);font-size:14px;line-height:1;
+  }
+  .pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--honey)}
 
-  /* Product info — "quiet pharmacy editorial" */
+  /* Product info — "quiet pharmacy editorial": every claim once, one voice
+     leading. Stack: kicker → H1 → one-sentence sub → proof line → claims
+     line → (price+qty → CTAs) → trust footnote → benefits image. */
   .info{padding-top:8px}
   .pi-kicker{display:block;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--honey-deep);margin-bottom:10px}
   .pi-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:52px;font-weight:700;line-height:1.02;letter-spacing:-0.03em;color:var(--ink);margin-bottom:14px;text-wrap:balance}
   .pi-title em{font-style:normal;color:var(--honey);font-weight:700}
   @media(max-width:680px){.pi-title{font-size:38px}}
   .pi-sub{font-size:16px;color:var(--ink-soft);font-style:normal;font-weight:400;line-height:1.6;margin-bottom:20px;max-width:520px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal}
-  .pi-proof{display:flex;align-items:baseline;gap:7px;margin-bottom:10px;font-size:13px;line-height:1}
-  .pi-proof__star{color:var(--honey);font-size:13px}
-  .pi-proof__score{font-weight:600;color:var(--ink)}
-  .pi-proof__count{font-weight:400;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
-  .pi-proof__count:hover{color:var(--ink)}
+  .pi-proof{display:flex;align-items:center;gap:8px;margin-bottom:14px;line-height:1}
+  .pi-proof__stars{color:#F5A623;font-size:15px;letter-spacing:2px}
+  .pi-proof__score{font-weight:700;color:var(--ink);font-size:14px}
+  .pi-proof__sep{color:#CBCBCB}
+  .pi-proof__count{font-size:13.5px;color:var(--muted,#6B6B6B);text-decoration:none}
+  .pi-proof__count:hover{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+  /* Trust bar — one unified strip, evenly divided (no orphan chips) */
+  .pi-trust{
+    list-style:none;margin:0 0 26px;padding:0;
+    display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#FBFBFC;
+  }
+  .pi-trust li{
+    flex:1;min-width:0;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-align:center;
+    font-size:11.5px;font-weight:600;letter-spacing:-0.01em;color:#3F3F3F;line-height:1.2;white-space:nowrap;
+    padding:12px 8px;border-right:1px solid var(--line-soft,#EFEFEF);
+  }
+  .pi-trust li:last-child{border-right:0}
+  .pi-trust li svg{width:14px;height:14px;color:#23867F;flex:0 0 14px}
+  @media(max-width:600px){
+    .pi-trust{flex-direction:column}
+    .pi-trust li{justify-content:flex-start;text-align:left;border-right:0;border-bottom:1px solid var(--line-soft,#EFEFEF);padding:12px 16px}
+    .pi-trust li:last-child{border-bottom:0}
+  }
+  /* keep old .pi-claims styling as a harmless fallback */
   .pi-claims{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A8A8A;margin-bottom:28px;line-height:1.8}
+  /* Commerce block — price coupled to the decision, not floating as a poster */
   .pi-commerce{display:flex;align-items:center;justify-content:space-between;gap:16px}
   .pi-price-line{display:flex;flex-direction:column;gap:3px}
   .pi-price-now{font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.01em;color:var(--ink);line-height:1}
@@ -106,108 +171,324 @@
   .pi-add:hover{background:var(--charcoal-2);transform:translateY(-1px)}
   .pi-add-secondary{height:50px;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--ink);font-weight:700;font-size:14px;letter-spacing:.04em;border:1px solid var(--ink);border-radius:12px;cursor:pointer;text-transform:uppercase;transition:background .2s,color .2s}
   .pi-add-secondary:hover{background:var(--ink);color:#fff}
+  /* Trust footnote — one quiet hairline-ruled line, replaces the bordered card */
   .pi-footnote{margin-top:20px;padding-top:16px;border-top:1px solid var(--line-soft,#EFEFEF);font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:#8A8A8A;line-height:1.7}
-  /* Benefit bullets — soft circular check + clean type. List, not grid, so long
-     copy can breathe without truncating. */
-  .pi-points{margin-top:18px;display:flex;flex-direction:column;gap:10px;padding:0}
-  .pi-points li{display:flex;align-items:center;gap:12px;font-size:14.5px;list-style:none;color:var(--ink);font-weight:500;line-height:1.35}
-  .pi-points__check{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--honey-soft);color:var(--honey-deep);flex-shrink:0}
-  .pi-points__check svg{width:12px;height:12px}
-  /* Benefits illustration — single composite graphic */
+
+  /* ---- Bundle / pack selector ---- */
+  .pi-bundles{border:0;padding:0;margin:20px 0 0;display:flex;flex-direction:column;gap:10px}
+  .pi-bundle{
+    position:relative;display:flex;align-items:center;gap:13px;
+    border:1.5px solid var(--line);border-radius:12px;padding:13px 15px;cursor:pointer;background:#fff;
+    transition:border-color .16s ease,background .16s ease;
+  }
+  .pi-bundle:hover{border-color:#C7CCCB}
+  .pi-bundle input{position:absolute;opacity:0;pointer-events:none}
+  .pi-bundle.is-selected{border-color:#23867F;background:#F4FBFA}
+  /* custom radio dot */
+  .pi-bundle__dot{flex:0 0 20px;width:20px;height:20px;border-radius:50%;border:2px solid #CBD2D1;position:relative;transition:border-color .16s ease}
+  .pi-bundle.is-selected .pi-bundle__dot{border-color:#23867F}
+  .pi-bundle.is-selected .pi-bundle__dot::after{content:'';position:absolute;inset:3px;border-radius:50%;background:#23867F}
+  .pi-bundle__left{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+  .pi-bundle__days{font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.01em;color:var(--ink);line-height:1.1;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .pi-bundle__rec{font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#23867F;background:#E0F5F3;padding:3px 7px;border-radius:5px}
+  .pi-bundle__packs{font-size:12.5px;color:#8A8A8A}
+  .pi-bundle__right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .pi-bundle__price{text-align:right;line-height:1.15;white-space:nowrap}
+  .pi-bundle__price s{color:#A6A6A6;font-weight:400;font-size:12.5px;margin-right:3px}
+  .pi-bundle__price strong{font-family:'Helvetica Neue',Arial,sans-serif;font-size:17px;font-weight:700;letter-spacing:-0.01em;color:var(--ink)}
+  .pi-bundle__off{font-size:11px;font-weight:800;letter-spacing:.01em;color:#fff;background:#23867F;padding:5px 8px;border-radius:7px;white-space:nowrap}
+
+  /* ---- Urgency strip ---- */
+  .pi-urgency{margin:14px 0 0;display:flex;align-items:center;gap:12px;border:1px solid #F1DAD6;border-radius:12px;padding:11px 15px;background:#FFF7F5}
+  .pi-urgency__ic{flex:0 0 auto;width:32px;height:32px;border-radius:9px;background:#FBE3DE;color:#D9463A;display:grid;place-items:center}
+  .pi-urgency__ic svg{width:17px;height:17px;transform-origin:50% 80%;animation:piFlicker 1.7s ease-in-out infinite}
+  @keyframes piFlicker{0%,100%{transform:scale(1) rotate(-1deg);opacity:1}50%{transform:scale(1.13) rotate(1deg);opacity:.9}}
+  .pi-urgency__txt{margin:0;font-size:13px;color:var(--muted,#6B6B6B);line-height:1.45}
+  .pi-urgency__txt strong{color:#D9463A;font-weight:800;letter-spacing:-0.01em}
+  .pi-urgency__txt b{color:var(--ink);font-weight:700}
+
+  @media(max-width:560px){
+    .pi-bundle{padding:12px 13px;gap:11px}
+    .pi-bundle__right{flex-direction:column;align-items:flex-end;gap:5px}
+    .pi-bundle__price strong{font-size:16px}
+  }
+
+  /* Benefits illustration */
   .pi-benefits{margin:28px 0 0;border-radius:14px;overflow:hidden;background:#fff}
   .pi-benefits img{display:block;width:100%;height:auto}
 
-  /* Section */
-  section.s{padding:44px 0;font-size:17px;position:relative}
-  @media(max-width:680px){section.s{padding:32px 0}}
-  .s-eyebrow{display:inline-flex;align-items:center;background:var(--honey-soft);color:var(--honey-deep);font-size:12px;font-weight:800;padding:8px 16px;border-radius:24px;letter-spacing:.10em;text-transform:uppercase;margin-bottom:16px}
-  .s-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:48px;font-weight:700;line-height:1.05;letter-spacing:-0.025em;margin-bottom:16px;max-width:760px;color:var(--charcoal);text-wrap:balance}
+  /* ---------- Section ---------- */
+  section.s{padding:72px 0;font-size:17px;position:relative}
+  @media(max-width:680px){section.s{padding:56px 0}}
+  .s-eyebrow{
+    display:inline-flex;align-items:center;
+    background:var(--honey-soft);
+    color:var(--honey-deep);font-size:12px;font-weight:800;
+    padding:8px 16px;border-radius:22px;letter-spacing:.10em;text-transform:uppercase;margin-bottom:16px;
+  }
+  .s-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:48px;font-weight:700;line-height:1.05;letter-spacing:-0.025em;margin-bottom:16px;max-width:760px;color:var(--charcoal);position:relative;text-wrap:balance}
   .s-title em{font-style:italic;color:var(--honey);font-weight:500}
   @media(max-width:680px){.s-title{font-size:36px}}
   .s-sub{font-size:17px;color:var(--ink-soft);max-width:640px;line-height:1.6}
-  .s-head{margin-bottom:24px}
+  .s-head{margin-bottom:40px;position:relative}
   .s-head.center{text-align:center}
   .s-head.center .s-title,.s-head.center .s-sub{margin-left:auto;margin-right:auto}
 
-  /* Symptoms */
+  /* ---------- Premium icon chip (shared) ---------- */
+  .ic-chip{
+    width:64px;height:64px;border-radius:18px;
+    background:#F7F7F8;
+    color:var(--ink);
+    display:grid;place-items:center;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .ic-chip svg{width:30px;height:30px;stroke-width:2.2}
+
+  /* ---------- Symptom cards ---------- */
   .symptoms-bg{background:#fff}
-  .symptoms-figure,.actives-figure,.bvitamins-figure,.trail-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
-  .symptoms-figure img,.actives-figure img,.bvitamins-figure img,.trail-figure img{display:block;width:100%;height:auto}
+  /* Photo figures (other 4 sections) keep the soft rounded-card framing */
+  .symptoms-figure,
+  .actives-figure,
+  .bvitamins-figure,
+  .trail-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .bvitamins-figure{margin:0 0 32px}
+  .symptoms-figure picture,
+  .actives-figure picture,
   .trail-figure picture{display:block}
-  /* Desktop: constrain the trail illustration a bit narrower than full width */
-  .trail-figure{max-width:900px;margin-left:auto;margin-right:auto}
-  .tl-disclaimer{margin:18px auto 0;text-align:center;font-size:12.5px;font-style:italic;color:var(--muted);max-width:560px}
+  .symptoms-figure img,
+  .actives-figure img,
+  .bvitamins-figure img,
+  .trail-figure img{display:block;width:100%;height:auto}
+  /* Switch + Root figures sit FLUSH with their section bg — no card frame,
+     image edges dissolve directly into the section. */
+  .switch-figure,
+  .root-figure{margin:0;border-radius:0;overflow:visible;background:transparent}
+  .switch-figure picture{display:block}
+  .switch-figure img,
+  .root-figure img{display:block;width:100%;height:auto}
+  /* MOBILE: break image out of .wrap's horizontal padding so it spans full
+     viewport width — "zoomed in" so text inside the illustration is bigger
+     and more legible on phones. */
+  @media (max-width: 720px){
+    .switch-figure,
+    .root-figure{
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+    }
+  }
   .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
   @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
-  .symptom-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;transition:transform .3s ease,box-shadow .3s ease;position:relative}
-  .symptom-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(40,40,40,.10)}
-  .symptom-card .ic{width:64px;height:64px;border-radius:18px;background:#F7F7F8;color:var(--ink);display:grid;place-items:center;margin-bottom:18px}
+  .symptom-card{
+    background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;
+    transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s,border-color .3s;
+  }
+  .symptom-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px -16px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
+  .symptom-card:hover .ic{transform:scale(1.04)}
+  .symptom-card .ic{
+    width:64px;height:64px;border-radius:18px;
+    background:#F7F7F8;
+    color:var(--ink);display:grid;place-items:center;margin-bottom:18px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  }
   .symptom-card .ic svg{width:30px;height:30px;stroke-width:2.2}
   .symptom-card h4{font-family:'Helvetica Neue',Arial,sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;color:var(--ink)}
   .symptom-card p{font-size:14px;color:var(--muted);line-height:1.5}
 
-  /* Power team */
-  .power-bg{background:#fff}
+  /* ---------- Power team ---------- */
+  .power-bg{background:var(--surface)}
   .power-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;align-items:stretch}
   @media(max-width:880px){.power-grid{grid-template-columns:1fr}}
-  .power-card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:34px;position:relative;transition:transform .3s ease,box-shadow .3s ease}
-  .power-card:hover{transform:translateY(-4px);box-shadow:0 22px 48px rgba(40,40,40,.10)}
-  .power-card .pc-eye{display:inline-flex;align-items:center;background:var(--honey-soft);color:var(--honey-deep);font-size:11px;font-weight:800;padding:6px 12px;border-radius:16px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
-  .power-card .pc-icon{width:72px;height:72px;border-radius:22px;background:#F7F7F8;color:var(--ink);display:grid;place-items:center;margin-bottom:18px}
-  .power-card .pc-icon svg{width:36px;height:36px;stroke-width:2.2}
+  .power-card{
+    background:#fff;border:1px solid var(--line);border-radius:24px;padding:34px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s;
+  }
+  .power-card:hover{transform:translateY(-4px);box-shadow:0 20px 44px -20px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
+  .power-card .pc-eye{
+    display:inline-flex;align-items:center;
+    background:var(--honey-soft);
+    color:var(--honey-deep);font-size:11px;font-weight:800;padding:6px 12px;border-radius:16px;
+    letter-spacing:.10em;text-transform:uppercase;margin-bottom:14px;
+  }
   .power-card h3{font-family:'Helvetica Neue',Arial,sans-serif;font-size:26px;margin-bottom:8px;letter-spacing:-0.015em}
   .power-card .pc-lede{font-size:14.5px;color:var(--muted);margin-bottom:18px;line-height:1.55}
-  .power-card ul{list-style:none;display:grid;gap:8px}
-  .power-card li{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-soft)}
-  .power-card li svg{width:16px;height:16px;color:var(--honey)}
-  .power-card .pc-tag{margin-top:16px;font-size:12px;color:var(--honey-deep);font-style:italic}
+  .power-card ul{list-style:none;display:grid;gap:10px}
+  .power-card li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft)}
+  .power-card li svg{
+    width:22px;height:22px;color:var(--honey);
+    flex-shrink:0;
+  }
+  .power-card .pc-tag{margin-top:18px;font-size:12.5px;color:var(--muted);font-style:italic;padding-top:14px;border-top:1px solid var(--line-soft)}
 
-  /* B Vitamins (kept name) */
+  /* ---------- B Vitamins ---------- */
   .bvit-bg{background:#fff}
-  .bvit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
-  @media(max-width:880px){.bvit-grid{grid-template-columns:repeat(2,1fr)}}
-  .bvit-pill{background:var(--honey-soft);border-radius:18px;padding:18px 12px;text-align:center}
-  .bvit-pill .name{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:14px;color:var(--honey-deep);letter-spacing:.04em}
-  .bvit-pill .sub{font-size:11px;color:var(--muted);margin-top:2px}
+  .bvit-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:18px}
+  @media(max-width:980px){.bvit-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:520px){.bvit-grid{grid-template-columns:repeat(2,1fr)}}
+  .bvit-pill{
+    background:var(--honey-soft);
+    border-radius:18px;padding:20px 12px;text-align:center;
+    transition:transform .3s,box-shadow .3s;
+  }
+  .bvit-pill:hover{transform:translateY(-3px);box-shadow:0 12px 28px -14px rgba(40,40,40,.12)}
+  .bvit-pill .name{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:18px;color:var(--honey-deep);letter-spacing:.02em}
+  .bvit-pill .sub{font-size:11.5px;color:var(--honey-deep);opacity:.75;margin-top:4px;font-weight:600}
   .bvit-help{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:36px;align-items:stretch}
   @media(max-width:880px){.bvit-help{grid-template-columns:repeat(2,1fr)}}
-  .bvit-help-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;transition:transform .25s ease,box-shadow .25s ease}
-  .bvit-help-card:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(40,40,40,.10)}
-  .bvit-help-card .bv-icon{width:64px;height:64px;border-radius:18px;background:#F7F7F8;color:var(--ink);display:grid;place-items:center;margin-bottom:14px}
-  .bvit-help-card .bv-icon svg{width:30px;height:30px;stroke-width:2.2}
-  .bvit-help-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;margin-bottom:5px;color:var(--ink)}
-  .bvit-help-card p{font-size:13px;color:var(--muted);line-height:1.5}
+  .bvit-help-card{
+    background:#fff;border:1px solid var(--line);
+    border-radius:20px;padding:24px;
+    transition:transform .3s,box-shadow .3s,border-color .3s;
+  }
+  .bvit-help-card:hover{transform:translateY(-3px);border-color:var(--line);box-shadow:0 16px 32px -16px rgba(40,40,40,.12)}
+  .bvit-help-card:hover .ic{transform:scale(1.04)}
+  .bvit-help-card .ic{
+    width:64px;height:64px;border-radius:18px;
+    background:#F7F7F8;
+    color:var(--ink);display:grid;place-items:center;margin-bottom:14px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .bvit-help-card .ic svg{width:30px;height:30px;stroke-width:2.2}
+  .bvit-help-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;margin-bottom:6px;color:var(--ink);font-weight:700}
+  .bvit-help-card p{font-size:13px;color:var(--muted);line-height:1.55}
 
-  /* Formula list */
+  /* ---------- Minerals ---------- */
+  .min-bg{background:var(--surface)}
+  .min-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
+  @media(max-width:880px){.min-grid{grid-template-columns:repeat(2,1fr)}}
+  .min-card{
+    background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;
+    transition:transform .3s,box-shadow .3s,border-color .3s;
+  }
+  .min-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px -16px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
+  .min-card:hover .ic{transform:scale(1.04)}
+  .min-card .ic{
+    width:64px;height:64px;border-radius:18px;
+    background:#F7F7F8;
+    color:var(--ink);display:grid;place-items:center;
+    font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:22px;letter-spacing:-.01em;
+    margin-bottom:14px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .min-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:17px;margin-bottom:6px;color:var(--ink);font-weight:700}
+  .min-card p{font-size:13.5px;color:var(--muted);line-height:1.5}
+
+  /* ---------- 9 actives formula ---------- */
   .formula-bg{background:#fff}
-  .formula-list{margin-top:14px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff}
-  .formula-row{display:grid;grid-template-columns:1.5fr 1fr 2fr;align-items:center;padding:18px 22px;border-top:1px solid var(--line-soft)}
-  .formula-row:first-child{border-top:0;background:var(--surface);font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--honey-deep)}
+  .formula-list{
+    margin-top:14px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff;
+  }
+  .formula-row{display:grid;grid-template-columns:1.5fr 1fr 2fr;align-items:center;padding:18px 22px;border-top:1px solid var(--line-soft);transition:background .25s}
+  .formula-row:not(:first-child):hover{background:rgba(0,0,0,0.02)}
+  .formula-row:first-child{border-top:0;background:var(--surface);font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.10em;color:var(--ink)}
   .fc-name{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;color:var(--ink);font-size:14.5px}
   .fc-name small{display:block;font-size:11.5px;color:var(--muted);font-weight:500;margin-top:2px}
   .fc-amt{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;color:var(--honey-deep);font-size:14px}
   .fc-role{font-size:13.5px;color:var(--muted);line-height:1.5}
   @media(max-width:680px){.formula-row{grid-template-columns:1fr}.fc-amt{font-size:13px}.formula-row:first-child{display:none}}
 
-  /* Timeline */
-  .timeline-bg{background:#fff}
+  /* ---------- Timeline ---------- */
+  .timeline-bg{background:var(--surface)}
   .timeline-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:16px;align-items:stretch}
   @media(max-width:880px){.timeline-grid{grid-template-columns:1fr}}
-  .tl-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px;position:relative;transition:transform .3s ease,box-shadow .3s ease}
-  .tl-card:hover{transform:translateY(-5px);box-shadow:0 22px 48px rgba(40,40,40,.10)}
-  .tl-icon{width:64px;height:64px;border-radius:20px;background:#F7F7F8;color:var(--ink);display:grid;place-items:center}
-  .tl-icon svg{width:30px;height:30px;stroke-width:2.2}
-  .tl-step{position:absolute;top:22px;right:22px;background:var(--charcoal);color:#fff;font-family:'Helvetica Neue';font-weight:800;font-size:11px;padding:6px 12px;border-radius:16px;letter-spacing:.06em}
+  .tl-card{
+    background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px;position:relative;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s;
+  }
+  .tl-card:hover{transform:translateY(-5px);box-shadow:0 20px 44px -20px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
+  .tl-step{
+    position:absolute;top:20px;right:20px;
+    background:var(--honey-soft);
+    color:var(--honey-deep);font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:11px;
+    padding:6px 12px;border-radius:14px;letter-spacing:.08em;text-transform:uppercase;
+  }
   .tl-card h4{font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;color:var(--ink);margin:22px 0 14px;max-width:80%;letter-spacing:-0.015em}
-  .tl-card ul{list-style:none;display:grid;gap:7px}
-  .tl-card li{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-soft)}
-  .tl-card li svg{width:15px;height:15px;color:var(--honey)}
-  .tl-stat{margin-top:36px;background:var(--charcoal);color:#fff;border-radius:20px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-  .tl-stat strong{font-family:'Helvetica Neue';font-weight:800;font-size:22px;letter-spacing:-0.02em}
-  .tl-stat .ref{font-size:11px;opacity:.85;font-style:italic}
+  .tl-card ul{list-style:none;display:grid;gap:10px}
+  .tl-card li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft)}
+  .tl-card li svg{
+    width:22px;height:22px;color:var(--honey);
+    flex-shrink:0;
+  }
+  .tl-stat{
+    margin-top:36px;
+    background:var(--charcoal);
+    color:#fff;border-radius:20px;padding:26px 32px;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  }
+  .tl-stat strong{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.02em}
+  .tl-stat .ref{font-size:11.5px;opacity:.85;font-style:italic}
 
-  /* Compare */
-  .why-bg{background:#fff}
+  /* ---------- Compare ---------- */
+  /* Reader voices section — text break between two photo-heavy bands.
+     Subtle off-white bg differs from #fff sections above/below so the
+     palette cleanser reads as a distinct moment. */
+  .voices-bg{background:#FAFAF8;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+  .voices-head{text-align:center;margin-bottom:32px}
+  .voices-head .rv-marker{margin-bottom:12px}
+  .voices-title{
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size:clamp(26px,3.6vw,40px);
+    font-weight:700;
+    line-height:1.1;
+    letter-spacing:-0.022em;
+    color:var(--ink);
+    max-width:600px;
+    margin:0 auto;
+  }
+  .voices-title em{font-style:normal;color:var(--honey-deep);font-weight:700}
+  .voices-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    max-width:1080px;
+    margin:0 auto;
+  }
+  .voice-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:30px 24px 22px;
+    position:relative;
+    transition:border-color .2s,transform .25s,box-shadow .25s;
+  }
+  .voice-card:hover{
+    border-color:rgba(40,40,40,.18);
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px -16px rgba(40,40,40,.16);
+  }
+  .voice-card__mark{
+    font-family:'Helvetica Neue',Georgia,serif;
+    font-size:48px;
+    line-height:0.4;
+    color:var(--honey);
+    opacity:.55;
+    position:absolute;
+    top:24px;left:22px;
+    font-weight:300;
+  }
+  .voice-card__quote{
+    font-size:15.5px;
+    line-height:1.55;
+    color:var(--ink);
+    margin:28px 0 18px;
+    font-weight:400;
+    letter-spacing:-0.005em;
+    text-wrap:pretty;
+  }
+  .voice-card__attr{
+    display:flex;flex-direction:column;gap:3px;
+    border-top:1px solid var(--line-soft);
+    padding-top:14px;
+  }
+  .voice-card__name{
+    font-size:12.5px;font-weight:700;color:var(--ink);
+    letter-spacing:.06em;text-transform:uppercase;
+  }
+  .voice-card__meta{font-size:12px;color:var(--muted)}
+  .voice-card__stars{
+    color:var(--honey);font-size:11.5px;letter-spacing:.2em;margin-top:4px;
+  }
+  @media (max-width:880px){.voices-grid{grid-template-columns:1fr;gap:14px;max-width:560px}}
   .compare-table{margin-top:14px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
   .compare-row{display:grid;grid-template-columns:1.2fr 1fr 1fr}
   .compare-row + .compare-row{border-top:1px solid var(--line-soft)}
@@ -225,26 +506,40 @@
     .cc.lbl{grid-column:1/-1;background:var(--line-soft);font-size:13px}
   }
 
-  /* Root cards */
-  /* Root section: white bg + flush figure (image carries its own heading) */
+  /* ---------- Root cards ---------- */
+  /* Root section: white bg + collapsed top padding so image sits flush
+     at the section bracket — same treatment as .why-bg / switch section. */
   .root-bg{background:#fff;padding-top:0 !important}
   .root-bg .wrap{padding-top:0}
-  .root-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff;max-width:980px;margin-left:auto;margin-right:auto}
-  .root-figure picture{display:block}
-  .root-figure img{display:block;width:100%;height:auto}
   .root-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px;align-items:stretch}
   @media(max-width:980px){.root-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:580px){.root-grid{grid-template-columns:1fr}}
-  .root-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;position:relative;transition:transform .3s ease,box-shadow .3s ease}
-  .root-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(40,40,40,.10)}
-  .root-card .rc-eye{display:inline-flex;align-items:center;background:var(--honey-soft);font-family:'Helvetica Neue';font-weight:800;font-size:11px;color:var(--honey-deep);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;padding:5px 11px;border-radius:14px}
-  .root-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:17px;color:var(--ink);margin-bottom:8px}
+  .root-card{
+    background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s;
+  }
+  .root-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -18px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
+  .root-card .rc-eye{
+    display:inline-flex;align-items:center;
+    font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:11px;
+    color:var(--honey-deep);letter-spacing:.10em;text-transform:uppercase;margin-bottom:12px;
+    padding:5px 10px;background:var(--honey-soft);
+    border-radius:14px;
+  }
+  .root-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:17px;color:var(--ink);margin-bottom:8px;font-weight:700;letter-spacing:-0.01em}
   .root-card p{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px}
-  .root-card .solve{display:flex;gap:10px;align-items:flex-start;background:var(--honey-soft);color:var(--honey-deep);padding:12px 14px;border-radius:14px;font-size:13px;font-weight:600;line-height:1.4}
-  .root-card .solve svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;stroke-width:2.4}
+  .root-card .solve{
+    display:flex;gap:10px;align-items:center;
+    background:var(--honey-soft);
+    color:var(--honey-deep);padding:12px 14px;border-radius:14px;
+    font-size:13px;font-weight:700;line-height:1.4;
+  }
+  .root-card .solve svg{
+    width:20px;height:20px;flex-shrink:0;color:var(--honey);stroke-width:2.4;
+  }
 
-  /* Reminder + final CTA */
-  .reminder{background:var(--charcoal);color:#fff;padding:44px 0}
+  /* ---------- Reminder + final CTA ---------- */
+  .reminder{background:var(--charcoal);color:#fff;padding:64px 0}
   .reminder .wrap{text-align:center}
   .reminder .eye{display:inline-block;background:rgba(255,255,255,.08);color:#fff;font-size:11px;font-weight:800;padding:6px 14px;border-radius:20px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
   .reminder h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:42px;font-weight:700;line-height:1.15;color:#fff;max-width:22ch;margin:0 auto 16px;letter-spacing:-0.02em}
@@ -275,7 +570,7 @@
   .fq-a strong{color:var(--ink)}
   @media(max-width:640px){.fq-q{font-size:15px;padding:16px 18px}.fq-a{padding:0 18px 18px}}
 
-  /* Sticky buy bar — Myntra/Nykaa dual-button standard */
+  /* ---------- Sticky offer ---------- */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(40,40,40,.08);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:40}
   .sticky-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:560px;margin:0 auto}
   .sticky-bar__btn{height:48px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;font-weight:700;font-size:13.5px;letter-spacing:.04em;text-transform:uppercase;font-family:inherit;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
@@ -283,63 +578,69 @@
   .sticky-bar__cart:active{background:var(--ink);color:#fff}
   .sticky-bar__buy{background:var(--charcoal);color:#fff;border:1.5px solid var(--charcoal)}
   .sticky-bar__buy:active{background:#000}
+  .sticky-cta-inner{display:flex;align-items:center;gap:14px;justify-content:space-between}
+  .sticky-text{display:flex;flex-direction:column;line-height:1.2}
+  .sticky-eye{font-size:10px;font-weight:800;color:var(--honey-deep);letter-spacing:.10em;text-transform:uppercase;margin-bottom:2px}
+  .sticky-h{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:14px;color:var(--ink)}
+  .sticky-h em{color:var(--honey);font-style:normal;font-weight:800}
+  .sticky-price{display:flex;align-items:baseline;gap:6px;flex-shrink:0}
+  .sticky-now{font-family:'Helvetica Neue';font-weight:700;font-size:18px;color:var(--ink)}
+  .sticky-mrp{font-size:12px;color:var(--muted);text-decoration:line-through}
+  .sticky-btn{background:var(--charcoal);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+  .sticky-btn:hover{background:var(--charcoal-2)}
+  @media(max-width:680px){.sticky-text{display:none}}
 
   /* ============================================================
      MOBILE UX PASS — surgical augmentations only.
      Targets <=720px viewports (Indian mobile 360–414px primary).
      ============================================================ */
   @media (max-width: 720px){
+    /* Horizontal page padding scales smoothly */
     .wrap{padding:0 clamp(16px,4.5vw,24px)}
 
+    /* Marquee — keep readable */
     .marquee{padding:8px 0}
     .marquee-track{gap:32px;font-size:11.5px}
 
-    .microbar{padding:8px 0;font-size:11px}
-    .microbar-inner{gap:14px 18px;justify-content:flex-start;overflow-x:auto;
-      -webkit-overflow-scrolling:touch;white-space:nowrap;flex-wrap:nowrap;
-      padding-bottom:2px}
-    .microbar-item{flex:0 0 auto}
-
+    /* Hero — tighten padding, scale title with clamp */
     .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
-    .product-hero::before{width:280px;height:280px;top:-80px;right:-80px}
     .product-hero-grid{gap:24px}
-    /* Benefits + symptoms images go edge-to-edge (zoomed) on phones —
-       break out of .wrap padding so they touch both screen borders. */
-    .pi-benefits{margin:24px 0 0;border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-    .symptoms-figure,.actives-figure,.bvitamins-figure,.trail-figure,.root-figure{border-radius:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-    .pi-title{font-size:clamp(28px,7.5vw,38px);line-height:1.08}
-    .pi-sub{font-size:15px;line-height:1.55;margin-bottom:18px;text-align:left;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft)}
     .pi-kicker{font-size:10px;letter-spacing:.18em;margin-bottom:8px}
+    .pi-title{font-size:clamp(32px,9vw,40px);line-height:1.04;margin-bottom:12px}
+    .pi-sub{font-size:14.5px;line-height:1.55;margin-bottom:18px;text-align:left;text-wrap:pretty;hyphens:none;word-break:normal;overflow-wrap:normal;color:var(--ink-soft);max-width:36ch}
     .pi-claims{font-size:11px;letter-spacing:.12em;margin-bottom:24px}
     .pi-price-now{font-size:20px}
     .pi-price-meta{font-size:12.5px}
     .pi-footnote{margin-top:18px;padding-top:14px;font-size:11px}
-    .pi-commerce{gap:12px}
-    .pi-points{margin-top:16px;gap:11px}
-    .pi-points li{font-size:14.5px;min-height:24px}
-    .pi-points__check{width:22px;height:22px}
 
+    /* Gallery thumbs — keep horizontal at 360px, ~64-72px tall */
     .gallery-thumbs{gap:6px;margin-top:8px}
     .gallery-thumb{min-height:44px;border-radius:10px;border-width:1.25px}
 
-    .pi-buy-form .pi-buy-row{display:none !important}
+    /* Buy row — keep touch targets ≥44px; global CTA standard (style.css)
+       handles the 56px heights, equal-width grid, fonts. */
+    .pi-buy-row{gap:8px;margin:0}
     .pi-qty{border-radius:11px}
     .pi-qty button{width:44px;height:48px}
     .pi-qty input{width:42px;height:48px;font-size:15px}
+    .pi-commerce{gap:12px}
 
+    /* Section padding scales — tightened for mobile so two sections aren't
+       100+ px apart vertically. Each section gets 28px top/bottom (56px gap
+       between two sections, ~half the previous gap). Heading-to-content
+       margin trimmed from 28 → 18. */
     section.s{padding:28px 0}
     .s-title{font-size:clamp(26px,7vw,38px);line-height:1.1;margin-bottom:10px}
     .s-sub{font-size:15px;line-height:1.55}
-    .s-head{margin-bottom:16px}
+    .s-head{margin-bottom:18px}
+    .pi-feature{padding:36px 0}
+    .reminder{padding:32px 0}
 
+    /* Symptom + min cards — single column on small phones for readability */
     .power-card{padding:24px}
-    .power-card h3{font-size:22px}
-    .power-card .pc-icon{width:60px;height:60px;border-radius:18px}
-    .power-card .pc-icon svg{width:30px;height:30px}
     .symptom-card{padding:22px 20px}
-    .symptom-card .ic{width:60px;height:60px}
-    .symptom-card .ic svg{width:28px;height:28px}
     .symptom-card h4{font-size:16px}
+    .min-card{padding:22px 20px}
     .root-card{padding:22px 20px}
     .tl-card{padding:24px 22px}
     .tl-card h4{font-size:20px;max-width:100%;margin:18px 0 12px}
@@ -347,28 +648,42 @@
     .tl-stat{padding:20px 22px;flex-direction:column;align-items:flex-start;text-align:left}
     .tl-stat strong{font-size:20px;line-height:1.25}
 
+    /* Compare table — bigger touch label rows */
     .cc{padding:12px 14px;font-size:13.5px}
 
+    /* B vitamins help cards — keep icon chip large enough to read */
     .bvit-help-card{padding:20px 18px}
-    .bvit-help-card .bv-icon{width:56px;height:56px;border-radius:14px}
-    .bvit-help-card .bv-icon svg{width:26px;height:26px}
+    .bvit-help-card .ic{width:56px;height:56px;border-radius:14px}
+    .bvit-help-card .ic svg{width:26px;height:26px}
 
+    /* Reminder + final */
     .reminder{padding:32px 0}
     .reminder p{font-size:15px}
     .final{padding:36px 0}
     .final p{font-size:15px}
     .final-cta{padding:14px 24px;font-size:13.5px;min-height:50px}
 
+    /* Mobile purchase UI = the sticky bar (Myntra/Nykaa pattern).
+       Hide the in-column CTA row so there's exactly ONE set of buy
+       buttons on phones; price + qty stepper stay in the column. */
+    .pi-buy-form .pi-buy-row{display:none !important}
+
+    /* Tappable nav & links inherited from layout — reinforce here */
     .site-header .nav__menu a,.site-header .nav__toggle{min-height:44px}
   }
 
+  /* Extra-narrow phones (~360px) — only tighten where necessary */
   @media (max-width: 380px){
+    .pi-title{font-size:30px}
+    .pi-price-now{font-size:19px}
     .gallery-thumb{border-radius:8px}
   }
 
+  /* Single-column at 580px for symptom + B vitamins (8 cards is a lot) */
   @media (max-width: 580px){
     .symptoms-grid{grid-template-columns:1fr;gap:12px}
     .bvit-help{grid-template-columns:1fr;gap:12px}
+    .min-grid{grid-template-columns:repeat(2,1fr);gap:12px}
   }
 </style>
 </head>
@@ -427,14 +742,17 @@
     <div class="product-hero-grid">
       <div class="gallery">
         <div class="gallery-main">
-          <img id="galleryMain" src="/img/products/ginger-1.jpg" alt="Shiōrra Advanced Ginger+ — Gentle support for pregnancy">
+          <img id="galleryMain" src="/img/products/ginger-g1.jpg" alt="A hand resting on a Shiōrra Advanced Ginger+ pack beside fresh ginger root on a lavender backdrop">
         </div>
         <div class="gallery-thumbs" id="galleryThumbs">
-          <button type="button" class="gallery-thumb is-active" data-full="/img/products/ginger-1.jpg" aria-label="Pack shot"><img src="/img/products/ginger-1.jpg" alt=""></button>
-          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-2.jpg" aria-label="Product display"><img src="/img/products/ginger-2.jpg" alt=""></button>
-          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-3.jpg" aria-label="Product display"><img src="/img/products/ginger-3.jpg" alt=""></button>
-          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-4.jpg" aria-label="Product display"><img src="/img/products/ginger-4.jpg" alt=""></button>
-          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-5.jpg" aria-label="Product details"><img src="/img/products/ginger-5.jpg" alt=""></button>
+          <button type="button" class="gallery-thumb is-active" data-full="/img/products/ginger-g1.jpg" aria-label="The pack"><img src="/img/products/ginger-g1.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-g2.jpg" aria-label="Morning support"><img src="/img/products/ginger-g2.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-g3.jpg" aria-label="Daily routine"><img src="/img/products/ginger-g3.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-g4.jpg" aria-label="Back of pack"><img src="/img/products/ginger-g4.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-g5.jpg" aria-label="Ingredients and certifications"><img src="/img/products/ginger-g5.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-g6.jpg" aria-label="Why these ingredients"><img src="/img/products/ginger-g6.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-g7.jpg" aria-label="Shiōrra vs others"><img src="/img/products/ginger-g7.jpg" alt="" loading="lazy"></button>
+          <button type="button" class="gallery-thumb" data-full="/img/products/ginger-g8.jpg" aria-label="Your trust"><img src="/img/products/ginger-g8.jpg" alt="" loading="lazy"></button>
         </div>
       </div>
       <div class="info">
@@ -442,23 +760,55 @@
         <h1 class="pi-title">Advanced Ginger<em>+</em></h1>
         <p class="pi-sub">Standardized ginger extract with active Vit. B<sub>6</sub> (P5P), Vit. B<sub>1</sub> &amp; Magnesium — gentle daily support for nausea, digestion and calm.</p>
         <div class="pi-proof">
-          <span class="pi-proof__star" aria-hidden="true">★</span>
+          <span class="pi-proof__stars" aria-hidden="true">★★★★★</span>
           <span class="pi-proof__score">4.8</span>
+          <span class="pi-proof__sep" aria-hidden="true">·</span>
           <a href="/reviews" class="pi-proof__count">Early reviews</a>
         </div>
-        <p class="pi-claims">Doctor recommended · No artificial flavours · 100% vegetarian</p>
+        <ul class="pi-trust" aria-label="Product assurances">
+          <% ['Doctor recommended', 'FSSAI & GMP', '100% vegetarian'].forEach(function (t) { %>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><%= t %></li>
+          <% }); %>
+        </ul>
         <form action="/cart/buy-now" method="post" id="addToCartForm" class="pi-buy-form">
           <input type="hidden" name="productId" value="<%= product.id %>">
-          <div class="pi-commerce">
-            <div class="pi-price-line">
-              <span class="pi-price-now">₹599</span>
-              <span class="pi-price-meta">MRP <s>₹699</s> · 14% off</span>
-            </div>
-            <div class="pi-qty">
-              <button type="button" data-q="-" aria-label="Decrease quantity">−</button>
-              <input type="number" name="quantity" value="1" min="1" max="9" form="addToCartForm" aria-label="Quantity">
-              <button type="button" data-q="+" aria-label="Increase quantity">+</button>
-            </div>
+          <input type="hidden" name="quantity" id="bundleQty" value="1">
+
+          <%
+            var _base = product.priceInPaise || 74900;
+            var _mrp = (product.mrpInPaise && product.mrpInPaise > _base) ? product.mrpInPaise : Math.round(_base * 1.2);
+            // Pack total prices in paise — MUST match BUNDLE_PRICES in cartController.
+            var _packs = [
+              { qty: 1, days: 30, price: _base },
+              { qty: 2, days: 60, price: 104900, rec: true },
+              { qty: 3, days: 90, price: 146900 },
+            ];
+            var _inr = function (p) { return '₹' + (p / 100).toLocaleString('en-IN'); };
+          %>
+          <fieldset class="pi-bundles" aria-label="Choose your pack">
+            <% _packs.forEach(function (pk, i) {
+                 var mrpTotal = _mrp * pk.qty;
+                 var off = Math.round((1 - pk.price / mrpTotal) * 100); %>
+              <label class="pi-bundle<%= i === 0 ? ' is-selected' : '' %>">
+                <input type="radio" name="bundle" value="<%= pk.qty %>" data-qty="<%= pk.qty %>" <%= i === 0 ? 'checked' : '' %>>
+                <span class="pi-bundle__dot" aria-hidden="true"></span>
+                <span class="pi-bundle__left">
+                  <span class="pi-bundle__days"><%= pk.days %> Days<% if (pk.rec) { %><span class="pi-bundle__rec">Recommended</span><% } %></span>
+                  <span class="pi-bundle__packs">Pack of <%= pk.qty %> · incl. all taxes</span>
+                </span>
+                <span class="pi-bundle__right">
+                  <span class="pi-bundle__price"><s><%= _inr(mrpTotal) %></s> <strong><%= _inr(pk.price) %></strong></span>
+                  <span class="pi-bundle__off">Save <%= off %>%</span>
+                </span>
+              </label>
+            <% }); %>
+          </fieldset>
+
+          <div class="pi-urgency">
+            <span class="pi-urgency__ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 23a7 7 0 0 0 7-7c0-2.6-1.4-4.7-2.8-6.3-.4 1.3-1.3 2.1-2.4 2.1 1-2.1.3-4.6-1.6-6.4C10.9 3.7 9.4 2.6 9.6 1 6.9 2.6 4.5 5.7 4.5 10c0 .6.1 1.3.2 1.9A7 7 0 0 0 12 23z"/></svg>
+            </span>
+            <p class="pi-urgency__txt"><strong>Selling fast!</strong> <b id="piViewers">18</b> people are viewing this right now.</p>
           </div>
           <% var _soldOut = (typeof product.stock === 'number' && product.stock <= 0);
              var _lowStock = (!_soldOut && typeof product.stock === 'number' && product.stock <= 10); %>
@@ -476,123 +826,10 @@
           <% } %>
         </form>
         <p class="pi-footnote">Free shipping over ₹999 · 30-day money-back guarantee</p>
-        <figure class="pi-benefits">
-          <img src="/img/products/ginger-benefits.png" alt="Ginger+ benefits — eases morning queasiness, supports digestion, warming calming comfort, one vegecap daily" loading="lazy">
-        </figure>
       </div>
     </div>
   </div>
 </section>
-
-<!-- FEATURED READER LETTER — full-bleed editorial pull quote -->
-<section class="pi-feature" aria-label="Featured reader letter">
-  <div class="wrap">
-    <span class="rv-marker rv-marker--light">Featured · Reader Letter 01</span>
-    <blockquote class="pi-feature__quote">
-      <span class="pi-feature__open" aria-hidden="true">"</span>
-      The first trimester was rough — I couldn't keep breakfast down and the smell of dinner made me cry. My sister sent me Ginger+ in week nine. Within a fortnight the mornings stopped feeling like a battle, and I was finally eating proper meals again.
-      <span class="pi-feature__close" aria-hidden="true">"</span>
-    </blockquote>
-    <div class="pi-feature__attr">
-      <div class="pi-feature__author">Ananya R.</div>
-      <div class="pi-feature__meta">Bengaluru · 14 weeks · verified purchase</div>
-      <div class="pi-feature__rating" aria-label="5 star rating">★ ★ ★ ★ ★</div>
-    </div>
-  </div>
-</section>
-
-<style>
-  /* Featured pull-quote — mirrors the reviews.ejs .rv-feature DNA */
-  .pi-feature{background:var(--charcoal,#282828);color:#fff;padding:44px 0;position:relative;overflow:hidden}
-  .pi-feature .wrap{max-width:880px;text-align:center}
-  .pi-feature .rv-marker{margin-bottom:32px}
-  .pi-feature__quote{font-family:'Helvetica Neue','Helvetica',Arial,sans-serif;font-size:clamp(24px,3.4vw,36px);line-height:1.32;letter-spacing:-0.015em;font-weight:400;color:#fff;margin:0 auto 36px;max-width:760px;text-wrap:balance;position:relative}
-  .pi-feature__open,.pi-feature__close{font-family:'Helvetica Neue',Georgia,serif;font-size:1.4em;font-weight:300;color:var(--honey,#2E8B57);opacity:.7;display:inline-block;line-height:0;position:relative;top:.1em}
-  .pi-feature__open{margin-right:.08em}
-  .pi-feature__close{margin-left:.04em}
-  .pi-feature__attr{display:flex;flex-direction:column;align-items:center;gap:6px}
-  .pi-feature__author{font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff}
-  .pi-feature__meta{font-size:12.5px;color:rgba(255,255,255,.6);letter-spacing:.04em}
-  .pi-feature__rating{color:var(--honey,#2E8B57);font-size:13px;letter-spacing:.18em;margin-top:4px}
-  @media (max-width:640px){
-    .pi-feature{padding:32px 0}
-    .pi-feature__quote{font-size:clamp(20px,5.4vw,28px);line-height:1.36}
-  }
-</style>
-
-<!-- WHY MORNING SICKNESS HAPPENS -->
-<section class="s symptoms-bg">
-  <div class="wrap">
-    <div class="s-head center">
-      <span class="rv-marker">The nausea · 01</span>
-      <span class="s-eyebrow" style="display:none">Why extra support matters</span>
-      <h2 class="s-title">Pregnancy nausea is <em>quietly draining</em>.</h2>
-      <p class="s-sub">Up to 80% of women report nausea or queasiness in the first trimester. The right support — gentle, nutritionally backed — can change the day.</p>
-    </div>
-    <figure class="symptoms-figure">
-      <img src="/img/products/ginger-symptoms.png" alt="Pregnancy nausea symptoms Ginger+ supports — morning queasiness (waves of nausea, often worst on an empty stomach), digestive discomfort (slower digestion leaves you bloated and heavy), energy dips (small bouts of nausea sap energy for hours), missed meals (nausea makes eating harder, worsening the cycle), low B6 stores (vitamin B6 is the natural anti-nausea co-factor, many women run low in pregnancy), disrupted sleep (night-time nausea breaks rest), anxiety creeps in (constant low-grade nausea raises anxiety and mood swings), skipped iron (nausea makes iron tablets harder to keep down, hemoglobin slides further)" loading="lazy">
-    </figure>
-  </div>
-</section>
-
-<!-- POWER TEAM -->
-<section class="s power-bg" id="composition">
-  <div class="wrap">
-    <div class="s-head center">
-      <span class="rv-marker">The team · 02</span><span class="s-eyebrow" style="display:none">Meet the power team</span>
-      <h2 class="s-title">Two actives, <em>built for the first trimester</em>.</h2>
-      <p class="s-sub">Ginger+ pairs a standardized ginger extract with the active form of Vit. B<sub>6</sub> — the two most evidence-backed pregnancy nausea supports, together in one capsule.</p>
-    </div>
-    <figure class="actives-figure">
-      <img src="/img/products/ginger-actives.png" alt="Ginger+ two lead actives — Standardized Ginger 250 mg (concentrated, consistent, gentle; eases morning queasiness, supports gentle digestion, warming comforting effect, pregnancy-friendly dose) and Active B6 2.3 mg as Pyridoxal-5-Phosphate P5P (the active form, no conversion needed; eases pregnancy nausea, supports energy and mood, co-factor in hemoglobin, ready to use the moment it's absorbed)" loading="lazy">
-    </figure>
-  </div>
-</section>
-
-<!-- SUPPORTING ACTIVES -->
-<section class="s bvit-bg">
-  <div class="wrap">
-    <div class="s-head center">
-      <span class="rv-marker">The actives · 03</span><span class="s-eyebrow" style="display:none">The supporting actives</span>
-      <h2 class="s-title">A formula that <em>finishes the job</em>.</h2>
-      <p class="s-sub">Ginger and Vit. B<sub>6</sub> lead. Vit. B<sub>1</sub> and magnesium round it out — together supporting digestion, nerve function and gentle daily calm.</p>
-    </div>
-    <figure class="bvitamins-figure">
-      <img src="/img/products/ginger-supporting.png" alt="Ginger+ supporting actives — Ginger (standardized extract), B6 (P5P active form), B1 (Thiamine) and Mg (Magnesium Bisglycinate). Nausea relief: Ginger + B6 P5P, the two evidence-backed actives for pregnancy nausea. Digestive comfort: warming ginger helps gentle movement, magnesium relaxes smooth muscle. Energy and mood: B1 and B6 together support steady energy and calmer mood through the day. Gentle absorption: magnesium as bisglycinate, chelated, gentler on the stomach, well-absorbed." loading="lazy">
-    </figure>
-  </div>
-</section>
-
-<!-- TIMELINE -->
-<section class="s timeline-bg" id="timeline">
-  <div class="wrap">
-    <div class="s-head center">
-      <span class="rv-marker">The trail · 04</span><span class="s-eyebrow" style="display:none">What you may notice</span>
-      <h2 class="s-title">Gentle, <em>day by day</em>.</h2>
-      <p class="s-sub">Ginger+ is a daily routine — not a quick fix. Here's what most women report as the weeks add up. Individual experiences may vary.</p>
-    </div>
-    <figure class="trail-figure">
-      <picture>
-        <source media="(max-width: 720px)" srcset="/img/products/ginger-trail-mobile.png">
-        <img src="/img/products/ginger-trail-desktop.png" alt="Ginger+ timeline — Start: easing in, first relief, better routine, calmer mornings. Week 2-4: steady support, less queasiness, better digestion, easier meals. Continued: daily comfort, steady comfort, calmer through trimesters, easier iron intake. Designed for first-trimester nausea, gentle enough for daily use." loading="lazy">
-      </picture>
-    </figure>
-    <p class="tl-disclaimer">If symptoms persist, always check with your gynaecologist.</p>
-  </div>
-</section>
-
-<!-- ROOT CAUSE -->
-<section class="s root-bg">
-  <div class="wrap">
-    <figure class="root-figure">
-      <picture>
-        <source media="(max-width: 720px)" srcset="/img/products/ginger-root-mobile.png">
-        <img src="/img/products/ginger-root-desktop.png" alt="Why nausea keeps coming back — and how the right nutrients help break the cycle. Hormonal changes trigger morning sickness; eating becomes harder as smells and foods feel unbearable; energy drops through the day; sleep disruption from night-time nausea; stress builds up; iron becomes harder to tolerate. Ginger + B6 ease nausea and queasiness, B1 supports energy production, and Magnesium supports muscle relaxation and better sleep." loading="lazy">
-      </picture>
-    </figure>
-  </div>
-</section>
-
 <!-- FAQ -->
 <section class="s faq-sec">
   <div class="wrap">
@@ -603,40 +840,28 @@
     <div class="fq-list">
       <details class="fq-item"><summary class="fq-q">What's in Ginger+?<span class="plus">+</span></summary><div class="fq-a">Standardized Ginger Extract (250 mg) + active <strong>Vit. B<sub>6</sub> as P5P</strong> (2.3 mg) + Vit. B<sub>1</sub> + Magnesium Bisglycinate. Built specifically for first-trimester nausea and gentle daily digestion.</div></details>
       <details class="fq-item"><summary class="fq-q">Is Ginger+ safe in the first trimester?<span class="plus">+</span></summary><div class="fq-a">Yes — Ginger+ was built specifically for first-trimester nausea. The doses of ginger and Vit. B<sub>6</sub> are pregnancy-friendly. If symptoms are severe or persistent, please consult your gynaecologist.</div></details>
-      <details class="fq-item"><summary class="fq-q">When should I take Ginger+?<span class="plus">+</span></summary><div class="fq-a">Once a day, anytime. Many women take it in the morning when nausea tends to peak. You can take it with or without food.</div></details>
-      <details class="fq-item"><summary class="fq-q">Can I take Iron+ and Ginger+ together?<span class="plus">+</span></summary><div class="fq-a">Yes — they pair well. Many moms take Ginger+ in the morning (for nausea) and Iron+ later in the day. Both are gentle enough for daily use.</div></details>
+      <details class="fq-item"><summary class="fq-q">How does Ginger+ ease nausea?<span class="plus">+</span></summary><div class="fq-a">Standardised ginger extract and active <strong>Vit. B<sub>6</sub> (P5P)</strong> are the two most evidence-backed pregnancy-nausea supports — together in one gentle daily capsule.</div></details>
+      <details class="fq-item"><summary class="fq-q">When should I take Ginger+?<span class="plus">+</span></summary><div class="fq-a">Once a day, ideally after a meal with a glass of water. If mornings are the hardest, some prefer taking it the night before.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is Ginger+ vegetarian?<span class="plus">+</span></summary><div class="fq-a">Yes — 100% vegetarian vegecaps, with no gelatin, no preservatives, GMO-free and gluten-free.</div></details>
     </div>
   </div>
 </section>
 
-<!-- GENTLE REMINDER -->
-<section class="reminder">
-  <div class="wrap">
-    <span class="eye">A gentle reminder</span>
-    <h2>Be <em>gentle</em> with yourself.</h2>
-    <p>Supplements support your routine — they don't replace medical advice. If nausea is severe or persistent, always check with your gynaecologist.</p>
-    <div class="rem-row">
-      <span class="rem-chip">Small, frequent meals</span>
-      <span class="rem-chip">Hydration</span>
-      <span class="rem-chip">Rest</span>
-      <span class="rem-chip">Fresh air</span>
-      <span class="rem-chip">Talk to your OB-GYN</span>
-    </div>
-  </div>
-</section>
 
 <!-- FINAL CTA -->
 <section class="final">
   <div class="wrap">
-    <h2>Gentle daily support, <em>for the first trimester</em>.</h2>
-    <p>Standardized ginger, active Vit. B<sub>6</sub>, gentle minerals — built for what pregnancy actually feels like.</p>
+    <h2>Gentle care for the days that <em>need it most.</em></h2>
+    <p>Ease the mornings, support digestion and calm — backed by science, gentle every single day.</p>
     <a href="#buy" class="final-cta">
       Start your Ginger+ routine
     </a>
   </div>
 </section>
 
-<!-- STICKY OFFER -->
+<!-- STICKY BUY BAR — standard mobile e-comm pattern (Myntra / Nykaa / Man Matters):
+     the bar IS the purchase UI on phones. Buttons submit the main hero form via
+     form= attribute, so the qty stepper value is respected. -->
 <div class="sticky-cta">
   <div class="sticky-bar">
     <% if (_soldOut) { %>
@@ -660,28 +885,47 @@
   const main = document.getElementById('galleryMain');
   const thumbs = document.querySelectorAll('.gallery-thumb');
   if (!main || !thumbs.length) return;
+  const select = (t) => {
+    const url = t.getAttribute('data-full');
+    if (!url || main.src.endsWith(url)) return;
+    thumbs.forEach((x) => x.classList.remove('is-active'));
+    t.classList.add('is-active');
+    main.src = url;
+    // Keep the alt in step with the slide, otherwise it stays stuck
+    // describing the first image for anyone using a screen reader.
+    const label = t.getAttribute('aria-label');
+    if (label) main.alt = 'Shiōrra Advanced Ginger+ — ' + label;
+  };
+
+  // Hover previews the slide on pointer devices; click still works everywhere
+  // (and is the only path on touch, where there is no hover).
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   thumbs.forEach((t) => {
-    t.addEventListener('click', () => {
-      const url = t.getAttribute('data-full');
-      if (!url) return;
-      thumbs.forEach((x) => x.classList.remove('is-active'));
-      t.classList.add('is-active');
-      main.src = url;
-    });
+    t.addEventListener('click', () => select(t));
+    if (canHover) t.addEventListener('mouseenter', () => select(t));
   });
 })();
+// Bundle selector — a pack radio sets the hidden quantity the cart uses.
 (function () {
-  document.querySelectorAll('.pi-qty').forEach((q) => {
-    const input = q.querySelector('input');
-    const min = parseInt(input.min, 10) || 1;
-    const max = parseInt(input.max, 10) || 9;
-    q.querySelectorAll('button[data-q]').forEach((b) => {
-      b.addEventListener('click', () => {
-        const v = parseInt(input.value, 10) || min;
-        input.value = b.dataset.q === '+' ? Math.min(max, v + 1) : Math.max(min, v - 1);
-      });
+  const qtyInput = document.getElementById('bundleQty');
+  const radios = document.querySelectorAll('.pi-bundle input[name="bundle"]');
+  if (!qtyInput || !radios.length) return;
+  const sync = () => {
+    radios.forEach((r) => {
+      const label = r.closest('.pi-bundle');
+      if (label) label.classList.toggle('is-selected', r.checked);
+      if (r.checked) qtyInput.value = r.getAttribute('data-qty') || '1';
     });
-  });
+  };
+  radios.forEach((r) => r.addEventListener('change', sync));
+  sync();
+})();
+
+// Social-proof viewer count — a fresh random 10-30 on each visit.
+(function () {
+  const el = document.getElementById('piViewers');
+  if (!el) return;
+  el.textContent = String(Math.floor(Math.random() * 21) + 10); // 10..30
 })();
 </script>
 <%- include('../partials/cart-drawer') %>
