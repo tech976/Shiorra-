@@ -73,13 +73,14 @@
         .product-card__price{margin-top:auto;padding-top:6px}
       }
 
-      /* Trust row — 4-col → 2-col → 1-col with readable type */
-      @media (max-width: 1024px){
-        .trust-row__inner{grid-template-columns:repeat(2,1fr)!important;gap:20px!important}
-      }
+      /* Trust row — the base grid (style.css) already gives a 2×2 at ≤760px
+         via `grid-column: span 6` in a 12-col grid. Don't override the column
+         count here (that breaks the span math); only restyle the badges into
+         centered, icon-on-top cells on phones. */
       @media (max-width: 540px){
-        .trust-row__inner{grid-template-columns:1fr!important;gap:16px!important;text-align:left}
-        .trust-item{justify-content:flex-start}
+        .trust-row__inner{row-gap:26px!important}
+        .trust-item{flex-direction:column;align-items:center;text-align:center;gap:8px}
+        .trust-item__txt{text-align:center}
       }
 
       /* Trust grid — 3 col → 1 col on phones */
