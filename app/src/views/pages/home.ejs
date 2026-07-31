@@ -46,7 +46,10 @@
           scrollbar-width:none;
         }
         .products-row__grid::-webkit-scrollbar{display:none}
-        .products-row{padding-top:clamp(30px,8vw,56px)}
+        .products-row{padding-top:clamp(22px,6vw,40px)}
+        /* Hide the "Explore the Shiōrra routine" heading on phones — lead
+           straight into the products. */
+        .products-row__head{display:none}
         /* Equal-height cards so every card's details line up row-for-row */
         .products-row__grid{align-items:stretch}
         .products-row__grid > .product-card{
