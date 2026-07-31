@@ -22,11 +22,10 @@
       /* Hero banner — make sure the rotator never collapses below a
          readable height on phones and never overflows horizontally. */
       @media (max-width: 720px){
-        .hero--banners,.hero-banners{width:100%;overflow:hidden}
-        .hero-banners__track,.hero-banners__slide{aspect-ratio:4/5}
-        .hero-banners__slide img{width:100%;height:100%;object-fit:cover;object-position:center}
-        .hero-banners__dots{bottom:14px;gap:8px}
-        .hero-banners__dot{min-width:14px;min-height:14px;padding:0}
+        /* Hero banner images carry baked-in text that crops badly at 4:5 on
+           phones — hide the hero entirely so the page leads with the product
+           routine, which is the real mobile shopping entry point. */
+        .hero--banners{display:none!important}
       }
 
       /* Products row — swipeable carousel on phones: ~2.5 cards in view
@@ -47,18 +46,28 @@
           scrollbar-width:none;
         }
         .products-row__grid::-webkit-scrollbar{display:none}
+        .products-row{padding-top:clamp(30px,8vw,56px)}
+        /* Equal-height cards so every card's details line up row-for-row */
+        .products-row__grid{align-items:stretch}
         .products-row__grid > .product-card{
-          flex:0 0 40%;
+          flex:0 0 62%;                 /* bigger cards — ~1.5 in view */
           scroll-snap-align:start;
           min-width:0;
+          display:flex;flex-direction:column;
         }
-        .products-row__title{font-size:clamp(28px,7vw,42px);line-height:1.1}
-        .products-row__sub{font-size:14.5px}
-        .product-card__body{padding:14px 14px 16px}
-        .product-card__cta{min-height:44px;padding:11px 12px;font-size:12.5px;letter-spacing:.02em}
-        .product-card__name{font-size:15.5px;line-height:1.2}
-        .product-card__desc{font-size:12.5px;line-height:1.4}
-        .product-card__rating{font-size:12px}
+        /* Cleaner cards on phones — drop the promo overlays */
+        .product-card__badge,.product-card__discount{display:none!important}
+        .products-row__title{font-size:clamp(30px,8.4vw,40px);line-height:1.08}
+        .products-row__sub{font-size:15px}
+        .product-card__body{padding:15px 15px 14px;flex:1 1 auto;display:flex;flex-direction:column}
+        .product-card__cta{min-height:46px;padding:12px 14px;font-size:13.5px;letter-spacing:.02em}
+        .product-card__name{font-size:16.5px;line-height:1.2}
+        /* Clamp descriptions to exactly two lines so the rating + price below
+           start at the same height on every card (fixes the "scattered" look). */
+        .product-card__desc{font-size:13px;line-height:1.4;min-height:2.8em;margin-bottom:2px;
+          display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .product-card__rating{font-size:12.5px}
+        .product-card__price{margin-top:auto;padding-top:6px}
       }
 
       /* Trust row — 4-col → 2-col → 1-col with readable type */

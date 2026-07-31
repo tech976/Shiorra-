@@ -685,6 +685,49 @@
     .bvit-help{grid-template-columns:1fr;gap:12px}
     .min-grid{grid-template-columns:repeat(2,1fr);gap:12px}
   }
+
+  /* ============================================================
+     Mobile PDP refinements — tighter, proper e-commerce rhythm.
+     Last media block so it wins over the earlier mobile rules.
+     Gallery stays 4:5 (slides are infographics — must not crop).
+     ============================================================ */
+  @media (max-width:720px){
+    .product-hero{padding:16px 0 26px}
+    .product-hero-grid{gap:16px}
+    .gallery{gap:8px}
+    .gallery-thumb{flex:0 0 54px}
+    .info{padding-top:0}
+    .pi-kicker{font-size:10px;letter-spacing:.16em;margin-bottom:6px}
+    .pi-title{font-size:clamp(26px,7.2vw,32px);line-height:1.05;margin-bottom:8px}
+    .pi-sub{font-size:14px;line-height:1.5;margin-bottom:13px;max-width:40ch}
+    .pi-proof{margin-bottom:12px}
+    .pi-proof__stars{font-size:14px}
+    /* Trust — one compact horizontal strip (was three ~40px stacked rows) */
+    .pi-trust{flex-direction:row;margin-bottom:14px}
+    .pi-trust li{flex:1;flex-direction:column;justify-content:center;text-align:center;gap:5px;
+      border-right:1px solid var(--line-soft,#EFEFEF);border-bottom:0;padding:10px 5px;
+      font-size:10px;line-height:1.2;white-space:normal}
+    .pi-trust li:last-child{border-right:0}
+    .pi-trust li svg{width:15px;height:15px;flex:0 0 15px}
+    /* Bundles — tighter rows */
+    .pi-bundles{margin-top:12px;gap:8px}
+    .pi-bundle{padding:11px 13px;gap:11px}
+    .pi-bundle__days{font-size:15px}
+    .pi-urgency{margin-top:11px;padding:10px 13px}
+    .pi-urgency__txt{font-size:12.5px}
+    .pi-footnote{margin-top:13px;padding-top:12px}
+    /* FAQ + final — tighter headings and rows */
+    section.s{padding:30px 0}
+    .s-head{margin-bottom:16px}
+    .s-title{font-size:clamp(24px,6.2vw,30px)}
+    .fq-list{gap:8px}
+    .fq-q{font-size:14.5px;padding:13px 16px;gap:12px}
+    .fq-q .plus{width:24px;height:24px;font-size:16px}
+    .fq-a{font-size:14px;line-height:1.55}
+    .final{padding:30px 0}
+    .final h2{font-size:clamp(24px,6.4vw,30px);margin-bottom:10px}
+    .final p{font-size:14.5px;margin-bottom:20px}
+  }
 </style>
 </head>
 <body>
