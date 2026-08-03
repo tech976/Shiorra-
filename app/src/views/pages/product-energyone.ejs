@@ -556,6 +556,15 @@
   .final p{font-size:16px;color:var(--muted);max-width:540px;margin:0 auto 24px}
   .final-cta{display:inline-flex;align-items:center;gap:10px;background:var(--charcoal);color:#fff;padding:16px 32px;border-radius:14px;font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;transition:transform .2s,background .2s}
   .final-cta:hover{transform:translateY(-2px);background:var(--charcoal-2)}
+  /* Blend-with-benefits pills */
+  .final-benefits{list-style:none;margin:8px auto 26px;padding:0;display:flex;justify-content:center;flex-wrap:wrap;gap:12px;max-width:760px}
+  .final-benefits li{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:11px 20px;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:600;font-size:14.5px;letter-spacing:-0.01em;color:var(--ink);box-shadow:var(--shadow-sm)}
+  .final-benefit__ic{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center}
+  .final-benefit__ic svg{width:14px;height:14px}
+  @media(max-width:560px){
+    .final-benefits{flex-direction:column;align-items:center;gap:10px}
+    .final-benefits li{width:100%;max-width:320px;justify-content:center;font-size:14px}
+  }
   /* FAQ accordion */
   .faq-sec{background:#fff}
   .fq-list{display:grid;gap:12px;max-width:820px;margin:0 auto}
@@ -894,8 +903,21 @@
 <!-- FINAL CTA -->
 <section class="final">
   <div class="wrap">
-    <h2>Recharge. Refocus. <em>Revitalize.</em></h2>
-    <p>Steady daily energy and focus — caffeine-free, backed by science, gentle every single day.</p>
+    <h2>Blend with <em>benefits</em></h2>
+    <ul class="final-benefits" aria-label="Advanced EnergyOne+ benefits">
+      <li>
+        <span class="final-benefit__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <span class="final-benefit__t">Clinically proven ingredients</span>
+      </li>
+      <li>
+        <span class="final-benefit__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <span class="final-benefit__t">Hypoallergenic</span>
+      </li>
+      <li>
+        <span class="final-benefit__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13C4 6 11 4 20 4c0 9-2 16-9 16Z"/><path d="M4 20c2-5 6-8 11-9"/></svg></span>
+        <span class="final-benefit__t">100% vegetarian</span>
+      </li>
+    </ul>
     <a href="#buy" class="final-cta">
       Start your EnergyOne+ routine
     </a>
