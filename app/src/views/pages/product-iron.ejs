@@ -1408,7 +1408,14 @@
     <div class="pair-grid">
       <% pairWith.forEach(function (p) {
            var t = _tint[p.slug] || _tint['advanced-iron'];
-           var img = (p.images && p.images[0] && p.images[0].url) || '/img/products/box-studio.png';
+           // "Pair it with" tile art — a fixed clean pack shot per product, so
+           // this section never inherits stale/wrong catalogue images from the DB.
+           var _pairImg = {
+             'advanced-iron':      '/img/products/iron-home.png',
+             'advanced-ginger':    '/img/products/ginger-home.png',
+             'advanced-energyone': '/img/products/energy-home.png'
+           };
+           var img = _pairImg[p.slug] || (p.images && p.images[0] && p.images[0].url) || '/img/products/box-studio.png';
            var out = (typeof p.stock === 'number' && p.stock <= 0); %>
         <div class="pair-tile" style="--tile-soft:<%= t.soft %>;--tile-ink:<%= t.ink %>">
           <div class="pair-media">
