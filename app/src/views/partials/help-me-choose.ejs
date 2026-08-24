@@ -90,6 +90,10 @@
     background: #23867F; border-color: #23867F; color: #FFFFFF;
   }
 
+  /* The class sets display:flex, which beats the UA's [hidden]{display:none}
+     — without it the empty result card renders on page load with a blank
+     thumbnail, before any concern has been picked. */
+  .hmc__result[hidden] { display: none; }
   .hmc__result {
     display: flex; gap: 22px; align-items: center;
     margin: 26px auto 0; max-width: 620px;

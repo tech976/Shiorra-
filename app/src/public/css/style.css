@@ -6867,12 +6867,21 @@ body.aw-cursor-out .aw-cursor-ring {
     margin: 0;
     border-radius: 0;
     overflow: hidden;
-    background: var(--c-surface-1);
-    /* Lock the slot to exactly (viewport height − header chrome). With the
-       promo strip (~34 px) + sticky site-header (~54 px) ≈ 88 px above, this
-       means header + hero banner = 100vh on the dot. No 16:9 aspect-ratio
-       on desktop — the image stretches via object-fit:cover to fill the slot. */
-    height: calc(100vh - 88px);
+    /* Safety net only — at matched ratios no band is ever exposed. */
+    background: #F9F2EF;
+    /* PRE-LOAD PLACEHOLDER ONLY — keep this equal to the banner artwork's
+       ratio. The carousel script re-reads the real dimensions once the images
+       load and sets aspect-ratio from them, so the hero is always exactly as
+       large as it can be with no crop and no band. This value exists purely so
+       the slot reserves the right height before that happens (a mismatch here
+       costs a visible layout shift on first paint, not a wrong final size).
+       Current artwork: 2.34:1 -> ~615px tall at a 1440 viewport.
+       To make the banner TALLER, re-export at a narrower ratio: the height at
+       1440 wide is 1440 / ratio, so 2.05 gives ~700px and 1.92 gives ~750px.
+       Update this number to match and the shift stays at zero. */
+    height: auto;
+    aspect-ratio: 2.34;
+    max-height: calc(100vh - 88px);
     isolation: isolate;
 }
 .hero-banners__track { position: absolute; inset: 0; }
@@ -6901,8 +6910,13 @@ body.aw-cursor-out .aw-cursor-ring {
     height: 100%;
 }
 .hero-banners__slide img {
-    object-fit: cover;
-    object-position: center top;
+    /* Deliberately contain rather than cover. At the current matched 2.34:1
+       the two are pixel-identical, but they fail differently: if an off-ratio
+       banner is ever dropped in, cover silently slices content off artwork
+       that carries baked-in headline text, whereas contain shows the whole
+       thing and makes the mismatch visible. */
+    object-fit: contain;
+    object-position: center;
 }
 
 /* Progress bar inside the banner */

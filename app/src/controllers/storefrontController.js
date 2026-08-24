@@ -59,8 +59,16 @@ exports.product = async (req, res, next) => {
         message: "We couldn't find that product.",
       });
     }
+    // Siblings for the "Pair it with" strip. Read live rather than hard-coded
+    // in the template so price, stock and id can never drift from the catalogue.
+    const pairWith = await prisma.product.findMany({
+      where: { active: true, slug: { not: product.slug } },
+      include: { images: { orderBy: { sortOrder: 'asc' }, take: 1 } },
+      orderBy: { priceInPaise: 'asc' },
+    });
+
     const template = PRODUCT_TEMPLATES[product.slug] || 'pages/product';
-    const opts = { title: `${product.name} · Shiōrra`, product };
+    const opts = { title: `${product.name} · Shiōrra`, product, pairWith };
     // Marketing templates are self-contained <html> docs; skip the layout.
     if (PRODUCT_TEMPLATES[product.slug]) opts.layout = false;
     res.render(template, opts);
