@@ -7067,6 +7067,14 @@ body.aw-cursor-out .aw-cursor-ring {
 /* Title + price tinted to the product accent (darker shade for visible pop) */
 .product-card--01 .product-card__name,
 .product-card--01 .product-card__price { color: #BE123C; }
+/* Ginger+ had no rule at all, so it fell back to default ink while its two
+   siblings were tinted. #1F6B43 is the Ginger+ PDP's own --honey-2, i.e. the
+   deeper shade of its #2E8B57 accent — the same "one step darker than the
+   product colour" the Iron+ rule above uses. The lighter #2E8B57 only reaches
+   4.25:1 on white, which fails AA for the price (17.6px bold is under the
+   large-text threshold); this is 6.5:1, in line with its siblings. */
+.product-card--02 .product-card__name,
+.product-card--02 .product-card__price { color: #1F6B43; }
 .product-card--03 .product-card__name,
 .product-card--03 .product-card__price { color: #B73A92; }
 

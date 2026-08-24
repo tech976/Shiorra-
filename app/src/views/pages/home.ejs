@@ -457,11 +457,16 @@
          the seam half a gap short and the loop would visibly jump. */
       .bband{
         position:relative;overflow:hidden;isolation:isolate;
-        /* the photo's own ratio, so nothing of her is cropped on desktop;
-           min-height keeps the band usable once it gets narrow, where cover
-           crops to her instead */
-        aspect-ratio:1919 / 820;
-        min-height:260px;
+        /* PRE-LOAD PLACEHOLDER ONLY — the script below re-reads the file's
+           real dimensions and sets aspect-ratio from them, so swapping the
+           artwork never needs a CSS edit. Keep this close to the current file
+           (1983x793) purely to avoid a first-paint jump. */
+        aspect-ratio:1983 / 793;
+        /* No min-height: it only ever bound on narrow screens, and there it
+           forced a 2.5:1 photo into a ~1.5:1 box, so cover sliced the packs
+           off both edges. Below 720px the band is simply as tall as the
+           artwork's own ratio makes it. */
+        min-height:0;
         background:#1E1A1C;
       }
       .bband__bg{position:absolute;inset:0;z-index:0}
@@ -535,17 +540,28 @@
 
     <script>
       // Stand-in until the model shot is added, so the band never shows a
-      // broken image.
+      // broken image — plus: shape the band to whatever the artwork actually
+      // is, so it is never cropped at any width and a re-export needs no CSS
+      // change. Same approach as the hero rotator above.
       (function () {
         var img = document.getElementById('bbandImg');
         if (!img) return;
+        var band = img.closest('.bband');
+
+        var fit = function () {
+          if (!band || !img.naturalWidth || !img.naturalHeight) return;
+          band.style.aspectRatio = img.naturalWidth + ' / ' + img.naturalHeight;
+        };
         var swap = function () {
           var fb = img.getAttribute('data-fallback');
           if (!fb) return;
           img.removeAttribute('data-fallback');
-          img.src = fb;
+          img.src = fb;            // load event below re-fits to the new file
         };
+
         if (img.complete && img.naturalWidth === 0) swap();
+        else if (img.complete) fit();
+        img.addEventListener('load', fit);
         img.addEventListener('error', swap);
       })();
     </script>

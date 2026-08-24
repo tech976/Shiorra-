@@ -21,7 +21,7 @@ const products = [
     badge: 'Best Seller',
     ingredients: `Ferrous Bisglycinate (27 mg) · L-methylfolate (570 mcg) · Methylcobalamin / B12 (2.45 mcg) · Pyridoxal-5-Phosphate / B6 (2.3 mg) · Niacinamide / B3 (16 mg) · Riboflavin / B2 (2.7 mg) · Zinc Sulphate (14.5 mg) · Cupric Sulphate (1.7 mg) · Selenomethionine (40 mcg)`,
     servingInfo: '1 vegecap daily after a meal. 30 capsules per pack.',
-    images: ['/img/products/sku-iron.png', '/img/products/box-studio.png', '/img/products/capsules.png'],
+    images: ['/img/products/iron-g1.png', '/img/products/iron-g2.png', '/img/products/iron-g3.png', '/img/products/iron-g4.png', '/img/products/iron-g5.png', '/img/products/iron-g6.png', '/img/products/iron-g7.png', '/img/products/iron-g8.png'],
   },
   {
     slug: 'advanced-ginger',
@@ -35,7 +35,7 @@ const products = [
     badge: 'New Launch',
     ingredients: `Standardized Ginger Extract (250 mg) · Pyridoxal-5-Phosphate / B6 (2.3 mg) · Vitamin B1 · Magnesium Bisglycinate`,
     servingInfo: '1 vegecap daily with water. 30 capsules per pack.',
-    images: ['/img/products/sku-ginger.png', '/img/products/ginger-box-1.png', '/img/products/ginger-box-2.png'],
+    images: ['/img/products/ginger-g1.png', '/img/products/ginger-g2.png', '/img/products/ginger-g3.png', '/img/products/ginger-g6.png', '/img/products/ginger-g8.png'],
   },
   {
     slug: 'advanced-energyone',
@@ -48,8 +48,8 @@ const products = [
     featured: true,
     badge: 'New Launch',
     ingredients: `Taurine · Ginseng Extract · B1 (Thiamine) · B2 (Riboflavin) · B3 (Niacin) · B6 · B12 (Methylcobalamin) · Folic Acid · Biotin · Zinc · Magnesium · Iron · Selenium · Copper · Chromium · Iodine · Amino Acids (Leucine, Lysine, Arginine, Valine, Isoleucine, Threonine, Histidine, Methionine, Tryptophan)`,
-    servingInfo: '1 vegecap daily, anytime — with or without food. 30 capsules per pack.',
-    images: ['/img/products/sku-multivitamin.png'],
+    servingInfo: '1 tablet daily, anytime — with or without food. 30 tablets per pack.',
+    images: ['/img/products/energy-g1.png', '/img/products/energy-g2.png', '/img/products/energy-g3.png', '/img/products/energy-g4.png', '/img/products/energy-g5.png', '/img/products/energy-g6.png', '/img/products/energy-g7.png', '/img/products/energy-g8.png'],
   },
 ];
 

@@ -1331,12 +1331,13 @@
   .pair-media{grid-column:1;grid-row:1}
   .pair-name{grid-column:1;grid-row:2}
   .pair-price,.pair-sold{grid-column:1;grid-row:3}
-  /* Desktop: share the media's cell, pinned to its foot. pointer-events:none
-     so this strip never intercepts clicks meant for the whole-card link —
-     the button re-enables them on itself once revealed. */
+  /* Own row, under the name and price, at EVERY width. It used to share the
+     media's cell and fade in on hover, which meant the primary action was
+     invisible until you hovered the card. z-index keeps it above the
+     stretched .pair-link::after that makes the whole tile clickable. */
   .pair-form{
-    margin:0;grid-column:1;grid-row:1;align-self:end;justify-self:stretch;
-    display:flex;justify-content:center;padding-bottom:14px;z-index:3;pointer-events:none;
+    margin:14px 0 0;grid-column:1;grid-row:4;justify-self:stretch;
+    display:flex;justify-content:center;z-index:3;
   }
 
   /* Pack shots are landscape lifestyle photographs, not cut-outs on
@@ -1345,8 +1346,7 @@
   /* Deliberately NO z-index. With one, .pair-media stacked above the
      stretched .pair-link::after (z-index 1) and swallowed every click over
      the image — which is most of the card — leaving only the name/price
-     strip clickable. At auto it paints below the link overlay, while the
-     CTA inside it still wins on its own z-index:3. */
+     strip clickable. At auto it paints below the link overlay. */
   .pair-media{
     position:relative;width:100%;border-radius:16px;overflow:hidden;
     background:#fff;aspect-ratio:1/1;
@@ -1360,18 +1360,17 @@
     background:rgba(255,255,255,.94);color:var(--tile-ink);padding:5px 10px;border-radius:999px;
   }
 
-  /* CTA rides over the foot of the pack shot, revealed on hover.
-     opacity + translate (not display) so it can animate in. */
+  /* Always visible — no reveal to wait for. Full width of the tile so it
+     reads as the card's primary action rather than a floating pill. */
   .pair-cta{
-    transform:translateY(10px);opacity:0;pointer-events:none;
-    min-width:min(84%,280px);height:50px;border-radius:999px;border:1.5px solid var(--ink);
+    width:100%;height:50px;border-radius:999px;border:1.5px solid var(--ink);
     background:#fff;color:var(--ink);font-weight:800;font-size:13.5px;letter-spacing:.06em;
     text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;
-    transition:opacity .26s ease,transform .26s ease,background .18s ease,color .18s ease;
-    box-shadow:0 10px 26px rgba(40,40,40,.16);
+    cursor:pointer;
+    transition:background .18s ease,color .18s ease,box-shadow .18s ease;
+    box-shadow:0 8px 20px rgba(40,40,40,.10);
   }
-  .pair-tile:hover .pair-cta,.pair-tile:focus-within .pair-cta{opacity:1;transform:none;pointer-events:auto}
-  .pair-cta:hover{background:var(--ink);color:#fff}
+  .pair-cta:hover{background:var(--ink);color:#fff;box-shadow:0 10px 26px rgba(40,40,40,.18)}
 
   /* colour:inherit is load-bearing — the global `h1..h6 {color:charcoal}` in
      style.css otherwise outranks the colour inherited from the card. */
@@ -1387,19 +1386,11 @@
     .pair-tile{padding:20px 20px 26px;border-radius:20px}
     .pair-name{margin-top:14px;font-size:16px}
     .pair-price{font-size:14.5px}
-    /* Touch: the CTA leaves the pack shot and becomes a normal full-width
-       button in its own row, below the name and price. */
-    .pair-form{grid-column:1;grid-row:4;align-self:auto;padding-bottom:0;margin-top:14px;pointer-events:auto}
-    .pair-cta{opacity:1;transform:none;pointer-events:auto;width:100%;min-width:0;height:44px;font-size:12px}
+    .pair-form{margin-top:12px}
+    .pair-cta{height:44px;font-size:12px}
   }
   @media (max-width:560px){
     .pair-grid{grid-template-columns:1fr;max-width:420px}
-  }
-  /* A touch device wider than the 820px breakpoint (tablet) still has no
-     hover, so the CTA must not be left invisible over the image. */
-  @media (hover:none){
-    .pair-form{grid-column:1;grid-row:4;align-self:auto;padding-bottom:0;margin-top:14px;pointer-events:auto}
-    .pair-cta{opacity:1;transform:none;pointer-events:auto;width:100%;min-width:0}
   }
 </style>
 
