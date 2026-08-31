@@ -95,30 +95,20 @@
        makes the thumbs line up top AND bottom with the big image. */
     align-items:stretch;
   }
-  /* Fixed 4:5 — every slide is exported at that ratio, so the artwork fills
-     the frame exactly. */
+  /* Fixed 1:1 — every slide is exported square (1254x1254), so the artwork
+     fills the frame edge to edge with nothing to letterbox or fill. */
   .gallery-main{
-    flex:1;min-width:0;align-self:flex-start;aspect-ratio:4/5;background:#fff;
+    flex:1;min-width:0;align-self:flex-start;aspect-ratio:1/1;background:#fff;
     border-radius:20px;border:1px solid var(--line);
     display:grid;place-items:center;overflow:hidden;position:relative;
   }
   /* Absolutely positioned, NOT width/height:100% in the grid flow. Under
      place-items:center the percentage height does not resolve, so the img
-     falls back to its intrinsic ratio and overflows a frame of a different
-     shape — which overflow:hidden then CROPS. That silently sliced the top
-     and bottom off any slide that was not exactly 4:5. inset:0 gives contain
-     a definite box, so an off-ratio file is letterboxed and shown whole. */
-  .gallery-main img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:contain;object-position:center}
-  /* Slides that are not exactly 4:5 leave empty margin once contained. Rather
-     than crop them to fill (these are text-dense infographics — cropping loses
-     content) the margin is filled with a blurred, over-scaled copy of the same
-     slide, so the frame reads as full. On a true 4:5 slide there is no margin
-     and this is never visible. */
-  .gallery-main__bg{
-    position:absolute;inset:0;z-index:0;
-    background-size:cover;background-position:center;
-    filter:blur(24px) saturate(1.06);transform:scale(1.16);
-  }
+     falls back to its intrinsic ratio. inset:0 gives object-fit a definite box.
+     cover, not contain: every slide is exported square (1254x1254) so it fills
+     exactly and nothing is cropped — and a future off-ratio file still fills
+     the frame edge to edge rather than sitting in bands. Export slides square. */
+  .gallery-main img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center}
   /* grid-auto-rows:1fr splits whatever height the rail is handed into equal
      rows, so N thumbs always span exactly the main image — no leftover gap
      under the last thumb, at any column width and any thumb count. */
@@ -126,25 +116,25 @@
      the main image's height split N ways, so any fixed width only yields 4:5
      cells at one particular N. At 8 slides 60px was right; at 5 the same width
      gives tall narrow cells that letterbox the artwork.
-       main_h = 1.25 * (C - w - 12)      rail height == main image height
+       main_h = 1.0 * (C - w - 12)       rail height == main image height
        cell_h = (main_h - (N-1)*8) / N   split N ways, 8px gaps
-       want  w = 0.8 * cell_h            cell matches the 4:5 artwork
-     solving:  w = (C - 12 - 6.4*(N-1)) / (N + 1)
+       want  w = 1.0 * cell_h            cell matches the square artwork
+     solving:  w = (C - 12 - 8*(N-1)) / (N + 1)
      --n comes from _slides.length, so changing the list re-solves it. */
   .gallery-thumbs{
     order:-1;
-    flex:0 0 calc((100% - 12px - 6.4px * (var(--n, 8) - 1)) / (var(--n, 8) + 1));
+    flex:0 0 calc((100% - 12px - 8px * (var(--n, 8) - 1)) / (var(--n, 8) + 1));
     display:grid;grid-auto-rows:1fr;gap:8px;
   }
   .gallery-thumb{position:relative;width:100%;height:100%;min-height:0;background:#fff;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;padding:0;transition:border-color .2s,transform .2s}
-  .gallery-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;transition:transform .35s ease}
+  .gallery-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
   /* Below 880px the rail can't sit beside the image — stack it under, scrolling. */
   @media(max-width:880px){
     .gallery{position:static;flex-direction:column;gap:10px}
-    .gallery-main{flex:none;width:100%;max-height:none;aspect-ratio:4/5;padding:0}
+    .gallery-main{flex:none;width:100%;max-height:none;aspect-ratio:1/1;padding:0}
     .gallery-thumbs{order:1;flex:none;display:flex;flex-direction:row;width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none}
     .gallery-thumbs::-webkit-scrollbar{display:none}
-    .gallery-thumb{flex:0 0 58px;height:auto;aspect-ratio:4/5;min-height:0}
+    .gallery-thumb{flex:0 0 58px;height:auto;aspect-ratio:1/1;min-height:0}
   }
   .gallery-thumb:hover{border-color:var(--honey);transform:translateY(-1px)}
   .gallery-thumb.is-active{border-color:var(--honey);box-shadow:0 0 0 3px var(--honey-soft) inset}
@@ -929,17 +919,18 @@
           // the main frame, the thumb rail and the rail's width all follow from it.
           var _slides = [
             { n: 1, t: 'The pack' },
-            { n: 2, t: '6 powerful ingredients' },
-            { n: 3, t: 'How to take it' },
-            { n: 7, t: 'Why these 6 ingredients' },
-            { n: 8, t: 'Our promise' }
+            { n: 2, t: 'Smarter iron for a healthier pregnancy' },
+            { n: 3, t: 'Complete nutritional facts' },
+            { n: 4, t: 'Your journey to better iron health' },
+            { n: 5, t: 'Research you can trust' },
+            { n: 6, t: 'Why choose Advanced Iron+' },
+            { n: 7, t: 'The 6 key ingredients' }
           ];
-          var _slideSrc = function (n) { return '/img/products/iron-g' + n + '.png?v=4'; };
+          var _slideSrc = function (n) { return '/img/products/iron-n' + n + '.png?v=2'; };
         %>
         <div class="gallery" style="--n:<%= _slides.length %>">
           <div class="gallery-main">
-            <div class="gallery-main__bg" id="galleryBg" aria-hidden="true" style="background-image:url('<%= _slideSrc(_slides[0].n) %>')"></div>
-            <img id="galleryMain" src="<%= _slideSrc(_slides[0].n) %>" alt="Two hands offering Shiōrra Advanced Iron+ capsules beside the pack and fresh ginger on a blue backdrop">
+            <img id="galleryMain" src="<%= _slideSrc(_slides[0].n) %>" alt="A hand holding the Shiōrra Advanced Iron+ pack, blister of red capsules raised behind it, on a pink backdrop">
           </div>
           <div class="gallery-thumbs" id="galleryThumbs">
             <% _slides.forEach(function (sl, i) { %>
@@ -1149,6 +1140,205 @@
   </div>
 </section>
 
+<!-- BENEFITS -->
+<style>
+  /* ============================================================
+     BENEFITS — living ingredient orbit
+     The formula itself is the visual: the capsule sits at the centre and the
+     nine actives orbit it as powder discs. At rest the ring drifts slowly —
+     nine actives, none singled out, which is what the heading says. Choose a
+     stage and the drift stops: the actives involved glide round to gather in
+     the top arc while the rest recede toward the core and grey back, so the
+     diagram explains the formula instead of three icons standing in for it.
+     Angles are driven from JS (see the orbit script) rather than CSS keyframes,
+     because gathering has to happen from wherever the drift currently sits.
+     ============================================================ */
+  .orb{background:linear-gradient(180deg,#FFFFFF 0%,#FDF6F8 55%,#FFFFFF 100%);border-top:1px solid var(--line);padding:78px 0}
+  .orb__head{text-align:center;margin-bottom:14px}
+  .orb__head .s-title{margin-inline:auto;margin-bottom:0}
+  .orb__hint{text-align:center;font-size:13px;color:var(--muted-2);margin:0 0 34px}
+
+  .orb-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:52px;align-items:center}
+
+  /* ---- stage ---- */
+  .orb-stage{position:relative;width:min(468px,100%);aspect-ratio:1;margin-inline:auto;--r:186px}
+  .orb-ring,.orb-ring--inner{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;
+    border:1px dashed rgba(159,18,57,.20);pointer-events:none;
+  }
+  .orb-ring{width:calc(var(--r) * 2);height:calc(var(--r) * 2)}
+  .orb-ring--inner{width:calc(var(--r) * 1.08);height:calc(var(--r) * 1.08);border-style:solid;border-color:rgba(159,18,57,.09)}
+
+  /* capsule at the centre, over a soft bloom */
+  .orb-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64%;z-index:3;pointer-events:none}
+  .orb-core::before{
+    content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:150%;aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle,rgba(225,29,72,.14),transparent 68%);
+  }
+  .orb-core img{position:relative;width:100%;height:auto;display:block}
+
+  /* ---- orbiting actives ---- */
+  .orb-node{
+    position:absolute;left:50%;top:50%;width:78px;height:78px;padding:0;border:0;background:none;
+    cursor:default;z-index:2;
+    /* place on the circle, then counter-rotate so the disc stays upright */
+    /* --a (angle) and --rk (radius multiplier) are driven per-frame from JS,
+       so neither gets a CSS transition — the script does the easing itself. */
+    transform:translate(-50%,-50%) rotate(var(--a)) translateY(calc(-1 * var(--r) * var(--rk, 1))) rotate(calc(-1 * var(--a)));
+    transition:filter .35s ease,opacity .35s ease;
+  }
+  .orb-node__disc{
+    display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;
+    background:#fff;box-shadow:0 6px 18px rgba(120,20,50,.14),0 0 0 3px #fff,0 0 0 4px rgba(159,18,57,.10);
+    transition:box-shadow .35s ease,transform .35s ease;
+  }
+  /* the swatches are a powder blob centred on white — scaling up inside the
+     circular mask fills the disc with powder instead of framing it in white */
+  .orb-node__disc img{width:100%;height:100%;object-fit:cover;transform:scale(1.75);display:block}
+  .orb-node__label{
+    position:absolute;left:50%;top:calc(100% + 7px);transform:translateX(-50%);
+    white-space:nowrap;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--honey-deep);background:#fff;border:1px solid rgba(159,18,57,.16);
+    padding:3px 8px;border-radius:999px;
+    opacity:0;transition:opacity .3s ease;pointer-events:none;
+  }
+  /* labels stay hidden until something is lit, so the resting state is nine
+     clean discs rather than a wall of type */
+  .orb-node.is-lit .orb-node__label{opacity:1}
+  .orb-node.is-lit .orb-node__disc{
+    transform:scale(1.1);
+    box-shadow:0 10px 26px rgba(120,20,50,.22),0 0 0 3px #fff,0 0 0 5px var(--honey);
+  }
+  .orb-node.is-dim{opacity:.42;filter:grayscale(.55)}
+  .orb-node.is-dim .orb-node__disc{transform:scale(.86);box-shadow:0 4px 12px rgba(120,20,50,.10),0 0 0 3px #fff}
+
+  /* ---- benefit list ---- */
+  .orb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+  .orb-ben{
+    width:100%;text-align:left;cursor:pointer;position:relative;
+    background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 22px;
+    transition:border-color .28s ease,box-shadow .28s ease,transform .28s ease;
+  }
+  .orb-ben:hover,.orb-ben.is-active{border-color:var(--honey);box-shadow:0 14px 34px rgba(159,18,57,.10);transform:translateY(-2px)}
+  .orb-ben__n{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--honey);display:block;margin-bottom:7px}
+  .orb-ben__t{font-size:19px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);margin:0 0 6px;line-height:1.25}
+  .orb-ben__s{font-size:14.5px;color:var(--ink-soft);line-height:1.55;margin:0}
+  /* long copy expands only for the active one — grid-rows animates to auto */
+  .orb-ben__more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s ease,opacity .3s ease;opacity:0}
+  .orb-ben.is-active .orb-ben__more{grid-template-rows:1fr;opacity:1}
+  .orb-ben__more > div{overflow:hidden}
+  .orb-ben__l{font-size:14px;color:var(--muted);line-height:1.6;margin:10px 0 0}
+  .orb-ben__ings{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
+  .orb-ben__ings span{
+    font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--honey-deep);background:var(--honey-soft);padding:4px 9px;border-radius:999px;
+  }
+
+  @media (max-width:980px){
+    .orb-grid{grid-template-columns:1fr;gap:34px}
+    .orb-stage{width:min(400px,86vw);--r:158px}
+    .orb-node{width:66px;height:66px}
+  }
+  /* Touch gets the same interaction, driven by tap instead of hover, so the
+     gather is no longer neutralised here. Labels stay hidden on the resting
+     ring — nine of them at this size is a wall of type — but appear on the
+     actives that gather, which is where the naming actually matters. */
+  @media (hover:none),(max-width:680px){
+    .orb{padding:48px 0}
+    .orb-stage{width:min(330px,80vw);--r:130px}
+    .orb-node{width:56px;height:56px}
+    .orb-node__label{display:none;font-size:9.5px;padding:2px 6px}
+    .orb-node.is-lit .orb-node__label{display:block}
+    .orb-ben{padding:16px 18px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .orb-node,.orb-node__disc,.orb-ben,.orb-ben__more{transition:none}
+    .orb-ben:hover,.orb-ben.is-active{transform:none}
+  }
+</style>
+
+<section class="orb" aria-labelledby="orbTitle">
+  <div class="wrap">
+    <div class="orb__head">
+      <span class="s-eyebrow">Benefits</span>
+      <h2 class="s-title" id="orbTitle">One capsule, <em>nine actives.</em></h2>
+    </div>
+    <p class="orb__hint">Choose a stage to see which actives are involved.</p>
+
+    <%
+      // The nine actives on the pack, in orbit order. `k` matches the file in
+      // /img/ingredients/ and the keys used by the benefit mapping below.
+      var _orbIng = [
+        { k: 'iron',        t: 'Iron' },
+        { k: 'folate',      t: 'Folate' },
+        { k: 'b12',         t: 'Vitamin B12' },
+        { k: 'b6',          t: 'Vitamin B6' },
+        { k: 'zinc',        t: 'Zinc' },
+        { k: 'copper',      t: 'Copper' },
+        { k: 'selenium',    t: 'Selenium' },
+        { k: 'riboflavin',  t: 'Riboflavin' },
+        { k: 'niacinamide', t: 'Niacinamide' }
+      ];
+      // Which actives to light per stage. This is a FORMULATION grouping — the
+      // actives present and relevant — not a claim that each one produces the
+      // benefit on its own. Worth confirming with the formulator.
+      var _orbBen = [
+        { t: 'Pregnancy',
+          s: 'Supporting increased iron needs during this important stage.',
+          l: 'During pregnancy the body&rsquo;s iron requirements increase. Advanced Iron+ is formulated with ferrous bisglycinate to provide iron support in a gentle, thoughtfully formulated form.',
+          ings: ['iron', 'folate', 'b12'] },
+        { t: 'Everyday iron support',
+          s: 'For those who need additional iron supplementation.',
+          l: 'Iron plays an important role in supporting normal haemoglobin formation and maintaining healthy iron levels. Supplementation should be taken according to individual needs and professional guidance.',
+          ings: ['iron', 'copper', 'zinc', 'selenium'] },
+        { t: 'Postpartum &amp; lactation',
+          s: 'Continued support in the months after birth.',
+          l: 'Iron needs do not end at delivery. Advanced Iron+ is intended for use through the postpartum and lactating period, in the same chelated form that is gentler on the stomach.',
+          ings: ['iron', 'b12', 'b6', 'riboflavin', 'niacinamide'] }
+      ];
+      var _orbName = {};
+      _orbIng.forEach(function (i) { _orbName[i.k] = i.t; });
+      var _orbStep = 360 / _orbIng.length;
+    %>
+
+    <div class="orb-grid">
+      <div class="orb-stage" id="orbStage">
+        <span class="orb-ring" aria-hidden="true"></span>
+        <span class="orb-ring--inner" aria-hidden="true"></span>
+        <% _orbIng.forEach(function (ing, i) { %>
+          <span class="orb-node" data-ing="<%= ing.k %>" style="--a:<%= (-90 + _orbStep * i).toFixed(2) %>deg">
+            <span class="orb-node__disc"><img src="/img/ingredients/<%= ing.k %>.png" alt="<%= ing.t %>" loading="lazy"></span>
+            <span class="orb-node__label"><%= ing.t %></span>
+          </span>
+        <% }); %>
+        <span class="orb-core" aria-hidden="true">
+          <img src="/img/products/pill-hero.png" alt="">
+        </span>
+      </div>
+
+      <ul class="orb-list">
+        <% _orbBen.forEach(function (b, i) { %>
+          <li>
+            <%# a button, so keyboard users get the same reveal as a pointer %>
+            <button type="button" class="orb-ben<%= i === 0 ? ' is-active' : '' %>" data-ings="<%= b.ings.join(',') %>">
+              <span class="orb-ben__n">0<%= i + 1 %></span>
+              <h3 class="orb-ben__t"><%- b.t %></h3>
+              <p class="orb-ben__s"><%- b.s %></p>
+              <span class="orb-ben__more"><div>
+                <p class="orb-ben__l"><%- b.l %></p>
+                <span class="orb-ben__ings">
+                  <% b.ings.forEach(function (k) { %><span><%= _orbName[k] %></span><% }); %>
+                </span>
+              </div></span>
+            </button>
+          </li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- KEY INGREDIENTS -->
 <style>
   /* Three tracks: labels | product shot | labels. The outer tracks are 1fr
@@ -1276,6 +1466,116 @@
     </div>
   </div>
 </section>
+
+<!-- EVIDENCE-BACKED FORMULATION -->
+<%
+  // Stage copy comes only from claims already published on this page — the
+  // "Journey to Better Iron Health" slide in the gallery, the FAQ, and the
+  // pack. The clinical figures that used to headline this section are kept,
+  // but moved into the note below: they come from research on the ingredient,
+  // not on Advanced Iron+, so they are substantiation rather than a promise.
+  var _jt = {
+    eyebrow: 'Evidence-Backed Formulation',
+    title: 'What changes, <em>and when.</em>',
+    lede: 'Iron works gradually, not overnight. Here is the shape of it &mdash; what you may notice, and roughly when.',
+    stages: [
+      {
+        k: 'Week 0',
+        h: 'Where most women start',
+        s: 'Low iron &mdash; and the reserve behind it already running close to empty.',
+        points: [
+          'Tired by the middle of the afternoon',
+          'Out of breath on the stairs',
+          'Dizziness or weakness',
+          'Hard to hold your concentration'
+        ]
+      },
+      {
+        k: 'Weeks 1&ndash;4',
+        h: 'Early improvement begins',
+        s: 'Haemoglobin starts to rise and red blood cell production picks up. The change is subtle at first, but it is there.',
+        points: [
+          'More energy through the day',
+          'Less tiredness',
+          'Reduced dizziness',
+          'Subtle, but noticeable'
+        ],
+        proof: 'Gentle enough to stay on &mdash; <b>87%</b> reported no adverse effects.'
+      },
+      {
+        k: 'Weeks 6&ndash;8',
+        h: 'Stronger from within',
+        s: 'Haemoglobin is meaningfully improved, and ferritin &mdash; the store your body draws on &mdash; starts rebuilding.',
+        points: [
+          'Better stamina',
+          'Less breathlessness',
+          'Improved daily functioning',
+          'Reserves refilled, not just topped up'
+        ],
+        proof: 'In studies of this form of iron, haemoglobin rose <b>2.12 g/dL</b> and ferritin <b>18.13 &micro;g/L</b>.'
+      },
+      {
+        k: 'Month 3+',
+        h: 'The one that actually gets finished',
+        s: 'The gentlest iron only helps if it is still being taken months later. That is most of the point of the form we chose.',
+        points: [
+          'One capsule a day',
+          'Gentle on the stomach',
+          'B<sub>12</sub>, folate and zinc already included',
+          'Nothing else to remember'
+        ],
+        proof: '<b>98%</b> stayed on it, against <b>74%</b> on conventional iron.'
+      }
+    ],
+    note: '<p>The stages above describe a typical course, not a guarantee &mdash; individual results vary, and your doctor is the right person to read your own bloodwork. The figures come from published clinical research on oral iron therapy and on chelated ferrous bisglycinate as an ingredient, not from a trial of Advanced Iron+ itself.</p>' +
+          '<ul><li>Haemoglobin rise: +2.12 g/dL</li><li>Ferritin (iron stores): +18.13 &micro;g/L</li><li>Tolerated with no adverse effects: 87%</li><li>Stayed on treatment: 98%, against 74% on conventional iron</li></ul>'
+  };
+%>
+<%- include('../partials/journey-timeline', { jt: _jt }) %>
+
+<!-- TESTIMONIALS -->
+<%
+  var _tm = {
+    eyebrow: 'Testimonials',
+    title: 'What women actually <em>say.</em>',
+    score: '4.9',
+    count: '1,240+ reviews',
+    href: '/reviews',
+    items: [
+      { q: '&ldquo;My OB-GYN recommended Shi&#x14D;rra after I switched off ferrous sulfate. By week 6 my Hb was rising. Honestly I forgot what energy felt like in pregnancy until now.&rdquo;',
+        name: 'Anjali R.', meta: 'Bengaluru &middot; 2nd trimester', tag: 'Energy' },
+      { q: '&ldquo;Finally an iron capsule that doesn&rsquo;t taste like metal. I take mine with breakfast &mdash; no aftertaste at all.&rdquo;',
+        name: 'Sneha K.', meta: 'Pune &middot; postpartum', tag: 'Taste' },
+      { q: '&ldquo;The only iron I&rsquo;ve ever kept down through a pregnancy. That alone is worth it.&rdquo;',
+        name: 'Tara V.', meta: 'Hyderabad &middot; 1st trimester', tag: 'Gentle' },
+      { q: '&ldquo;My skin started looking less pale within weeks. Energy followed soon after. I&rsquo;m telling every friend who&rsquo;s expecting.&rdquo;',
+        name: 'Meera S.', meta: 'Chennai &middot; 3rd trimester', tag: 'Energy' },
+      { q: '&ldquo;My wife is finally not dreading her morning iron. As a husband watching her go through pregnancy, that means everything.&rdquo;',
+        name: 'Rohan K.', meta: 'Delhi &middot; husband &amp; supporter', tag: 'Family' },
+      { q: '&ldquo;Switched at the start of my second trimester. Hb went from 9.8 to 12.1 in 12 weeks. My OB was thrilled.&rdquo;',
+        name: 'Kavya N.', meta: 'Kolkata &middot; 2nd trimester', tag: 'Hb rise' }
+    ]
+  };
+%>
+<%- include('../partials/testimonials', { tm: _tm }) %>
+
+<!-- FAQ -->
+<section class="s faq-sec">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="rv-marker">FAQ</span>
+      <h2 class="s-title">Questions, <em>answered</em>.</h2>
+    </div>
+    <div class="fq-list">
+      <details class="fq-item"><summary class="fq-q">What makes Iron+ different from regular iron tablets?<span class="plus">+</span></summary><div class="fq-a">Iron+ uses <strong>Ferrous Bisglycinate</strong> — a chelated form of iron that's 2-4× better absorbed and ~90% gentler than ferrous sulfate. It also includes the Vit. B<sub>12</sub>, folate, Vit. B<sub>6</sub> and zinc co-factors most conventional tablets skip.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is the folate in Iron+ active?<span class="plus">+</span></summary><div class="fq-a">Yes. We use <strong>L-methylfolate</strong> (570 mcg) — the active form. No enzymatic conversion required, so it works even for women with the MTHFR variant.</div></details>
+      <details class="fq-item"><summary class="fq-q">Can I take Iron+ throughout pregnancy?<span class="plus">+</span></summary><div class="fq-a">Yes — Iron+ is designed for use throughout pregnancy and postpartum. Always confirm with your OB-GYN, particularly if your current hemoglobin is on the very low end.</div></details>
+      <details class="fq-item"><summary class="fq-q">Will Iron+ cause constipation or nausea?<span class="plus">+</span></summary><div class="fq-a">It's significantly less likely than conventional iron — Ferrous Bisglycinate is ~90% gentler on the GI tract. If you do feel queasy, take it with food and plenty of water, and pair with Ginger+ during the first trimester.</div></details>
+      <details class="fq-item"><summary class="fq-q">When should I take Iron+?<span class="plus">+</span></summary><div class="fq-a">Once a day, ideally with a meal. Avoid pairing with tea, coffee or calcium-rich drinks within an hour — they can blunt iron absorption. Vitamin C-rich foods (citrus, amla) help.</div></details>
+    </div>
+  </div>
+</section>
+
 
 <!-- PAIR IT WITH -->
 <style>
@@ -1446,388 +1746,6 @@
 </section>
 <% } %>
 
-<!-- EVIDENCE-BACKED FORMULATION -->
-<style>
-  .ebf{background:#FBF4F7;padding:82px 0}
-  .ebf-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1fr);gap:58px;align-items:center}
-
-  .ebf-media{position:relative;border-radius:24px;overflow:hidden;box-shadow:0 26px 60px rgba(107,34,85,.14);
-    transition:transform .5s cubic-bezier(.2,.7,.3,1),box-shadow .5s ease}
-  .ebf-media:hover{transform:translateY(-7px);box-shadow:0 38px 80px rgba(107,34,85,.22)}
-  .ebf-media img{width:100%;height:auto;display:block;aspect-ratio:4/5;object-fit:cover;
-    transition:transform .8s cubic-bezier(.2,.7,.3,1),filter .45s ease}
-  .ebf-media:hover img{transform:scale(1.06);filter:saturate(1.09) contrast(1.04) brightness(1.02)}
-  .ebf-media::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:inherit;
-    box-shadow:inset 0 0 0 1px rgba(159,18,57,.22);opacity:0;transition:opacity .45s ease}
-  .ebf-media:hover::after{opacity:1}
-
-  .ebf-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:clamp(30px,3.4vw,42px);font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(--ink);margin:0 0 12px}
-  .ebf-title em{font-style:italic;font-weight:500;color:var(--honey)}
-  .ebf-lede{font-size:16px;line-height:1.6;color:var(--ink-soft);margin:0;max-width:46ch}
-
-  /* ---- figures as charts ----
-     Two of these are true proportions (87%, and 98% against 74%), so they get
-     real charts. The other two are absolute increases with no denominator —
-     drawing those as rings or pies would invent one, so they get a delta
-     treatment instead: the trend, an arrow, and the number. */
-  .ebf-figs{display:grid;grid-template-columns:1fr 1fr;gap:26px 30px;margin:34px 0 0}
-  .ebf-fig{display:flex;flex-direction:column;gap:9px}
-  .ebf-fig__viz{height:54px;display:flex;align-items:flex-end}
-  .ebf-fig__n{font-family:'Helvetica Neue',Arial,sans-serif;font-size:clamp(25px,2.7vw,33px);font-weight:800;letter-spacing:-0.03em;color:var(--honey);line-height:1}
-  .ebf-fig__l{font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--ink-soft);line-height:1.35}
-  .ebf-fig__l i{font-style:normal;color:var(--honey-2)}
-
-  /* delta: a rising trend line that draws itself */
-  .ebf-spark{width:74px;height:34px;overflow:visible}
-  .ebf-spark path{fill:none;stroke:var(--honey);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;
-    stroke-dasharray:120;stroke-dashoffset:120;transition:stroke-dashoffset 1.1s cubic-bezier(.2,.7,.3,1)}
-  .ebf.is-in .ebf-spark path{stroke-dashoffset:0}
-  .ebf-spark circle{fill:var(--honey);opacity:0;transition:opacity .3s ease .9s}
-  .ebf.is-in .ebf-spark circle{opacity:1}
-
-  /* ring: a real proportion, so it is drawn as one */
-  /* stores accumulating — columns grow in sequence */
-  .ebf-stack{display:flex;align-items:flex-end;gap:5px;height:38px}
-  .ebf-stack i{display:block;width:11px;border-radius:3px;background:var(--honey);height:0;
-    transition:height .8s cubic-bezier(.2,.7,.3,1)}
-  .ebf-stack i:nth-child(1){opacity:.35}
-  .ebf-stack i:nth-child(2){opacity:.55}
-  .ebf-stack i:nth-child(3){opacity:.78}
-  .ebf.is-in .ebf-stack i{height:var(--h)}
-  .ebf.is-in .ebf-stack i:nth-child(2){transition-delay:.1s}
-  .ebf.is-in .ebf-stack i:nth-child(3){transition-delay:.2s}
-  .ebf.is-in .ebf-stack i:nth-child(4){transition-delay:.3s}
-
-  .ebf-ring{width:54px;height:54px;transform:rotate(-90deg)}
-  .ebf-ring circle{fill:none;stroke-width:4.4;stroke-linecap:round}
-  .ebf-ring .t{stroke:rgba(159,18,57,.14)}
-  .ebf-ring .v{stroke:var(--honey);stroke-dasharray:0 100;transition:stroke-dasharray 1.2s cubic-bezier(.2,.7,.3,1)}
-  .ebf.is-in .ebf-ring .v{stroke-dasharray:var(--pct) 100}
-
-  /* paired bars: the comparison IS the point, so both are shown */
-  .ebf-bars{display:flex;flex-direction:column;gap:5px;width:100%}
-  .ebf-bar{display:flex;align-items:center;gap:8px}
-  .ebf-bar__k{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2);width:34px;flex:none}
-  .ebf-bar__t{flex:1;height:9px;border-radius:99px;background:rgba(159,18,57,.10);overflow:hidden}
-  .ebf-bar__f{display:block;height:100%;border-radius:99px;width:0;transition:width 1.1s cubic-bezier(.2,.7,.3,1)}
-  .ebf.is-in .ebf-bar__f{width:var(--w)}
-  .ebf-bar--ours .ebf-bar__f{background:var(--honey)}
-  .ebf-bar--conv .ebf-bar__f{background:rgba(159,18,57,.30)}
-
-  /* the research disclosure still has to be reachable — tucked, not dropped */
-  .ebf-note{margin:26px 0 0;border-top:1px solid rgba(159,18,57,.14);padding-top:14px}
-  .ebf-note summary{cursor:pointer;list-style:none;font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--muted-2)}
-  .ebf-note summary::-webkit-details-marker{display:none}
-  .ebf-note summary::after{content:' +';color:var(--honey)}
-  .ebf-note[open] summary::after{content:' –'}
-  .ebf-note p{margin:9px 0 0;font-size:12.5px;color:var(--muted-2);line-height:1.6;max-width:58ch}
-
-  @media (max-width:900px){
-    .ebf{padding:52px 0}
-    .ebf-grid{grid-template-columns:minmax(0,1fr);gap:30px}
-    .ebf-media{order:-1;max-width:440px;margin-inline:auto}
-    .ebf-figs{gap:22px 24px}
-    /* Centred once stacked: left-aligned copy under a centred photo reads as
-       one-sided. The lede and the caveat carry a max-width, so text-align
-       alone leaves them pinned left — they need the auto side margins too. */
-    .ebf-copy{text-align:center}
-    .ebf-lede{margin-inline:auto}
-    .ebf-note p{margin-inline:auto}
-    /* Each figure is its own flex column, so the viz, the number and the
-       label have to be centred on the cross axis rather than inherited. */
-    .ebf-fig{align-items:center}
-    /* align-items:center makes this shrink to its content, which collapsed
-       the paired bars' width:100% track down to the width of its labels —
-       the bars vanished. Keep the viz full-width and centre inside it. */
-    .ebf-fig__viz{width:100%;justify-content:center}
-    .ebf-bars{max-width:230px;margin-inline:auto}
-    /* the paired bars are a unit — keep their row labels reading left */
-    .ebf-bar__k{text-align:left}
-  }
-  @media (max-width:420px){
-    .ebf-figs{grid-template-columns:1fr}
-  }
-  @media (prefers-reduced-motion:reduce){
-    .ebf-media,.ebf-media img,.ebf-spark path,.ebf-ring .v,.ebf-bar__f,.ebf-stack i{transition:none}
-    .ebf-media:hover{transform:none}
-    .ebf-media:hover img{transform:none;filter:none}
-  }
-</style>
-
-<section class="ebf" id="ebfSection" aria-labelledby="ebfTitle">
-  <div class="wrap">
-    <div class="ebf-grid">
-      <div class="ebf-media">
-        <img src="/img/products/iron-1.jpg" alt="Shiōrra Advanced Iron+ pack on a marble stand" loading="lazy">
-      </div>
-
-      <div class="ebf-copy">
-        <span class="s-eyebrow">Evidence-Backed Formulation</span>
-        <h2 class="ebf-title" id="ebfTitle">Built on the science of <em>better iron.</em></h2>
-        <p class="ebf-lede">Chelated <strong>Ferrous Bisglycinate</strong> &mdash; the iron form studied most extensively for pregnancy.</p>
-
-        <div class="ebf-figs">
-          <div class="ebf-fig">
-            <span class="ebf-fig__viz" aria-hidden="true">
-              <svg class="ebf-spark" viewBox="0 0 74 34"><path d="M2 30 L20 23 L38 15 L56 8 L70 3"/><circle cx="70" cy="3" r="3.4"/></svg>
-            </span>
-            <span class="ebf-fig__n">+2.12 g/dl</span>
-            <span class="ebf-fig__l">Haemoglobin rise <i>&dagger;</i></span>
-          </div>
-
-          <div class="ebf-fig">
-            <span class="ebf-fig__viz" aria-hidden="true">
-              <span class="ebf-stack">
-                <i style="--h:34%"></i><i style="--h:56%"></i><i style="--h:78%"></i><i style="--h:100%"></i>
-              </span>
-            </span>
-            <span class="ebf-fig__n">+18.13 &micro;g/l</span>
-            <span class="ebf-fig__l">Ferritin &mdash; iron stores <i>&dagger;</i></span>
-          </div>
-
-          <div class="ebf-fig">
-            <span class="ebf-fig__viz" aria-hidden="true">
-              <svg class="ebf-ring" viewBox="0 0 42 42" style="--pct:87">
-                <circle class="t" cx="21" cy="21" r="15.915"/>
-                <circle class="v" cx="21" cy="21" r="15.915"/>
-              </svg>
-            </span>
-            <span class="ebf-fig__n">87%</span>
-            <span class="ebf-fig__l">Tolerated, no adverse effects <i>&dagger;</i></span>
-          </div>
-
-          <div class="ebf-fig">
-            <span class="ebf-fig__viz" aria-hidden="true">
-              <span class="ebf-bars">
-                <span class="ebf-bar ebf-bar--ours"><span class="ebf-bar__k">Iron+</span><span class="ebf-bar__t"><span class="ebf-bar__f" style="--w:98%"></span></span></span>
-                <span class="ebf-bar ebf-bar--conv"><span class="ebf-bar__k">Conv.</span><span class="ebf-bar__t"><span class="ebf-bar__f" style="--w:74%"></span></span></span>
-              </span>
-            </span>
-            <span class="ebf-fig__n">98%</span>
-            <span class="ebf-fig__l">Stayed on treatment, vs 74% <i>&dagger;</i></span>
-          </div>
-        </div>
-
-        <details class="ebf-note">
-          <summary>&dagger; About these figures</summary>
-          <p>Figures come from published clinical research on oral iron therapy and on chelated ferrous bisglycinate as an ingredient &mdash; not from a trial of Advanced Iron+ itself.</p>
-        </details>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="s faq-sec">
-  <div class="wrap">
-    <div class="s-head center">
-      <span class="rv-marker">FAQ</span>
-      <h2 class="s-title">Questions, <em>answered</em>.</h2>
-    </div>
-    <div class="fq-list">
-      <details class="fq-item"><summary class="fq-q">What makes Iron+ different from regular iron tablets?<span class="plus">+</span></summary><div class="fq-a">Iron+ uses <strong>Ferrous Bisglycinate</strong> — a chelated form of iron that's 2-4× better absorbed and ~90% gentler than ferrous sulfate. It also includes the Vit. B<sub>12</sub>, folate, Vit. B<sub>6</sub> and zinc co-factors most conventional tablets skip.</div></details>
-      <details class="fq-item"><summary class="fq-q">Is the folate in Iron+ active?<span class="plus">+</span></summary><div class="fq-a">Yes. We use <strong>L-methylfolate</strong> (570 mcg) — the active form. No enzymatic conversion required, so it works even for women with the MTHFR variant.</div></details>
-      <details class="fq-item"><summary class="fq-q">Can I take Iron+ throughout pregnancy?<span class="plus">+</span></summary><div class="fq-a">Yes — Iron+ is designed for use throughout pregnancy and postpartum. Always confirm with your OB-GYN, particularly if your current hemoglobin is on the very low end.</div></details>
-      <details class="fq-item"><summary class="fq-q">Will Iron+ cause constipation or nausea?<span class="plus">+</span></summary><div class="fq-a">It's significantly less likely than conventional iron — Ferrous Bisglycinate is ~90% gentler on the GI tract. If you do feel queasy, take it with food and plenty of water, and pair with Ginger+ during the first trimester.</div></details>
-      <details class="fq-item"><summary class="fq-q">When should I take Iron+?<span class="plus">+</span></summary><div class="fq-a">Once a day, ideally with a meal. Avoid pairing with tea, coffee or calcium-rich drinks within an hour — they can blunt iron absorption. Vitamin C-rich foods (citrus, amla) help.</div></details>
-    </div>
-  </div>
-</section>
-
-
-<!-- BENEFITS -->
-<style>
-  /* ============================================================
-     BENEFITS — ingredient orbit
-     The formula itself is the visual: the capsule sits at the centre and the
-     nine actives orbit it as powder discs. Choosing a benefit lights the
-     actives involved and dims the rest, so the diagram explains the formula
-     instead of three icons standing in for it. Reuses the bubble language
-     already on the hero banners.
-     ============================================================ */
-  .orb{background:linear-gradient(180deg,#FFFFFF 0%,#FDF6F8 55%,#FFFFFF 100%);border-top:1px solid var(--line);padding:78px 0}
-  .orb__head{text-align:center;margin-bottom:14px}
-  .orb__head .s-title{margin-inline:auto;margin-bottom:0}
-  .orb__hint{text-align:center;font-size:13px;color:var(--muted-2);margin:0 0 34px}
-
-  .orb-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:52px;align-items:center}
-
-  /* ---- stage ---- */
-  .orb-stage{position:relative;width:min(468px,100%);aspect-ratio:1;margin-inline:auto;--r:186px}
-  .orb-ring,.orb-ring--inner{
-    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;
-    border:1px dashed rgba(159,18,57,.20);pointer-events:none;
-  }
-  .orb-ring{width:calc(var(--r) * 2);height:calc(var(--r) * 2)}
-  .orb-ring--inner{width:calc(var(--r) * 1.08);height:calc(var(--r) * 1.08);border-style:solid;border-color:rgba(159,18,57,.09)}
-
-  /* capsule at the centre, over a soft bloom */
-  .orb-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64%;z-index:3;pointer-events:none}
-  .orb-core::before{
-    content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    width:150%;aspect-ratio:1;border-radius:50%;
-    background:radial-gradient(circle,rgba(225,29,72,.14),transparent 68%);
-  }
-  .orb-core img{position:relative;width:100%;height:auto;display:block}
-
-  /* ---- orbiting actives ---- */
-  .orb-node{
-    position:absolute;left:50%;top:50%;width:78px;height:78px;padding:0;border:0;background:none;
-    cursor:default;z-index:2;
-    /* place on the circle, then counter-rotate so the disc stays upright */
-    transform:translate(-50%,-50%) rotate(var(--a)) translateY(calc(-1 * var(--r))) rotate(calc(-1 * var(--a)));
-    transition:filter .35s ease,opacity .35s ease;
-  }
-  .orb-node__disc{
-    display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;
-    background:#fff;box-shadow:0 6px 18px rgba(120,20,50,.14),0 0 0 3px #fff,0 0 0 4px rgba(159,18,57,.10);
-    transition:box-shadow .35s ease,transform .35s ease;
-  }
-  /* the swatches are a powder blob centred on white — scaling up inside the
-     circular mask fills the disc with powder instead of framing it in white */
-  .orb-node__disc img{width:100%;height:100%;object-fit:cover;transform:scale(1.75);display:block}
-  .orb-node__label{
-    position:absolute;left:50%;top:calc(100% + 7px);transform:translateX(-50%);
-    white-space:nowrap;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--honey-deep);background:#fff;border:1px solid rgba(159,18,57,.16);
-    padding:3px 8px;border-radius:999px;
-    opacity:0;transition:opacity .3s ease;pointer-events:none;
-  }
-  /* labels stay hidden until something is lit, so the resting state is nine
-     clean discs rather than a wall of type */
-  .orb-node.is-lit .orb-node__label{opacity:1}
-  .orb-node.is-lit .orb-node__disc{
-    transform:scale(1.1);
-    box-shadow:0 10px 26px rgba(120,20,50,.22),0 0 0 3px #fff,0 0 0 5px var(--honey);
-  }
-  .orb-node.is-dim{opacity:.42;filter:grayscale(.55)}
-
-  /* ---- benefit list ---- */
-  .orb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
-  .orb-ben{
-    width:100%;text-align:left;cursor:pointer;position:relative;
-    background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 22px;
-    transition:border-color .28s ease,box-shadow .28s ease,transform .28s ease;
-  }
-  .orb-ben:hover,.orb-ben.is-active{border-color:var(--honey);box-shadow:0 14px 34px rgba(159,18,57,.10);transform:translateY(-2px)}
-  .orb-ben__n{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--honey);display:block;margin-bottom:7px}
-  .orb-ben__t{font-size:19px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);margin:0 0 6px;line-height:1.25}
-  .orb-ben__s{font-size:14.5px;color:var(--ink-soft);line-height:1.55;margin:0}
-  /* long copy expands only for the active one — grid-rows animates to auto */
-  .orb-ben__more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s ease,opacity .3s ease;opacity:0}
-  .orb-ben.is-active .orb-ben__more{grid-template-rows:1fr;opacity:1}
-  .orb-ben__more > div{overflow:hidden}
-  .orb-ben__l{font-size:14px;color:var(--muted);line-height:1.6;margin:10px 0 0}
-  .orb-ben__ings{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
-  .orb-ben__ings span{
-    font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
-    color:var(--honey-deep);background:var(--honey-soft);padding:4px 9px;border-radius:999px;
-  }
-
-  @media (max-width:980px){
-    .orb-grid{grid-template-columns:1fr;gap:34px}
-    .orb-stage{width:min(400px,86vw);--r:158px}
-    .orb-node{width:66px;height:66px}
-  }
-  /* No hover on touch: light every active, and each card lists its own so the
-     mapping is still readable without pointing at anything. */
-  @media (hover:none),(max-width:680px){
-    .orb{padding:48px 0}
-    .orb__hint{display:none}
-    .orb-stage{width:min(330px,80vw);--r:130px}
-    .orb-node{width:56px;height:56px}
-    .orb-node__label{display:none}
-    .orb-node.is-dim{opacity:1;filter:none}
-    .orb-ben{padding:16px 18px}
-    .orb-ben__more{grid-template-rows:1fr;opacity:1}
-  }
-  @media (prefers-reduced-motion:reduce){
-    .orb-node,.orb-node__disc,.orb-ben,.orb-ben__more{transition:none}
-    .orb-ben:hover,.orb-ben.is-active{transform:none}
-  }
-</style>
-
-<section class="orb" aria-labelledby="orbTitle">
-  <div class="wrap">
-    <div class="orb__head">
-      <span class="s-eyebrow">Benefits</span>
-      <h2 class="s-title" id="orbTitle">One capsule, <em>nine actives.</em></h2>
-    </div>
-    <p class="orb__hint">Hover a stage below to see which actives are involved.</p>
-
-    <%
-      // The nine actives on the pack, in orbit order. `k` matches the file in
-      // /img/ingredients/ and the keys used by the benefit mapping below.
-      var _orbIng = [
-        { k: 'iron',        t: 'Iron' },
-        { k: 'folate',      t: 'Folate' },
-        { k: 'b12',         t: 'Vitamin B12' },
-        { k: 'b6',          t: 'Vitamin B6' },
-        { k: 'zinc',        t: 'Zinc' },
-        { k: 'copper',      t: 'Copper' },
-        { k: 'selenium',    t: 'Selenium' },
-        { k: 'riboflavin',  t: 'Riboflavin' },
-        { k: 'niacinamide', t: 'Niacinamide' }
-      ];
-      // Which actives to light per stage. This is a FORMULATION grouping — the
-      // actives present and relevant — not a claim that each one produces the
-      // benefit on its own. Worth confirming with the formulator.
-      var _orbBen = [
-        { t: 'Pregnancy',
-          s: 'Supporting increased iron needs during this important stage.',
-          l: 'During pregnancy the body&rsquo;s iron requirements increase. Advanced Iron+ is formulated with ferrous bisglycinate to provide iron support in a gentle, thoughtfully formulated form.',
-          ings: ['iron', 'folate', 'b12'] },
-        { t: 'Everyday iron support',
-          s: 'For those who need additional iron supplementation.',
-          l: 'Iron plays an important role in supporting normal haemoglobin formation and maintaining healthy iron levels. Supplementation should be taken according to individual needs and professional guidance.',
-          ings: ['iron', 'copper', 'zinc', 'selenium'] },
-        { t: 'Postpartum &amp; lactation',
-          s: 'Continued support in the months after birth.',
-          l: 'Iron needs do not end at delivery. Advanced Iron+ is intended for use through the postpartum and lactating period, in the same chelated form that is gentler on the stomach.',
-          ings: ['iron', 'b12', 'b6', 'riboflavin', 'niacinamide'] }
-      ];
-      var _orbName = {};
-      _orbIng.forEach(function (i) { _orbName[i.k] = i.t; });
-      var _orbStep = 360 / _orbIng.length;
-    %>
-
-    <div class="orb-grid">
-      <div class="orb-stage" id="orbStage">
-        <span class="orb-ring" aria-hidden="true"></span>
-        <span class="orb-ring--inner" aria-hidden="true"></span>
-        <% _orbIng.forEach(function (ing, i) { %>
-          <span class="orb-node" data-ing="<%= ing.k %>" style="--a:<%= (-90 + _orbStep * i).toFixed(2) %>deg">
-            <span class="orb-node__disc"><img src="/img/ingredients/<%= ing.k %>.png" alt="<%= ing.t %>" loading="lazy"></span>
-            <span class="orb-node__label"><%= ing.t %></span>
-          </span>
-        <% }); %>
-        <span class="orb-core" aria-hidden="true">
-          <img src="/img/products/pill-hero.png" alt="">
-        </span>
-      </div>
-
-      <ul class="orb-list">
-        <% _orbBen.forEach(function (b, i) { %>
-          <li>
-            <%# a button, so keyboard users get the same reveal as a pointer %>
-            <button type="button" class="orb-ben<%= i === 0 ? ' is-active' : '' %>" data-ings="<%= b.ings.join(',') %>">
-              <span class="orb-ben__n">0<%= i + 1 %></span>
-              <h3 class="orb-ben__t"><%- b.t %></h3>
-              <p class="orb-ben__s"><%- b.s %></p>
-              <span class="orb-ben__more"><div>
-                <p class="orb-ben__l"><%- b.l %></p>
-                <span class="orb-ben__ings">
-                  <% b.ings.forEach(function (k) { %><span><%= _orbName[k] %></span><% }); %>
-                </span>
-              </div></span>
-            </button>
-          </li>
-        <% }); %>
-      </ul>
-    </div>
-  </div>
-</section>
-
 <!-- FOOTER -->
 <%- include('../partials/footer-home') %>
 
@@ -1873,7 +1791,6 @@
 /* Gallery — click a thumb to swap the main image */
 (function () {
   const main = document.getElementById('galleryMain');
-  const bg = document.getElementById('galleryBg');
   const thumbs = document.querySelectorAll('.gallery-thumb');
   if (!main || !thumbs.length) return;
   const select = (t) => {
@@ -1882,7 +1799,6 @@
     thumbs.forEach((x) => x.classList.remove('is-active'));
     t.classList.add('is-active');
     main.src = url;
-    if (bg) bg.style.backgroundImage = "url('" + url + "')";
     // Keep the alt in step with the slide, otherwise it stays stuck
     // describing the first image for anyone using a screen reader.
     const label = t.getAttribute('aria-label');
@@ -2003,55 +1919,164 @@
   });
 })();
 
-// Ingredient orbit — choosing a stage lights the actives involved and dims
-// the rest. Pointer hover and keyboard focus both drive it; on touch the CSS
-// already shows every active and lists them per card, so this simply never
-// gets a chance to dim anything there.
+// Living ingredient orbit — the ring drifts slowly at rest; choosing a stage
+// freezes the drift and gathers that stage's actives into the top arc while
+// the rest recede toward the core. Angles are eased here rather than in CSS
+// because a gather has to start from wherever the drift happens to be.
+// Hover and keyboard focus drive it on pointer devices; tap drives it on
+// touch, where it used to do nothing at all.
 (function () {
   const stage = document.getElementById('orbStage');
+  const list  = document.querySelector('.orb-list');
   const bens  = document.querySelectorAll('.orb-ben');
   if (!stage || !bens.length) return;
-  const nodes = Array.prototype.slice.call(stage.querySelectorAll('.orb-node'));
-  const touch = window.matchMedia('(hover:none)').matches;
 
-  function light(ben) {
-    bens.forEach((b) => b.classList.toggle('is-active', b === ben));
-    if (touch) return;                       // never dim on touch
-    const lit = (ben.dataset.ings || '').split(',');
-    nodes.forEach((n) => {
-      const on = lit.indexOf(n.dataset.ing) !== -1;
-      n.classList.toggle('is-lit', on);
-      n.classList.toggle('is-dim', !on);
+  const nodes  = Array.prototype.slice.call(stage.querySelectorAll('.orb-node'));
+  if (!nodes.length) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hover  = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  const STEP = 360 / nodes.length;
+  const st = nodes.map(function (el, i) {
+    const base = -90 + STEP * i;             // its slot on the resting ring
+    return { el: el, base: base, a: base, rk: 1, lit: false, ta: base, trk: 1 };
+  });
+
+  let spin = 0;          // how far the resting ring has drifted, in degrees
+  let gathered = false;
+  let raf = null, last = 0, visible = true;
+
+  // shortest way round, so a node never takes the long way to its target
+  function norm(d) { return ((d + 180) % 360 + 360) % 360 - 180; }
+
+  // --a is measured from the TOP of the ring and turns clockwise — that is how
+  // the transform composes (rotate, then translateY upward). So the gather arc
+  // centres on 0, NOT on -90, which would put it out on the left.
+  const LIT_GAP = 37;   // deg between gathered actives. 37 deg at r=186 leaves
+                        // ~118px between centres — clear of both the 78px disc
+                        // and the widest label ("NIACINAMIDE").
+  const END_BUF = 40;   // deg of clearance between the cluster and the rest
+
+  function retarget() {
+    let n = 0;
+    st.forEach(function (s) { if (s.lit) n++; });
+    if (!gathered || !n) {
+      st.forEach(function (s) { s.ta = s.base + spin; s.trk = 1; });
+      return;
+    }
+    // The unlit fan out across the arc the cluster is NOT using, rather than
+    // being pulled inward. Pulling them in was the bug: 16% of the radius is
+    // 30px, well short of the 78px disc, so a dimmed active ended up sitting
+    // underneath a gathered one. Separate arcs cannot collide at all.
+    const m = st.length - n;
+    const litSpan = (n - 1) * LIT_GAP;
+    const restGap = m > 1 ? Math.max(0, 360 - litSpan - END_BUF * 2) / (m - 1) : 0;
+    let li = 0, ri = 0;
+    st.forEach(function (s) {
+      if (s.lit) {
+        s.ta = (li - (n - 1) / 2) * LIT_GAP;
+        s.trk = 1;
+        li++;
+      } else {
+        s.ta = 180 + (ri - (m - 1) / 2) * restGap;
+        s.trk = 0.93;                       // a touch inward, for depth only
+        ri++;
+      }
     });
   }
 
-  bens.forEach((b) => {
-    b.addEventListener('mouseenter', () => light(b));
-    b.addEventListener('focus', () => light(b));
-    b.addEventListener('click', () => light(b));
+  function paint() {
+    st.forEach(function (s) {
+      s.el.style.setProperty('--a', s.a.toFixed(2) + 'deg');
+      s.el.style.setProperty('--rk', s.rk.toFixed(3));
+    });
+  }
+
+  function frame(t) {
+    raf = null;
+    const dt = last ? Math.min(64, t - last) : 16;
+    last = t;
+    if (!gathered) spin += dt * 0.0052;      // ~5 deg/s — a full turn in ~70s
+    retarget();
+    // exponential ease, framed in dt so it behaves the same at 60 and 120Hz
+    const k = 1 - Math.exp(-dt / 135);
+    let moving = false;
+    st.forEach(function (s) {
+      const da = norm(s.ta - s.a), dr = s.trk - s.rk;
+      if (Math.abs(da) > 0.05 || Math.abs(dr) > 0.001) moving = true;
+      s.a += da * k;
+      s.rk += dr * k;
+    });
+    paint();
+    // Settle: once gathered and everything has arrived there is nothing left
+    // to animate, so stop asking for frames until the next interaction.
+    if (visible && (!gathered || moving)) kick();
+    else { raf = null; last = 0; }
+  }
+
+  function kick() {
+    if (raf || reduce) return;
+    raf = requestAnimationFrame(frame);
+  }
+
+  function light(ben) {
+    bens.forEach(function (b) { b.classList.toggle('is-active', b === ben); });
+    const want = (ben.dataset.ings || '').split(',');
+    st.forEach(function (s) {
+      s.lit = want.indexOf(s.el.dataset.ing) !== -1;
+      s.el.classList.toggle('is-lit', s.lit);
+      s.el.classList.toggle('is-dim', !s.lit);
+    });
+    gathered = true;
+    if (reduce) { retarget(); st.forEach(function (s) { s.a = s.ta; s.rk = s.trk; }); paint(); }
+    else { last = 0; kick(); }
+  }
+
+  function release() {
+    if (!gathered) return;
+    gathered = false;
+    st.forEach(function (s) {
+      s.lit = false;
+      s.el.classList.remove('is-lit', 'is-dim');
+    });
+    if (reduce) { retarget(); st.forEach(function (s) { s.a = s.ta; s.rk = s.trk; }); paint(); }
+    else { last = 0; kick(); }
+  }
+
+  bens.forEach(function (b) {
+    b.addEventListener('click', function () { light(b); });
+    b.addEventListener('focus', function () { light(b); });
+    if (hover) b.addEventListener('mouseenter', function () { light(b); });
   });
-  // Seed from whichever card is marked active in the markup, so the orbit is
-  // never in a state the copy does not explain.
-  light(document.querySelector('.orb-ben.is-active') || bens[0]);
+
+  // Back to drifting when the pointer leaves the stack. Only on hover devices:
+  // on touch there is no "leave", so a tapped stage stays gathered until
+  // another is tapped.
+  if (hover && list) {
+    list.addEventListener('mouseleave', release);
+    list.addEventListener('focusout', function (e) {
+      if (!list.contains(e.relatedTarget)) release();
+    });
+  }
+
+  // Nothing to animate off-screen.
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        visible = e.isIntersecting;
+        if (visible) { last = 0; kick(); }
+      });
+    }, { threshold: 0 }).observe(stage);
+  }
+
+  // The resting orbit means "all nine actives", which is what the heading
+  // says — so it starts drifting rather than pre-lit. The copy card marked
+  // active in the markup stays expanded for its text.
+  retarget();
+  paint();
+  kick();
 })();
 
-// Evidence charts — draw themselves once the section is actually on screen,
-// so the ring sweep and bar fills are seen rather than already finished. Fires
-// once, then stops observing. Falls back to the finished state if there is no
-// IntersectionObserver, rather than leaving the charts empty.
-(function () {
-  const sec = document.getElementById('ebfSection');
-  if (!sec) return;
-  if (!('IntersectionObserver' in window)) { sec.classList.add('is-in'); return; }
-  const io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (!e.isIntersecting) return;
-      sec.classList.add('is-in');
-      io.disconnect();
-    });
-  }, { threshold: 0.25 });
-  io.observe(sec);
-})();
 
 // Social-proof viewer count — a fresh random 10-30 on each visit.
 (function () {

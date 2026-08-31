@@ -1152,6 +1152,144 @@
   </div>
 </section>
 
+<!-- BENEFITS -->
+<style>
+  .bn{background:#FBFBFC;border-top:1px solid var(--line);padding:76px 0}
+  .bn__head{text-align:center;margin-bottom:38px}
+  .bn__head .s-title{margin-inline:auto;margin-bottom:0}
+
+  .bn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .bn-card{
+    position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:20px;
+    padding:28px 28px 30px;cursor:default;
+    transition:border-color .3s ease,box-shadow .3s ease,transform .3s ease;
+  }
+  /* Corner wash — gives the card a light source instead of a flat fill.
+     Clipped by the card's own overflow:hidden. */
+  .bn-card::before{
+    content:'';position:absolute;right:-46px;top:-46px;width:165px;height:165px;border-radius:50%;
+    background:radial-gradient(circle,rgba(46,139,87,.10),transparent 70%);
+    opacity:.7;transition:opacity .35s ease,transform .35s ease;pointer-events:none;
+  }
+  .bn-card:hover::before,.bn-card:focus-visible::before{opacity:1;transform:scale(1.3)}
+  .bn-card:hover,.bn-card:focus-visible{
+    border-color:var(--honey);box-shadow:0 18px 42px rgba(20,75,48,.10);
+    transform:translateY(-4px);outline:none;
+  }
+  /* Oversized ghost numeral: occupies the space the short copy leaves behind
+     at rest, so the card does not read as half-empty before you hover it. */
+  .bn-num{
+    position:absolute;right:18px;bottom:-6px;z-index:0;
+    font-family:'Helvetica Neue',Arial,sans-serif;font-size:86px;font-weight:800;
+    letter-spacing:-0.05em;line-height:1;color:rgba(20,75,48,.055);
+    pointer-events:none;user-select:none;transition:color .35s ease,transform .35s ease;
+  }
+  /* recedes on hover so it never competes with the detailed copy that
+     expands over it */
+  .bn-card:hover .bn-num,.bn-card:focus-visible .bn-num{color:rgba(20,75,48,.03);transform:translateY(6px)}
+  .bn-ic{
+    position:relative;z-index:1;width:56px;height:56px;border-radius:16px;
+    background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;margin-bottom:18px;
+    transition:background .3s ease,color .3s ease,transform .3s ease;
+  }
+  .bn-ic svg{width:31px;height:31px}
+  .bn-card:hover .bn-ic,.bn-card:focus-visible .bn-ic{background:var(--honey);color:#fff;transform:translateY(-2px) rotate(-3deg)}
+  .bn-title{position:relative;z-index:1;font-size:20px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);margin:0 0 6px;line-height:1.25}
+  /* Rule widens on hover — the only affordance hinting there is more to read. */
+  .bn-rule{position:relative;z-index:1;display:block;width:34px;height:2px;background:var(--honey);border-radius:2px;margin:0 0 16px;transition:width .35s cubic-bezier(.2,.7,.3,1)}
+  .bn-card:hover .bn-rule,.bn-card:focus-visible .bn-rule{width:76px}
+
+  /* Both copies share one grid cell, so they crossfade in place AND the cell
+     self-sizes to whichever is taller. A hand-picked min-height would have to
+     be re-guessed for every copy edit and every breakpoint; this never needs
+     touching and never lets the card resize on hover. */
+  .bn-body{position:relative;z-index:1;display:grid;align-items:start}
+  .bn-short,.bn-long{grid-area:1/1;margin:0;font-size:15px;line-height:1.6;transition:opacity .38s ease,transform .38s ease}
+  .bn-short{color:var(--ink-soft);opacity:1;transform:none}
+  .bn-long{color:var(--muted);opacity:0;transform:translateY(9px)}
+  .bn-card:hover .bn-short,.bn-card:focus-visible .bn-short{opacity:0;transform:translateY(-9px)}
+  .bn-card:hover .bn-long,.bn-card:focus-visible .bn-long{opacity:1;transform:none}
+
+  @media (max-width:1000px){
+    .bn-grid{gap:16px}
+    .bn-card{padding:22px 20px 24px}
+    .bn-title{font-size:18px}
+    .bn-ic{width:50px;height:50px;border-radius:14px;margin-bottom:15px}
+    .bn-ic svg{width:27px;height:27px}
+    .bn-num{font-size:70px;right:14px}
+    .bn-short,.bn-long{font-size:14px}
+  }
+  /* No hover to reveal with: stack both copies so the detail is simply there.
+     Without this the long text would be unreachable on every phone. */
+  @media (hover:none),(max-width:760px){
+    .bn{padding:46px 0}
+    .bn__head{margin-bottom:24px}
+    .bn-grid{grid-template-columns:1fr;gap:14px}
+    .bn-card{transform:none}
+    .bn-body{display:block}
+    .bn-short,.bn-long{opacity:1;transform:none}
+    .bn-long{margin-top:10px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .bn-card,.bn-rule,.bn-short,.bn-long{transition:none}
+    .bn-card:hover{transform:none}
+    .bn-card:hover .bn-short{transform:none}
+    .bn-card:hover .bn-long{transform:none}
+  }
+</style>
+
+<section class="bn" aria-labelledby="bnTitle">
+  <div class="wrap">
+    <div class="bn__head">
+      <span class="s-eyebrow">Benefits</span>
+      <h2 class="s-title" id="bnTitle">Where Advanced Ginger+ <em>fits in.</em></h2>
+    </div>
+
+    <%
+      var _bn = [
+        {
+          ic: '<circle cx="12" cy="12" r="8.6"/><path d="M12 16.2c-2.6-1.8-4-3.2-4-4.9a2.15 2.15 0 0 1 4-1.1 2.15 2.15 0 0 1 4 1.1c0 1.7-1.4 3.1-4 4.9z"/>',
+          t: 'The first trimester',
+          s: 'Built for the weeks when mornings are hardest.',
+          l: 'Ginger+ was formulated specifically for first-trimester nausea, at ginger and vitamin B<sub>6</sub> doses chosen to be pregnancy-friendly. If symptoms are severe or persistent, please consult your gynaecologist.'
+        },
+        {
+          ic: '<rect x="3.4" y="5.2" width="17.2" height="15.4" rx="2.6"/><path d="M8.2 3.2v4M15.8 3.2v4M3.4 10.1h17.2"/><path d="m9.3 14.9 1.9 1.9 3.6-3.7"/>',
+          t: 'Everyday digestion',
+          s: 'Gentle support for day-to-day digestive comfort.',
+          l: 'Standardised ginger extract has long been used to settle an upset stomach. Alongside magnesium bisglycinate it is intended to support digestive comfort as part of a daily routine, taken according to individual needs and professional guidance.'
+        },
+        {
+          // DRAFT — written only from claims already on this page (pack:
+          // "Designed for feel good mornings" / "Supports energy metabolism").
+          // Replace as needed.
+          ic: '<path d="M3.6 11.6h16.8a8.4 8.4 0 0 1-16.8 0z"/><path d="M8.4 11.6a3.6 3.6 0 0 1 7.2 0"/><path d="M12 4.4v3.6"/><path d="M6.5 19.4h11"/>',
+          t: 'Feel-good mornings',
+          s: 'For starting the day a little steadier.',
+          l: 'Vitamin B<sub>1</sub> and active B<sub>6</sub> support the everyday energy metabolism that queasy mornings tend to drain &mdash; which is why the pack is built around good mornings, not just easing discomfort.'
+        }
+      ];
+    %>
+    <div class="bn-grid">
+      <% _bn.forEach(function (c, i) { %>
+        <%# tabindex makes the hover-gated copy reachable by keyboard too %>
+        <article class="bn-card" tabindex="0">
+          <span class="bn-num" aria-hidden="true">0<%= i + 1 %></span>
+          <span class="bn-ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><%- c.ic %></svg>
+          </span>
+          <h3 class="bn-title"><%- c.t %></h3>
+          <span class="bn-rule" aria-hidden="true"></span>
+          <div class="bn-body">
+            <p class="bn-short"><%- c.s %></p>
+            <p class="bn-long"><%- c.l %></p>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
 <!-- KEY INGREDIENTS -->
 <style>
   /* Three tracks: labels | product shot | labels. The outer tracks are 1fr
@@ -1286,6 +1424,109 @@
     </div>
   </div>
 </section>
+
+<!-- EVIDENCE-BACKED FORMULATION -->
+<%
+  // Ginger+ has no trial data and no substantiated onset timing, so this track
+  // is the daily ROUTINE, not a promise about when nausea eases. Every line is
+  // taken from the FAQ ("after a meal", "some prefer the night before"), the
+  // first-trimester card, or the pack.
+  var _jt = {
+    eyebrow: 'Evidence-Backed Formulation',
+    title: 'How it fits <em>your day.</em>',
+    lede: 'One vegecap, built for the weeks when mornings are hardest. Here is where it lands in a day.',
+    stages: [
+      {
+        k: 'The night before',
+        h: 'If mornings are the hardest part',
+        s: 'Some prefer taking it the night before, so they are not facing a capsule while already queasy.',
+        points: [
+          'One vegecap with water',
+          'Nothing to face first thing',
+          'Built around the morning after'
+        ]
+      },
+      {
+        k: 'After a meal',
+        h: 'The usual way to take it',
+        s: 'Once a day, ideally after a meal with a full glass of water.',
+        points: [
+          'One a day, no more',
+          'Food first, then the capsule',
+          'A full glass of water'
+        ]
+      },
+      {
+        k: 'First trimester',
+        h: 'The weeks it was made for',
+        s: 'Ginger+ was formulated specifically for first-trimester nausea, at doses chosen to be pregnancy-friendly.',
+        points: [
+          'A real dose of standardised ginger extract, not a trace',
+          'Vitamin B<sub>6</sub> in the form your body can use straight away',
+          'Pregnancy-friendly doses throughout',
+          'Talk to your gynaecologist if symptoms are severe'
+        ]
+      },
+      {
+        k: 'Day to day',
+        h: 'Beyond the queasy weeks',
+        s: 'Ginger has long been used to settle an unsettled stomach. Alongside magnesium, it supports everyday digestive comfort as part of a daily routine.',
+        points: [
+          'Gentle daily digestion',
+          'Magnesium bisglycinate alongside',
+          '100% vegetarian vegecaps',
+          'No gelatin, no preservatives'
+        ]
+      }
+    ],
+    note: '<p>This describes the formulation as printed on the pack and how it is meant to be taken. Advanced Ginger+ has not itself been through a clinical trial, and nothing above is a claim about how quickly nausea eases &mdash; that varies a great deal. If nausea is severe or persistent, please consult your gynaecologist.</p>' +
+          '<ul><li>Standardised ginger extract: 250 mg per capsule</li><li>Vitamin B<sub>6</sub> as P5P (the active form): 2.3 mg</li><li>Also included: magnesium bisglycinate and vitamin B<sub>1</sub></li><li>One vegecap a day, after a meal</li></ul>'
+  };
+%>
+<%- include('../partials/journey-timeline', { jt: _jt }) %>
+
+<!-- TESTIMONIALS -->
+<%
+  // No published review base for this product yet — the hero reads "Early
+  // reviews". Rather than borrow Iron+'s quotes or invent any, the slot shows
+  // an honest early-days panel and asks for the first one.
+  //
+  // Do NOT populate items with written-for-us copy: testimonials nobody gave
+  // are a deceptive practice, and India's CCPA / BIS IS 19000 rules on online
+  // consumer reviews prohibit them outright. When real quotes arrive, paste
+  // them into items as {q, name, meta, tag, img} and DELETE the invite — the
+  // loop replaces this panel automatically, with no other change.
+  var _tm = {
+    eyebrow: 'Testimonials',
+    title: 'What people <em>say.</em>',
+    items: [],
+    invite: {
+      title: 'Early days for <em>Ginger+</em>.',
+      body: 'It launched recently, so there are not yet enough reviews to publish. We would rather show you none than borrow somebody else&rsquo;s &mdash; so if Ginger+ has helped your mornings, tell us how it is going.',
+      cta: { label: 'Share your experience', href: '/contact' },
+      alt: { label: 'Read Advanced Iron+ reviews', href: '/reviews' }
+    }
+  };
+%>
+<%- include('../partials/testimonials', { tm: _tm }) %>
+
+<!-- FAQ -->
+<section class="s faq-sec">
+  <div class="wrap">
+    <div class="s-head center">
+      <span class="rv-marker">FAQ</span>
+      <h2 class="s-title">Questions, <em>answered</em>.</h2>
+    </div>
+    <div class="fq-list">
+      <details class="fq-item"><summary class="fq-q">What's in Ginger+?<span class="plus">+</span></summary><div class="fq-a">Standardized Ginger Extract (250 mg) + active Vit. B<sub>6</sub> as <strong>P5P</strong> (2.3 mg) + Vit. B<sub>1</sub> + Magnesium Bisglycinate. Built specifically for first-trimester nausea and gentle daily digestion.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is Ginger+ safe in the first trimester?<span class="plus">+</span></summary><div class="fq-a">Yes &mdash; Ginger+ was built specifically for first-trimester nausea. The doses of ginger and Vit. B<sub>6</sub> are pregnancy-friendly. If symptoms are severe or persistent, please consult your gynaecologist.</div></details>
+      <details class="fq-item"><summary class="fq-q">How does Ginger+ ease nausea?<span class="plus">+</span></summary><div class="fq-a">Standardised ginger extract and active Vit. B<sub>6</sub> (P5P) are the two most evidence-backed pregnancy-nausea supports &mdash; together in one gentle daily capsule.</div></details>
+      <details class="fq-item"><summary class="fq-q">When should I take Ginger+?<span class="plus">+</span></summary><div class="fq-a">Once a day, ideally after a meal with a glass of water. If mornings are the hardest, some prefer taking it the night before.</div></details>
+      <details class="fq-item"><summary class="fq-q">Is Ginger+ vegetarian?<span class="plus">+</span></summary><div class="fq-a">Yes &mdash; <strong>100% vegetarian</strong> vegecaps, with no gelatin, no preservatives, GMO-free and gluten-free.</div></details>
+    </div>
+  </div>
+</section>
+
 
 <!-- PAIR IT WITH -->
 <style>
@@ -1455,294 +1696,6 @@
   </div>
 </section>
 <% } %>
-
-<!-- EVIDENCE-BACKED FORMULATION -->
-<style>
-  /* Blush band so the section separates from the white Key Ingredients block
-     above it, and picks up the warm cream tones already in the photograph. */
-  .ebf{background:#F4FAF6;padding:82px 0}
-  .ebf-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1fr);gap:58px;align-items:center}
-
-  .ebf-media{
-    position:relative;border-radius:24px;overflow:hidden;
-    box-shadow:0 26px 60px rgba(18,70,45,.14);
-    transition:transform .5s cubic-bezier(.2,.7,.3,1),box-shadow .5s ease;
-  }
-  .ebf-media:hover{transform:translateY(-7px);box-shadow:0 38px 80px rgba(18,70,45,.22)}
-  /* Slower than the lift so the push-in keeps reading after the card settles. */
-  .ebf-media img{
-    width:100%;height:auto;display:block;aspect-ratio:4/5;object-fit:cover;
-    transition:transform .8s cubic-bezier(.2,.7,.3,1),filter .45s ease;
-  }
-  .ebf-media:hover img{transform:scale(1.06)}
-  /* No white sheen sweep here: this shot is high-key cream and marble, so a
-     white gradient passing over it is invisible. A small warmth-and-contrast
-     lift is what actually reads on light photography. */
-  .ebf-media img{filter:saturate(1) contrast(1)}
-  .ebf-media:hover img{filter:saturate(1.09) contrast(1.04) brightness(1.02)}
-  /* Inner hairline that fades up on hover, so the frame feels picked out. */
-  .ebf-media::after{
-    content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
-    border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(20,75,48,.22);
-    opacity:0;transition:opacity .45s ease;
-  }
-  .ebf-media:hover::after{opacity:1}
-  /* Motion off: keep the depth cue, drop everything that moves. */
-  @media (prefers-reduced-motion:reduce){
-    .ebf-media,.ebf-media img,.ebf-media::after{transition:none}
-    .ebf-media:hover{transform:none}
-    .ebf-media:hover img{transform:none;filter:none}
-  }
-
-  .ebf-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:clamp(30px,3.4vw,42px);font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(--ink);margin:0 0 14px}
-  .ebf-title em{font-style:italic;font-weight:500;color:var(--honey)}
-  .ebf-lede{font-size:16px;line-height:1.65;color:var(--ink-soft);margin:0;max-width:52ch}
-
-  /* Ledger, not floating blocks: hairline rules knit the four figures into one
-     table so they read as a single body of evidence. */
-  .ebf-stats{
-    --rule:rgba(20,75,48,.14);
-    display:grid;grid-template-columns:1fr 1fr;
-    margin:34px 0 0;border-top:1px solid var(--rule);
-  }
-  .ebf-stat{padding:26px 28px;border-bottom:1px solid var(--rule)}
-  .ebf-stat:nth-child(odd){padding-left:0;border-right:1px solid var(--rule)}
-  .ebf-stat:nth-child(even){padding-right:0}
-  .ebf-stat b{
-    display:block;font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:clamp(26px,2.9vw,36px);font-weight:800;letter-spacing:-0.035em;
-    color:var(--honey);line-height:1;margin-bottom:10px;
-  }
-  .ebf-stat span{display:block;font-size:14px;font-weight:600;color:var(--ink-soft);line-height:1.5}
-  .ebf-stat i{font-style:normal;color:var(--honey-2)}
-
-  .ebf-note{margin:20px 0 0;font-size:12.5px;font-weight:600;color:var(--muted-2);line-height:1.6;max-width:56ch}
-
-  @media (max-width:900px){
-    .ebf{padding:52px 0}
-    .ebf-grid{grid-template-columns:minmax(0,1fr);gap:30px}
-    .ebf-media{order:-1;max-width:440px;margin-inline:auto}
-    /* Centred once stacked: left-aligned copy under a centred photo reads as
-       one-sided. max-width alone is not enough — these blocks need the auto
-       side margins too, or they stay pinned to the left of their column. */
-    .ebf-copy{text-align:center}
-    .ebf-lede{margin-inline:auto}
-    .ebf-note{margin-inline:auto}
-    .ebf-stats{margin-top:28px}
-    /* symmetric, so the two columns mirror instead of hugging the text edge */
-    .ebf-stat{padding:20px 18px}
-    .ebf-stat:nth-child(odd){padding-left:18px}
-    .ebf-stat:nth-child(even){padding-right:18px}
-  }
-  @media (max-width:560px){
-    .ebf{padding:40px 0}
-    .ebf-lede{font-size:14.5px}
-    .ebf-stat{padding:16px 12px}
-    .ebf-stat:nth-child(odd){padding-left:12px}
-    .ebf-stat:nth-child(even){padding-right:12px}
-    .ebf-stat b{font-size:23px;margin-bottom:7px}
-    .ebf-stat span{font-size:12.5px;line-height:1.45}
-    .ebf-note{font-size:11.5px}
-  }
-</style>
-
-<section class="ebf" aria-labelledby="ebfTitle">
-  <div class="wrap">
-    <div class="ebf-grid">
-      <div class="ebf-media">
-        <img src="/img/products/ginger-1.jpg" alt="Shiōrra Advanced Ginger+ pack with fresh ginger root" loading="lazy">
-      </div>
-
-      <div class="ebf-copy">
-        <span class="s-eyebrow">Evidence-Backed Formulation</span>
-        <h2 class="ebf-title" id="ebfTitle">Built for the <em>hardest mornings.</em></h2>
-        <p class="ebf-lede">Advanced Ginger+ pairs <strong>standardised ginger extract with active vitamin B<sub>6</sub></strong> &mdash; the two supports most commonly studied for pregnancy-related nausea, in one daily capsule. The figures below are formulation facts taken from the pack.</p>
-
-        <%
-          // Sourced from claims already substantiated elsewhere on this page
-          // (FAQ + pack copy). Nothing here is a new efficacy number.
-          // FORMULATION FACTS, not clinical results. No trial figures were
-          // supplied for Ginger+, and inventing efficacy percentages for a
-          // supplement taken in pregnancy is not something to guess at. Every
-          // number below is read straight off the pack. Send real research
-          // figures and these swap out one-for-one.
-          var _ebf = [
-            { n: '250 mg', t: 'standardised <em>Zingiber officinale</em> extract per capsule' },
-            { n: '2.3 mg', t: 'vitamin B<sub>6</sub> as P5P &mdash; the already-active form' },
-            { n: '4',      t: 'targeted actives: ginger, B<sub>6</sub>, magnesium bisglycinate and B<sub>1</sub>' },
-            { n: '1',      t: 'vegecap a day, after a meal with a glass of water' }
-          ];
-        %>
-        <div class="ebf-stats">
-          <% _ebf.forEach(function (x) { %>
-            <div class="ebf-stat">
-              <b><%- x.n %></b>
-              <span><%- x.t %></span>
-            </div>
-          <% }); %>
-        </div>
-
-        <p class="ebf-note">Figures describe the formulation as printed on the pack. Advanced Ginger+ has not itself been through a clinical trial &mdash; if nausea is severe or persistent, please speak to your gynaecologist.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="s faq-sec">
-  <div class="wrap">
-    <div class="s-head center">
-      <span class="rv-marker">FAQ</span>
-      <h2 class="s-title">Questions, <em>answered</em>.</h2>
-    </div>
-    <div class="fq-list">
-      <details class="fq-item"><summary class="fq-q">What's in Ginger+?<span class="plus">+</span></summary><div class="fq-a">Standardized Ginger Extract (250 mg) + active Vit. B<sub>6</sub> as <strong>P5P</strong> (2.3 mg) + Vit. B<sub>1</sub> + Magnesium Bisglycinate. Built specifically for first-trimester nausea and gentle daily digestion.</div></details>
-      <details class="fq-item"><summary class="fq-q">Is Ginger+ safe in the first trimester?<span class="plus">+</span></summary><div class="fq-a">Yes &mdash; Ginger+ was built specifically for first-trimester nausea. The doses of ginger and Vit. B<sub>6</sub> are pregnancy-friendly. If symptoms are severe or persistent, please consult your gynaecologist.</div></details>
-      <details class="fq-item"><summary class="fq-q">How does Ginger+ ease nausea?<span class="plus">+</span></summary><div class="fq-a">Standardised ginger extract and active Vit. B<sub>6</sub> (P5P) are the two most evidence-backed pregnancy-nausea supports &mdash; together in one gentle daily capsule.</div></details>
-      <details class="fq-item"><summary class="fq-q">When should I take Ginger+?<span class="plus">+</span></summary><div class="fq-a">Once a day, ideally after a meal with a glass of water. If mornings are the hardest, some prefer taking it the night before.</div></details>
-      <details class="fq-item"><summary class="fq-q">Is Ginger+ vegetarian?<span class="plus">+</span></summary><div class="fq-a">Yes &mdash; <strong>100% vegetarian</strong> vegecaps, with no gelatin, no preservatives, GMO-free and gluten-free.</div></details>
-    </div>
-  </div>
-</section>
-
-
-<!-- BENEFITS -->
-<style>
-  .bn{background:#FBFBFC;border-top:1px solid var(--line);padding:76px 0}
-  .bn__head{text-align:center;margin-bottom:38px}
-  .bn__head .s-title{margin-inline:auto;margin-bottom:0}
-
-  .bn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-  .bn-card{
-    position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:20px;
-    padding:28px 28px 30px;cursor:default;
-    transition:border-color .3s ease,box-shadow .3s ease,transform .3s ease;
-  }
-  /* Corner wash — gives the card a light source instead of a flat fill.
-     Clipped by the card's own overflow:hidden. */
-  .bn-card::before{
-    content:'';position:absolute;right:-46px;top:-46px;width:165px;height:165px;border-radius:50%;
-    background:radial-gradient(circle,rgba(46,139,87,.10),transparent 70%);
-    opacity:.7;transition:opacity .35s ease,transform .35s ease;pointer-events:none;
-  }
-  .bn-card:hover::before,.bn-card:focus-visible::before{opacity:1;transform:scale(1.3)}
-  .bn-card:hover,.bn-card:focus-visible{
-    border-color:var(--honey);box-shadow:0 18px 42px rgba(20,75,48,.10);
-    transform:translateY(-4px);outline:none;
-  }
-  /* Oversized ghost numeral: occupies the space the short copy leaves behind
-     at rest, so the card does not read as half-empty before you hover it. */
-  .bn-num{
-    position:absolute;right:18px;bottom:-6px;z-index:0;
-    font-family:'Helvetica Neue',Arial,sans-serif;font-size:86px;font-weight:800;
-    letter-spacing:-0.05em;line-height:1;color:rgba(20,75,48,.055);
-    pointer-events:none;user-select:none;transition:color .35s ease,transform .35s ease;
-  }
-  /* recedes on hover so it never competes with the detailed copy that
-     expands over it */
-  .bn-card:hover .bn-num,.bn-card:focus-visible .bn-num{color:rgba(20,75,48,.03);transform:translateY(6px)}
-  .bn-ic{
-    position:relative;z-index:1;width:56px;height:56px;border-radius:16px;
-    background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;margin-bottom:18px;
-    transition:background .3s ease,color .3s ease,transform .3s ease;
-  }
-  .bn-ic svg{width:31px;height:31px}
-  .bn-card:hover .bn-ic,.bn-card:focus-visible .bn-ic{background:var(--honey);color:#fff;transform:translateY(-2px) rotate(-3deg)}
-  .bn-title{position:relative;z-index:1;font-size:20px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);margin:0 0 6px;line-height:1.25}
-  /* Rule widens on hover — the only affordance hinting there is more to read. */
-  .bn-rule{position:relative;z-index:1;display:block;width:34px;height:2px;background:var(--honey);border-radius:2px;margin:0 0 16px;transition:width .35s cubic-bezier(.2,.7,.3,1)}
-  .bn-card:hover .bn-rule,.bn-card:focus-visible .bn-rule{width:76px}
-
-  /* Both copies share one grid cell, so they crossfade in place AND the cell
-     self-sizes to whichever is taller. A hand-picked min-height would have to
-     be re-guessed for every copy edit and every breakpoint; this never needs
-     touching and never lets the card resize on hover. */
-  .bn-body{position:relative;z-index:1;display:grid;align-items:start}
-  .bn-short,.bn-long{grid-area:1/1;margin:0;font-size:15px;line-height:1.6;transition:opacity .38s ease,transform .38s ease}
-  .bn-short{color:var(--ink-soft);opacity:1;transform:none}
-  .bn-long{color:var(--muted);opacity:0;transform:translateY(9px)}
-  .bn-card:hover .bn-short,.bn-card:focus-visible .bn-short{opacity:0;transform:translateY(-9px)}
-  .bn-card:hover .bn-long,.bn-card:focus-visible .bn-long{opacity:1;transform:none}
-
-  @media (max-width:1000px){
-    .bn-grid{gap:16px}
-    .bn-card{padding:22px 20px 24px}
-    .bn-title{font-size:18px}
-    .bn-ic{width:50px;height:50px;border-radius:14px;margin-bottom:15px}
-    .bn-ic svg{width:27px;height:27px}
-    .bn-num{font-size:70px;right:14px}
-    .bn-short,.bn-long{font-size:14px}
-  }
-  /* No hover to reveal with: stack both copies so the detail is simply there.
-     Without this the long text would be unreachable on every phone. */
-  @media (hover:none),(max-width:760px){
-    .bn{padding:46px 0}
-    .bn__head{margin-bottom:24px}
-    .bn-grid{grid-template-columns:1fr;gap:14px}
-    .bn-card{transform:none}
-    .bn-body{display:block}
-    .bn-short,.bn-long{opacity:1;transform:none}
-    .bn-long{margin-top:10px}
-  }
-  @media (prefers-reduced-motion:reduce){
-    .bn-card,.bn-rule,.bn-short,.bn-long{transition:none}
-    .bn-card:hover{transform:none}
-    .bn-card:hover .bn-short{transform:none}
-    .bn-card:hover .bn-long{transform:none}
-  }
-</style>
-
-<section class="bn" aria-labelledby="bnTitle">
-  <div class="wrap">
-    <div class="bn__head">
-      <span class="s-eyebrow">Benefits</span>
-      <h2 class="s-title" id="bnTitle">Where Advanced Ginger+ <em>fits in.</em></h2>
-    </div>
-
-    <%
-      var _bn = [
-        {
-          ic: '<circle cx="12" cy="12" r="8.6"/><path d="M12 16.2c-2.6-1.8-4-3.2-4-4.9a2.15 2.15 0 0 1 4-1.1 2.15 2.15 0 0 1 4 1.1c0 1.7-1.4 3.1-4 4.9z"/>',
-          t: 'The first trimester',
-          s: 'Built for the weeks when mornings are hardest.',
-          l: 'Ginger+ was formulated specifically for first-trimester nausea, at ginger and vitamin B<sub>6</sub> doses chosen to be pregnancy-friendly. If symptoms are severe or persistent, please consult your gynaecologist.'
-        },
-        {
-          ic: '<rect x="3.4" y="5.2" width="17.2" height="15.4" rx="2.6"/><path d="M8.2 3.2v4M15.8 3.2v4M3.4 10.1h17.2"/><path d="m9.3 14.9 1.9 1.9 3.6-3.7"/>',
-          t: 'Everyday digestion',
-          s: 'Gentle support for day-to-day digestive comfort.',
-          l: 'Standardised ginger extract has long been used to settle an upset stomach. Alongside magnesium bisglycinate it is intended to support digestive comfort as part of a daily routine, taken according to individual needs and professional guidance.'
-        },
-        {
-          // DRAFT — written only from claims already on this page (pack:
-          // "Designed for feel good mornings" / "Supports energy metabolism").
-          // Replace as needed.
-          ic: '<path d="M3.6 11.6h16.8a8.4 8.4 0 0 1-16.8 0z"/><path d="M8.4 11.6a3.6 3.6 0 0 1 7.2 0"/><path d="M12 4.4v3.6"/><path d="M6.5 19.4h11"/>',
-          t: 'Feel-good mornings',
-          s: 'For starting the day a little steadier.',
-          l: 'Vitamin B<sub>1</sub> and active B<sub>6</sub> support the everyday energy metabolism that queasy mornings tend to drain &mdash; which is why the pack is built around good mornings, not just easing discomfort.'
-        }
-      ];
-    %>
-    <div class="bn-grid">
-      <% _bn.forEach(function (c, i) { %>
-        <%# tabindex makes the hover-gated copy reachable by keyboard too %>
-        <article class="bn-card" tabindex="0">
-          <span class="bn-num" aria-hidden="true">0<%= i + 1 %></span>
-          <span class="bn-ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><%- c.ic %></svg>
-          </span>
-          <h3 class="bn-title"><%- c.t %></h3>
-          <span class="bn-rule" aria-hidden="true"></span>
-          <div class="bn-body">
-            <p class="bn-short"><%- c.s %></p>
-            <p class="bn-long"><%- c.l %></p>
-          </div>
-        </article>
-      <% }); %>
-    </div>
-  </div>
-</section>
 
 <!-- FOOTER -->
 <%- include('../partials/footer-home') %>

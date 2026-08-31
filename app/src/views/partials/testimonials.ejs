@@ -1,0 +1,193 @@
+<%# ============================================================
+     Testimonials — an infinite horizontal loop, sitting between the
+     evidence section and the FAQ.
+
+     Same technique as the certification scroller: one track holding the
+     set twice, translated -50% on a linear loop, so the seam is never
+     visible. Pauses on hover and on keyboard focus; under
+     prefers-reduced-motion the animation is dropped and the viewport
+     becomes a normal horizontal scroller instead.
+
+     With no items it renders either NOTHING, or — if tm.invite is set —
+     an "early days" panel asking for the first review. A product with no
+     review base gets one of those two, never borrowed or invented quotes:
+     publishing testimonials nobody gave is a deceptive practice, and under
+     India's CCPA / BIS IS 19000 rules on online consumer reviews it is
+     specifically prohibited. Delete the invite and paste real quotes into
+     items the moment they exist.
+
+     Expects a `tm` object:
+       tm.eyebrow  small label above the title
+       tm.title    heading (HTML — <em> gets the page accent)
+       tm.score    e.g. '4.9'          (optional, with tm.count)
+       tm.count    e.g. '1,240+ reviews'
+       tm.href     where the count links (optional)
+       tm.secs     seconds per full loop (optional, default 46)
+       tm.invite   { title, body, cta:{label,href}, alt:{label,href} }
+                   shown INSTEAD of the loop while items is empty
+       tm.items    [{ q, name, meta, tag, img }]
+                   img is the customer's photo. When absent the card falls
+                   back to a monogram built from their initials — never a
+                   stock face, which would imply a person who did not
+                   give this review.
+     ============================================================ %>
+<% if (tm && tm.items && tm.items.length) { %>
+<section class="tm-sec" aria-labelledby="tmTitle">
+  <style>
+    .tm-sec{background:#fff;padding:82px 0;position:relative}
+    .tm-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap;margin:0 0 34px}
+    .tm-head__l{max-width:56ch}
+    .tm-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:clamp(28px,3.2vw,40px);font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(--ink);margin:0}
+    .tm-title em{font-style:italic;font-weight:500;color:var(--honey)}
+
+    .tm-score{display:flex;align-items:center;gap:10px;white-space:nowrap}
+    .tm-score__s{color:var(--honey);font-size:15px;letter-spacing:.12em}
+    .tm-score__n{font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;color:var(--ink)}
+    .tm-score__c{font-size:13.5px;color:var(--ink-soft);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.16)}
+    .tm-score__c:hover{color:var(--honey-deep);border-bottom-color:currentColor}
+
+    /* ---- the loop ----
+       The track holds the set twice and travels -50%, so the moment it
+       resets, item 1 of copy 2 is exactly where item 1 of copy 1 began and
+       nothing jumps. width:max-content stops the flex track wrapping. */
+    .tm-viewport{overflow:hidden}
+    .tm-track{display:flex;width:max-content;animation:tmScroll var(--tmSecs,46s) linear infinite}
+    .tm-sec:hover .tm-track,
+    .tm-track:focus-within{animation-play-state:paused}
+    .tm-set{display:flex;gap:20px;padding-right:20px;list-style:none;margin:0}
+    @keyframes tmScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* edge fades so cards dissolve rather than pop at the boundaries */
+    .tm-sec::before,.tm-sec::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
+    .tm-sec::before{left:0;background:linear-gradient(90deg,#fff 0,#fff 26%,rgba(255,255,255,0) 100%)}
+    .tm-sec::after{right:0;background:linear-gradient(270deg,#fff 0,#fff 26%,rgba(255,255,255,0) 100%)}
+
+    .tm-card{flex:0 0 342px;width:342px;display:flex;flex-direction:column;
+      background:#FBF4F7;border:1px solid var(--line);border-radius:18px;padding:24px 24px 20px}
+    .tm-card__r{color:var(--honey);font-size:13px;letter-spacing:.14em;margin:0 0 12px}
+    .tm-card__q{font-size:14.5px;line-height:1.6;color:var(--ink);margin:0 0 20px;flex:1}
+
+    .tm-card__a{display:flex;align-items:center;gap:12px}
+    .tm-card__av{flex:none;width:44px;height:44px;border-radius:50%;overflow:hidden;
+      background:var(--honey-soft);display:grid;place-items:center;
+      box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+    .tm-card__av img{width:100%;height:100%;object-fit:cover;display:block}
+    /* monogram fallback — derived from the name, never a stock face */
+    .tm-card__av span{font-size:15px;font-weight:800;letter-spacing:.02em;color:var(--honey-deep)}
+    .tm-card__who{min-width:0}
+    .tm-card__n{display:block;font-size:14px;font-weight:700;color:var(--ink);line-height:1.3}
+    .tm-card__m{display:block;font-size:12.5px;color:var(--ink-soft);line-height:1.35}
+    .tm-card__t{align-self:flex-start;margin:14px 0 0;padding:4px 11px;border-radius:999px;
+      background:color-mix(in srgb,var(--honey) 12%,transparent);color:var(--honey-deep);
+      font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+
+    @media (max-width: 860px){
+      .tm-sec{padding:56px 0}
+      .tm-head{margin-bottom:24px;gap:14px}
+      .tm-sec::before,.tm-sec::after{width:48px}
+      .tm-card{flex-basis:284px;width:284px;padding:20px 20px 17px;border-radius:14px}
+      .tm-set{gap:14px;padding-right:14px}
+    }
+    /* ---- early-days panel ---- */
+    .tm-invite{display:flex;flex-direction:column;align-items:center;text-align:center;
+      background:#FBF4F7;border:1px dashed rgba(0,0,0,.14);border-radius:22px;padding:44px 32px}
+    .tm-invite__t{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+      font-size:clamp(21px,2.3vw,27px);font-weight:700;letter-spacing:-0.02em;color:var(--ink);margin:0 0 10px}
+    .tm-invite__t em{font-style:normal;color:var(--honey)}
+    .tm-invite__p{font-size:15px;line-height:1.62;color:var(--ink-soft);margin:0;max-width:52ch}
+    .tm-invite__row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:22px}
+    .tm-invite__cta,.tm-invite__alt{display:inline-flex;align-items:center;min-height:46px;
+      padding:0 22px;border-radius:999px;font-size:13.5px;font-weight:700;text-decoration:none;
+      transition:background .25s ease,color .25s ease,border-color .25s ease}
+    .tm-invite__cta{background:var(--honey);color:#fff}
+    .tm-invite__cta:hover{background:var(--honey-deep)}
+    .tm-invite__alt{border:1px solid var(--line);color:var(--ink)}
+    .tm-invite__alt:hover{border-color:var(--honey);color:var(--honey-deep)}
+    @media (max-width:860px){
+      .tm-invite{padding:30px 20px;border-radius:16px}
+      .tm-invite__cta,.tm-invite__alt{width:100%;justify-content:center}
+    }
+
+    /* No animation: the viewport becomes a plain scroller, so every review is
+       still reachable — it just does not move on its own. */
+    @media (prefers-reduced-motion: reduce){
+      .tm-track{animation:none;width:auto}
+      .tm-viewport{overflow-x:auto;scrollbar-width:none}
+      .tm-viewport::-webkit-scrollbar{display:none}
+    }
+  </style>
+
+  <div class="wrap">
+    <div class="tm-head">
+      <div class="tm-head__l">
+        <span class="s-eyebrow"><%= tm.eyebrow %></span>
+        <h2 class="tm-title" id="tmTitle"><%- tm.title %></h2>
+      </div>
+      <% if (tm.score) { %>
+        <div class="tm-score">
+          <span class="tm-score__s" aria-hidden="true">★★★★★</span>
+          <span class="tm-score__n"><%= tm.score %></span>
+          <% if (tm.count) { %>
+            <% if (tm.href) { %><a class="tm-score__c" href="<%= tm.href %>"><%= tm.count %></a>
+            <% } else { %><span class="tm-score__c"><%= tm.count %></span><% } %>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <%
+    // initials for the monogram fallback: "Anjali R." -> "AR"
+    var _tmInit = function (n) {
+      return String(n || '').replace(/&[a-z]+;/gi, ' ').split(/\s+/)
+        .filter(Boolean).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join('');
+    };
+  %>
+  <div class="tm-viewport">
+    <div class="tm-track" style="--tmSecs:<%= (tm.secs || 46) %>s">
+      <%# the set twice: copy two is aria-hidden so a screen reader is not
+          read every review a second time %>
+      <% [0, 1].forEach(function (dup) { %>
+        <ul class="tm-set"<%- dup ? ' aria-hidden="true"' : '' %>>
+          <% tm.items.forEach(function (it) { %>
+            <li class="tm-card">
+              <span class="tm-card__r" aria-label="Rated 5 out of 5">★★★★★</span>
+              <blockquote class="tm-card__q"><%- it.q %></blockquote>
+              <div class="tm-card__a">
+                <span class="tm-card__av">
+                  <% if (it.img) { %><img src="<%= it.img %>" alt="<%- it.name %>" loading="lazy">
+                  <% } else { %><span aria-hidden="true"><%= _tmInit(it.name) %></span><% } %>
+                </span>
+                <span class="tm-card__who">
+                  <span class="tm-card__n"><%- it.name %></span>
+                  <% if (it.meta) { %><span class="tm-card__m"><%- it.meta %></span><% } %>
+                </span>
+              </div>
+              <% if (it.tag) { %><span class="tm-card__t"><%- it.tag %></span><% } %>
+            </li>
+          <% }); %>
+        </ul>
+      <% }); %>
+    </div>
+  </div>
+</section>
+<% } else if (tm && tm.invite) { %>
+<section class="tm-sec" aria-labelledby="tmTitle">
+  <div class="wrap">
+    <div class="tm-head">
+      <div class="tm-head__l">
+        <span class="s-eyebrow"><%= tm.eyebrow %></span>
+        <h2 class="tm-title" id="tmTitle"><%- tm.title %></h2>
+      </div>
+    </div>
+    <div class="tm-invite">
+      <h3 class="tm-invite__t"><%- tm.invite.title %></h3>
+      <p class="tm-invite__p"><%- tm.invite.body %></p>
+      <div class="tm-invite__row">
+        <% if (tm.invite.cta) { %><a class="tm-invite__cta" href="<%= tm.invite.cta.href %>"><%- tm.invite.cta.label %></a><% } %>
+        <% if (tm.invite.alt) { %><a class="tm-invite__alt" href="<%= tm.invite.alt.href %>"><%- tm.invite.alt.label %></a><% } %>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>
