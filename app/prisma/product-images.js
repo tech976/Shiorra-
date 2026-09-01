@@ -10,6 +10,9 @@
 // tiles, shop and home cards, cart, checkout and admin list all read.
 module.exports = {
   'advanced-iron': [
+    // Card art (index 0) = the same pack shot the home page uses, so the shop
+    // grid, cart, checkout and admin list all match the homepage lineup.
+    '/img/products/iron-home.png',
     '/img/products/iron-g1.png',
     '/img/products/iron-g2.png',
     '/img/products/iron-g3.png',
@@ -29,13 +32,17 @@ module.exports = {
     '/img/products/ginger-g8.png',
   ],
   'advanced-energyone': [
+    // Card art (index 0) — see the note on advanced-iron above.
+    '/img/products/energy-home.png',
     '/img/products/energy-g1.png',
     '/img/products/energy-g2.png',
     '/img/products/energy-g3.png',
     '/img/products/energy-g4.png',
     '/img/products/energy-g5.png',
     '/img/products/energy-g6.png',
-    '/img/products/energy-g7.png',
+    // g7 has no PNG on disk — it blocked this whole entry from ever syncing.
+    // Restore the line once /img/products/energy-g7.png exists.
+    // '/img/products/energy-g7.png',
     '/img/products/energy-g8.png',
   ],
 };
