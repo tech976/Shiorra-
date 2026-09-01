@@ -75,7 +75,13 @@
     overflow:visible;
   }
   .product-hero-grid{
-    display:grid;grid-template-columns:1.15fr 1fr;gap:36px;
+    display:grid;grid-template-columns:1.55fr 1fr;gap:30px;
+    /* Was 1.15fr/36px, sized when the gallery was 4:5. A square frame is
+       20% shorter at the same width, which left the carousel looking small
+       beside the much taller buy panel. Widening the column grows the image
+       itself rather than padding it: the frame and the artwork are both 1:1,
+       so nothing is letterboxed. The panel keeps ~435px, comfortably above
+       the ~400px its 3-up pack selector needs. */
     /* No align-items:start. The gallery column must STRETCH to the info
        panel's height, otherwise the sticky rail inside it has no travel room
        and the image just parks at the top with dead space beneath it. */
@@ -175,7 +181,7 @@
   .pi-kicker{display:block;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--honey-deep);margin-bottom:12px}
   .pi-title{
     font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
-    font-size:clamp(34px,3.9vw,50px);font-weight:900;line-height:.98;letter-spacing:-0.025em;
+    font-size:clamp(27px,3.0vw,38px);font-weight:900;line-height:1.0;letter-spacing:-0.025em;
     text-transform:uppercase;color:var(--ink);margin-bottom:6px;text-wrap:balance;
   }
   .pi-title em{font-style:normal;font-weight:900;color:var(--honey);font-size:.82em;vertical-align:.04em}
@@ -1844,7 +1850,10 @@
   .pair__head .s-title{margin-inline:auto;margin-bottom:10px}
   .pair__sub{font-size:16px;color:var(--muted);margin:0}
 
-  .pair-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:920px;margin-inline:auto}
+  /* auto-fit + justify-content:center so the row stays centred at ANY tile
+     count — two tiles fill the 920px row exactly, a lone tile (e.g. while
+     Ginger+ is down) sits centred instead of stranded in the left column. */
+  .pair-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,448px));justify-content:center;gap:24px;max-width:920px;margin-inline:auto}
 
   /* Explicit grid rows AND columns: the form is deliberately assigned the
      media's own cell on desktop. Pinning only the row leaves the column to
