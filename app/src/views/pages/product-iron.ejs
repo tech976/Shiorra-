@@ -49,6 +49,17 @@
   button{font:inherit;cursor:pointer;border:0;background:none}
   .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
 
+  /* ---------- Sticky topbar (marquee + header) ---------- */
+  /* --topbar-h is measured by script at the foot of the page and re-measured
+     on resize, because the marquee's height changes with the breakpoint. The
+     fallback matches the desktop value so the first paint is already right. */
+  .topbar{position:sticky;top:0;z-index:60}
+  /* Nested sticky inside a sticky parent resolves against this box, which is
+     never what we want here — the parent already does the sticking. */
+  .topbar .site-header{position:relative;top:auto;z-index:auto}
+  /* Anchor targets must clear the whole bar, not just the nav. */
+  html{scroll-padding-top:calc(var(--topbar-h, 89px) + 12px)}
+
   /* ---------- Marquee ---------- */
   .marquee{background:var(--charcoal);color:#fff;padding:10px 0;overflow:hidden;border-bottom:1px solid var(--line)}
   .marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 36s linear infinite;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
@@ -75,7 +86,12 @@
     overflow:visible;
   }
   .product-hero-grid{
-    display:grid;grid-template-columns:1.55fr 1fr;gap:30px;
+    display:grid;
+    /* The buy panel is pinned rather than proportional. It needs ~400px for
+       its 3-up pack selector and gains nothing from more, so every extra
+       pixel of the (now wider) hero band goes to the gallery instead of
+       being split between the two. */
+    grid-template-columns:minmax(0,1fr) clamp(400px,34%,440px);gap:30px;
     /* Was 1.15fr/36px, sized when the gallery was 4:5. A square frame is
        20% shorter at the same width, which left the carousel looking small
        beside the much taller buy panel. Widening the column grows the image
@@ -87,7 +103,14 @@
        and the image just parks at the top with dead space beneath it. */
     position:relative;
   }
-  @media(max-width:880px){.product-hero-grid{grid-template-columns:1fr;gap:28px}}
+  /* The hero band alone runs wider than the 1180px .wrap the rest of the page
+     uses — this is the one section whose job is a big image, and the gallery
+     scales with the column it is given. Other sections are unaffected. */
+  .product-hero > .wrap{max-width:1280px}
+  @media(max-width:880px){
+    .product-hero-grid{grid-template-columns:1fr;gap:28px}
+    .product-hero > .wrap{max-width:1180px}
+  }
 
   /* Gallery — vertical thumb rail flush against the main image.
      .gallery-col is the stretched grid item; .gallery is the sticky child, so
@@ -95,7 +118,18 @@
      blank white column on the left. */
   .gallery-col{min-width:0}
   .gallery{
-    position:sticky;top:96px;padding-top:8px;display:flex;gap:12px;min-width:0;
+    position:sticky;top:calc(var(--topbar-h, 89px) + 16px);padding-top:8px;
+    display:flex;gap:12px;min-width:0;
+    /* Height cap. The frame is square and sized by WIDTH (aspect-ratio:1/1),
+       so bounding the height means bounding this row's width. Inverting the
+       rail formula below — main = (N*G - 4N - 8) / (N + 1) — and solving for
+       G at main = cap gives:  G = (cap*(N+1) + 4N + 8) / N.
+       Under that cap the image grows to fill the column; over it, the column
+       stops growing so the gallery still fits one screen. Nothing is padded
+       or letterboxed either way: the frame and the artwork are both 1:1. */
+    max-width:calc((var(--gal-cap) * (var(--n, 8) + 1) + 4px * var(--n, 8) + 8px) / var(--n, 8));
+    /* topbar + 16px above, and room for the fixed buy bar below. */
+    --gal-cap:calc(100vh - var(--topbar-h, 89px) - 112px);
     /* stretch (not flex-start): the flex line's height is set by the main
        image, and the rail then stretches to exactly that — which is what
        makes the thumbs line up top AND bottom with the big image. */
@@ -136,7 +170,7 @@
   .gallery-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
   /* Below 880px the rail can't sit beside the image — stack it under, scrolling. */
   @media(max-width:880px){
-    .gallery{position:static;flex-direction:column;gap:10px}
+    .gallery{position:static;flex-direction:column;gap:10px;max-width:none}
     .gallery-main{flex:none;width:100%;max-height:none;aspect-ratio:1/1;padding:0}
     .gallery-thumbs{order:1;flex:none;display:flex;flex-direction:row;width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none}
     .gallery-thumbs::-webkit-scrollbar{display:none}
@@ -868,6 +902,12 @@
 </head>
 <body>
 
+<!-- MARQUEE + HEADER — one sticky unit. The ticker used to scroll away
+     above the nav; keeping them together means the guarantee strip stays
+     on screen for the whole page. .site-header is position:sticky in
+     style.css, which is redundant (and makes the offset maths ambiguous)
+     inside an already-sticky parent, so it is neutralised below. -->
+<div class="topbar" id="topbar">
 <!-- MARQUEE -->
 <div class="marquee">
   <div class="marquee-track">
@@ -901,6 +941,7 @@
         </nav>
     </div>
 </header>
+</div><!-- /.topbar -->
 
 
 <style>
@@ -1797,6 +1838,20 @@
 <script src="/js/award.js"></script>
 <script src="/js/main.js"></script>
 <script>
+/* Publish the sticky topbar's real height as --topbar-h. The gallery sticks
+   below it and anchor targets scroll clear of it, and the marquee's height
+   changes with the breakpoint, so it is measured rather than hard-coded. */
+(function () {
+  const bar = document.getElementById('topbar');
+  if (!bar) return;
+  const set = () => document.documentElement.style
+    .setProperty('--topbar-h', bar.offsetHeight + 'px');
+  set();
+  addEventListener('resize', set, { passive: true });
+  // Web fonts land after first paint and change the ticker's line box.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
+})();
+
 /* Gallery — click a thumb to swap the main image */
 (function () {
   const main = document.getElementById('galleryMain');
