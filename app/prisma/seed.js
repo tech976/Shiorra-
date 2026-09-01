@@ -26,6 +26,13 @@ const products = [
     images: PRODUCT_IMAGES['advanced-iron'],
   },
   {
+    // TEMPORARILY DOWN — Advanced Ginger+ is still under review, so it is
+    // hidden rather than deleted: `active: false` makes every storefront query
+    // (home, shop, product page, "Pair it with", cart add, checkout, JSON API)
+    // skip it, while the row, its images and its PDP template all stay put.
+    // To bring it back: set this to true, re-run `npm run seed`, and un-comment
+    // the "GINGER+ TEMPORARILY DOWN" blocks in the views (grep for that string).
+    active: false,
     slug: 'advanced-ginger',
     name: 'Advanced Ginger+',
     tagline: 'Gentle daily support for pregnancy wellness.',
@@ -91,7 +98,7 @@ async function upsertProducts() {
         badge: p.badge,
         ingredients: p.ingredients,
         servingInfo: p.servingInfo,
-        active: true,
+        active: p.active !== false,
       },
       create: {
         slug: p.slug,
@@ -105,6 +112,7 @@ async function upsertProducts() {
         badge: p.badge,
         ingredients: p.ingredients,
         servingInfo: p.servingInfo,
+        active: p.active !== false,
       },
     });
 

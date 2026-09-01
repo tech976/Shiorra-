@@ -83,6 +83,9 @@
   /* Products row */
   .prod-bg{background:var(--surface)}
   .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+  /* GINGER+ TEMPORARILY DOWN — two cards in a 3-up grid leave an empty
+     column. Delete this rule when the Ginger+ card is restored. */
+  .prod-grid{grid-template-columns:repeat(2,1fr);max-width:760px;margin-left:auto;margin-right:auto}
   @media(max-width:880px){.prod-grid{grid-template-columns:1fr}}
   .prod-card{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .25s,box-shadow .25s;display:block}
   .prod-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(40,40,40,.10)}
@@ -255,6 +258,7 @@
           <span class="prod-card__cta">Explore Iron+</span>
         </div>
       </a>
+      <!-- GINGER+ TEMPORARILY DOWN — restore this card when the product is live again.
       <a href="/product/advanced-ginger" class="prod-card prod-card--ginger">
         <div class="prod-card__media"><img src="/img/products/ginger-1.jpg" alt="Advanced Ginger+"></div>
         <div class="prod-card__body">
@@ -264,6 +268,7 @@
           <span class="prod-card__cta">Explore Ginger+</span>
         </div>
       </a>
+      -->
       <a href="/product/advanced-energyone" class="prod-card prod-card--energy">
         <div class="prod-card__media"><img src="/img/products/energy-1.jpg" alt="Advanced EnergyOne+"></div>
         <div class="prod-card__body">
@@ -385,7 +390,9 @@
       </div>
       <div class="ed-footer__col"><h5>Shop</h5><ul>
         <li><a href="/product/advanced-iron">Advanced Iron+</a></li>
+        <!-- GINGER+ TEMPORARILY DOWN — restore this link when the product is live again.
         <li><a href="/product/advanced-ginger">Advanced Ginger+</a></li>
+        -->
         <li><a href="/product/advanced-energyone">Advanced EnergyOne+</a></li>
       </ul></div>
       <div class="ed-footer__col"><h5>Brand</h5><ul>

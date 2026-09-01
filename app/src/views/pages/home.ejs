@@ -306,25 +306,36 @@
                       hero-2 "You grow the Baby."             Advanced Iron+
                       hero-4 "Gentle support every morning."  Advanced Ginger+
                       hero-3 "Daily Energy. Stronger You."    Advanced EnergyOne+ %>
-                <!-- Banner 1 (default visible) · hero-1 — full range -->
+                <!-- HERO-1 TEMPORARILY DOWN — Banner 1 · hero-1 (full range).
+                     It was the first, default-visible slide, so while it is out
+                     hero-2 below carries is-active / aria-hidden="false" and the
+                     eager load, and one dot is commented out to match. Restoring
+                     this figure means putting all three back.
+
+                     Banner 1 (default visible) · hero-1 — full range
                 <figure class="hero-banners__slide is-active" data-index="0" aria-hidden="false">
                     <a href="/shop" aria-label="Shop all Shiōrra supplements">
                         <img src="/img/banners/hero-1.png" alt="Shiōrra — your wellness, every day. Advanced Ginger+, EnergyOne+ and Iron+ together" loading="eager">
                     </a>
                 </figure>
-                <!-- Banner 2 · hero-2 — Advanced Iron+ -->
-                <figure class="hero-banners__slide" data-index="1" aria-hidden="true">
+                -->
+                <!-- Banner 1 · hero-2 — Advanced Iron+ (default visible + eager while hero-1 is down) -->
+                <figure class="hero-banners__slide is-active" data-index="1" aria-hidden="false">
                     <a href="/product/advanced-iron" aria-label="Shop Shiōrra Advanced Iron+">
-                        <img src="/img/banners/hero-2.png" alt="Shiōrra Advanced Iron+ — real nutrition for a healthier pregnancy" loading="lazy">
+                        <img src="/img/banners/hero-2.png" alt="Shiōrra Advanced Iron+ — real nutrition for a healthier pregnancy" loading="eager">
                     </a>
                 </figure>
-                <!-- Banner 3 · hero-4 — Advanced Ginger+ -->
+                <!-- GINGER+ TEMPORARILY DOWN — Banner 3 · hero-4 (Advanced Ginger+).
+                     The carousel indexes slides by DOM position, so with this
+                     one out the EnergyOne+ figure below becomes slide 2 and the
+                     fourth dot is commented out to match. Restore both together.
                 <figure class="hero-banners__slide" data-index="2" aria-hidden="true">
                     <a href="/product/advanced-ginger" aria-label="Shop Shiōrra Advanced Ginger+">
                         <img src="/img/banners/hero-4.png" alt="Shiōrra Advanced Ginger+ — gentle support for every morning" loading="lazy">
                     </a>
                 </figure>
-                <!-- Banner 4 · hero-3 — Advanced EnergyOne+ -->
+                -->
+                <!-- Banner 3 · hero-3 — Advanced EnergyOne+ (data-index 3 while Ginger+ is down) -->
                 <figure class="hero-banners__slide" data-index="3" aria-hidden="true">
                     <a href="/product/advanced-energyone" aria-label="Shop Shiōrra Advanced EnergyOne+">
                         <img src="/img/banners/hero-3.png" alt="Shiōrra Advanced EnergyOne+ — daily energy, stronger you" loading="lazy">
@@ -335,8 +346,12 @@
             <div class="hero-banners__dots" role="tablist" aria-label="Banner indicators">
                 <button class="hero-banners__dot is-active" data-go="0" role="tab" aria-selected="true"  aria-label="Banner 1"></button>
                 <button class="hero-banners__dot"            data-go="1" role="tab" aria-selected="false" aria-label="Banner 2"></button>
+                <!-- HERO-1 TEMPORARILY DOWN — restore this dot with the hero-1 slide above.
                 <button class="hero-banners__dot"            data-go="2" role="tab" aria-selected="false" aria-label="Banner 3"></button>
+                -->
+                <!-- GINGER+ TEMPORARILY DOWN — restore this dot with the hero-4 slide above.
                 <button class="hero-banners__dot"            data-go="3" role="tab" aria-selected="false" aria-label="Banner 4"></button>
+                -->
             </div>
 
             <div class="hero-banners__progress" aria-hidden="true"></div>
@@ -351,6 +366,13 @@
                 <p class="products-row__sub">Clinical. Gentle. Beautifully simple.</p>
             </header>
 
+            <style>
+                /* GINGER+ TEMPORARILY DOWN — the showcase is a 3-up grid; with
+                   only two cards left they would sit left-aligned against an
+                   empty third column. Delete this block when Ginger+ returns. */
+                .products-row__grid { grid-template-columns: repeat(2, 1fr); max-width: 760px; }
+                @media (max-width: 520px) { .products-row__grid { grid-template-columns: 1fr; max-width: 460px; } }
+            </style>
             <div class="products-row__grid stagger">
 
                 <!-- 01 — Advanced Iron+ -->
@@ -375,7 +397,10 @@
                     </a>
                 </article>
 
-                <!-- 02 — Advanced Ginger+ (new launch) -->
+                <!-- GINGER+ TEMPORARILY DOWN — card 02. The showcase grid is
+                     narrowed to two columns by the TEMP style block above while
+                     this is out; restore both together.
+                02 — Advanced Ginger+ (new launch)
                 <article class="product-card product-card--02 reveal">
                     <a href="/product/advanced-ginger" class="product-card__media" aria-label="Advanced Ginger+ · gentle daily support for pregnancy">
                         <span class="product-card__badge product-card__badge--ink">New Launch</span>
@@ -396,6 +421,7 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
                     </a>
                 </article>
+                -->
 
                 <!-- 03 — Advanced EnergyOne+ -->
                 <article class="product-card product-card--03 reveal">
@@ -630,7 +656,12 @@
         </div>
     </section>
 
-    <!-- ============== FEATURED PRODUCT · Ginger+ (reversed) ============== -->
+    <!-- GINGER+ TEMPORARILY DOWN — the whole Ginger+ feature band.
+         It was the reversed/alt one between Iron+ and EnergyOne+, so while it
+         is out EnergyOne+ below carries the reverse+alt modifiers to keep the
+         page alternating. Restore this section and drop those two classes again.
+
+    ============== FEATURED PRODUCT · Ginger+ (reversed) ==============
     <section class="fp-feature fp-feature--reverse fp-feature--alt">
         <div class="container">
             <div class="fp-feature__layout">
@@ -692,9 +723,12 @@
             </div>
         </div>
     </section>
+    -->
 
     <!-- ============== FEATURED PRODUCT · EnergyOne+ ============== -->
-    <section class="fp-feature">
+    <!-- fp-feature--reverse fp-feature--alt: borrowed from the Ginger+ band
+         while it is down (see above). Revert to plain "fp-feature" on return. -->
+    <section class="fp-feature fp-feature--reverse fp-feature--alt">
         <div class="container">
 
             <div class="fp-feature__layout">
