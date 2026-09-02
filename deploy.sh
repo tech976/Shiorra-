@@ -161,6 +161,16 @@ npm ci --omit=dev
 
 ${MIGRATE_CMD}
 
+# Product gallery art lives in ProductImage rows, not in the repo, so a
+# git reset + migrate leaves it at whatever the database already held. That
+# is how production ended up still serving the retired sku-* placeholders
+# long after the current art was committed. sync-images is idempotent and
+# touches ONLY ProductImage (never stock, never prices), so it is safe to
+# run on every deploy. Deliberately NOT `npm run seed`, which would reset
+# stock to catalogue defaults and wipe real inventory.
+echo "▸ npm run sync:images …"
+npm run sync:images
+
 echo "▸ pm2 reload ${PM2_NAME} …"
 pm2 reload "${PM2_NAME}" --update-env || pm2 start ecosystem.config.js --env production --name "${PM2_NAME}"
 pm2 save

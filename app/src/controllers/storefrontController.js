@@ -1,4 +1,5 @@
 const prisma = require('../config/db');
+const { notWithdrawn, isWithdrawn } = require('../config/withdrawn');
 
 // Each product slug → the specific styled EJS template that mirrors the
 // static marketing site. Unknown slugs fall back to the generic page.
@@ -12,7 +13,7 @@ const PRODUCT_TEMPLATES = {
 // in one query so each product card can submit a real /cart/add form.
 async function loadShowcaseProducts() {
   const products = await prisma.product.findMany({
-    where: { slug: { in: Object.keys(PRODUCT_TEMPLATES) }, active: true },
+    where: { slug: { in: Object.keys(PRODUCT_TEMPLATES) }, active: true, ...notWithdrawn },
     include: { images: { orderBy: { sortOrder: 'asc' }, take: 1 } },
   });
   return Object.fromEntries(products.map((p) => [p.slug, p]));
@@ -36,7 +37,7 @@ exports.home = async (req, res, next) => {
 exports.shop = async (req, res, next) => {
   try {
     const products = await prisma.product.findMany({
-      where: { active: true },
+      where: { active: true, ...notWithdrawn },
       include: { images: { orderBy: { sortOrder: 'asc' }, take: 1 } },
       orderBy: [{ featured: 'desc' }, { name: 'asc' }],
     });
@@ -52,7 +53,7 @@ exports.product = async (req, res, next) => {
       where: { slug: req.params.slug },
       include: { images: { orderBy: { sortOrder: 'asc' } } },
     });
-    if (!product || !product.active) {
+    if (!product || !product.active || isWithdrawn(product)) {
       return res.status(404).render('pages/error', {
         title: 'Not found',
         status: 404,
@@ -62,7 +63,7 @@ exports.product = async (req, res, next) => {
     // Siblings for the "Pair it with" strip. Read live rather than hard-coded
     // in the template so price, stock and id can never drift from the catalogue.
     const pairWith = await prisma.product.findMany({
-      where: { active: true, slug: { not: product.slug } },
+      where: { active: true, slug: { not: product.slug }, ...notWithdrawn },
       include: { images: { orderBy: { sortOrder: 'asc' }, take: 1 } },
       orderBy: { priceInPaise: 'asc' },
     });

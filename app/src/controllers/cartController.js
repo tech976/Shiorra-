@@ -1,4 +1,5 @@
 const prisma = require('../config/db');
+const { notWithdrawn, isWithdrawn, sellable } = require('../config/withdrawn');
 
 async function loadCart(req) {
   if (req.user) {
@@ -8,7 +9,7 @@ async function loadCart(req) {
       orderBy: { createdAt: 'asc' },
     });
     return items
-      .filter((i) => i.product && i.product.active)
+      .filter((i) => sellable(i.product))
       .map((i) => ({
         productId: i.productId,
         product: i.product,
@@ -19,7 +20,7 @@ async function loadCart(req) {
   const guest = req.session.guestCart || [];
   if (!guest.length) return [];
   const products = await prisma.product.findMany({
-    where: { id: { in: guest.map((g) => g.productId) }, active: true },
+    where: { id: { in: guest.map((g) => g.productId) }, active: true, ...notWithdrawn },
     include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } },
   });
   const byId = Object.fromEntries(products.map((p) => [p.id, p]));
@@ -178,7 +179,7 @@ exports.add = async (req, res, next) => {
     const { productId, quantity = 1 } = req.body;
     const qty = Math.max(1, Math.min(99, parseInt(quantity, 10) || 1));
     const product = await prisma.product.findUnique({ where: { id: productId } });
-    if (!product || !product.active) {
+    if (!product || !product.active || isWithdrawn(product)) {
       return res.status(404).json({ error: 'Product not found' });
     }
 
@@ -216,7 +217,7 @@ exports.buyNow = async (req, res, next) => {
     const { productId, quantity = 1 } = req.body;
     const qty = Math.max(1, Math.min(99, parseInt(quantity, 10) || 1));
     const product = await prisma.product.findUnique({ where: { id: productId } });
-    if (!product || !product.active) {
+    if (!product || !product.active || isWithdrawn(product)) {
       req.flash('error', 'Product not found.');
       return res.redirect('/shop');
     }

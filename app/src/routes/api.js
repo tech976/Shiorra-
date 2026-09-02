@@ -1,6 +1,7 @@
 // Thin JSON API for client-side use (cart count badge updates etc.)
 const express = require('express');
 const prisma = require('../config/db');
+const { notWithdrawn } = require('../config/withdrawn');
 const cartCtrl = require('../controllers/cartController');
 
 const router = express.Router();
@@ -35,7 +36,7 @@ router.get('/cart', async (req, res, next) => {
 router.get('/products', async (req, res, next) => {
   try {
     const products = await prisma.product.findMany({
-      where: { active: true },
+      where: { active: true, ...notWithdrawn },
       include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } },
       orderBy: [{ featured: 'desc' }, { name: 'asc' }],
     });
