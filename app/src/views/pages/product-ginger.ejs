@@ -1135,16 +1135,19 @@
       { t: 'FSSAI Certified', img: '/img/certs/fssai.png', scale: 1.2,   svg: '<circle cx="12" cy="9" r="6"/><path d="m9.4 9 1.9 1.9L15 7.2"/><path d="M8.9 14.4 7.6 22l4.4-2.2L16.4 22l-1.3-7.6"/>' },
       { t: 'GMP Certified', img: '/img/certs/gmp.png',     svg: '<path d="M2.5 21h19"/><path d="M4 21V9.6l5 3.1V9.6l5 3.1V6.3l5 3.1V21"/><path d="M8 21v-3.2M13 21v-3.2"/>' },
       { t: 'ISO Certified', img: '/img/certs/iso.png',     svg: '<path d="M14 2.8H7a2 2 0 0 0-2 2v14.4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.8z"/><path d="M14 2.8v5h5"/><path d="m8.8 14.2 2.1 2.1 4.3-4.3"/>' },
-      { t: 'GMO Free', img: '/img/certs/gmo-free.png',          svg: '<path d="M5 3.2c0 5 3 6.6 7 8.6s7 3.9 7 9"/><path d="M19 3.2c0 5-3 6.6-7 8.6s-7 3.9-7 9"/><path d="M7.6 6.6h8.8M7.6 17.4h8.8"/><path d="M3.4 20.6 20.6 3.4"/>' },
-      { t: 'No Additives', img: '/img/certs/no-additives.png',      svg: '<path d="M9.2 2.8v6.6l-4.4 8.3A2 2 0 0 0 6.6 21h10.8a2 2 0 0 0 1.8-3.3l-4.4-8.3V2.8"/><path d="M8.2 2.8h7.6"/><path d="M3.4 20.6 20.6 3.4"/>' }
+      { t: 'GMO Free', img: '/img/certs/gmo-free.png',          svg: '<path d="M5 3.2c0 5 3 6.6 7 8.6s7 3.9 7 9"/><path d="M19 3.2c0 5-3 6.6-7 8.6s-7 3.9-7 9"/><path d="M7.6 6.6h8.8M7.6 17.4h8.8"/><path d="M3.4 20.6 20.6 3.4"/>' }
     ];
   %>
   <div class="certs-viewport">
     <div class="certs-track">
       <% [0, 1].forEach(function (dup) { %>
         <ul class="certs-set"<%- dup ? ' aria-hidden="true"' : '' %>>
-          <% _certs.forEach(function (c) { %>
-            <li class="cert">
+          <%# Each half repeats the list twice. The loop is only seamless if
+              one half is at least as wide as the screen; at four badges a
+              single pass is ~992px, which would leave a gap sliding across
+              any wider display. The repeats are hidden from screen readers. %>
+          <% _certs.concat(_certs).forEach(function (c, ci) { %>
+            <li class="cert"<%- ci >= _certs.length ? ' aria-hidden="true"' : '' %>>
               <span class="cert__ic"<%- c.scale ? ' style="--certScale:' + c.scale + '"' : '' %>>
                 <% if (c.img) { %><img src="<%= c.img %>" alt="" loading="lazy"><% } %>
                 <svg class="cert__fb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"<%- c.img ? '' : ' style="display:block"' %>><%- c.svg %></svg>
