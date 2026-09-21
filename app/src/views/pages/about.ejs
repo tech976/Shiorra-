@@ -70,56 +70,21 @@
   .s-head.center{text-align:center}
   .s-head.center .s-title,.s-head.center .s-sub{margin-left:auto;margin-right:auto}
 
-  /* Pillars */
-  .pillars-bg{background:#fff}
-  .pillars-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
-  @media(max-width:880px){.pillars-grid{grid-template-columns:repeat(2,1fr)}}
-  .pillar-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;transition:transform .25s,box-shadow .25s,border-color .25s}
-  .pillar-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(40,40,40,.10);border-color:var(--honey)}
-  .pillar-num{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:11px;color:var(--honey-deep);letter-spacing:.16em;margin-bottom:14px}
-  .pillar-card h4{font-family:'Helvetica Neue',Arial,sans-serif;font-size:20px;margin-bottom:8px;color:var(--ink)}
-  .pillar-card p{font-size:14.5px;color:var(--ink-soft);line-height:1.55}
-
-  /* Products row */
-  .prod-bg{background:var(--surface)}
-  .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
-  /* GINGER+ TEMPORARILY DOWN — two cards in a 3-up grid leave an empty
-     column. Delete this rule when the Ginger+ card is restored. */
-  .prod-grid{grid-template-columns:repeat(2,1fr);max-width:760px;margin-left:auto;margin-right:auto}
-  @media(max-width:880px){.prod-grid{grid-template-columns:1fr}}
-  .prod-card{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .25s,box-shadow .25s;display:block}
-  .prod-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(40,40,40,.10)}
-  .prod-card__media{aspect-ratio:4/5;overflow:hidden}
-  /* Card media backdrops kept neutral — accents live only in fonts */
-  .prod-card--iron .prod-card__media,
-  .prod-card--ginger .prod-card__media,
-  .prod-card--energy .prod-card__media{background:#fff}
-  .prod-card__media img{width:100%;height:100%;object-fit:cover}
-  .prod-card__body{padding:24px}
-  .prod-card__eye{font-size:11px;font-weight:800;letter-spacing:.10em;text-transform:uppercase;margin-bottom:6px}
-  .prod-card--iron .prod-card__eye{color:#BE123C}
-  .prod-card--ginger .prod-card__eye{color:#144B30}
-  .prod-card--energy .prod-card__eye{color:#B73A92}
-  .prod-card h3{font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;margin-bottom:8px;color:var(--ink)}
-  .prod-card h3 em{font-style:italic;font-weight:500}
-  .prod-card--iron h3 em{color:#E11D48}
-  .prod-card--ginger h3 em{color:#2E8B57}
-  .prod-card--energy h3 em{color:#B73A92}
-  .prod-card p{font-size:14.5px;color:var(--ink-soft);line-height:1.55;margin-bottom:18px}
-  .prod-card__cta{display:inline-flex;align-items:center;gap:8px;color:var(--charcoal);font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
-
   /* Standards */
-  .std-bg{background:#fff}
+  .std-bg{background:var(--surface)}
   .std-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-items:stretch;max-width:840px;margin:0 auto}
+  /* An odd count leaves one card alone on the last row; centre it at card
+     width instead of leaving it hanging in the left column. */
+  @media(min-width:641px){.std-card:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc(50% - 7px)}}
   @media(max-width:640px){.std-grid{grid-template-columns:1fr}}
-  .std-card{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--line-soft);border-radius:16px;padding:18px 22px;text-align:left;transition:transform .25s,box-shadow .25s,border-color .25s}
+  .std-card{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line-soft);border-radius:16px;padding:18px 22px;text-align:left;transition:transform .25s,box-shadow .25s,border-color .25s}
   .std-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(40,40,40,.09);border-color:var(--honey)}
   .std-card .ic{flex:0 0 44px;width:44px;height:44px;border-radius:12px;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center}
   .std-card .ic svg{width:23px;height:23px;stroke-width:2}
   .std-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15.5px;color:var(--ink);margin:0;letter-spacing:-0.005em}
 
   /* Story */
-  .story-bg{background:var(--surface)}
+  .story-bg{background:#fff}
   .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
   @media(max-width:880px){.story-grid{grid-template-columns:1fr;gap:28px}}
   .story-copy h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:42px;font-weight:700;line-height:1.05;letter-spacing:-0.02em;margin-bottom:18px;color:var(--charcoal);text-wrap:balance}
@@ -127,18 +92,20 @@
   @media(max-width:680px){.story-copy h2{font-size:32px}}
   .story-copy p{font-size:16px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px}
   /* Founders */
-  .founders{margin-top:56px;text-align:center}
+  /* Founders — its own section now, directly under the hero. */
+  .founders-bg{background:var(--surface)}
+  .founders{text-align:center}
   .founders__title{font-family:'Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:700;letter-spacing:-0.02em;color:var(--charcoal);margin:8px 0 32px}
   .founders__title em{font-style:italic;color:var(--honey);font-weight:500}
   .founders__grid{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;align-items:stretch}
-  .founder{flex:0 1 360px;display:flex;flex-direction:column;align-items:center;background:#fff;border:1px solid var(--line-soft);border-radius:20px;padding:32px 28px;transition:transform .25s,box-shadow .25s,border-color .25s}
+  .founder{flex:0 1 360px;display:flex;flex-direction:column;align-items:stretch;text-align:left;background:#fff;border:1px solid var(--line-soft);border-radius:20px;padding:32px 28px;transition:transform .25s,box-shadow .25s,border-color .25s}
   .founder:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(40,40,40,.10);border-color:var(--honey)}
   .founder__avatar{width:96px;height:96px;border-radius:50%;margin:0 auto 16px;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:30px;letter-spacing:.02em;overflow:hidden;flex-shrink:0}
   .founder__avatar img{width:100%;height:100%;object-fit:cover;display:block}
   .founder__name{font-family:'Helvetica Neue',Arial,sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:3px}
   .founder__role{font-size:12.5px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--honey-deep)}
-  .founder__bio{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin-top:14px;text-align:center}
-  @media(max-width:680px){.founders{margin-top:40px}.founders__title{font-size:24px}}
+  .founder__bio{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin-top:14px;text-align:left}
+  @media(max-width:680px){.founders__title{font-size:24px}}
   .story-quote{background:#fff;border:1px solid var(--line);border-left:4px solid var(--honey);padding:28px;border-radius:14px;box-shadow:0 8px 24px rgba(40,40,40,.06)}
   .story-quote .kanji{font-family:'Noto Serif',serif;font-size:clamp(44px,9vw,80px);line-height:1;color:var(--honey-deep);margin-bottom:14px}
   .story-quote .word{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);margin-bottom:8px}
@@ -225,59 +192,44 @@
   </div>
 </section>
 
-<section class="s pillars-bg">
+<section class="s founders-bg">
   <div class="wrap">
-    <div class="s-head center">
-      <span class="s-eyebrow">What we stand for</span>
-      <h2 class="s-title">A brand built on <em>four promises</em>.</h2>
-      <p class="s-sub">Trust. Science. Inclusion. Guidance. These aren't taglines — they're the filter every product passes through before it earns the Shiōrra name.</p>
-    </div>
-    <div class="pillars-grid">
-      <div class="pillar-card"><div class="pillar-num">01 · TRUST</div><h4>Clean, real ingredients</h4><p>No preservatives, no artificial colours or flavours. Purity is the starting point, not an afterthought.</p></div>
-      <div class="pillar-card"><div class="pillar-num">02 · SCIENCE</div><h4>Active-form first</h4><p>Methylcobalamin, P5P, methylfolate. We pick the form your body can actually use — not the cheapest.</p></div>
-      <div class="pillar-card"><div class="pillar-num">03 · INCLUSION</div><h4>For every stage</h4><p>Pregnancy, postpartum, busy adults, active lifestyles. Thoughtful formulation for who you actually are.</p></div>
-      <div class="pillar-card"><div class="pillar-num">04 · GUIDANCE</div><h4>Your gentle ally</h4><p>"Shiori" means a guide — a trusted companion. We build products that earn that name, daily.</p></div>
+    <div class="founders">
+      <span class="s-eyebrow">The founders</span>
+      <h3 class="founders__title">The women <em>behind Shiōrra</em>.</h3>
+      <div class="founders__grid">
+        <div class="founder">
+          <div class="founder__avatar" aria-hidden="true">SP</div>
+          <div class="founder__name">Dr. Shivangi Patel</div>
+          <div class="founder__role">Co-founder</div>
+          <p class="founder__bio">A Pharmacology Ph.D. and NIPER Ahmedabad alumna with over seven years of experience in scientific research and evidence-based healthcare. Passionate about making science accessible, she is committed to developing clinically backed, transparent formulations that prioritize quality, efficacy and trust — helping people make informed choices for better health.</p>
+        </div>
+        <div class="founder">
+          <div class="founder__avatar" aria-hidden="true">IP</div>
+          <div class="founder__name">Ishita Patel</div>
+          <div class="founder__role">Co-founder</div>
+          <p class="founder__bio">A NIFT alumna and brand strategist. Her journey with Shiōrra began when she struggled with persistent gut and skin issues that no skincare product or wellness trend seemed to solve. It was only when her sister looked beyond the symptoms and addressed the root cause that she experienced a real difference — and that personal transformation became the foundation of Shiōrra. Today she is driven by a simple belief: lasting wellness starts from within, built on science, transparency and thoughtful solutions, not quick fixes.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="s prod-bg">
+<section class="s story-bg">
   <div class="wrap">
-    <div class="s-head center">
-      <span class="s-eyebrow">The range</span>
-      <h2 class="s-title">Explore <em>the range</em>.</h2>
-      <p class="s-sub">Each Shiōrra product is built around the same clinical bar and the same gentle formulation philosophy — from daily nausea to everyday energy.</p>
-    </div>
-    <div class="prod-grid">
-      <a href="/product/advanced-iron" class="prod-card prod-card--iron">
-        <div class="prod-card__media"><img src="/img/products/iron-1.jpg" alt="Advanced Iron+"></div>
-        <div class="prod-card__body">
-          <div class="prod-card__eye">For pregnancy &amp; postpartum</div>
-          <h3>Advanced <em>Iron+</em></h3>
-          <p>Ferrous Bisglycinate 27 mg + Folate, Vit. B<sub>12</sub>, Vit. B<sub>6</sub>, Zinc, Copper, Selenium. Gentle on the stomach, no metallic aftertaste.</p>
-          <span class="prod-card__cta">Explore Iron+</span>
-        </div>
-      </a>
-      <!-- GINGER+ TEMPORARILY DOWN — restore this card when the product is live again.
-      <a href="/product/advanced-ginger" class="prod-card prod-card--ginger">
-        <div class="prod-card__media"><img src="/img/products/ginger-1.jpg" alt="Advanced Ginger+"></div>
-        <div class="prod-card__body">
-          <div class="prod-card__eye">For pregnancy nausea</div>
-          <h3>Advanced <em>Ginger+</em></h3>
-          <p>Standardized Ginger + active Vit. B<sub>6</sub> (P5P) + Vit. B<sub>1</sub> + Magnesium. Gentle daily support for queasiness and digestion.</p>
-          <span class="prod-card__cta">Explore Ginger+</span>
-        </div>
-      </a>
-      -->
-      <a href="/product/advanced-energyone" class="prod-card prod-card--energy">
-        <div class="prod-card__media"><img src="/img/products/energy-1.jpg" alt="Advanced EnergyOne+"></div>
-        <div class="prod-card__body">
-          <div class="prod-card__eye">For daily energy &amp; focus</div>
-          <h3>Advanced <em>EnergyOne+</em></h3>
-          <p>Taurine + Ginseng + B-Complex + minerals + amino acids. Caffeine-free, multi-nutrient support for modern life.</p>
-          <span class="prod-card__cta">Explore EnergyOne+</span>
-        </div>
-      </a>
+    <div class="story-grid">
+      <div class="story-copy">
+        <span class="s-eyebrow">Our story</span>
+        <h2>Built from a <em>real, lived need</em>.</h2>
+        <p>Shiōrra was born when the women who built it couldn't find a clean, science-backed supplement they trusted enough to give to the people they cared about. So they built one — then a second, then a third.</p>
+        <p>Each Shiōrra product is grounded in 30+ years of clinical formulation experience from K.C. Laboratories, and is shaped by what real women told us they needed: gentler, smarter, more honest wellness.</p>
+        <p>We're a small team. Every formula is reviewed personally. Every shipment leaves with care.</p>
+      </div>
+      <div class="story-quote">
+        <div class="kanji">栞</div>
+        <div class="word">Shiori — a guide</div>
+        <p>"Shiori" is the Japanese word for a bookmark — a quiet companion that holds your place and helps you find your way back. That's the kind of brand we wanted to build.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -303,14 +255,6 @@
         <h5>FSSAI, GMP &amp; ISO certified</h5>
       </div>
       <div class="std-card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 9-9 3 0 6 1 7 2-2 8-6 12-9 14z"/><path d="M8 16c3-4 6-6 9-7"/></svg></div>
-        <h5>100% vegetarian</h5>
-      </div>
-      <div class="std-card">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="5.6" y1="5.6" x2="18.4" y2="18.4"/></svg></div>
-        <h5>No additives</h5>
-      </div>
-      <div class="std-card">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4c0 6 10 10 10 16"/><path d="M17 4c0 6-10 10-10 16"/><path d="M8.5 8h7M8 12h8M8.5 16h7"/><line x1="4" y1="20" x2="20" y2="4"/></svg></div>
         <h5>GMO-free</h5>
       </div>
@@ -321,44 +265,6 @@
       <div class="std-card">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-6-4-6-9a3 3 0 0 1 5-2 3 3 0 0 1 5 2c0 5-6 9-6 9z"/><path d="M9 9.5v.01M15 9.5v.01"/></svg></div>
         <h5>Cruelty-free</h5>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="s story-bg">
-  <div class="wrap">
-    <div class="story-grid">
-      <div class="story-copy">
-        <span class="s-eyebrow">Our story</span>
-        <h2>Built from a <em>real, lived need</em>.</h2>
-        <p>Shiōrra was born when the women who built it couldn't find a clean, science-backed supplement they trusted enough to give to the people they cared about. So they built one — then a second, then a third.</p>
-        <p>Each Shiōrra product is grounded in 30+ years of clinical formulation experience from K.C. Laboratories, and is shaped by what real women told us they needed: gentler, smarter, more honest wellness.</p>
-        <p>We're a small team. Every formula is reviewed personally. Every shipment leaves with care.</p>
-      </div>
-      <div class="story-quote">
-        <div class="kanji">栞</div>
-        <div class="word">Shiori — a guide</div>
-        <p>"Shiori" is the Japanese word for a bookmark — a quiet companion that holds your place and helps you find your way back. That's the kind of brand we wanted to build.</p>
-      </div>
-    </div>
-
-    <div class="founders">
-      <span class="s-eyebrow">The founders</span>
-      <h3 class="founders__title">The women <em>behind Shiōrra</em>.</h3>
-      <div class="founders__grid">
-        <div class="founder">
-          <div class="founder__avatar" aria-hidden="true">SP</div>
-          <div class="founder__name">Dr. Shivangi Patel</div>
-          <div class="founder__role">Co-founder</div>
-          <p class="founder__bio">A Pharmacology Ph.D. and NIPER Ahmedabad alumna with over seven years of experience in scientific research and evidence-based healthcare. Passionate about making science accessible, she is committed to developing clinically backed, transparent formulations that prioritize quality, efficacy and trust — helping people make informed choices for better health.</p>
-        </div>
-        <div class="founder">
-          <div class="founder__avatar" aria-hidden="true">IP</div>
-          <div class="founder__name">Ishita Patel</div>
-          <div class="founder__role">Co-founder</div>
-          <p class="founder__bio">A NIFT alumna and brand strategist. Her journey with Shiōrra began when she struggled with persistent gut and skin issues that no skincare product or wellness trend seemed to solve. It was only when her sister looked beyond the symptoms and addressed the root cause that she experienced a real difference — and that personal transformation became the foundation of Shiōrra. Today she is driven by a simple belief: lasting wellness starts from within, built on science, transparency and thoughtful solutions, not quick fixes.</p>
-        </div>
       </div>
     </div>
   </div>
