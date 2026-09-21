@@ -973,7 +973,7 @@
             { n: 6, t: 'Why choose Advanced Iron+' },
             { n: 7, t: 'The 6 key ingredients' }
           ];
-          var _slideSrc = function (n) { return '/img/products/iron-n' + n + '.png?v=2'; };
+          var _slideSrc = function (n) { return '/img/products/iron-n' + n + '.png?v=3'; };
         %>
         <div class="gallery" style="--n:<%= _slides.length %>">
           <div class="gallery-main">
@@ -1164,16 +1164,19 @@
       { t: 'FSSAI Certified', img: '/img/certs/fssai.png', scale: 1.2,   svg: '<circle cx="12" cy="9" r="6"/><path d="m9.4 9 1.9 1.9L15 7.2"/><path d="M8.9 14.4 7.6 22l4.4-2.2L16.4 22l-1.3-7.6"/>' },
       { t: 'GMP Certified', img: '/img/certs/gmp.png',     svg: '<path d="M2.5 21h19"/><path d="M4 21V9.6l5 3.1V9.6l5 3.1V6.3l5 3.1V21"/><path d="M8 21v-3.2M13 21v-3.2"/>' },
       { t: 'ISO Certified', img: '/img/certs/iso.png',     svg: '<path d="M14 2.8H7a2 2 0 0 0-2 2v14.4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.8z"/><path d="M14 2.8v5h5"/><path d="m8.8 14.2 2.1 2.1 4.3-4.3"/>' },
-      { t: 'GMO Free', img: '/img/certs/gmo-free.png',          svg: '<path d="M5 3.2c0 5 3 6.6 7 8.6s7 3.9 7 9"/><path d="M19 3.2c0 5-3 6.6-7 8.6s-7 3.9-7 9"/><path d="M7.6 6.6h8.8M7.6 17.4h8.8"/><path d="M3.4 20.6 20.6 3.4"/>' },
-      { t: 'No Additives', img: '/img/certs/no-additives.png',      svg: '<path d="M9.2 2.8v6.6l-4.4 8.3A2 2 0 0 0 6.6 21h10.8a2 2 0 0 0 1.8-3.3l-4.4-8.3V2.8"/><path d="M8.2 2.8h7.6"/><path d="M3.4 20.6 20.6 3.4"/>' }
+      { t: 'GMO Free', img: '/img/certs/gmo-free.png',          svg: '<path d="M5 3.2c0 5 3 6.6 7 8.6s7 3.9 7 9"/><path d="M19 3.2c0 5-3 6.6-7 8.6s-7 3.9-7 9"/><path d="M7.6 6.6h8.8M7.6 17.4h8.8"/><path d="M3.4 20.6 20.6 3.4"/>' }
     ];
   %>
   <div class="certs-viewport">
     <div class="certs-track">
       <% [0, 1].forEach(function (dup) { %>
         <ul class="certs-set"<%- dup ? ' aria-hidden="true"' : '' %>>
-          <% _certs.forEach(function (c) { %>
-            <li class="cert">
+          <%# Each half repeats the list twice. The loop is only seamless if
+              one half is at least as wide as the screen; at four badges a
+              single pass is ~992px, which would leave a gap sliding across
+              any wider display. The repeats are hidden from screen readers. %>
+          <% _certs.concat(_certs).forEach(function (c, ci) { %>
+            <li class="cert"<%- ci >= _certs.length ? ' aria-hidden="true"' : '' %>>
               <span class="cert__ic"<%- c.scale ? ' style="--certScale:' + c.scale + '"' : '' %>>
                 <% if (c.img) { %><img src="<%= c.img %>" alt="" loading="lazy"><% } %>
                 <svg class="cert__fb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"<%- c.img ? '' : ' style="display:block"' %>><%- c.svg %></svg>
@@ -1190,193 +1193,134 @@
 <!-- BENEFITS -->
 <style>
   /* ============================================================
-     BENEFITS — living ingredient orbit
-     The formula itself is the visual: the capsule sits at the centre and the
-     nine actives orbit it as powder discs. At rest the ring drifts slowly —
-     nine actives, none singled out, which is what the heading says. Choose a
-     stage and the drift stops: the actives involved glide round to gather in
-     the top arc while the rest recede toward the core and grey back, so the
-     diagram explains the formula instead of three icons standing in for it.
-     Angles are driven from JS (see the orbit script) rather than CSS keyframes,
-     because gathering has to happen from wherever the drift currently sits.
+     BENEFITS — one stage at a time, with a large photo beside it
+     Hover (or tap, or keyboard focus) a stage: its card opens to two lines
+     of copy and the photo panel crossfades to that stage. One stage is
+     always open, so the section never rests as three closed bars.
+
+     The photo frame is locked to 2:3 because every photo is exported
+     1024x1536. Frame and photo share a ratio, so object-fit:cover fills
+     edge to edge with NOTHING cropped. Export any replacement at 2:3 too.
      ============================================================ */
-  .orb{background:linear-gradient(180deg,#FFFFFF 0%,#FDF6F8 55%,#FFFFFF 100%);border-top:1px solid var(--line);padding:78px 0}
-  .orb__head{text-align:center;margin-bottom:14px}
-  .orb__head .s-title{margin-inline:auto;margin-bottom:0}
-  .orb__hint{text-align:center;font-size:13px;color:var(--muted-2);margin:0 0 34px}
+  .ben{background:#fff;border-top:1px solid var(--line);padding:88px 0}
+  .ben-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,440px);
+    grid-template-areas:"intro photo" "list photo";
+    grid-template-rows:auto 1fr;
+    column-gap:72px;row-gap:30px;align-items:start;
+  }
+  .ben-intro{grid-area:intro}
+  .ben-intro .s-title{margin-bottom:14px}
+  .ben-sub{font-size:16px;color:var(--ink-soft);line-height:1.65;margin:0;max-width:44ch}
 
-  .orb-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:52px;align-items:center}
+  /* ---- photo panel ---- */
+  .ben-photo{
+    grid-area:photo;align-self:center;position:relative;width:100%;aspect-ratio:2/3;
+    border-radius:24px;overflow:hidden;background:var(--honey-soft);color:var(--honey);
+    display:grid;place-items:center;
+    box-shadow:0 24px 60px rgba(159,18,57,.14),0 0 0 1px rgba(159,18,57,.06);
+  }
+  .ben-photo svg{width:56px;height:56px;opacity:.5}
+  /* all three are stacked; only the active one is visible */
+  .ben-photo img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+    opacity:0;transform:scale(1.03);transition:opacity .5s ease,transform .8s ease;
+  }
+  .ben-photo img.is-active{opacity:1;transform:none}
+  /* display:block above would beat the UA's [hidden] rule, so say it outright */
+  .ben-photo img[hidden]{display:none}
 
-  /* ---- stage ---- */
-  .orb-stage{position:relative;width:min(468px,100%);aspect-ratio:1;margin-inline:auto;--r:186px}
-  .orb-ring,.orb-ring--inner{
-    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;
-    border:1px dashed rgba(159,18,57,.20);pointer-events:none;
-  }
-  .orb-ring{width:calc(var(--r) * 2);height:calc(var(--r) * 2)}
-  .orb-ring--inner{width:calc(var(--r) * 1.08);height:calc(var(--r) * 1.08);border-style:solid;border-color:rgba(159,18,57,.09)}
-
-  /* capsule at the centre, over a soft bloom */
-  .orb-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64%;z-index:3;pointer-events:none}
-  .orb-core::before{
-    content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    width:150%;aspect-ratio:1;border-radius:50%;
-    background:radial-gradient(circle,rgba(225,29,72,.14),transparent 68%);
-  }
-  .orb-core img{position:relative;width:100%;height:auto;display:block}
-
-  /* ---- orbiting actives ---- */
-  .orb-node{
-    position:absolute;left:50%;top:50%;width:78px;height:78px;padding:0;border:0;background:none;
-    cursor:default;z-index:2;
-    /* place on the circle, then counter-rotate so the disc stays upright */
-    /* --a (angle) and --rk (radius multiplier) are driven per-frame from JS,
-       so neither gets a CSS transition — the script does the easing itself. */
-    transform:translate(-50%,-50%) rotate(var(--a)) translateY(calc(-1 * var(--r) * var(--rk, 1))) rotate(calc(-1 * var(--a)));
-    transition:filter .35s ease,opacity .35s ease;
-  }
-  .orb-node__disc{
-    display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;
-    background:#fff;box-shadow:0 6px 18px rgba(120,20,50,.14),0 0 0 3px #fff,0 0 0 4px rgba(159,18,57,.10);
-    transition:box-shadow .35s ease,transform .35s ease;
-  }
-  /* the swatches are a powder blob centred on white — scaling up inside the
-     circular mask fills the disc with powder instead of framing it in white */
-  .orb-node__disc img{width:100%;height:100%;object-fit:cover;transform:scale(1.75);display:block}
-  .orb-node__label{
-    position:absolute;left:50%;top:calc(100% + 7px);transform:translateX(-50%);
-    white-space:nowrap;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--honey-deep);background:#fff;border:1px solid rgba(159,18,57,.16);
-    padding:3px 8px;border-radius:999px;
-    opacity:0;transition:opacity .3s ease;pointer-events:none;
-  }
-  /* labels stay hidden until something is lit, so the resting state is nine
-     clean discs rather than a wall of type */
-  .orb-node.is-lit .orb-node__label{opacity:1}
-  .orb-node.is-lit .orb-node__disc{
-    transform:scale(1.1);
-    box-shadow:0 10px 26px rgba(120,20,50,.22),0 0 0 3px #fff,0 0 0 5px var(--honey);
-  }
-  .orb-node.is-dim{opacity:.42;filter:grayscale(.55)}
-  .orb-node.is-dim .orb-node__disc{transform:scale(.86);box-shadow:0 4px 12px rgba(120,20,50,.10),0 0 0 3px #fff}
-
-  /* ---- benefit list ---- */
-  .orb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
-  .orb-ben{
-    width:100%;text-align:left;cursor:pointer;position:relative;
-    background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 22px;
+  /* ---- stage list ---- */
+  .ben-list{grid-area:list;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+  .ben-item{
+    width:100%;text-align:left;cursor:pointer;
+    background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 24px;
     transition:border-color .28s ease,box-shadow .28s ease,transform .28s ease;
   }
-  .orb-ben:hover,.orb-ben.is-active{border-color:var(--honey);box-shadow:0 14px 34px rgba(159,18,57,.10);transform:translateY(-2px)}
-  .orb-ben__n{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--honey);display:block;margin-bottom:7px}
-  .orb-ben__t{font-size:19px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);margin:0 0 6px;line-height:1.25}
-  .orb-ben__s{font-size:14.5px;color:var(--ink-soft);line-height:1.55;margin:0}
-  /* long copy expands only for the active one — grid-rows animates to auto */
-  .orb-ben__more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s ease,opacity .3s ease;opacity:0}
-  .orb-ben.is-active .orb-ben__more{grid-template-rows:1fr;opacity:1}
-  .orb-ben__more > div{overflow:hidden}
-  .orb-ben__l{font-size:14px;color:var(--muted);line-height:1.6;margin:10px 0 0}
-  .orb-ben__ings{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
-  .orb-ben__ings span{
-    font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
-    color:var(--honey-deep);background:var(--honey-soft);padding:4px 9px;border-radius:999px;
-  }
+  .ben-item:hover,.ben-item.is-active{border-color:var(--honey);box-shadow:0 14px 34px rgba(159,18,57,.10);transform:translateY(-2px)}
+  .ben-item:focus-visible{outline:2px solid var(--honey);outline-offset:3px}
+  .ben-item__n{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--honey);display:block;margin-bottom:7px}
+  .ben-item__t{font-size:20px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);margin:0 0 6px;line-height:1.25}
+  .ben-item__s{font-size:14.5px;color:var(--ink-soft);line-height:1.55;margin:0}
+  /* grid-rows animates 0fr -> 1fr, i.e. to the copy's own height */
+  .ben-item__more{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .38s ease,opacity .3s ease}
+  .ben-item.is-active .ben-item__more{grid-template-rows:1fr;opacity:1}
+  .ben-item__more > div{overflow:hidden}
+  .ben-item__l{display:block;font-size:14.5px;color:var(--muted);line-height:1.65;margin:0;padding-top:12px}
 
   @media (max-width:980px){
-    .orb-grid{grid-template-columns:1fr;gap:34px}
-    .orb-stage{width:min(400px,86vw);--r:158px}
-    .orb-node{width:66px;height:66px}
+    .ben-grid{
+      grid-template-columns:1fr;
+      grid-template-areas:"intro" "photo" "list";
+      grid-template-rows:auto;row-gap:26px;
+    }
+    .ben-intro{text-align:center}
+    .ben-sub{margin-inline:auto}
+    /* still the full 2:3 photo, just narrower so it fits one screen */
+    .ben-photo{width:min(380px,82%);justify-self:center}
   }
-  /* Touch gets the same interaction, driven by tap instead of hover, so the
-     gather is no longer neutralised here. Labels stay hidden on the resting
-     ring — nine of them at this size is a wall of type — but appear on the
-     actives that gather, which is where the naming actually matters. */
-  @media (hover:none),(max-width:680px){
-    .orb{padding:48px 0}
-    .orb-stage{width:min(330px,80vw);--r:130px}
-    .orb-node{width:56px;height:56px}
-    .orb-node__label{display:none;font-size:9.5px;padding:2px 6px}
-    .orb-node.is-lit .orb-node__label{display:block}
-    .orb-ben{padding:16px 18px}
+  @media (max-width:680px){
+    .ben{padding:52px 0}
+    .ben-item{padding:17px 19px}
+    .ben-item__t{font-size:18px}
+    .ben-photo{width:min(320px,86%);border-radius:20px}
   }
   @media (prefers-reduced-motion:reduce){
-    .orb-node,.orb-node__disc,.orb-ben,.orb-ben__more{transition:none}
-    .orb-ben:hover,.orb-ben.is-active{transform:none}
+    .ben-item,.ben-item__more,.ben-photo img{transition:none}
+    .ben-item:hover,.ben-item.is-active{transform:none}
   }
 </style>
 
-<section class="orb" aria-labelledby="orbTitle">
+<%
+  // Stage copy is carried over word for word from the old orbit panel, which
+  // was already written to stay inside the product's claims. `img` is the
+  // stage's photo — 2:3 portrait, to match the frame.
+  var _ben = [
+    { t: 'Pregnancy',
+      s: 'Supporting increased iron needs during this important stage.',
+      l: 'During pregnancy the body&rsquo;s iron requirements increase. Advanced Iron+ is formulated with ferrous bisglycinate to provide iron support in a gentle, thoughtfully formulated form.',
+      img: '/img/benefits/iron-pregnancy.png',
+      alt: 'A pregnant woman smiling at a pack of Shiōrra Advanced Iron+ in her hand' },
+    { t: 'Everyday iron support',
+      s: 'For those who need additional iron supplementation.',
+      l: 'Iron plays an important role in supporting normal haemoglobin formation and maintaining healthy iron levels. Supplementation should be taken according to individual needs and professional guidance.',
+      img: '/img/benefits/iron-everyday.png',
+      alt: 'A woman out for a run along the seafront at sunrise' },
+    { t: 'Postpartum &amp; lactation',
+      s: 'Continued support in the months after birth.',
+      l: 'Iron needs do not end at delivery. Advanced Iron+ is intended for use through the postpartum and lactating period, in the same chelated form that is gentler on the stomach.',
+      img: '/img/benefits/iron-postpartum.png',
+      alt: 'A new mother smiling down at the baby in her arms' }
+  ];
+%>
+<section class="ben" aria-labelledby="benTitle">
   <div class="wrap">
-    <div class="orb__head">
-      <span class="s-eyebrow">Benefits</span>
-      <h2 class="s-title" id="orbTitle">One capsule, <em>nine actives.</em></h2>
-    </div>
-    <p class="orb__hint">Choose a stage to see which actives are involved.</p>
-
-    <%
-      // The nine actives on the pack, in orbit order. `k` matches the file in
-      // /img/ingredients/ and the keys used by the benefit mapping below.
-      var _orbIng = [
-        { k: 'iron',        t: 'Iron' },
-        { k: 'folate',      t: 'Folate' },
-        { k: 'b12',         t: 'Vitamin B12' },
-        { k: 'b6',          t: 'Vitamin B6' },
-        { k: 'zinc',        t: 'Zinc' },
-        { k: 'copper',      t: 'Copper' },
-        { k: 'selenium',    t: 'Selenium' },
-        { k: 'riboflavin',  t: 'Riboflavin' },
-        { k: 'niacinamide', t: 'Niacinamide' }
-      ];
-      // Which actives to light per stage. This is a FORMULATION grouping — the
-      // actives present and relevant — not a claim that each one produces the
-      // benefit on its own. Worth confirming with the formulator.
-      var _orbBen = [
-        { t: 'Pregnancy',
-          s: 'Supporting increased iron needs during this important stage.',
-          l: 'During pregnancy the body&rsquo;s iron requirements increase. Advanced Iron+ is formulated with ferrous bisglycinate to provide iron support in a gentle, thoughtfully formulated form.',
-          ings: ['iron', 'folate', 'b12'] },
-        { t: 'Everyday iron support',
-          s: 'For those who need additional iron supplementation.',
-          l: 'Iron plays an important role in supporting normal haemoglobin formation and maintaining healthy iron levels. Supplementation should be taken according to individual needs and professional guidance.',
-          ings: ['iron', 'copper', 'zinc', 'selenium'] },
-        { t: 'Postpartum &amp; lactation',
-          s: 'Continued support in the months after birth.',
-          l: 'Iron needs do not end at delivery. Advanced Iron+ is intended for use through the postpartum and lactating period, in the same chelated form that is gentler on the stomach.',
-          ings: ['iron', 'b12', 'b6', 'riboflavin', 'niacinamide'] }
-      ];
-      var _orbName = {};
-      _orbIng.forEach(function (i) { _orbName[i.k] = i.t; });
-      var _orbStep = 360 / _orbIng.length;
-    %>
-
-    <div class="orb-grid">
-      <div class="orb-stage" id="orbStage">
-        <span class="orb-ring" aria-hidden="true"></span>
-        <span class="orb-ring--inner" aria-hidden="true"></span>
-        <% _orbIng.forEach(function (ing, i) { %>
-          <span class="orb-node" data-ing="<%= ing.k %>" style="--a:<%= (-90 + _orbStep * i).toFixed(2) %>deg">
-            <span class="orb-node__disc"><img src="/img/ingredients/<%= ing.k %>.png" alt="<%= ing.t %>" loading="lazy"></span>
-            <span class="orb-node__label"><%= ing.t %></span>
-          </span>
-        <% }); %>
-        <span class="orb-core" aria-hidden="true">
-          <img src="/img/products/pill-hero.png" alt="">
-        </span>
+    <div class="ben-grid">
+      <div class="ben-intro">
+        <span class="s-eyebrow">Benefits</span>
+        <h2 class="s-title" id="benTitle">Support for <em>every stage.</em></h2>
+        <p class="ben-sub">Through pregnancy, everyday needs and the months after birth &mdash; one gentle, chelated iron for each stage.</p>
       </div>
 
-      <ul class="orb-list">
-        <% _orbBen.forEach(function (b, i) { %>
+      <div class="ben-photo">
+        <%# placeholder mark underneath — only seen if a photo file is missing %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>
+        <% _ben.forEach(function (b, i) { %>
+          <img src="<%= b.img %>" alt="<%= b.alt %>"<%- i === 0 ? ' class="is-active"' : ' loading="lazy"' %>>
+        <% }); %>
+      </div>
+
+      <ul class="ben-list">
+        <% _ben.forEach(function (b, i) { %>
           <li>
             <%# a button, so keyboard users get the same reveal as a pointer %>
-            <button type="button" class="orb-ben<%= i === 0 ? ' is-active' : '' %>" data-ings="<%= b.ings.join(',') %>">
-              <span class="orb-ben__n">0<%= i + 1 %></span>
-              <h3 class="orb-ben__t"><%- b.t %></h3>
-              <p class="orb-ben__s"><%- b.s %></p>
-              <span class="orb-ben__more"><div>
-                <p class="orb-ben__l"><%- b.l %></p>
-                <span class="orb-ben__ings">
-                  <% b.ings.forEach(function (k) { %><span><%= _orbName[k] %></span><% }); %>
-                </span>
+            <button type="button" class="ben-item<%= i === 0 ? ' is-active' : '' %>" aria-expanded="<%= i === 0 ? 'true' : 'false' %>">
+              <span class="ben-item__n">0<%= i + 1 %></span>
+              <h3 class="ben-item__t"><%- b.t %></h3>
+              <p class="ben-item__s"><%- b.s %></p>
+              <span class="ben-item__more"><div>
+                <span class="ben-item__l"><%- b.l %></span>
               </div></span>
             </button>
           </li>
@@ -1388,197 +1332,208 @@
 
 <!-- KEY INGREDIENTS -->
 <style>
-  /* Three tracks: labels | product shot | labels. The outer tracks are 1fr
-     each so the shot stays optically centred no matter how long the copy
-     runs, and the columns mirror each other (right-aligned on the left,
-     left-aligned on the right) so both point inward at the pill. */
-  .ki{background:#fff}
-  /* Explicit rows, not two independent flex columns: the left items carry a
-     dosage sub-line and the right ones do not, so free-flowing columns drift
-     out of step. Placing all four on a shared 2-row grid keeps each pair's
-     headings on exactly the same baseline. */
-  .ki-grid{
-    display:grid;
-    grid-template-columns:1fr minmax(280px,440px) 1fr;
-    grid-template-rows:auto auto;
-    column-gap:76px;row-gap:66px;align-items:start;
+  /* ============================================================
+     KEY INGREDIENTS — living ingredient orbit
+     The capsule sits at the centre and the nine actives orbit it as powder
+     discs, drifting slowly. Hover (or focus, or tap) an active and its name
+     pops up beside it; the ring holds still while you read it so the label
+     does not slide out from under the pointer.
+     Angles are driven from JS (see the orbit script) rather than CSS
+     keyframes, so the ring can pause and resume from wherever it is.
+     ============================================================ */
+  .orb{background:linear-gradient(180deg,#FFFFFF 0%,#FDF6F8 55%,#FFFFFF 100%);border-top:1px solid var(--line);padding:78px 0 92px}
+  .orb__head{text-align:center;margin-bottom:14px}
+  .orb__head .s-title{margin-inline:auto;margin-bottom:0}
+  .orb__hint{text-align:center;font-size:13px;color:var(--muted-2);margin:0 0 30px}
+  .orb__hint-touch{display:none}
+  @media (hover:none){.orb__hint-hover{display:none}.orb__hint-touch{display:inline}}
+
+  /* ---- stage ---- */
+  .orb-stage{position:relative;width:min(520px,100%);aspect-ratio:1;margin-inline:auto;--r:206px}
+  .orb-ring,.orb-ring--inner{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;
+    border:1px dashed rgba(159,18,57,.20);pointer-events:none;
   }
-  .ki-item{position:relative;max-width:300px}
-  .ki-item:nth-of-type(1){grid-column:1;grid-row:1;justify-self:end;text-align:right}
-  .ki-item:nth-of-type(2){grid-column:1;grid-row:2;justify-self:end;text-align:right}
-  .ki-item:nth-of-type(3){grid-column:3;grid-row:1;justify-self:start;text-align:left}
-  .ki-item:nth-of-type(4){grid-column:3;grid-row:2;justify-self:start;text-align:left}
-  .ki-item h3{font-size:24px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);margin:0 0 9px;line-height:1.2}
-  .ki-item h3 span{display:block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--honey-deep);margin-top:5px}
-  .ki-item p{font-size:15px;font-weight:600;color:var(--muted);line-height:1.55;margin:0}
-  .ki-media{grid-column:2;grid-row:1 / span 2;align-self:center;display:grid;place-items:center}
-  /* multiply drops the shot's white studio backdrop out against the white
-     section, so the pill reads as placed on the page rather than pasted. */
-  /* The shot is 1536x1024 but the capsule itself only occupies ~46% of that
-     width — the rest is blank margin. Sizing the file to the column would
-     render a small pill in a big empty box, so it is deliberately oversized
-     past the column instead. Only the blank margin overflows; the capsule
-     itself still lands inside the centre track, clear of the connectors.
-     multiply is what makes that safe — the overflowing white margin leaves
-     anything behind it untouched instead of masking it.
-     The enlargement is a transform rather than a width, deliberately:
-     transforms do not feed back into layout, so the row stays as tall as the
-     copy needs instead of inheriting ~150px of blank canvas above and below
-     the capsule. */
-  .ki-media img{
-    width:100%;max-width:440px;height:auto;display:block;
-    transform:scale(1.9);transform-origin:center;
-    mix-blend-mode:multiply;
+  .orb-ring{width:calc(var(--r) * 2);height:calc(var(--r) * 2)}
+  .orb-ring--inner{width:calc(var(--r) * 1.08);height:calc(var(--r) * 1.08);border-style:solid;border-color:rgba(159,18,57,.09)}
+
+  /* capsule at the centre, over a soft bloom */
+  .orb-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62%;z-index:3;pointer-events:none}
+  .orb-core::before{
+    content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:150%;aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle,rgba(225,29,72,.14),transparent 68%);
+  }
+  .orb-core img{position:relative;width:100%;height:auto;display:block}
+
+  /* ---- orbiting actives ---- */
+  .orb-node{
+    position:absolute;left:50%;top:50%;width:78px;height:78px;padding:0;border:0;background:none;
+    cursor:pointer;z-index:2;
+    /* place on the circle, then counter-rotate so the disc stays upright.
+       --a is set per frame from JS, so it deliberately has no transition. */
+    transform:translate(-50%,-50%) rotate(var(--a)) translateY(calc(-1 * var(--r))) rotate(calc(-1 * var(--a)));
+  }
+  .orb-node:focus-visible{outline:none}
+  /* the one being read rises above its neighbours and the capsule */
+  .orb-node:hover,.orb-node:focus-visible,.orb-node.is-lit{z-index:5}
+  .orb-node__disc{
+    display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;
+    background:#fff;box-shadow:0 6px 18px rgba(120,20,50,.14),0 0 0 3px #fff,0 0 0 4px rgba(159,18,57,.10);
+    transition:box-shadow .3s ease,transform .3s ease;
+  }
+  /* the swatches are a powder blob centred on white — scaling up inside the
+     circular mask fills the disc with powder instead of framing it in white */
+  .orb-node__disc img{width:100%;height:100%;object-fit:cover;transform:scale(1.75);display:block}
+  .orb-node:hover .orb-node__disc,.orb-node:focus-visible .orb-node__disc,.orb-node.is-lit .orb-node__disc{
+    transform:scale(1.12);
+    box-shadow:0 12px 28px rgba(120,20,50,.24),0 0 0 3px #fff,0 0 0 5px var(--honey);
   }
 
-  /* ---- connectors: one per ingredient, aimed at the capsule ---- */
-  .ki-arrow{position:absolute;top:13px;height:2px;width:72px;pointer-events:none}
-  .ki-arrow::before{content:'';position:absolute;top:50%;width:7px;height:7px;border-radius:50%;background:rgba(225,29,72,.4);transform:translateY(-50%)}
-  .ki-arrow::after{content:'';position:absolute;top:50%;width:8px;height:8px}
-  /* left pair — line runs rightward, arrowhead nearest the capsule */
-  .ki-item:nth-of-type(1) .ki-arrow,
-  .ki-item:nth-of-type(2) .ki-arrow{left:100%;margin-left:14px;background:linear-gradient(90deg,rgba(225,29,72,.16),rgba(225,29,72,.8))}
-  .ki-item:nth-of-type(1) .ki-arrow::before,
-  .ki-item:nth-of-type(2) .ki-arrow::before{left:0}
-  .ki-item:nth-of-type(1) .ki-arrow::after,
-  .ki-item:nth-of-type(2) .ki-arrow::after{right:-1px;border-top:2px solid var(--honey);border-right:2px solid var(--honey);transform:translateY(-50%) rotate(45deg)}
-  /* right pair — mirrored */
-  .ki-item:nth-of-type(3) .ki-arrow,
-  .ki-item:nth-of-type(4) .ki-arrow{right:100%;margin-right:14px;background:linear-gradient(270deg,rgba(225,29,72,.16),rgba(225,29,72,.8))}
-  .ki-item:nth-of-type(3) .ki-arrow::before,
-  .ki-item:nth-of-type(4) .ki-arrow::before{right:0}
-  .ki-item:nth-of-type(3) .ki-arrow::after,
-  .ki-item:nth-of-type(4) .ki-arrow::after{left:-1px;border-bottom:2px solid var(--honey);border-left:2px solid var(--honey);transform:translateY(-50%) rotate(45deg)}
+  /* the name pop-up — hidden at rest so the ring reads as nine clean discs */
+  .orb-node__label{
+    position:absolute;left:50%;top:calc(100% + 9px);
+    transform:translate(-50%,4px) scale(.92);transform-origin:50% 0;
+    white-space:nowrap;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    color:#fff;background:var(--honey-deep);
+    padding:5px 11px;border-radius:999px;box-shadow:0 8px 20px rgba(120,20,50,.22);
+    opacity:0;transition:opacity .22s ease,transform .22s ease;pointer-events:none;
+  }
+  /* small pointer notch so the pill clearly belongs to its disc */
+  .orb-node__label::before{
+    content:'';position:absolute;left:50%;top:-4px;width:8px;height:8px;margin-left:-4px;
+    background:var(--honey-deep);transform:rotate(45deg);border-radius:1px;
+  }
+  .orb-node:hover .orb-node__label,.orb-node:focus-visible .orb-node__label,.orb-node.is-lit .orb-node__label{
+    opacity:1;transform:translate(-50%,0) scale(1);
+  }
 
   @media (max-width:980px){
-    .ki-grid{grid-template-columns:1fr minmax(220px,330px) 1fr;column-gap:52px;row-gap:48px}
-    .ki-media img{max-width:330px;transform:scale(1.85)}
-    .ki-item h3{font-size:21px}
-    .ki-item p{font-size:14px}
-    .ki-arrow{width:46px;top:11px}
+    .orb-stage{width:min(440px,86vw);--r:172px}
+    .orb-node{width:68px;height:68px}
   }
-  /* Below 760px the side-by-side reads as cramped columns — stack it, shot
-     first, and centre the copy so the section keeps its symmetry. */
-  @media (max-width:760px){
-    .ki-grid{grid-template-columns:1fr;grid-template-rows:none;row-gap:24px}
-    /* single column: reset every explicit placement and let source order rule,
-       with the shot pulled to the top */
-    .ki-media{grid-column:1;grid-row:1;margin-bottom:2px}
-    .ki-media img{width:min(300px,62vw);max-width:none;transform:scale(1.75)}
-    /* stacked: nothing sits beside the capsule to point at */
-    .ki-arrow{display:none}
-    .ki-item:nth-of-type(1),.ki-item:nth-of-type(2),
-    .ki-item:nth-of-type(3),.ki-item:nth-of-type(4){
-      grid-column:1;grid-row:auto;justify-self:center;text-align:center;
-    }
-    .ki-item{max-width:430px}
-    .ki-item h3{font-size:19px;margin-bottom:6px}
-    .ki-item p{font-size:14px;line-height:1.5}
+  @media (max-width:680px){
+    .orb{padding:48px 0 64px}
+    .orb-stage{width:min(330px,80vw);--r:130px}
+    .orb-node{width:54px;height:54px}
+    .orb-node__label{font-size:10px;padding:4px 9px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .orb-node__disc,.orb-node__label{transition:none}
   }
 </style>
 
-<section class="s ki" aria-labelledby="kiTitle">
+<section class="orb" aria-labelledby="orbTitle">
   <div class="wrap">
-    <div class="s-head center">
-      <h2 class="s-title" id="kiTitle">Key <em>Ingredients</em></h2>
+    <div class="orb__head">
+      <span class="s-eyebrow">Key ingredients</span>
+      <h2 class="s-title" id="orbTitle">One capsule, <em>nine actives.</em></h2>
     </div>
-    <div class="ki-grid">
-      <div class="ki-item">
-        <span class="ki-arrow" aria-hidden="true"></span>
-        <h3>Ferrous Bisglycinate<span>27 mg</span></h3>
-        <p>Chelated iron absorbed 2&ndash;4&times; better than ferrous sulfate &mdash; and about 90% gentler on the stomach.</p>
-      </div>
-      <div class="ki-item">
-        <span class="ki-arrow" aria-hidden="true"></span>
-        <h3>L-Methylfolate<span>570 mcg</span></h3>
-        <p>The already-active form of folate. No conversion needed, so it works even with the MTHFR variant.</p>
-      </div>
-      <div class="ki-item">
-        <span class="ki-arrow" aria-hidden="true"></span>
-        <h3>Vitamin B<sub>12</sub></h3>
-        <p>Partners with folate to build healthy red blood cells and support your baby&rsquo;s neural development.</p>
-      </div>
-      <div class="ki-item">
-        <span class="ki-arrow" aria-hidden="true"></span>
-        <h3>Zinc</h3>
-        <p>Helps the body absorb and put iron to use, while supporting day-to-day immunity.</p>
-      </div>
+    <p class="orb__hint">
+      <span class="orb__hint-hover">Hover over an ingredient to see its name.</span>
+      <span class="orb__hint-touch">Tap an ingredient to see its name.</span>
+    </p>
 
-      <div class="ki-media">
-        <img id="kiPill"
-             src="/img/products/pill-hero.png"
-             data-fallback="/img/products/capsules.png"
-             alt="A single Shiōrra Advanced Iron+ capsule">
-      </div>
+    <%
+      // The nine actives on the pack, in orbit order. `k` matches the file in
+      // /img/ingredients/.
+      var _orbIng = [
+        { k: 'iron',        t: 'Iron' },
+        { k: 'folate',      t: 'Folate' },
+        { k: 'b12',         t: 'Vitamin B12' },
+        { k: 'b6',          t: 'Vitamin B6' },
+        { k: 'zinc',        t: 'Zinc' },
+        { k: 'copper',      t: 'Copper' },
+        { k: 'selenium',    t: 'Selenium' },
+        { k: 'riboflavin',  t: 'Riboflavin' },
+        { k: 'niacinamide', t: 'Niacinamide' }
+      ];
+      var _orbStep = 360 / _orbIng.length;
+    %>
+
+    <div class="orb-stage" id="orbStage">
+      <span class="orb-ring" aria-hidden="true"></span>
+      <span class="orb-ring--inner" aria-hidden="true"></span>
+      <% _orbIng.forEach(function (ing, i) { %>
+        <%# a button so it can take keyboard focus and a tap; its accessible
+            name is the label text, so the disc image stays decorative %>
+        <button type="button" class="orb-node" data-ing="<%= ing.k %>" style="--a:<%= (-90 + _orbStep * i).toFixed(2) %>deg">
+          <span class="orb-node__disc"><img src="/img/ingredients/<%= ing.k %>.png" alt="" loading="lazy"></span>
+          <span class="orb-node__label"><%= ing.t %></span>
+        </button>
+      <% }); %>
+      <span class="orb-core" aria-hidden="true">
+        <img src="/img/products/pill-hero.png" alt="">
+      </span>
     </div>
   </div>
 </section>
 
-<!-- EVIDENCE-BACKED FORMULATION -->
-<%
-  // Stage copy comes only from claims already published on this page — the
-  // "Journey to Better Iron Health" slide in the gallery, the FAQ, and the
-  // pack. The clinical figures that used to headline this section are kept,
-  // but moved into the note below: they come from research on the ingredient,
-  // not on Advanced Iron+, so they are substantiation rather than a promise.
-  var _jt = {
-    eyebrow: 'Evidence-Backed Formulation',
-    title: 'What changes, <em>and when.</em>',
-    lede: 'Iron works gradually, not overnight. Here is the shape of it &mdash; what you may notice, and roughly when.',
-    stages: [
-      {
-        k: 'Week 0',
-        h: 'Where most women start',
-        s: 'Low iron &mdash; and the reserve behind it already running close to empty.',
-        points: [
-          'Tired by the middle of the afternoon',
-          'Out of breath on the stairs',
-          'Dizziness or weakness',
-          'Hard to hold your concentration'
-        ]
-      },
-      {
-        k: 'Weeks 1&ndash;4',
-        h: 'Early improvement begins',
-        s: 'Haemoglobin starts to rise and red blood cell production picks up. The change is subtle at first, but it is there.',
-        points: [
-          'More energy through the day',
-          'Less tiredness',
-          'Reduced dizziness',
-          'Subtle, but noticeable'
-        ],
-        proof: 'Gentle enough to stay on &mdash; <b>87%</b> reported no adverse effects.'
-      },
-      {
-        k: 'Weeks 6&ndash;8',
-        h: 'Stronger from within',
-        s: 'Haemoglobin is meaningfully improved, and ferritin &mdash; the store your body draws on &mdash; starts rebuilding.',
-        points: [
-          'Better stamina',
-          'Less breathlessness',
-          'Improved daily functioning',
-          'Reserves refilled, not just topped up'
-        ],
-        proof: 'In studies of this form of iron, haemoglobin rose <b>2.12 g/dL</b> and ferritin <b>18.13 &micro;g/L</b>.'
-      },
-      {
-        k: 'Month 3+',
-        h: 'The one that actually gets finished',
-        s: 'The gentlest iron only helps if it is still being taken months later. That is most of the point of the form we chose.',
-        points: [
-          'One capsule a day',
-          'Gentle on the stomach',
-          'B<sub>12</sub>, folate and zinc already included',
-          'Nothing else to remember'
-        ],
-        proof: '<b>98%</b> stayed on it, against <b>74%</b> on conventional iron.'
-      }
-    ],
-    note: '<p>The stages above describe a typical course, not a guarantee &mdash; individual results vary, and your doctor is the right person to read your own bloodwork. The figures come from published clinical research on oral iron therapy and on chelated ferrous bisglycinate as an ingredient, not from a trial of Advanced Iron+ itself.</p>' +
-          '<ul><li>Haemoglobin rise: +2.12 g/dL</li><li>Ferritin (iron stores): +18.13 &micro;g/L</li><li>Tolerated with no adverse effects: 87%</li><li>Stayed on treatment: 98%, against 74% on conventional iron</li></ul>'
-  };
-%>
-<%- include('../partials/journey-timeline', { jt: _jt }) %>
+<!-- HAEMOGLOBIN RISE — full-bleed infographic -->
+<style>
+  /* ============================================================
+     HAEMOGLOBIN RISE — edge-to-edge artwork, blended into the page
+     The image is 16:9 (1672x941) and spans the full viewport, outside .wrap.
+     Two seams made it read as a picture pasted between sections, so both are
+     closed here rather than in the artwork:
+       top    — its edge is near-white (253,252,252), so plain white padding
+                gives it the same breathing room as every other section and
+                simply runs on into it.
+       bottom — it ends in pink mountain mist cut straight across, against
+                the pure white testimonials. The last few percent are masked
+                out over a matching tint (#FDF4F6, the bottom row's average),
+                and that tint then eases back to white below the image.
+       The top 3% is faded out too: the artwork carries a faint blush tint
+       that otherwise shows as an edge against the white padding. Its first
+       content (the label top-left) starts at 4%, so nothing is lost.
+     ============================================================ */
+  .hemo{border-top:1px solid var(--line);background:#fff;padding-top:clamp(24px,3.2vw,48px)}
+  .hemo__fig{
+    margin:0;position:relative;
+    /* what the masked-out bottom edge dissolves into */
+    background:linear-gradient(180deg,rgba(253,244,246,0) 78%,#FDF4F6 100%);
+  }
+  .hemo__fig img{
+    display:block;width:100%;height:auto;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 3%,#000 95%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0,#000 3%,#000 95%,transparent 100%);
+  }
+  .hemo__tail{height:clamp(44px,6vw,96px);background:linear-gradient(180deg,#FDF4F6 0%,#FFFFFF 100%)}
+  .hemo__hint{display:none}
+  /* visually hidden, but gives the section a real heading for screen readers */
+  .hemo__h{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  /* Phones: at full width the artwork is a ~220px strip with ~5px text, so it
+     is shown at a readable 940px instead and scrolls sideways. A portrait
+     export for mobile would beat this — swap it in with <picture> if one is
+     made. */
+  @media (max-width:720px){
+    .hemo{padding-top:28px}
+    .hemo__hint{
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted-2);margin:0 0 12px;
+    }
+    .hemo__hint svg{width:14px;height:14px}
+    .hemo__scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+    .hemo__scroll::-webkit-scrollbar{display:none}
+    .hemo__fig{width:940px}
+  }
+</style>
+<section class="hemo" aria-labelledby="hemoTitle">
+  <h2 class="hemo__h" id="hemoTitle">How haemoglobin climbs on Advanced Iron+</h2>
+  <p class="hemo__hint" aria-hidden="true">Swipe to explore the climb
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </p>
+  <div class="hemo__scroll">
+    <figure class="hemo__fig">
+      <%# The artwork is text-heavy, so the alt carries its content for anyone
+          who cannot see it. Keep it in step if the image is re-exported. %>
+      <img src="/img/products/hemo.png" width="1672" height="941" loading="lazy"
+           alt="Hb climbs gently, visibly. Base camp, week 1 to 2, from a base level of 10.0 g/dL: settling into the routine, no notable side effects, feeling a bit more energy. Mid ascent, week 4 to 8: an average rise of 0.8 to 1.4 g/dL, stamina returning, clearer mental focus. Summit, month 3 to 6: haemoglobin at 12.6 g/dL or above, the WHO normal range, with pregnancy and postpartum support. Average rise about 2.78 g/dL; most women reach WHO normal by month 3 to 6. Individual experiences may vary.">
+    </figure>
+  </div>
+  <div class="hemo__tail" aria-hidden="true"></div>
+</section>
 
 <!-- TESTIMONIALS -->
 <%
@@ -1940,21 +1895,6 @@
   });
 })();
 
-// Key-ingredients shot — falls back to the stock capsule photo until the
-// dedicated single-pill cut-out is added.
-(function () {
-  var img = document.getElementById('kiPill');
-  if (!img) return;
-  var swap = function () {
-    var fb = img.getAttribute('data-fallback');
-    if (!fb) return;
-    img.removeAttribute('data-fallback');
-    img.src = fb;
-  };
-  if (img.complete && img.naturalWidth === 0) swap();
-  img.addEventListener('error', swap);
-})();
-
 // FAQ — open on hover for mouse users, one at a time.
 // Gated on a real hover-capable pointer: touch devices never fire hover, so
 // they keep the native tap-to-toggle and are left completely alone. Keyboard
@@ -1983,143 +1923,63 @@
   });
 })();
 
-// Living ingredient orbit — the ring drifts slowly at rest; choosing a stage
-// freezes the drift and gathers that stage's actives into the top arc while
-// the rest recede toward the core. Angles are eased here rather than in CSS
-// because a gather has to start from wherever the drift happens to be.
-// Hover and keyboard focus drive it on pointer devices; tap drives it on
-// touch, where it used to do nothing at all.
+// Key ingredients orbit — the ring drifts slowly; hovering, focusing or
+// tapping an active pops its name up and holds the ring still while it is
+// being read. Angles are driven here rather than by CSS keyframes so the ring
+// can pause and pick up again from exactly where it stopped.
 (function () {
   const stage = document.getElementById('orbStage');
-  const list  = document.querySelector('.orb-list');
-  const bens  = document.querySelectorAll('.orb-ben');
-  if (!stage || !bens.length) return;
-
-  const nodes  = Array.prototype.slice.call(stage.querySelectorAll('.orb-node'));
+  if (!stage) return;
+  const nodes = Array.prototype.slice.call(stage.querySelectorAll('.orb-node'));
   if (!nodes.length) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hover  = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   const STEP = 360 / nodes.length;
-  const st = nodes.map(function (el, i) {
-    const base = -90 + STEP * i;             // its slot on the resting ring
-    return { el: el, base: base, a: base, rk: 1, lit: false, ta: base, trk: 1 };
-  });
-
-  let spin = 0;          // how far the resting ring has drifted, in degrees
-  let gathered = false;
-  let raf = null, last = 0, visible = true;
-
-  // shortest way round, so a node never takes the long way to its target
-  function norm(d) { return ((d + 180) % 360 + 360) % 360 - 180; }
-
-  // --a is measured from the TOP of the ring and turns clockwise — that is how
-  // the transform composes (rotate, then translateY upward). So the gather arc
-  // centres on 0, NOT on -90, which would put it out on the left.
-  const LIT_GAP = 37;   // deg between gathered actives. 37 deg at r=186 leaves
-                        // ~118px between centres — clear of both the 78px disc
-                        // and the widest label ("NIACINAMIDE").
-  const END_BUF = 40;   // deg of clearance between the cluster and the rest
-
-  function retarget() {
-    let n = 0;
-    st.forEach(function (s) { if (s.lit) n++; });
-    if (!gathered || !n) {
-      st.forEach(function (s) { s.ta = s.base + spin; s.trk = 1; });
-      return;
-    }
-    // The unlit fan out across the arc the cluster is NOT using, rather than
-    // being pulled inward. Pulling them in was the bug: 16% of the radius is
-    // 30px, well short of the 78px disc, so a dimmed active ended up sitting
-    // underneath a gathered one. Separate arcs cannot collide at all.
-    const m = st.length - n;
-    const litSpan = (n - 1) * LIT_GAP;
-    const restGap = m > 1 ? Math.max(0, 360 - litSpan - END_BUF * 2) / (m - 1) : 0;
-    let li = 0, ri = 0;
-    st.forEach(function (s) {
-      if (s.lit) {
-        s.ta = (li - (n - 1) / 2) * LIT_GAP;
-        s.trk = 1;
-        li++;
-      } else {
-        s.ta = 180 + (ri - (m - 1) / 2) * restGap;
-        s.trk = 0.93;                       // a touch inward, for depth only
-        ri++;
-      }
-    });
-  }
+  let spin = 0, held = false, raf = null, last = 0, visible = true;
 
   function paint() {
-    st.forEach(function (s) {
-      s.el.style.setProperty('--a', s.a.toFixed(2) + 'deg');
-      s.el.style.setProperty('--rk', s.rk.toFixed(3));
+    nodes.forEach(function (el, i) {
+      el.style.setProperty('--a', (-90 + STEP * i + spin).toFixed(2) + 'deg');
     });
   }
-
   function frame(t) {
     raf = null;
     const dt = last ? Math.min(64, t - last) : 16;
     last = t;
-    if (!gathered) spin += dt * 0.0052;      // ~5 deg/s — a full turn in ~70s
-    retarget();
-    // exponential ease, framed in dt so it behaves the same at 60 and 120Hz
-    const k = 1 - Math.exp(-dt / 135);
-    let moving = false;
-    st.forEach(function (s) {
-      const da = norm(s.ta - s.a), dr = s.trk - s.rk;
-      if (Math.abs(da) > 0.05 || Math.abs(dr) > 0.001) moving = true;
-      s.a += da * k;
-      s.rk += dr * k;
-    });
+    spin = (spin + dt * 0.0052) % 360;       // ~5 deg/s — a full turn in ~70s
     paint();
-    // Settle: once gathered and everything has arrived there is nothing left
-    // to animate, so stop asking for frames until the next interaction.
-    if (visible && (!gathered || moving)) kick();
-    else { raf = null; last = 0; }
+    if (visible && !held) kick(); else last = 0;
   }
-
   function kick() {
-    if (raf || reduce) return;
+    if (raf || reduce || held || !visible) return;
     raf = requestAnimationFrame(frame);
   }
+  function hold()   { held = true; }
+  function resume() { held = false; last = 0; kick(); }
 
-  function light(ben) {
-    bens.forEach(function (b) { b.classList.toggle('is-active', b === ben); });
-    const want = (ben.dataset.ings || '').split(',');
-    st.forEach(function (s) {
-      s.lit = want.indexOf(s.el.dataset.ing) !== -1;
-      s.el.classList.toggle('is-lit', s.lit);
-      s.el.classList.toggle('is-dim', !s.lit);
-    });
-    gathered = true;
-    if (reduce) { retarget(); st.forEach(function (s) { s.a = s.ta; s.rk = s.trk; }); paint(); }
-    else { last = 0; kick(); }
+  // A tapped name stays up until another active, or anywhere else, is tapped.
+  function lightOnly(node) {
+    nodes.forEach(function (n) { n.classList.toggle('is-lit', n === node); });
   }
 
-  function release() {
-    if (!gathered) return;
-    gathered = false;
-    st.forEach(function (s) {
-      s.lit = false;
-      s.el.classList.remove('is-lit', 'is-dim');
-    });
-    if (reduce) { retarget(); st.forEach(function (s) { s.a = s.ta; s.rk = s.trk; }); paint(); }
-    else { last = 0; kick(); }
-  }
-
-  bens.forEach(function (b) {
-    b.addEventListener('click', function () { light(b); });
-    b.addEventListener('focus', function () { light(b); });
-    if (hover) b.addEventListener('mouseenter', function () { light(b); });
+  nodes.forEach(function (n) {
+    if (hover) {
+      n.addEventListener('mouseenter', hold);
+      n.addEventListener('mouseleave', resume);
+    } else {
+      n.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (n.classList.contains('is-lit')) { lightOnly(null); resume(); }
+        else { lightOnly(n); hold(); }
+      });
+    }
+    n.addEventListener('focus', hold);
+    n.addEventListener('blur', function () { if (!n.classList.contains('is-lit')) resume(); });
   });
-
-  // Back to drifting when the pointer leaves the stack. Only on hover devices:
-  // on touch there is no "leave", so a tapped stage stays gathered until
-  // another is tapped.
-  if (hover && list) {
-    list.addEventListener('mouseleave', release);
-    list.addEventListener('focusout', function (e) {
-      if (!list.contains(e.relatedTarget)) release();
+  if (!hover) {
+    document.addEventListener('click', function () {
+      if (nodes.some(function (n) { return n.classList.contains('is-lit'); })) { lightOnly(null); resume(); }
     });
   }
 
@@ -2133,14 +1993,42 @@
     }, { threshold: 0 }).observe(stage);
   }
 
-  // The resting orbit means "all nine actives", which is what the heading
-  // says — so it starts drifting rather than pre-lit. The copy card marked
-  // active in the markup stays expanded for its text.
-  retarget();
   paint();
   kick();
 })();
 
+// Benefits — one stage open at a time, and the photo panel follows it.
+// Hover opens on pointer devices; click and keyboard focus open everywhere.
+// Leaving the list keeps the last one open rather than collapsing to three
+// closed bars.
+(function () {
+  const items = Array.prototype.slice.call(document.querySelectorAll('.ben-item'));
+  if (!items.length) return;
+  const photos = Array.prototype.slice.call(document.querySelectorAll('.ben-photo img'));
+  const hover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function open(item) {
+    const idx = items.indexOf(item);
+    items.forEach(function (b, i) {
+      const on = i === idx;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-expanded', on ? 'true' : 'false');
+    });
+    photos.forEach(function (img, i) { img.classList.toggle('is-active', i === idx); });
+  }
+  items.forEach(function (b) {
+    b.addEventListener('click', function () { open(b); });
+    b.addEventListener('focus', function () { open(b); });
+    if (hover) b.addEventListener('mouseenter', function () { open(b); });
+  });
+
+  // A photo whose file is missing is hidden, leaving the branded placeholder
+  // underneath instead of a broken-image icon.
+  photos.forEach(function (img) {
+    const miss = function () { img.hidden = true; };
+    if (img.complete && img.naturalWidth === 0) miss();
+    img.addEventListener('error', miss);
+  });
+})();
 
 // Social-proof viewer count — a fresh random 10-30 on each visit.
 (function () {
