@@ -1482,126 +1482,31 @@
 <%- include('../partials/testimonials', { tm: _tm }) %>
 
 <!-- FAQ -->
-<style>
-  /* ============================================================
-     FAQ — three tabs over one accordion
-     General answers product questions, Delivery covers shipping and returns,
-     Service covers the brand and support. Delivery and Service copy is the
-     same wording as the /faq page, so the two cannot drift apart.
-     Panels are plain <details>, so every question still opens with no JS;
-     the tabs are what JS adds. Each panel shares a `name`, which makes the
-     browser close the previously open question on its own.
-     ============================================================ */
-  .faq-tabs{display:flex;justify-content:center;margin:0 0 42px}
-  .faq-tabs__inner{display:inline-flex;border:1.5px solid var(--charcoal);border-radius:4px;overflow:hidden}
-  .faq-tab{
-    font-family:inherit;font-size:15px;font-weight:600;color:var(--charcoal);background:#fff;
-    padding:12px 26px;min-height:46px;cursor:pointer;border:0;border-left:1.5px solid var(--charcoal);
-    transition:background .2s ease,color .2s ease;
-  }
-  .faq-tab:first-child{border-left:0}
-  .faq-tab:hover{background:var(--surface)}
-  .faq-tab[aria-selected="true"]{background:var(--charcoal);color:#fff;font-weight:700}
-  .faq-tab:focus-visible{outline:2px solid var(--honey);outline-offset:-4px}
-
-  .faq-panel[hidden]{display:none}
-  .faq-panel{max-width:920px;margin:0 auto}
-  .faq-row{border-bottom:1px solid var(--line)}
-  .faq-row > summary{
-    display:flex;align-items:center;justify-content:space-between;gap:24px;
-    list-style:none;cursor:pointer;padding:22px 4px;
-    font-size:19px;font-weight:500;letter-spacing:-0.01em;color:var(--ink);
-  }
-  .faq-row > summary::-webkit-details-marker{display:none}
-  .faq-row > summary:hover{color:var(--honey-deep)}
-  .faq-row > summary:focus-visible{outline:2px solid var(--honey);outline-offset:2px;border-radius:6px}
-  .faq-chev{flex:0 0 auto;width:20px;height:20px;transition:transform .25s ease;color:var(--ink)}
-  .faq-row[open] .faq-chev{transform:rotate(180deg)}
-  .faq-row__a{padding:0 4px 24px;font-size:15.5px;color:var(--ink-soft);line-height:1.7;max-width:74ch}
-  .faq-row__a a{color:var(--honey-deep);text-decoration:underline}
-
-  @media (max-width:680px){
-    .faq-tabs{margin-bottom:28px}
-    .faq-tab{font-size:13.5px;padding:11px 16px}
-    .faq-row > summary{font-size:16.5px;padding:18px 2px;gap:14px}
-    .faq-row__a{font-size:14.5px;padding-bottom:20px}
-  }
-  @media (prefers-reduced-motion:reduce){.faq-chev,.faq-tab{transition:none}}
-</style>
-
-<section class="s faq-sec" aria-labelledby="faqTitle">
-  <div class="wrap">
-    <div class="s-head center">
-      <span class="rv-marker">FAQ</span>
-      <h2 class="s-title" id="faqTitle">Questions, <em>answered</em>.</h2>
-    </div>
-
-    <%
-      // Delivery and Service are the /faq page's shipping-and-returns and
-      // brand-and-trust answers, word for word.
-      var _faq = [
-      { k: 'general', label: 'General', items: [
-          { q: 'Is EnergyOne+ caffeine-free?',
-            a: 'Completely. The lift comes from <strong>B-complex vitamins, taurine, ginseng</strong> and minerals that support your own energy metabolism &mdash; so there&rsquo;s no spike, no crash and no disrupted sleep.' },
-          { q: 'What\'s in EnergyOne+?',
-            a: 'Taurine, Ginseng Extract, a full <strong>B-Complex</strong>, Zinc and 23 other essential nutrients &mdash; minerals and amino acids that support steady energy, focus and vitality.' },
-          { q: 'Who is EnergyOne+ for?',
-            a: 'Busy adults and active lifestyles who want steady daily energy and mental focus without caffeine.' },
-          { q: 'When should I take EnergyOne+?',
-            a: 'Once a day, ideally in the morning after a meal with a glass of water.' },
-          { q: 'Is EnergyOne+ vegetarian?',
-            a: 'Yes &mdash; <strong>100% vegetarian</strong>, with no preservatives, GMO-free and gluten-free.' }
-      ] },
-      { k: 'delivery', label: 'Delivery', items: [
-          { q: 'How long does delivery take?',
-            a: '2-5 business days for most Indian addresses. Metros usually 2-3 days, remote pincodes can take up to 7. You\'ll get a tracking link by email and SMS.' },
-          { q: 'Is shipping really free?',
-            a: 'Free on orders over <strong>₹999</strong>. Below that, a flat ₹49 shipping fee applies. You\'ll see the total before checkout.' },
-          { q: 'Do you offer Cash on Delivery?',
-            a: 'Yes — COD is available across India. You can also pay online via UPI, cards, wallets and netbanking.' },
-          { q: 'What is your return policy?',
-            a: 'Unopened packs can be returned within <strong>30 days</strong> for a full refund. If your pack arrives damaged, write to us within 7 days and we\'ll replace it.' },
-          { q: 'Do you ship outside India?',
-            a: 'Not yet. We\'re focused on India for now — international shipping is on the roadmap. Drop us a note at hello@shiorra.com to be notified.' }
-      ] },
-      { k: 'service', label: 'Service', items: [
-          { q: 'Who makes Shiōrra products?',
-            a: 'Shiōrra is a trademark of <strong>K.C. Laboratories</strong> — a 30-year clinical formulation house in India. Every formula is developed in-house and manufactured at our FSSAI &amp; GMP-certified facility.' },
-          { q: 'Are your products tested?',
-            a: 'Yes. Every batch is lab-tested for potency, purity and heavy-metal limits. We don\'t ship a batch until it clears.' },
-          { q: 'What does "Shiori" mean?',
-            a: '"Shiori" (栞) is the Japanese word for a bookmark — a gentle guide that holds your place. We picked the name because that\'s the kind of brand we wanted to build: quiet, reliable, with you for the long story.' },
-          { q: 'Who do I write to with questions?',
-            a: 'Email <a href="mailto:hello@shiorra.com" style="color:var(--honey-deep);text-decoration:underline">hello@shiorra.com</a>. A real human (often pharmacology-trained) replies within 24 hours, Mon-Sat.' }
-      ] }
-      ];
-    %>
-
-    <div class="faq-tabs">
-      <div class="faq-tabs__inner" role="tablist" aria-label="Question categories">
-        <% _faq.forEach(function (t, i) { %>
-          <button type="button" class="faq-tab" role="tab" id="faqTab-<%= t.k %>"
-                  aria-controls="faqPanel-<%= t.k %>" aria-selected="<%= i === 0 ? 'true' : 'false' %>"
-                  tabindex="<%= i === 0 ? '0' : '-1' %>"><%= t.label %></button>
-        <% }); %>
-      </div>
-    </div>
-
-    <% _faq.forEach(function (t, i) { %>
-      <div class="faq-panel" role="tabpanel" id="faqPanel-<%= t.k %>"
-           aria-labelledby="faqTab-<%= t.k %>" tabindex="0"<%- i === 0 ? '' : ' hidden' %>>
-        <% t.items.forEach(function (it) { %>
-          <details class="faq-row" name="faq-<%= t.k %>">
-            <summary><span><%- it.q %></span>
-              <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-            </summary>
-            <div class="faq-row__a"><%- it.a %></div>
-          </details>
-        <% }); %>
-      </div>
-    <% }); %>
-  </div>
-</section>
+<%
+  // General is this product's own questions; Delivery and Service come from
+  // faqShared so every page states the same terms (src/data/faq.js).
+  var _faqTabs = [
+    { k: 'general', label: 'General', items: [
+          { q: "Is EnergyOne+ caffeine-free?",
+            a: "Completely. The lift comes from <strong>B-complex vitamins, taurine, ginseng</strong> and minerals that support your own energy metabolism &mdash; so there&rsquo;s no spike, no crash and no disrupted sleep." },
+          { q: "What's in EnergyOne+?",
+            a: "Taurine, Ginseng Extract, a full <strong>B-Complex</strong>, Zinc and 23 other essential nutrients &mdash; minerals and amino acids that support steady energy, focus and vitality." },
+          { q: "Who is EnergyOne+ for?",
+            a: "Busy adults and active lifestyles who want steady daily energy and mental focus without caffeine." },
+          { q: "When should I take EnergyOne+?",
+            a: "Once a day, ideally in the morning after a meal with a glass of water." },
+          { q: "Is EnergyOne+ vegetarian?",
+            a: "Yes &mdash; <strong>100% vegetarian</strong>, with no preservatives, GMO-free and gluten-free." }
+    ] },
+    { k: 'delivery', label: 'Delivery', items: faqShared.delivery },
+    { k: 'service',  label: 'Service',  items: faqShared.service }
+  ];
+%>
+<%- include('../partials/faq-tabs', { faq: {
+      tabs: _faqTabs,
+      eyebrow: 'FAQ',
+      title: 'Questions, <em>answered</em>.'
+    } }) %>
 
 <!-- PAIR IT WITH -->
 <style>
@@ -1944,33 +1849,6 @@
     // click toggle run as well would fight it and strand items closed.
     var q = d.querySelector('.fq-q');
     if (q) q.addEventListener('click', function (e) { e.preventDefault(); });
-  });
-})();
-
-// FAQ tabs — General / Delivery / Service. The panels are plain <details>,
-// so every question still opens without this; the tabs are the only JS part.
-(function () {
-  const tabs = Array.prototype.slice.call(document.querySelectorAll('.faq-tab'));
-  if (!tabs.length) return;
-  const panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
-  function select(i, focus) {
-    tabs.forEach(function (t, n) {
-      const on = n === i;
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
-      t.tabIndex = on ? 0 : -1;
-      if (panels[n]) panels[n].hidden = !on;
-    });
-    if (focus) tabs[i].focus();
-  }
-  tabs.forEach(function (t, i) {
-    t.addEventListener('click', function () { select(i); });
-    t.addEventListener('keydown', function (e) {
-      // left/right to move between tabs, as a tablist is expected to behave
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-        e.preventDefault();
-        select((i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length, true);
-      }
-    });
   });
 })();
 

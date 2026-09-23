@@ -1520,22 +1520,31 @@
 <%- include('../partials/testimonials', { tm: _tm }) %>
 
 <!-- FAQ -->
-<section class="s faq-sec">
-  <div class="wrap">
-    <div class="s-head center">
-      <span class="rv-marker">FAQ</span>
-      <h2 class="s-title">Questions, <em>answered</em>.</h2>
-    </div>
-    <div class="fq-list">
-      <details class="fq-item"><summary class="fq-q">What's in Ginger+?<span class="plus">+</span></summary><div class="fq-a">Standardized Ginger Extract (250 mg) + active Vit. B<sub>6</sub> as <strong>P5P</strong> (2.3 mg) + Vit. B<sub>1</sub> + Magnesium Bisglycinate. Built specifically for first-trimester nausea and gentle daily digestion.</div></details>
-      <details class="fq-item"><summary class="fq-q">Is Ginger+ safe in the first trimester?<span class="plus">+</span></summary><div class="fq-a">Yes &mdash; Ginger+ was built specifically for first-trimester nausea. The doses of ginger and Vit. B<sub>6</sub> are pregnancy-friendly. If symptoms are severe or persistent, please consult your gynaecologist.</div></details>
-      <details class="fq-item"><summary class="fq-q">How does Ginger+ ease nausea?<span class="plus">+</span></summary><div class="fq-a">Standardised ginger extract and active Vit. B<sub>6</sub> (P5P) are the two most evidence-backed pregnancy-nausea supports &mdash; together in one gentle daily capsule.</div></details>
-      <details class="fq-item"><summary class="fq-q">When should I take Ginger+?<span class="plus">+</span></summary><div class="fq-a">Once a day, ideally after a meal with a glass of water. If mornings are the hardest, some prefer taking it the night before.</div></details>
-      <details class="fq-item"><summary class="fq-q">Is Ginger+ vegetarian?<span class="plus">+</span></summary><div class="fq-a">Yes &mdash; <strong>100% vegetarian</strong> vegecaps, with no gelatin, no preservatives, GMO-free and gluten-free.</div></details>
-    </div>
-  </div>
-</section>
-
+<%
+  // General is this product's own questions; Delivery and Service come from
+  // faqShared so every page states the same terms (src/data/faq.js).
+  var _faqTabs = [
+    { k: 'general', label: 'General', items: [
+          { q: "What's in Ginger+?",
+            a: "Standardized Ginger Extract (250 mg) + active Vit. B<sub>6</sub> as <strong>P5P</strong> (2.3 mg) + Vit. B<sub>1</sub> + Magnesium Bisglycinate. Built specifically for first-trimester nausea and gentle daily digestion." },
+          { q: "Is Ginger+ safe in the first trimester?",
+            a: "Yes &mdash; Ginger+ was built specifically for first-trimester nausea. The doses of ginger and Vit. B<sub>6</sub> are pregnancy-friendly. If symptoms are severe or persistent, please consult your gynaecologist." },
+          { q: "How does Ginger+ ease nausea?",
+            a: "Standardised ginger extract and active Vit. B<sub>6</sub> (P5P) are the two most evidence-backed pregnancy-nausea supports &mdash; together in one gentle daily capsule." },
+          { q: "When should I take Ginger+?",
+            a: "Once a day, ideally after a meal with a glass of water. If mornings are the hardest, some prefer taking it the night before." },
+          { q: "Is Ginger+ vegetarian?",
+            a: "Yes &mdash; <strong>100% vegetarian</strong> vegecaps, with no gelatin, no preservatives, GMO-free and gluten-free." }
+    ] },
+    { k: 'delivery', label: 'Delivery', items: faqShared.delivery },
+    { k: 'service',  label: 'Service',  items: faqShared.service }
+  ];
+%>
+<%- include('../partials/faq-tabs', { faq: {
+      tabs: _faqTabs,
+      eyebrow: 'FAQ',
+      title: 'Questions, <em>answered</em>.'
+    } }) %>
 
 <!-- PAIR IT WITH -->
 <style>

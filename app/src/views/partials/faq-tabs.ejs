@@ -1,0 +1,162 @@
+<%
+  /* Tabbed FAQ — one accordion behind a row of category tabs.
+     Used by the three product pages and by /faq, so the pattern only exists
+     once. Callers pass:
+       faq.tabs        [{ k, label, items:[{q,a}] }]  — required
+       faq.eyebrow     small label above the title    — optional
+       faq.title       section heading (HTML allowed) — optional
+       faq.sectionClass  class for the <section>      — default 's faq-sec'
+       faq.searchId    id of a search input to wire up — optional (/faq)
+     Delivery and Service items come from faqShared (see src/data/faq.js), so
+     shipping terms cannot differ between pages.
+
+     Questions are plain <details>: they open with JS off, and share a `name`
+     per tab so the browser closes the previously open one itself. The tabs
+     are the only scripted part. */
+  var _fq = faq || {};
+  var _fqTabs = _fq.tabs || [];
+  var _fqSection = _fq.sectionClass || 's faq-sec';
+  var _fqId = 'faq' + Math.random().toString(36).slice(2, 7);
+%>
+<style>
+  .faq-tabs{display:flex;justify-content:center;margin:0 0 42px}
+  .faq-tabs__inner{display:inline-flex;flex-wrap:wrap;justify-content:center;border:1.5px solid var(--charcoal);border-radius:4px;overflow:hidden}
+  .faq-tab{
+    font-family:inherit;font-size:15px;font-weight:600;color:var(--charcoal);background:#fff;
+    padding:12px 26px;min-height:46px;cursor:pointer;border:0;border-left:1.5px solid var(--charcoal);
+    transition:background .2s ease,color .2s ease;
+  }
+  .faq-tab:first-child{border-left:0}
+  .faq-tab:hover{background:var(--surface)}
+  .faq-tab[aria-selected="true"]{background:var(--charcoal);color:#fff;font-weight:700}
+  .faq-tab:focus-visible{outline:2px solid var(--honey);outline-offset:-4px}
+
+  .faq-panel[hidden]{display:none}
+  .faq-panel{max-width:920px;margin:0 auto}
+  .faq-row{border-bottom:1px solid var(--line)}
+  .faq-row[hidden]{display:none}
+  .faq-row > summary{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    list-style:none;cursor:pointer;padding:22px 4px;
+    font-size:19px;font-weight:500;letter-spacing:-0.01em;color:var(--ink);
+  }
+  .faq-row > summary::-webkit-details-marker{display:none}
+  .faq-row > summary:hover{color:var(--honey-deep)}
+  .faq-row > summary:focus-visible{outline:2px solid var(--honey);outline-offset:2px;border-radius:6px}
+  .faq-chev{flex:0 0 auto;width:20px;height:20px;transition:transform .25s ease;color:var(--ink)}
+  .faq-row[open] .faq-chev{transform:rotate(180deg)}
+  .faq-row__a{padding:0 4px 24px;font-size:15.5px;color:var(--ink-soft);line-height:1.7;max-width:74ch}
+  .faq-row__a a{color:var(--honey-deep);text-decoration:underline}
+  /* shown only while a search is running and nothing matches */
+  .faq-empty{text-align:center;color:var(--muted);font-size:15.5px;padding:40px 0}
+
+  @media (max-width:680px){
+    /* Five tabs do not fit one phone row, and wrapping strands the last one
+       on a half-empty second row — so the row scrolls sideways instead. */
+    .faq-tabs{margin-bottom:28px;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;padding:0 2px}
+    .faq-tabs::-webkit-scrollbar{display:none}
+    .faq-tabs__inner{flex-wrap:nowrap;margin-inline:auto}
+    .faq-tab{font-size:13.5px;padding:11px 16px;min-height:44px;white-space:nowrap}
+    .faq-row > summary{font-size:16.5px;padding:18px 2px;gap:14px}
+    .faq-row__a{font-size:14.5px;padding-bottom:20px}
+  }
+  @media (prefers-reduced-motion:reduce){.faq-chev,.faq-tab{transition:none}}
+</style>
+
+<section class="<%= _fqSection %>"<%- _fq.title ? ' aria-labelledby="' + _fqId + 'Title"' : '' %> data-faq="<%= _fqId %>">
+  <div class="wrap">
+    <% if (_fq.eyebrow || _fq.title) { %>
+      <div class="s-head center">
+        <% if (_fq.eyebrow) { %><span class="rv-marker"><%- _fq.eyebrow %></span><% } %>
+        <% if (_fq.title) { %><h2 class="s-title" id="<%= _fqId %>Title"><%- _fq.title %></h2><% } %>
+      </div>
+    <% } %>
+
+    <div class="faq-tabs">
+      <div class="faq-tabs__inner" role="tablist" aria-label="Question categories">
+        <% _fqTabs.forEach(function (t, i) { %>
+          <button type="button" class="faq-tab" role="tab" id="<%= _fqId %>Tab-<%= t.k %>"
+                  aria-controls="<%= _fqId %>Panel-<%= t.k %>" aria-selected="<%= i === 0 ? 'true' : 'false' %>"
+                  tabindex="<%= i === 0 ? '0' : '-1' %>"><%- t.label %></button>
+        <% }); %>
+      </div>
+    </div>
+
+    <% _fqTabs.forEach(function (t, i) { %>
+      <div class="faq-panel" role="tabpanel" id="<%= _fqId %>Panel-<%= t.k %>"
+           aria-labelledby="<%= _fqId %>Tab-<%= t.k %>" tabindex="0"<%- i === 0 ? '' : ' hidden' %>>
+        <% (t.items || []).forEach(function (it) { %>
+          <details class="faq-row" name="<%= _fqId %>-<%= t.k %>">
+            <summary><span><%- it.q %></span>
+              <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="faq-row__a"><%- it.a %></div>
+          </details>
+        <% }); %>
+      </div>
+    <% }); %>
+
+    <p class="faq-empty" hidden>No questions match that search.</p>
+  </div>
+</section>
+
+<script>
+(function () {
+  var root = document.querySelector('[data-faq="<%= _fqId %>"]');
+  if (!root) return;
+  var tabs   = Array.prototype.slice.call(root.querySelectorAll('.faq-tab'));
+  var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+  var empty  = root.querySelector('.faq-empty');
+  if (!tabs.length) return;
+
+  function select(i, focus) {
+    tabs.forEach(function (t, n) {
+      var on = n === i;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      if (panels[n]) panels[n].hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i); });
+    t.addEventListener('keydown', function (e) {
+      // left/right to move between tabs, as a tablist is expected to behave
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        select((i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length, true);
+      }
+    });
+  });
+
+<% if (_fq.searchId) { %>
+  // Search runs ACROSS the tabs: a query would otherwise only ever find what
+  // is in the tab you happen to be on. While one is typed the tab row steps
+  // aside, every panel is shown, and only matching questions remain.
+  var input = document.getElementById('<%= _fq.searchId %>');
+  var tabBar = root.querySelector('.faq-tabs');
+  if (input) {
+    var rows = Array.prototype.slice.call(root.querySelectorAll('.faq-row'));
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      if (!q) {
+        tabBar.hidden = false;
+        rows.forEach(function (r) { r.hidden = false; });
+        empty.hidden = true;
+        select(tabs.findIndex(function (t) { return t.getAttribute('aria-selected') === 'true'; }) || 0);
+        return;
+      }
+      tabBar.hidden = true;
+      panels.forEach(function (p) { if (p) p.hidden = false; });
+      var hits = 0;
+      rows.forEach(function (r) {
+        var on = r.textContent.toLowerCase().indexOf(q) !== -1;
+        r.hidden = !on;
+        if (on) hits++;
+      });
+      empty.hidden = hits > 0;
+    });
+  }
+<% } %>
+})();
+</script>
