@@ -1196,134 +1196,167 @@
 
 <!-- KEY INGREDIENTS -->
 <style>
-  /* Three tracks: labels | product shot | labels. The outer tracks are 1fr
-     each so the shot stays optically centred no matter how long the copy
-     runs, and the columns mirror each other (right-aligned on the left,
-     left-aligned on the right) so both point inward at the pill. */
-  .ki{background:#fff}
-  /* Explicit rows, not two independent flex columns: the left items carry a
-     dosage sub-line and the right ones do not, so free-flowing columns drift
-     out of step. Placing all four on a shared 2-row grid keeps each pair's
-     headings on exactly the same baseline. */
-  .ki-grid{
-    display:grid;
-    grid-template-columns:1fr minmax(280px,440px) 1fr;
-    grid-template-rows:auto auto;
-    column-gap:76px;row-gap:66px;align-items:start;
+  /* ============================================================
+     KEY INGREDIENTS — living ingredient orbit
+     The tablet sits at the centre and the five actives orbit it as powder
+     discs, drifting slowly. Hover (or focus, or tap) one and the ring holds
+     still while its name pops up and the caption below swaps to that
+     ingredient's line — so the copy from the old four-callout layout is kept
+     rather than reduced to a label.
+     Same component as the Iron+ page, in this page's magenta, with five
+     larger discs instead of nine. Angles come from JS rather than CSS
+     keyframes so the ring can pause and pick up from where it stopped.
+     ============================================================ */
+  .orb{background:linear-gradient(180deg,#FFFFFF 0%,#FCF4F9 55%,#FFFFFF 100%);padding:78px 0 84px}
+  .orb__head{text-align:center;margin-bottom:12px}
+  .orb__head .s-title{margin-inline:auto;margin-bottom:0}
+  .orb__hint{text-align:center;font-size:13px;color:var(--muted-2);margin:0 0 26px}
+  .orb__hint-touch{display:none}
+  @media (hover:none){.orb__hint-hover{display:none}.orb__hint-touch{display:inline}}
+
+  /* ---- stage ---- */
+  /* Geometry, so the spacing stays deliberate if anything changes:
+       ring gap    2*pi*r / 5 = ~302px between disc centres, less the 92px
+                   disc = ~210px of air between neighbours
+       outer edge  r + disc/2 (+ hover growth) = 290px, inside the 300px half
+       inner gap   r - disc/2 - tablet/2 = ~86px between tablet and discs */
+  .orb-stage{position:relative;width:min(600px,100%);aspect-ratio:1;margin-inline:auto;--r:240px}
+  .orb-ring,.orb-ring--inner{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;
+    border:1px dashed rgba(107,34,85,.20);pointer-events:none;
   }
-  .ki-item{position:relative;max-width:300px}
-  .ki-item:nth-of-type(1){grid-column:1;grid-row:1;justify-self:end;text-align:right}
-  .ki-item:nth-of-type(2){grid-column:1;grid-row:2;justify-self:end;text-align:right}
-  .ki-item:nth-of-type(3){grid-column:3;grid-row:1;justify-self:start;text-align:left}
-  .ki-item:nth-of-type(4){grid-column:3;grid-row:2;justify-self:start;text-align:left}
-  .ki-item h3{font-size:24px;font-weight:600;letter-spacing:-0.015em;color:var(--ink);margin:0 0 9px;line-height:1.2}
-  .ki-item h3 span{display:block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--honey-deep);margin-top:5px}
-  .ki-item p{font-size:15px;font-weight:600;color:var(--muted);line-height:1.55;margin:0}
-  .ki-media{grid-column:2;grid-row:1 / span 2;align-self:center;display:grid;place-items:center}
-  /* multiply drops the shot's white studio backdrop out against the white
-     section, so the pill reads as placed on the page rather than pasted. */
-  /* The shot is 1536x1024 but the pill itself only occupies ~46% of that
-     width — the rest is blank margin. Sizing the file to the column would
-     render a small pill in a big empty box, so it is deliberately oversized
-     past the column instead. Only the blank margin overflows; the pill
-     itself still lands inside the centre track, clear of the connectors.
-     multiply is what makes that safe — the overflowing white margin leaves
-     anything behind it untouched instead of masking it.
-     The enlargement is a transform rather than a width, deliberately:
-     transforms do not feed back into layout, so the row stays as tall as the
-     copy needs instead of inheriting ~150px of blank canvas above and below
-     the pill. */
-  .ki-media img{
-    width:100%;max-width:440px;height:auto;display:block;
-    /* The pill occupies 64.7% of the file's width, so it is scaled up to fill
-       the column instead of floating small inside it. 1.35 lands it at the
-       same optical size as the Iron+ pill (which needed 1.9, its cut-out
-       carrying far more empty canvas). A transform, not a width, so the row
-       height stays driven by the copy rather than by blank margin. */
-    transform:scale(1.35);transform-origin:center;
+  .orb-ring{width:calc(var(--r) * 2);height:calc(var(--r) * 2)}
+  .orb-ring--inner{width:calc(var(--r) * 1.35);height:calc(var(--r) * 1.35);border-style:solid;border-color:rgba(107,34,85,.09)}
+
+  /* the tablet at the centre, over a soft bloom */
+  /* the tablet is landscape, so it is sized to sit inside the inner ring
+     rather than across it */
+  .orb-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:36%;z-index:3;pointer-events:none}
+  .orb-core::before{
+    content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:150%;aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle,rgba(183,58,146,.16),transparent 68%);
+  }
+  .orb-core img{position:relative;width:100%;height:auto;display:block;filter:drop-shadow(0 18px 26px rgba(107,34,85,.26))}
+
+  /* ---- orbiting actives ---- */
+  .orb-node{
+    position:absolute;left:50%;top:50%;width:92px;height:92px;padding:0;border:0;background:none;
+    cursor:pointer;z-index:2;
+    /* place on the circle, then counter-rotate so the disc stays upright.
+       --a is set per frame from JS, so it deliberately has no transition. */
+    transform:translate(-50%,-50%) rotate(var(--a)) translateY(calc(-1 * var(--r))) rotate(calc(-1 * var(--a)));
+  }
+  .orb-node:focus-visible{outline:none}
+  .orb-node:hover,.orb-node:focus-visible,.orb-node.is-lit{z-index:5}
+  .orb-node__disc{
+    display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;
+    background:#fff;box-shadow:0 8px 22px rgba(107,34,85,.16),0 0 0 3px #fff,0 0 0 4px rgba(183,58,146,.12);
+    transition:box-shadow .3s ease,transform .3s ease;
+  }
+  /* the crops are already framed to the powder, so only a hair of scale to
+     keep the paper edge out of the circle */
+  .orb-node__disc img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);display:block}
+  .orb-node:hover .orb-node__disc,.orb-node:focus-visible .orb-node__disc,.orb-node.is-lit .orb-node__disc{
+    transform:scale(1.09);
+    box-shadow:0 14px 30px rgba(107,34,85,.26),0 0 0 3px #fff,0 0 0 5px var(--honey);
   }
 
-  /* ---- connectors: one per ingredient, aimed at the pill ---- */
-  .ki-arrow{position:absolute;top:13px;height:2px;width:72px;pointer-events:none}
-  .ki-arrow::before{content:'';position:absolute;top:50%;width:7px;height:7px;border-radius:50%;background:rgba(183,58,146,.4);transform:translateY(-50%)}
-  .ki-arrow::after{content:'';position:absolute;top:50%;width:8px;height:8px}
-  /* left pair — line runs rightward, arrowhead nearest the pill */
-  .ki-item:nth-of-type(1) .ki-arrow,
-  .ki-item:nth-of-type(2) .ki-arrow{left:100%;margin-left:14px;background:linear-gradient(90deg,rgba(183,58,146,.16),rgba(183,58,146,.8))}
-  .ki-item:nth-of-type(1) .ki-arrow::before,
-  .ki-item:nth-of-type(2) .ki-arrow::before{left:0}
-  .ki-item:nth-of-type(1) .ki-arrow::after,
-  .ki-item:nth-of-type(2) .ki-arrow::after{right:-1px;border-top:2px solid var(--honey);border-right:2px solid var(--honey);transform:translateY(-50%) rotate(45deg)}
-  /* right pair — mirrored */
-  .ki-item:nth-of-type(3) .ki-arrow,
-  .ki-item:nth-of-type(4) .ki-arrow{right:100%;margin-right:14px;background:linear-gradient(270deg,rgba(183,58,146,.16),rgba(183,58,146,.8))}
-  .ki-item:nth-of-type(3) .ki-arrow::before,
-  .ki-item:nth-of-type(4) .ki-arrow::before{right:0}
-  .ki-item:nth-of-type(3) .ki-arrow::after,
-  .ki-item:nth-of-type(4) .ki-arrow::after{left:-1px;border-bottom:2px solid var(--honey);border-left:2px solid var(--honey);transform:translateY(-50%) rotate(45deg)}
+  /* the name pop-up — hidden at rest so the ring reads as five clean discs */
+  .orb-node__label{
+    position:absolute;left:50%;top:calc(100% + 9px);
+    transform:translate(-50%,4px) scale(.92);transform-origin:50% 0;
+    white-space:nowrap;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    color:#fff;background:var(--honey-deep);
+    padding:5px 11px;border-radius:999px;box-shadow:0 8px 20px rgba(107,34,85,.24);
+    opacity:0;transition:opacity .22s ease,transform .22s ease;pointer-events:none;
+  }
+  .orb-node__label::before{
+    content:'';position:absolute;left:50%;top:-4px;width:8px;height:8px;margin-left:-4px;
+    background:var(--honey-deep);transform:rotate(45deg);border-radius:1px;
+  }
+  .orb-node:hover .orb-node__label,.orb-node:focus-visible .orb-node__label,.orb-node.is-lit .orb-node__label{
+    opacity:1;transform:translate(-50%,0) scale(1);
+  }
+
+  /* ---- caption under the stage ---- */
+  /* Fixed min-height so swapping lines never nudges the section's height. */
+  .orb-cap{max-width:620px;margin:22px auto 0;text-align:center;min-height:96px}
+  .orb-cap__t{font-size:19px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);margin:0 0 6px;transition:opacity .2s ease}
+  .orb-cap__t em{font-style:normal;color:var(--honey)}
+  .orb-cap__s{font-size:15px;color:var(--ink-soft);line-height:1.6;margin:0;transition:opacity .2s ease}
+  .orb-cap.is-swapping .orb-cap__t,.orb-cap.is-swapping .orb-cap__s{opacity:0}
 
   @media (max-width:980px){
-    .ki-grid{grid-template-columns:1fr minmax(220px,330px) 1fr;column-gap:52px;row-gap:48px}
-    .ki-media img{max-width:330px;transform:scale(1.32)}
-    .ki-item h3{font-size:21px}
-    .ki-item p{font-size:14px}
-    .ki-arrow{width:46px;top:11px}
+    .orb-stage{width:min(480px,88vw);--r:192px}
+    .orb-node{width:80px;height:80px}
   }
-  /* Below 760px the side-by-side reads as cramped columns — stack it, shot
-     first, and centre the copy so the section keeps its symmetry. */
-  @media (max-width:760px){
-    .ki-grid{grid-template-columns:1fr;grid-template-rows:none;row-gap:24px}
-    /* single column: reset every explicit placement and let source order rule,
-       with the shot pulled to the top */
-    .ki-media{grid-column:1;grid-row:1;margin-bottom:2px}
-    .ki-media img{width:min(300px,62vw);max-width:none;transform:scale(1.3)}
-    /* stacked: nothing sits beside the pill to point at */
-    .ki-arrow{display:none}
-    .ki-item:nth-of-type(1),.ki-item:nth-of-type(2),
-    .ki-item:nth-of-type(3),.ki-item:nth-of-type(4){
-      grid-column:1;grid-row:auto;justify-self:center;text-align:center;
-    }
-    .ki-item{max-width:430px}
-    .ki-item h3{font-size:19px;margin-bottom:6px}
-    .ki-item p{font-size:14px;line-height:1.5}
+  @media (max-width:680px){
+    .orb{padding:48px 0 60px}
+    .orb-stage{width:min(340px,82vw);--r:136px}
+    .orb-node{width:62px;height:62px}
+    .orb-node__label{font-size:10px;padding:4px 9px}
+    .orb-cap{min-height:118px}
+    .orb-cap__t{font-size:17px}
+    .orb-cap__s{font-size:14px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .orb-node__disc,.orb-node__label,.orb-cap__t,.orb-cap__s{transition:none}
   }
 </style>
 
-<section class="s ki" aria-labelledby="kiTitle">
+<section class="orb" aria-labelledby="kiTitle">
   <div class="wrap">
-    <div class="s-head center">
+    <div class="orb__head">
       <h2 class="s-title" id="kiTitle">Key <em>Ingredients</em></h2>
     </div>
-    <div class="ki-grid">
-      <div class="ki-item">
-        <span class="ki-arrow" aria-hidden="true"></span>
-        <h3>Taurine</h3>
-        <p>An amino acid the body uses in energy metabolism &mdash; part of why the lift here is steady rather than a stimulant spike.</p>
-      </div>
-      <div class="ki-item">
-        <span class="ki-arrow" aria-hidden="true"></span>
-        <h3>Ginseng Extract</h3>
-        <p>A traditional adaptogenic root, included to support mental alertness and physical vitality through the day.</p>
-      </div>
-      <div class="ki-item">
-        <span class="ki-arrow" aria-hidden="true"></span>
-        <h3>B-Complex Vitamins</h3>
-        <p>The B group your body draws on to turn food into usable energy, which is what makes this a support formula rather than a stimulant.</p>
-      </div>
-      <div class="ki-item">
-        <span class="ki-arrow" aria-hidden="true"></span>
-        <h3>Zinc <span>+ 23 nutrients</span></h3>
-        <p>Alongside 23 other essential vitamins, minerals and amino acids for daily nutritional wellness support.</p>
-      </div>
+    <p class="orb__hint">
+      <span class="orb__hint-hover">Hover over an ingredient to see what it does.</span>
+      <span class="orb__hint-touch">Tap an ingredient to see what it does.</span>
+    </p>
 
-      <div class="ki-media">
-        <%# Note: the copy on this page says tablet, while this render is a
-            two-piece capsule. Kept deliberately — the pill art stays as is. %>
-        <img id="kiPill"
-             src="/img/products/pill-hero2.png"
-             data-fallback="/img/products/capsules.png"
-             alt="A single Shiōrra Advanced EnergyOne+ tablet">
-      </div>
+    <%
+      // The five actives in orbit order. `img` is the powder shot, cropped
+      // square to the powder itself — the handwritten label on the original
+      // photograph is left out, since the name is shown on hover instead.
+      // Copy is carried over from the four-callout layout this replaces.
+      var _orbIng = [
+        { k: 'taurine',      t: 'Taurine',
+          s: 'An amino acid the body uses in energy metabolism &mdash; part of why the lift here is steady rather than a stimulant spike.' },
+        { k: 'ginseng',      t: 'Ginseng Extract',
+          s: 'A traditional adaptogenic root, included to support mental alertness and physical vitality through the day.' },
+        { k: 'vitamin-b',    t: 'B-Complex Vitamins',
+          s: 'The B group your body draws on to turn food into usable energy, which is what makes this a support formula rather than a stimulant.' },
+        { k: 'zinc',         t: 'Zinc',
+          s: 'Supports normal immune function and everyday nutritional wellness, alongside the rest of the mineral blend.' },
+        { k: '23-nutrients', t: '23 Essential Nutrients',
+          s: '23 vitamins, minerals and amino acids in all &mdash; a daily nutritional base rather than a single-note stimulant.' }
+      ];
+      var _orbStep = 360 / _orbIng.length;
+    %>
+
+    <div class="orb-stage" id="orbStage">
+      <span class="orb-ring" aria-hidden="true"></span>
+      <span class="orb-ring--inner" aria-hidden="true"></span>
+      <% _orbIng.forEach(function (ing, i) { %>
+        <%# a button so it can take keyboard focus and a tap; its accessible
+            name is the label text, so the disc image stays decorative %>
+        <button type="button" class="orb-node" data-ing="<%= ing.k %>"
+                data-t="<%= ing.t %>" data-s="<%- ing.s %>"
+                style="--a:<%= (-90 + _orbStep * i).toFixed(2) %>deg">
+          <span class="orb-node__disc"><img src="/img/ingredients/energy-<%= ing.k %>.jpg" alt="" loading="lazy"></span>
+          <span class="orb-node__label"><%= ing.t %></span>
+        </button>
+      <% }); %>
+      <span class="orb-core" aria-hidden="true">
+        <img src="/img/products/energy-tablet.png" alt="">
+      </span>
+    </div>
+
+    <%# aria-live so the swapped copy is announced rather than changing silently %>
+    <div class="orb-cap" id="orbCap" aria-live="polite">
+      <p class="orb-cap__t" id="orbCapT">Taurine, Ginseng, B-Complex <em>&amp; 23 essential nutrients</em></p>
+      <p class="orb-cap__s" id="orbCapS">One caffeine-free tablet a day, built from vitamins, minerals and amino acids rather than a stimulant.</p>
     </div>
   </div>
 </section>
@@ -1449,22 +1482,126 @@
 <%- include('../partials/testimonials', { tm: _tm }) %>
 
 <!-- FAQ -->
-<section class="s faq-sec">
+<style>
+  /* ============================================================
+     FAQ — three tabs over one accordion
+     General answers product questions, Delivery covers shipping and returns,
+     Service covers the brand and support. Delivery and Service copy is the
+     same wording as the /faq page, so the two cannot drift apart.
+     Panels are plain <details>, so every question still opens with no JS;
+     the tabs are what JS adds. Each panel shares a `name`, which makes the
+     browser close the previously open question on its own.
+     ============================================================ */
+  .faq-tabs{display:flex;justify-content:center;margin:0 0 42px}
+  .faq-tabs__inner{display:inline-flex;border:1.5px solid var(--charcoal);border-radius:4px;overflow:hidden}
+  .faq-tab{
+    font-family:inherit;font-size:15px;font-weight:600;color:var(--charcoal);background:#fff;
+    padding:12px 26px;min-height:46px;cursor:pointer;border:0;border-left:1.5px solid var(--charcoal);
+    transition:background .2s ease,color .2s ease;
+  }
+  .faq-tab:first-child{border-left:0}
+  .faq-tab:hover{background:var(--surface)}
+  .faq-tab[aria-selected="true"]{background:var(--charcoal);color:#fff;font-weight:700}
+  .faq-tab:focus-visible{outline:2px solid var(--honey);outline-offset:-4px}
+
+  .faq-panel[hidden]{display:none}
+  .faq-panel{max-width:920px;margin:0 auto}
+  .faq-row{border-bottom:1px solid var(--line)}
+  .faq-row > summary{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    list-style:none;cursor:pointer;padding:22px 4px;
+    font-size:19px;font-weight:500;letter-spacing:-0.01em;color:var(--ink);
+  }
+  .faq-row > summary::-webkit-details-marker{display:none}
+  .faq-row > summary:hover{color:var(--honey-deep)}
+  .faq-row > summary:focus-visible{outline:2px solid var(--honey);outline-offset:2px;border-radius:6px}
+  .faq-chev{flex:0 0 auto;width:20px;height:20px;transition:transform .25s ease;color:var(--ink)}
+  .faq-row[open] .faq-chev{transform:rotate(180deg)}
+  .faq-row__a{padding:0 4px 24px;font-size:15.5px;color:var(--ink-soft);line-height:1.7;max-width:74ch}
+  .faq-row__a a{color:var(--honey-deep);text-decoration:underline}
+
+  @media (max-width:680px){
+    .faq-tabs{margin-bottom:28px}
+    .faq-tab{font-size:13.5px;padding:11px 16px}
+    .faq-row > summary{font-size:16.5px;padding:18px 2px;gap:14px}
+    .faq-row__a{font-size:14.5px;padding-bottom:20px}
+  }
+  @media (prefers-reduced-motion:reduce){.faq-chev,.faq-tab{transition:none}}
+</style>
+
+<section class="s faq-sec" aria-labelledby="faqTitle">
   <div class="wrap">
     <div class="s-head center">
       <span class="rv-marker">FAQ</span>
-      <h2 class="s-title">Questions, <em>answered</em>.</h2>
+      <h2 class="s-title" id="faqTitle">Questions, <em>answered</em>.</h2>
     </div>
-    <div class="fq-list">
-      <details class="fq-item"><summary class="fq-q">Is EnergyOne+ caffeine-free?<span class="plus">+</span></summary><div class="fq-a">Completely. The lift comes from <strong>B-complex vitamins, taurine, ginseng</strong> and minerals that support your own energy metabolism &mdash; so there&rsquo;s no spike, no crash and no disrupted sleep.</div></details>
-      <details class="fq-item"><summary class="fq-q">What's in EnergyOne+?<span class="plus">+</span></summary><div class="fq-a">Taurine, Ginseng Extract, a full <strong>B-Complex</strong>, Zinc and 23 other essential nutrients &mdash; minerals and amino acids that support steady energy, focus and vitality.</div></details>
-      <details class="fq-item"><summary class="fq-q">Who is EnergyOne+ for?<span class="plus">+</span></summary><div class="fq-a">Busy adults and active lifestyles who want steady daily energy and mental focus without caffeine.</div></details>
-      <details class="fq-item"><summary class="fq-q">When should I take EnergyOne+?<span class="plus">+</span></summary><div class="fq-a">Once a day, ideally in the morning after a meal with a glass of water.</div></details>
-      <details class="fq-item"><summary class="fq-q">Is EnergyOne+ vegetarian?<span class="plus">+</span></summary><div class="fq-a">Yes &mdash; <strong>100% vegetarian</strong>, with no preservatives, GMO-free and gluten-free.</div></details>
+
+    <%
+      // Delivery and Service are the /faq page's shipping-and-returns and
+      // brand-and-trust answers, word for word.
+      var _faq = [
+      { k: 'general', label: 'General', items: [
+          { q: 'Is EnergyOne+ caffeine-free?',
+            a: 'Completely. The lift comes from <strong>B-complex vitamins, taurine, ginseng</strong> and minerals that support your own energy metabolism &mdash; so there&rsquo;s no spike, no crash and no disrupted sleep.' },
+          { q: 'What\'s in EnergyOne+?',
+            a: 'Taurine, Ginseng Extract, a full <strong>B-Complex</strong>, Zinc and 23 other essential nutrients &mdash; minerals and amino acids that support steady energy, focus and vitality.' },
+          { q: 'Who is EnergyOne+ for?',
+            a: 'Busy adults and active lifestyles who want steady daily energy and mental focus without caffeine.' },
+          { q: 'When should I take EnergyOne+?',
+            a: 'Once a day, ideally in the morning after a meal with a glass of water.' },
+          { q: 'Is EnergyOne+ vegetarian?',
+            a: 'Yes &mdash; <strong>100% vegetarian</strong>, with no preservatives, GMO-free and gluten-free.' }
+      ] },
+      { k: 'delivery', label: 'Delivery', items: [
+          { q: 'How long does delivery take?',
+            a: '2-5 business days for most Indian addresses. Metros usually 2-3 days, remote pincodes can take up to 7. You\'ll get a tracking link by email and SMS.' },
+          { q: 'Is shipping really free?',
+            a: 'Free on orders over <strong>₹999</strong>. Below that, a flat ₹49 shipping fee applies. You\'ll see the total before checkout.' },
+          { q: 'Do you offer Cash on Delivery?',
+            a: 'Yes — COD is available across India. You can also pay online via UPI, cards, wallets and netbanking.' },
+          { q: 'What is your return policy?',
+            a: 'Unopened packs can be returned within <strong>30 days</strong> for a full refund. If your pack arrives damaged, write to us within 7 days and we\'ll replace it.' },
+          { q: 'Do you ship outside India?',
+            a: 'Not yet. We\'re focused on India for now — international shipping is on the roadmap. Drop us a note at hello@shiorra.com to be notified.' }
+      ] },
+      { k: 'service', label: 'Service', items: [
+          { q: 'Who makes Shiōrra products?',
+            a: 'Shiōrra is a trademark of <strong>K.C. Laboratories</strong> — a 30-year clinical formulation house in India. Every formula is developed in-house and manufactured at our FSSAI &amp; GMP-certified facility.' },
+          { q: 'Are your products tested?',
+            a: 'Yes. Every batch is lab-tested for potency, purity and heavy-metal limits. We don\'t ship a batch until it clears.' },
+          { q: 'What does "Shiori" mean?',
+            a: '"Shiori" (栞) is the Japanese word for a bookmark — a gentle guide that holds your place. We picked the name because that\'s the kind of brand we wanted to build: quiet, reliable, with you for the long story.' },
+          { q: 'Who do I write to with questions?',
+            a: 'Email <a href="mailto:hello@shiorra.com" style="color:var(--honey-deep);text-decoration:underline">hello@shiorra.com</a>. A real human (often pharmacology-trained) replies within 24 hours, Mon-Sat.' }
+      ] }
+      ];
+    %>
+
+    <div class="faq-tabs">
+      <div class="faq-tabs__inner" role="tablist" aria-label="Question categories">
+        <% _faq.forEach(function (t, i) { %>
+          <button type="button" class="faq-tab" role="tab" id="faqTab-<%= t.k %>"
+                  aria-controls="faqPanel-<%= t.k %>" aria-selected="<%= i === 0 ? 'true' : 'false' %>"
+                  tabindex="<%= i === 0 ? '0' : '-1' %>"><%= t.label %></button>
+        <% }); %>
+      </div>
     </div>
+
+    <% _faq.forEach(function (t, i) { %>
+      <div class="faq-panel" role="tabpanel" id="faqPanel-<%= t.k %>"
+           aria-labelledby="faqTab-<%= t.k %>" tabindex="0"<%- i === 0 ? '' : ' hidden' %>>
+        <% t.items.forEach(function (it) { %>
+          <details class="faq-row" name="faq-<%= t.k %>">
+            <summary><span><%- it.q %></span>
+              <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="faq-row__a"><%- it.a %></div>
+          </details>
+        <% }); %>
+      </div>
+    <% }); %>
   </div>
 </section>
-
 
 <!-- PAIR IT WITH -->
 <style>
@@ -1782,21 +1919,6 @@
   });
 })();
 
-// Key-ingredients shot — falls back to the stock pill photo until the
-// dedicated single-pill cut-out is added.
-(function () {
-  var img = document.getElementById('kiPill');
-  if (!img) return;
-  var swap = function () {
-    var fb = img.getAttribute('data-fallback');
-    if (!fb) return;
-    img.removeAttribute('data-fallback');
-    img.src = fb;
-  };
-  if (img.complete && img.naturalWidth === 0) swap();
-  img.addEventListener('error', swap);
-})();
-
 // FAQ — open on hover for mouse users, one at a time.
 // Gated on a real hover-capable pointer: touch devices never fire hover, so
 // they keep the native tap-to-toggle and are left completely alone. Keyboard
@@ -1823,6 +1945,129 @@
     var q = d.querySelector('.fq-q');
     if (q) q.addEventListener('click', function (e) { e.preventDefault(); });
   });
+})();
+
+// FAQ tabs — General / Delivery / Service. The panels are plain <details>,
+// so every question still opens without this; the tabs are the only JS part.
+(function () {
+  const tabs = Array.prototype.slice.call(document.querySelectorAll('.faq-tab'));
+  if (!tabs.length) return;
+  const panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+  function select(i, focus) {
+    tabs.forEach(function (t, n) {
+      const on = n === i;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      if (panels[n]) panels[n].hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i); });
+    t.addEventListener('keydown', function (e) {
+      // left/right to move between tabs, as a tablist is expected to behave
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        select((i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length, true);
+      }
+    });
+  });
+})();
+
+// Key ingredients orbit — the ring drifts slowly; hovering, focusing or
+// tapping an active pops its name up, holds the ring still while it is read,
+// and swaps the caption under the stage to that ingredient's line.
+(function () {
+  const stage = document.getElementById('orbStage');
+  const capT = document.getElementById('orbCapT');
+  const capS = document.getElementById('orbCapS');
+  const cap  = document.getElementById('orbCap');
+  if (!stage) return;
+  const nodes = Array.prototype.slice.call(stage.querySelectorAll('.orb-node'));
+  if (!nodes.length) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hover  = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  const STEP = 360 / nodes.length;
+  let spin = 0, held = false, raf = null, last = 0, visible = true;
+
+  // what the caption says when nothing is picked
+  const restT = capT ? capT.innerHTML : '';
+  const restS = capS ? capS.innerHTML : '';
+  let swapTimer = null;
+  function caption(t, s) {
+    if (!capT || !capS) return;
+    if (capT.innerHTML === t && capS.innerHTML === s) return;
+    cap.classList.add('is-swapping');
+    clearTimeout(swapTimer);
+    swapTimer = setTimeout(function () {
+      capT.innerHTML = t; capS.innerHTML = s;
+      cap.classList.remove('is-swapping');
+    }, reduce ? 0 : 150);
+  }
+
+  function paint() {
+    nodes.forEach(function (el, i) {
+      el.style.setProperty('--a', (-90 + STEP * i + spin).toFixed(2) + 'deg');
+    });
+  }
+  function frame(t) {
+    raf = null;
+    const dt = last ? Math.min(64, t - last) : 16;
+    last = t;
+    spin = (spin + dt * 0.0052) % 360;       // ~5 deg/s — a full turn in ~70s
+    paint();
+    if (visible && !held) kick(); else last = 0;
+  }
+  function kick() {
+    if (raf || reduce || held || !visible) return;
+    raf = requestAnimationFrame(frame);
+  }
+  function show(n) {
+    held = true;
+    caption(n.dataset.t, n.dataset.s);
+  }
+  function clear() {
+    held = false; last = 0;
+    caption(restT, restS);
+    kick();
+  }
+  function lightOnly(node) {
+    nodes.forEach(function (n) { n.classList.toggle('is-lit', n === node); });
+  }
+
+  nodes.forEach(function (n) {
+    if (hover) {
+      n.addEventListener('mouseenter', function () { show(n); });
+      n.addEventListener('mouseleave', clear);
+    } else {
+      n.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (n.classList.contains('is-lit')) { lightOnly(null); clear(); }
+        else { lightOnly(n); show(n); }
+      });
+    }
+    n.addEventListener('focus', function () { show(n); });
+    n.addEventListener('blur', function () { if (!n.classList.contains('is-lit')) clear(); });
+  });
+  if (!hover) {
+    document.addEventListener('click', function () {
+      if (nodes.some(function (n) { return n.classList.contains('is-lit'); })) { lightOnly(null); clear(); }
+    });
+  }
+
+  // Nothing to animate off-screen.
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        visible = e.isIntersecting;
+        if (visible) { last = 0; kick(); }
+      });
+    }, { threshold: 0 }).observe(stage);
+  }
+
+  paint();
+  kick();
 })();
 
 // Use cases — a photo whose file is missing is hidden, leaving the branded
