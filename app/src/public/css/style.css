@@ -3102,6 +3102,58 @@ p { margin: 0; text-wrap: pretty; line-height: 1.5; }
 }
 .video-strip__btn .ico { width: 22px; height: 22px; }
 
+/* Stands in for the scroller while there are no real customer videos yet.
+   Sits on the same charcoal as the rest of the section, so the band still
+   reads as a section that is coming rather than as a hole in the page. */
+.video-strip__empty {
+    border: 1.5px dashed rgba(255,255,255,0.22);
+    border-radius: 20px;
+    padding: clamp(40px, 6vw, 64px) clamp(24px, 5vw, 56px);
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
+}
+.video-strip__empty-ico {
+    display: inline-grid;
+    place-items: center;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 20px;
+}
+.video-strip__empty-ico svg { width: 26px; height: 26px; }
+.video-strip__empty-t {
+    font-size: clamp(19px, 2.2vw, 23px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--c-white);
+    margin: 0 0 10px;
+}
+.video-strip__empty-s {
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.68);
+    margin: 0 auto;
+    max-width: 46ch;
+}
+.video-strip__empty-cta {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 13px 28px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    color: var(--c-white);
+    font-size: 14.5px;
+    font-weight: 600;
+    transition: background .25s, border-color .25s, transform .25s;
+}
+.video-strip__empty-cta:hover {
+    background: var(--c-pink);
+    border-color: var(--c-pink);
+    transform: translateY(-2px);
+}
+
 /* The scroller — horizontal, snap, hide scrollbar */
 .video-strip__scroller {
     display: grid;

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Advanced EnergyOne+ · Shiōrra · Daily Energy, Focus &amp; Vitality</title>
-<meta name="description" content="Shiōrra Advanced EnergyOne+ — Taurine, Ginseng Extract, B-Complex vitamins, Zinc & 23 other essential nutrients for daily energy, focus and vitality. Caffeine-free. A trademark of K.C. Laboratories." />
+<title>EnergyOne+ · Shiōrra · Daily Energy, Focus &amp; Vitality</title>
+<meta name="description" content="Shiōrra EnergyOne+ — Taurine, Ginseng Extract, B-Complex vitamins, Zinc & 23 other essential nutrients for daily energy, focus and vitality. Caffeine-free. A trademark of K.C. Laboratories." />
 <link rel="shortcut icon" type="image/png" href="/img/logo/logo-green.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -974,7 +974,8 @@
               { n: 3, t: 'Why choose EnergyOne+' },
               { n: 4, t: 'Complete nutritional facts' },
               { n: 5, t: 'Recharge, refocus, revitalize' },
-              { n: 6, t: 'Why we chose these ingredients' }
+              { n: 6, t: 'Why we chose these ingredients' },
+              { n: 7, t: 'Why you should trust us' }
             ];
             var _slideSrc = function (n) { return '/img/products/energy-n' + n + '.png?v=2'; };
         %>
@@ -993,7 +994,7 @@
       <div class="info">
         <div class="pi-panel">
           <span class="pi-kicker">Daily Energy &amp; Focus · 30 Tablets</span>
-          <h1 class="pi-title">Advanced EnergyOne<em>+</em></h1>
+          <h1 class="pi-title">EnergyOne<em>+</em></h1>
           <p class="pi-subtitle">Daily Energy &amp; Focus Formula</p>
           <p class="pi-actives">Taurine <i>|</i> Ginseng Extract <i>|</i> B-Complex <i>|</i> Zinc</p>
 
@@ -1279,15 +1280,60 @@
     opacity:1;transform:translate(-50%,0) scale(1);
   }
 
-  /* ---- caption under the stage ---- */
-  /* Fixed min-height so swapping lines never nudges the section's height. */
-  .orb-cap{max-width:620px;margin:22px auto 0;text-align:center;min-height:96px}
-  .orb-cap__t{font-size:19px;font-weight:700;letter-spacing:-0.015em;color:var(--ink);margin:0 0 6px;transition:opacity .2s ease}
-  .orb-cap__t em{font-style:normal;color:var(--honey)}
-  .orb-cap__s{font-size:15px;color:var(--ink-soft);line-height:1.6;margin:0;transition:opacity .2s ease}
-  .orb-cap.is-swapping .orb-cap__t,.orb-cap.is-swapping .orb-cap__s{opacity:0}
+  /* ---- ring + side panel ---- */
+  /* Same component as the Iron+ page. The ring keeps the wider column — it is
+     the thing being looked at, and it is round, so it needs its width in both
+     directions. The panel is pinned to a readable measure instead of taking a
+     share of what is left. */
+  .orb-grid{
+    display:grid;grid-template-columns:minmax(0,1fr) clamp(320px,31%,400px);
+    gap:clamp(24px,4vw,56px);align-items:center;
+  }
+  .orb-side{min-width:0}
+
+  /* Every card occupies the SAME grid cell, so the panel is already as tall as
+     its longest card and swapping never resizes anything. */
+  .orb-info{display:grid;min-width:0}
+  .orb-card{
+    grid-area:1 / 1;align-self:center;
+    background:#fff;border:1px solid var(--line);border-radius:20px;
+    padding:30px 32px 32px;box-shadow:0 14px 40px rgba(107,34,85,.08);
+    opacity:0;visibility:hidden;transform:translateY(7px);
+    /* No transition on the resting state, deliberately. The cards share one
+       grid cell, so a symmetric crossfade would show two sets of text through
+       each other on every swap. The outgoing card is cut instantly and only
+       the incoming one animates. */
+  }
+  .orb-card.is-on{
+    opacity:1;visibility:visible;transform:none;
+    transition:opacity .2s ease,transform .2s ease;
+  }
+  .orb-card__top{display:flex;align-items:center;gap:15px;margin-bottom:18px}
+  .orb-card__swatch{
+    flex:0 0 auto;width:58px;height:58px;border-radius:50%;overflow:hidden;background:#fff;
+    box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(183,58,146,.16);
+  }
+  /* same 1.04 crop as the orbit disc, so the chip and the node read as the
+     same object rather than two different photographs */
+  .orb-card__swatch img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);display:block}
+  .orb-card__name{
+    font-size:23px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);
+    margin:0;line-height:1.15;min-width:0;
+  }
+  /* The benefit line is the point of the panel, so it is set at reading size
+     rather than the caption size it had under the stage. */
+  .orb-card__s{font-size:17px;line-height:1.6;color:var(--ink-soft);margin:0}
+
+  .orb-foot{
+    text-align:center;font-size:12.5px;color:var(--muted-2);line-height:1.55;
+    max-width:56ch;margin:34px auto 0;
+  }
 
   @media (max-width:980px){
+    /* No room for two columns — the panel drops under the ring, capped to a
+       readable measure rather than running the full width of the page. */
+    .orb-grid{grid-template-columns:1fr;gap:28px;justify-items:center}
+    .orb-side{width:100%;max-width:560px}
     .orb-stage{width:min(480px,88vw);--r:192px}
     .orb-node{width:80px;height:80px}
   }
@@ -1296,12 +1342,13 @@
     .orb-stage{width:min(340px,82vw);--r:136px}
     .orb-node{width:62px;height:62px}
     .orb-node__label{font-size:10px;padding:4px 9px}
-    .orb-cap{min-height:118px}
-    .orb-cap__t{font-size:17px}
-    .orb-cap__s{font-size:14px}
+    .orb-card{padding:24px 24px 26px;border-radius:16px}
+    .orb-card__swatch{width:48px;height:48px}
+    .orb-card__name{font-size:20px}
+    .orb-card__s{font-size:15.5px}
   }
   @media (prefers-reduced-motion:reduce){
-    .orb-node__disc,.orb-node__label,.orb-cap__t,.orb-cap__s{transition:none}
+    .orb-node__disc,.orb-node__label,.orb-card{transition:none}
   }
 </style>
 
@@ -1319,45 +1366,66 @@
       // The five actives in orbit order. `img` is the powder shot, cropped
       // square to the powder itself — the handwritten label on the original
       // photograph is left out, since the name is shown on hover instead.
-      // Copy is carried over from the four-callout layout this replaces.
+      // Each line says what the ingredient does on its own terms. Keep it that
+      // way: comparisons against stimulants were removed at the client's
+      // request, so do not reintroduce "rather than a stimulant" phrasing.
       var _orbIng = [
         { k: 'taurine',      t: 'Taurine',
-          s: 'An amino acid the body uses in energy metabolism &mdash; part of why the lift here is steady rather than a stimulant spike.' },
+          s: 'An amino acid the body uses in energy metabolism, supporting a lift that stays steady across the day.' },
         { k: 'ginseng',      t: 'Ginseng Extract',
           s: 'A traditional adaptogenic root, included to support mental alertness and physical vitality through the day.' },
         { k: 'vitamin-b',    t: 'B-Complex Vitamins',
-          s: 'The B group your body draws on to turn food into usable energy, which is what makes this a support formula rather than a stimulant.' },
+          s: 'The B group your body draws on to turn the food you already eat into energy it can actually use.' },
         { k: 'zinc',         t: 'Zinc',
           s: 'Supports normal immune function and everyday nutritional wellness, alongside the rest of the mineral blend.' },
         { k: '23-nutrients', t: '23 Essential Nutrients',
-          s: '23 vitamins, minerals and amino acids in all &mdash; a daily nutritional base rather than a single-note stimulant.' }
+          s: '23 vitamins, minerals and amino acids in all — a broad daily nutritional base in a single tablet.' }
       ];
       var _orbStep = 360 / _orbIng.length;
     %>
 
-    <div class="orb-stage" id="orbStage">
-      <span class="orb-ring" aria-hidden="true"></span>
-      <span class="orb-ring--inner" aria-hidden="true"></span>
-      <% _orbIng.forEach(function (ing, i) { %>
-        <%# a button so it can take keyboard focus and a tap; its accessible
-            name is the label text, so the disc image stays decorative %>
-        <button type="button" class="orb-node" data-ing="<%= ing.k %>"
-                data-t="<%= ing.t %>" data-s="<%- ing.s %>"
-                style="--a:<%= (-90 + _orbStep * i).toFixed(2) %>deg">
-          <span class="orb-node__disc"><img src="/img/ingredients/energy-<%= ing.k %>.jpg" alt="" loading="lazy"></span>
-          <span class="orb-node__label"><%= ing.t %></span>
-        </button>
-      <% }); %>
-      <span class="orb-core" aria-hidden="true">
-        <img src="/img/products/energy-tablet.png" alt="">
-      </span>
+    <%# Stage and side panel are one grid so the panel sits beside the ring on
+        a desktop and drops beneath it on a phone. %>
+    <div class="orb-grid">
+      <div class="orb-stage" id="orbStage">
+        <span class="orb-ring" aria-hidden="true"></span>
+        <span class="orb-ring--inner" aria-hidden="true"></span>
+        <% _orbIng.forEach(function (ing, i) { %>
+          <%# a button so it can take keyboard focus and a tap; its accessible
+              name is the label text, so the disc image stays decorative %>
+          <button type="button" class="orb-node" data-ing="<%= ing.k %>"
+                  style="--a:<%= (-90 + _orbStep * i).toFixed(2) %>deg">
+            <span class="orb-node__disc"><img src="/img/ingredients/energy-<%= ing.k %>.jpg" alt="" loading="lazy"></span>
+            <span class="orb-node__label"><%= ing.t %></span>
+          </button>
+        <% }); %>
+        <span class="orb-core" aria-hidden="true">
+          <img src="/img/products/energy-tablet.png" alt="">
+        </span>
+      </div>
+
+      <%# All five cards are rendered and stacked in ONE grid cell, with only
+          the current one visible. The panel is therefore as tall as its
+          longest card from the start, so swapping ingredients never resizes
+          the section or nudges the ring. aria-live announces the swap; the
+          hidden cards are visibility:hidden, so they stay out of the
+          accessibility tree rather than being read as a list of five. %>
+      <div class="orb-info" id="orbInfo" aria-live="polite">
+        <% _orbIng.forEach(function (ing, i) { %>
+          <article class="orb-card<%= i === 0 ? ' is-on' : '' %>" data-for="<%= ing.k %>">
+            <div class="orb-card__top">
+              <span class="orb-card__swatch"><img src="/img/ingredients/energy-<%= ing.k %>.jpg" alt="" loading="lazy"></span>
+              <h3 class="orb-card__name"><%= ing.t %></h3>
+            </div>
+            <p class="orb-card__s"><%- ing.s %></p>
+          </article>
+        <% }); %>
+      </div>
     </div>
 
-    <%# aria-live so the swapped copy is announced rather than changing silently %>
-    <div class="orb-cap" id="orbCap" aria-live="polite">
-      <p class="orb-cap__t" id="orbCapT">Taurine, Ginseng, B-Complex <em>&amp; 23 essential nutrients</em></p>
-      <p class="orb-cap__s" id="orbCapS">One caffeine-free tablet a day, built from vitamins, minerals and amino acids rather than a stimulant.</p>
-    </div>
+    <%# The one line that is true of the whole formula rather than any single
+        active, kept from the caption this panel replaced. %>
+    <p class="orb-foot">One caffeine-free tablet a day, built from vitamins, minerals and amino acids.</p>
   </div>
 </section>
 
@@ -1365,9 +1433,11 @@
 <style>
   /* ============================================================
      USE CASES — "Ideal for" and five moments in a day
-     A row of circular photos with a one-liner under each. The first circle
-     (a group of different people) is the lead-in, so its caption carries the
-     brand colour and reads as the label for the five that follow.
+     Six circular photos, three across in two rows, with a one-liner under
+     each. The first circle (a group of different people) is the lead-in, so
+     its caption carries the brand colour and reads as the label for the five
+     that follow. Three across, not six: at six the circles had to be small
+     enough that the people in them stopped being legible.
      Photos live in /img/usecases/ (see _uc below) and are cropped to circles
      with object-fit:cover, so SQUARE exports with the subject centred work
      best. Until a file exists its circle shows a soft branded placeholder.
@@ -1375,13 +1445,17 @@
   .uc{background:linear-gradient(180deg,#FFFFFF 0%,#FCF4F9 55%,#FFFFFF 100%);border-top:1px solid var(--line);padding:76px 0 84px}
   .uc .s-head{margin-bottom:48px}
   @media (max-width:680px){.uc .s-head{margin-bottom:32px}}
+  /* Three across, so the six run as two rows. The grid is capped well inside
+     .wrap rather than filling it: at full width the columns would be ~370px
+     and the circles would float far apart with the labels stranded under
+     them. Capping the track keeps the six reading as one block. */
   .uc-list{
-    list-style:none;margin:0;padding:0;
-    display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:28px 22px;
+    list-style:none;margin:0 auto;padding:0;max-width:900px;
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:52px 44px;
   }
-  .uc-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+  .uc-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px}
   .uc-ph{
-    position:relative;width:100%;max-width:156px;aspect-ratio:1;border-radius:50%;overflow:hidden;
+    position:relative;width:100%;max-width:250px;aspect-ratio:1;border-radius:50%;overflow:hidden;
     background:var(--honey-soft);color:var(--honey);display:grid;place-items:center;
     box-shadow:0 12px 30px rgba(107,34,85,.14),0 0 0 4px #fff,0 0 0 5px rgba(183,58,146,.14);
     transition:transform .3s ease,box-shadow .3s ease;
@@ -1397,17 +1471,17 @@
   .uc-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.15)}
   /* display:block above would beat the UA's [hidden] rule, so say it outright */
   .uc-ph img[hidden]{display:none}
-  .uc-t{font-size:15px;font-weight:700;letter-spacing:-0.01em;color:var(--ink);line-height:1.35;margin:0;max-width:16ch}
+  .uc-t{font-size:17px;font-weight:700;letter-spacing:-0.01em;color:var(--ink);line-height:1.35;margin:0;max-width:18ch}
   /* the lead-in circle reads as the label for the rest */
-  .uc-item--lead .uc-t{color:var(--honey);font-size:17px;font-weight:800}
+  .uc-item--lead .uc-t{color:var(--honey);font-size:19px;font-weight:800}
   .uc-item--lead .uc-ph{box-shadow:0 12px 30px rgba(107,34,85,.18),0 0 0 4px #fff,0 0 0 6px var(--honey)}
 
-  @media (max-width:980px){ .uc-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 22px} }
+  @media (max-width:980px){ .uc-list{gap:40px 26px;max-width:760px} .uc-ph{max-width:200px} }
   @media (max-width:680px){
     .uc{padding:52px 0}
     .uc-list{gap:28px 14px}
     .uc-ph{max-width:112px}
-    .uc-t{font-size:13.5px}
+    .uc-t{font-size:13.5px;max-width:16ch}
     .uc-item--lead .uc-t{font-size:15px}
   }
   @media (max-width:420px){ .uc-list{grid-template-columns:repeat(2,minmax(0,1fr))} }
@@ -1487,14 +1561,22 @@
   // faqShared so every page states the same terms (src/data/faq.js).
   var _faqTabs = [
     { k: 'general', label: 'General', items: [
-          { q: "Is EnergyOne+ caffeine-free?",
-            a: "Completely. The lift comes from <strong>B-complex vitamins, taurine, ginseng</strong> and minerals that support your own energy metabolism &mdash; so there&rsquo;s no spike, no crash and no disrupted sleep." },
+          { q: "What makes EnergyOne+ different from other energy supplements?",
+            a: "The formula is built around forms your body can actually absorb, so what you take in is used rather than passed through. That is what lets the benefit build gradually instead of arriving as a spike &mdash; a daily nutritional base put together for how people live now." },
+          { q: "What are the benefits of taking EnergyOne+?",
+            a: "<ul><li>Helps maintain everyday energy and vitality</li><li>Supports hormonal wellness and balance</li><li>Nourishes healthy hair, skin and nails</li><li>Supports a strong and healthy immune system</li><li>Enhances stress resilience</li><li>Fills daily nutritional gaps</li></ul>" },
           { q: "What's in EnergyOne+?",
             a: "Taurine, Ginseng Extract, a full <strong>B-Complex</strong>, Zinc and 23 other essential nutrients &mdash; minerals and amino acids that support steady energy, focus and vitality." },
+          { q: "Is EnergyOne+ caffeine-free?",
+            a: "Completely. The lift comes from <strong>B-complex vitamins, taurine, ginseng</strong> and minerals that support your own energy metabolism &mdash; so there&rsquo;s no spike, no crash and no disrupted sleep." },
           { q: "Who is EnergyOne+ for?",
             a: "Busy adults and active lifestyles who want steady daily energy and mental focus without caffeine." },
-          { q: "When should I take EnergyOne+?",
-            a: "Once a day, ideally in the morning after a meal with a glass of water." },
+          { q: "How should EnergyOne+ be consumed?",
+            a: "Take <strong>1 tablet daily</strong> with a glass of water &mdash; ideally in the morning, after a meal &mdash; or as directed by your healthcare professional." },
+          { q: "How long does it take to see results?",
+            a: "Take it consistently for <strong>2-3 weeks</strong> to notice a difference, and for <strong>3-6 months</strong> for that improvement to hold." },
+          { q: "Are there any side effects of taking EnergyOne+?",
+            a: "It is designed to be gentle on the stomach. If you do experience any side effects, or you have a particular medical condition, consult your healthcare professional." },
           { q: "Is EnergyOne+ vegetarian?",
             a: "Yes &mdash; <strong>100% vegetarian</strong>, with no preservatives, GMO-free and gluten-free." }
     ] },
@@ -1750,7 +1832,7 @@
     // Keep the alt in step with the slide, otherwise it stays stuck
     // describing the first image for anyone using a screen reader.
     const label = t.getAttribute('aria-label');
-    if (label) main.alt = 'Shiōrra Advanced EnergyOne+ — ' + label;
+    if (label) main.alt = 'Shiōrra EnergyOne+ — ' + label;
   };
 
   // Hover previews the slide on pointer devices; click still works everywhere
@@ -1854,12 +1936,9 @@
 
 // Key ingredients orbit — the ring drifts slowly; hovering, focusing or
 // tapping an active pops its name up, holds the ring still while it is read,
-// and swaps the caption under the stage to that ingredient's line.
+// and swaps the panel beside the stage to that ingredient's card.
 (function () {
   const stage = document.getElementById('orbStage');
-  const capT = document.getElementById('orbCapT');
-  const capS = document.getElementById('orbCapS');
-  const cap  = document.getElementById('orbCap');
   if (!stage) return;
   const nodes = Array.prototype.slice.call(stage.querySelectorAll('.orb-node'));
   if (!nodes.length) return;
@@ -1869,19 +1948,12 @@
   const STEP = 360 / nodes.length;
   let spin = 0, held = false, raf = null, last = 0, visible = true;
 
-  // what the caption says when nothing is picked
-  const restT = capT ? capT.innerHTML : '';
-  const restS = capS ? capS.innerHTML : '';
-  let swapTimer = null;
-  function caption(t, s) {
-    if (!capT || !capS) return;
-    if (capT.innerHTML === t && capS.innerHTML === s) return;
-    cap.classList.add('is-swapping');
-    clearTimeout(swapTimer);
-    swapTimer = setTimeout(function () {
-      capT.innerHTML = t; capS.innerHTML = s;
-      cap.classList.remove('is-swapping');
-    }, reduce ? 0 : 150);
+  // Swap the side panel to an active. The cards are all in the DOM already,
+  // so this only flips a class — nothing loads and nothing reflows.
+  const cards = Array.prototype.slice.call(document.querySelectorAll('.orb-card'));
+  function card(key) {
+    if (!key) return;
+    cards.forEach(function (c) { c.classList.toggle('is-on', c.getAttribute('data-for') === key); });
   }
 
   function paint() {
@@ -1903,11 +1975,13 @@
   }
   function show(n) {
     held = true;
-    caption(n.dataset.t, n.dataset.s);
+    card(n.getAttribute('data-ing'));
   }
+  // Deliberately does NOT reset the panel: it keeps the last ingredient you
+  // looked at, so reading it does not require keeping the pointer parked on a
+  // disc that is slowly drifting away from under it.
   function clear() {
     held = false; last = 0;
-    caption(restT, restS);
     kick();
   }
   function lightOnly(node) {

@@ -48,7 +48,7 @@ const products = [
   },
   {
     slug: 'advanced-energyone',
-    name: 'Advanced EnergyOne+',
+    name: 'EnergyOne+',
     tagline: 'Daily energy, focus & vitality — caffeine-free.',
     description: `Daily nutritional support for energy, focus and vitality — thoughtfully formulated with Taurine, Ginseng Extract, B-Complex vitamins, essential minerals and amino acids.\n\nNot a temporary stimulation, not a caffeine spike. EnergyOne+ supports your body's natural energy systems for sustained daily wellness.`,
     price: 699,

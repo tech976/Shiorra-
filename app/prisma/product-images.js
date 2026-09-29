@@ -32,6 +32,7 @@ module.exports = {
     '/img/products/iron-n5.png',
     '/img/products/iron-n6.png',
     '/img/products/iron-n7.png',
+    '/img/products/iron-n8.png',
   ],
   // No -n* export exists for Ginger+, so the -g* set is still its current art.
   // g4, g5 and g7 have no PNG on disk — the .jpg originals were dropped in the
@@ -52,5 +53,6 @@ module.exports = {
     '/img/products/energy-n4.png',
     '/img/products/energy-n5.png',
     '/img/products/energy-n6.png',
+    '/img/products/energy-n7.png',
   ],
 };

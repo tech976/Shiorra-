@@ -135,19 +135,30 @@
        makes the thumbs line up top AND bottom with the big image. */
     align-items:stretch;
   }
-  /* Fixed 1:1 — every slide is exported square (1254x1254), so the artwork
-     fills the frame edge to edge with nothing to letterbox or fill. */
+  /* .gallery-main is an INVISIBLE, always-square sizing box; .gallery-frame
+     is the visible card inside it. Keeping the outer box square means the
+     thumb-rail alignment, the --gal-cap formula and the sticky travel are all
+     still solved for a 1:1 slide no matter what shape the current slide is.
+     Most slides are square (1254x1254), and the card then fills this box
+     exactly — identical to the single-element frame this replaced. */
   .gallery-main{
-    flex:1;min-width:0;align-self:flex-start;aspect-ratio:1/1;background:#fff;
-    border-radius:20px;border:1px solid var(--line);
-    display:grid;place-items:center;overflow:hidden;position:relative;
+    flex:1;min-width:0;align-self:flex-start;aspect-ratio:1/1;
+    display:grid;place-items:center;position:relative;
+  }
+  /* The card takes the CURRENT slide's ratio (--ar, declared per slide and
+     re-set on every swap) and is sized by HEIGHT, so the portrait back-label
+     slide narrows within the column instead of growing past the fold. The
+     artwork then fills its card edge to edge: the whole slide, no bands. */
+  .gallery-frame{
+    height:100%;width:auto;max-width:100%;aspect-ratio:var(--ar,1);
+    background:#fff;border-radius:20px;border:1px solid var(--line);
+    overflow:hidden;position:relative;
   }
   /* Absolutely positioned, NOT width/height:100% in the grid flow. Under
      place-items:center the percentage height does not resolve, so the img
      falls back to its intrinsic ratio. inset:0 gives object-fit a definite box.
-     cover, not contain: every slide is exported square (1254x1254) so it fills
-     exactly and nothing is cropped — and a future off-ratio file still fills
-     the frame edge to edge rather than sitting in bands. Export slides square. */
+     cover, not contain: the card already carries the slide's own ratio, so
+     cover fills it with nothing cropped — only a wrong --ar could crop. */
   .gallery-main img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center}
   /* grid-auto-rows:1fr splits whatever height the rail is handed into equal
      rows, so N thumbs always span exactly the main image — no leftover gap
@@ -168,10 +179,16 @@
   }
   .gallery-thumb{position:relative;width:100%;height:100%;min-height:0;background:#fff;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;padding:0;transition:border-color .2s,transform .2s}
   .gallery-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+  /* A tall slide cover-cropped into a square chip is an unreadable band, so
+     off-ratio thumbs show the whole slide shrunk to fit. Only the 58px nav
+     chip is affected — the main card still fills edge to edge. */
+  .gallery-thumb.is-tall img{object-fit:contain}
   /* Below 880px the rail can't sit beside the image — stack it under, scrolling. */
   @media(max-width:880px){
     .gallery{position:static;flex-direction:column;gap:10px;max-width:none}
-    .gallery-main{flex:none;width:100%;max-height:none;aspect-ratio:1/1;padding:0}
+    /* var(--ar), not 1/1: stacked on a phone there is no rail to align to and
+       no fold to stay inside, so a portrait slide takes the full width. */
+    .gallery-main{flex:none;width:100%;max-height:none;aspect-ratio:var(--ar,1);padding:0}
     .gallery-thumbs{order:1;flex:none;display:flex;flex-direction:row;width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none}
     .gallery-thumbs::-webkit-scrollbar{display:none}
     .gallery-thumb{flex:0 0 58px;height:auto;aspect-ratio:1/1;min-height:0}
@@ -964,24 +981,32 @@
         <%
           // Gallery slides in one list. Removing an entry is all that is needed —
           // the main frame, the thumb rail and the rail's width all follow from it.
+          // `ar` is the file's own width/height. It defaults to 1 because slides
+          // are exported square; a slide that is not gets its real ratio here and
+          // the card takes that shape, so the whole artwork shows uncropped and
+          // unpadded. Keep it in step with the file if you re-export a slide.
           var _slides = [
             { n: 1, t: 'The pack' },
             { n: 2, t: 'Smarter iron for a healthier pregnancy' },
-            { n: 3, t: 'Complete nutritional facts' },
+            { n: 3, t: 'Complete nutritional facts', ar: 1600 / 2766 },
             { n: 4, t: 'Your journey to better iron health' },
             { n: 5, t: 'Research you can trust' },
             { n: 6, t: 'Why choose Advanced Iron+' },
-            { n: 7, t: 'The 6 key ingredients' }
+            { n: 7, t: 'The 6 key ingredients' },
+            { n: 8, t: 'Why you should trust us' }
           ];
-          var _slideSrc = function (n) { return '/img/products/iron-n' + n + '.png?v=3'; };
+          var _slideSrc = function (n) { return '/img/products/iron-n' + n + '.png?v=4'; };
+          var _slideAr = function (sl) { return (sl.ar || 1).toFixed(4); };
         %>
         <div class="gallery" style="--n:<%= _slides.length %>">
-          <div class="gallery-main">
-            <img id="galleryMain" src="<%= _slideSrc(_slides[0].n) %>" alt="A hand holding the Shiōrra Advanced Iron+ pack, blister of red capsules raised behind it, on a pink backdrop">
+          <div class="gallery-main" id="galleryMain" style="--ar:<%= _slideAr(_slides[0]) %>">
+            <div class="gallery-frame">
+              <img id="galleryImg" src="<%= _slideSrc(_slides[0].n) %>" alt="A hand holding the Shiōrra Advanced Iron+ pack, blister of red capsules raised behind it, on a pink backdrop">
+            </div>
           </div>
           <div class="gallery-thumbs" id="galleryThumbs">
             <% _slides.forEach(function (sl, i) { %>
-              <button type="button" class="gallery-thumb<%= i === 0 ? ' is-active' : '' %>" data-full="<%= _slideSrc(sl.n) %>" aria-label="<%- sl.t %>"><img src="<%= _slideSrc(sl.n) %>" alt="" loading="lazy"></button>
+              <button type="button" class="gallery-thumb<%= i === 0 ? ' is-active' : '' %><%= sl.ar ? ' is-tall' : '' %>" data-full="<%= _slideSrc(sl.n) %>" data-ar="<%= _slideAr(sl) %>" aria-label="<%- sl.t %>"><img src="<%= _slideSrc(sl.n) %>" alt="" loading="lazy"></button>
             <% }); %>
           </div>
         </div>
@@ -1333,11 +1358,12 @@
 <!-- KEY INGREDIENTS -->
 <style>
   /* ============================================================
-     KEY INGREDIENTS — living ingredient orbit
+     KEY INGREDIENTS — living ingredient orbit + side panel
      The capsule sits at the centre and the nine actives orbit it as powder
      discs, drifting slowly. Hover (or focus, or tap) an active and its name
-     pops up beside it; the ring holds still while you read it so the label
-     does not slide out from under the pointer.
+     pops up beside it while the panel to the right fills in what that
+     ingredient does and why it is in the formula; the ring holds still while
+     you read, so the label does not slide out from under the pointer.
      Angles are driven from JS (see the orbit script) rather than CSS
      keyframes, so the ring can pause and resume from wherever it is.
      ============================================================ */
@@ -1408,7 +1434,67 @@
     opacity:1;transform:translate(-50%,0) scale(1);
   }
 
+  /* ---- ring + side panel ---- */
+  /* The ring keeps the wider column: it is the thing being looked at, and it
+     is round, so it needs its width in both directions. The panel is pinned
+     to a readable measure instead of taking a share. */
+  .orb-grid{
+    display:grid;grid-template-columns:minmax(0,1fr) clamp(320px,31%,400px);
+    gap:clamp(24px,4vw,60px);align-items:center;
+  }
+
+  /* Every card occupies the SAME grid cell, so the panel is already as tall as
+     its longest card and swapping never resizes anything. */
+  .orb-side{min-width:0}
+  .orb-info{display:grid;min-width:0}
+  .orb-card{
+    grid-area:1 / 1;align-self:center;
+    background:#fff;border:1px solid var(--line);border-radius:20px;
+    padding:28px 30px 30px;box-shadow:0 14px 40px rgba(120,20,50,.07);
+    opacity:0;visibility:hidden;transform:translateY(7px);
+    /* No transition on the resting state, deliberately. The cards share one
+       grid cell, so a symmetric crossfade would show two sets of text through
+       each other on every swap. The outgoing card is cut instantly and only
+       the incoming one animates. */
+  }
+  .orb-card.is-on{
+    opacity:1;visibility:visible;transform:none;
+    transition:opacity .2s ease,transform .2s ease;
+  }
+
+  .orb-card__top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+  .orb-card__swatch{
+    flex:0 0 auto;width:54px;height:54px;border-radius:50%;overflow:hidden;background:#fff;
+    box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(159,18,57,.12);
+  }
+  /* same 1.75 crop as the orbit disc, so the chip and the node read as the
+     same object rather than two different photographs */
+  .orb-card__swatch img{width:100%;height:100%;object-fit:cover;transform:scale(1.75);display:block}
+  .orb-card__id{min-width:0}
+  .orb-card__name{font-size:22px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);margin:0 0 2px;line-height:1.15}
+  .orb-card__form{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);margin:0}
+
+  .orb-card__dose{
+    font-size:13.5px;color:var(--ink-soft);margin:0 0 20px;
+    padding-bottom:18px;border-bottom:1px solid var(--line);
+  }
+  .orb-card__dose strong{color:var(--honey-deep);font-weight:800;font-size:15px}
+  .orb-card__dose i{font-style:normal;color:var(--muted-2);opacity:.5;margin:0 8px}
+
+  .orb-card__rows{display:grid;gap:16px}
+  .orb-row__k{
+    display:block;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--honey);margin-bottom:5px;
+  }
+  .orb-row__v{font-size:14.5px;line-height:1.62;color:var(--ink-soft);margin:0}
+
+  .orb-foot{font-size:11.5px;color:var(--muted-2);line-height:1.55;margin:14px 4px 0}
+
   @media (max-width:980px){
+    /* No room for two columns — the panel drops under the ring, capped to a
+       readable measure rather than running the full width of the page. */
+    .orb-grid{grid-template-columns:1fr;gap:30px;justify-items:center}
+    .orb-side{width:100%;max-width:560px}
     .orb-stage{width:min(440px,86vw);--r:172px}
     .orb-node{width:68px;height:68px}
   }
@@ -1417,9 +1503,14 @@
     .orb-stage{width:min(330px,80vw);--r:130px}
     .orb-node{width:54px;height:54px}
     .orb-node__label{font-size:10px;padding:4px 9px}
+    .orb-card{padding:22px 22px 24px;border-radius:16px}
+    .orb-card__swatch{width:46px;height:46px}
+    .orb-card__name{font-size:19px}
+    .orb-row__v{font-size:14px}
+    .orb-foot{margin-top:26px}
   }
   @media (prefers-reduced-motion:reduce){
-    .orb-node__disc,.orb-node__label{transition:none}
+    .orb-node__disc,.orb-node__label,.orb-card{transition:none}
   }
 </style>
 
@@ -1430,41 +1521,102 @@
       <h2 class="s-title" id="orbTitle">One capsule, <em>nine actives.</em></h2>
     </div>
     <p class="orb__hint">
-      <span class="orb__hint-hover">Hover over an ingredient to see its name.</span>
-      <span class="orb__hint-touch">Tap an ingredient to see its name.</span>
+      <span class="orb__hint-hover">Hover over an ingredient to read what it does.</span>
+      <span class="orb__hint-touch">Tap an ingredient to read what it does.</span>
     </p>
 
     <%
-      // The nine actives on the pack, in orbit order. `k` matches the file in
-      // /img/ingredients/.
+      // The nine actives on the pack, in orbit order. `k` matches the swatch
+      // file in /img/ingredients/. `form` and `dose` are transcribed from the
+      // Supplement Facts panel on the carton (slide 3 of the gallery), so the
+      // side panel and the pack can never disagree — re-check them here if the
+      // formulation is ever revised.
       var _orbIng = [
-        { k: 'iron',        t: 'Iron' },
-        { k: 'folate',      t: 'Folate' },
-        { k: 'b12',         t: 'Vitamin B12' },
-        { k: 'b6',          t: 'Vitamin B6' },
-        { k: 'zinc',        t: 'Zinc' },
-        { k: 'copper',      t: 'Copper' },
-        { k: 'selenium',    t: 'Selenium' },
-        { k: 'riboflavin',  t: 'Riboflavin' },
-        { k: 'niacinamide', t: 'Niacinamide' }
+        { k: 'iron', t: 'Iron', form: 'Ferrous Bisglycinate', dose: '27 mg',
+          fn: 'Iron bound to glycine, so it is absorbed as an intact molecule in the small intestine instead of competing for uptake as a free mineral.',
+          ben: '2–4× better absorbed and around 90% gentler than ferrous sulfate — the iron without the metallic aftertaste or the constipation.' },
+        { k: 'folate', t: 'Folate', form: 'L-Methylfolate', dose: '570 mcg',
+          fn: 'Folate in its already-active form, so it skips the MTHFR conversion step that a large share of people carry a slow variant of.',
+          ben: 'Supports the neural tube in the earliest weeks of pregnancy, and partners with B12 to build red blood cells.' },
+        { k: 'b12', t: 'Vitamin B12', form: 'Methylcobalamin', dose: '2.45 mcg',
+          fn: 'The active form of B12, used alongside folate in red blood cell formation and in normal nervous system function.',
+          ben: 'Folate cannot finish the job without it — the two are only useful to a pregnancy together.' },
+        { k: 'b6', t: 'Vitamin B6', form: 'Pyridoxal 5′-Phosphate', dose: '2.3 mg',
+          fn: 'The coenzyme form of B6, which the body uses directly in amino acid metabolism and in haemoglobin synthesis.',
+          ben: 'Contributes to normal red blood cell formation — the step that makes the iron beside it usable.' },
+        { k: 'zinc', t: 'Zinc', form: 'Zinc Sulphate', dose: '14.5 mg',
+          fn: 'A cofactor in hundreds of enzymes, and required for normal cell division and immune function.',
+          ben: 'Zinc and iron compete for the same absorption pathway, so supplying both avoids topping up one at the other’s expense.' },
+        { k: 'copper', t: 'Copper', form: 'Cupric Sulphate', dose: '1.7 mg',
+          fn: 'Needed to move stored iron into circulation — that loading is done by ceruloplasmin, a copper enzyme.',
+          ben: 'Iron taken for months without copper can quietly deplete it. Including it keeps the iron you take usable.' },
+        { k: 'selenium', t: 'Selenium', form: 'Selenomethionine', dose: '40 mcg',
+          fn: 'Built into the glutathione peroxidase enzymes, part of the body’s own antioxidant defence.',
+          ben: 'Also supports normal thyroid function, which shifts considerably across the three trimesters.' },
+        { k: 'riboflavin', t: 'Riboflavin', form: 'Vitamin B2', dose: '2.7 mg',
+          fn: 'Turns food into usable energy, and is needed to mobilise iron out of storage.',
+          ben: 'When riboflavin is low the response to iron is blunted — part of why this is a blend rather than iron alone.' },
+        { k: 'niacinamide', t: 'Niacinamide', form: 'Vitamin B3', dose: '13 mg',
+          fn: 'The non-flushing form of niacin, central to energy-yielding metabolism in every cell.',
+          ben: 'Contributes to normal energy metabolism and to the reduction of tiredness and fatigue.' }
       ];
       var _orbStep = 360 / _orbIng.length;
     %>
 
-    <div class="orb-stage" id="orbStage">
-      <span class="orb-ring" aria-hidden="true"></span>
-      <span class="orb-ring--inner" aria-hidden="true"></span>
-      <% _orbIng.forEach(function (ing, i) { %>
-        <%# a button so it can take keyboard focus and a tap; its accessible
-            name is the label text, so the disc image stays decorative %>
-        <button type="button" class="orb-node" data-ing="<%= ing.k %>" style="--a:<%= (-90 + _orbStep * i).toFixed(2) %>deg">
-          <span class="orb-node__disc"><img src="/img/ingredients/<%= ing.k %>.png" alt="" loading="lazy"></span>
-          <span class="orb-node__label"><%= ing.t %></span>
-        </button>
-      <% }); %>
-      <span class="orb-core" aria-hidden="true">
-        <img src="/img/products/pill-hero.png" alt="">
-      </span>
+    <%# Stage and side panel are one grid so the panel sits beside the ring on
+        a desktop and drops beneath it on a phone. %>
+    <div class="orb-grid">
+      <div class="orb-stage" id="orbStage">
+        <span class="orb-ring" aria-hidden="true"></span>
+        <span class="orb-ring--inner" aria-hidden="true"></span>
+        <% _orbIng.forEach(function (ing, i) { %>
+          <%# a button so it can take keyboard focus and a tap; its accessible
+              name is the label text, so the disc image stays decorative %>
+          <button type="button" class="orb-node" data-ing="<%= ing.k %>" style="--a:<%= (-90 + _orbStep * i).toFixed(2) %>deg">
+            <span class="orb-node__disc"><img src="/img/ingredients/<%= ing.k %>.png" alt="" loading="lazy"></span>
+            <span class="orb-node__label"><%= ing.t %></span>
+          </button>
+        <% }); %>
+        <span class="orb-core" aria-hidden="true">
+          <img src="/img/products/pill-hero.png" alt="">
+        </span>
+      </div>
+
+      <%# All nine cards are rendered and stacked in ONE grid cell, with only
+          the current one visible. The panel is therefore as tall as its
+          longest card from the start, so swapping ingredients never resizes
+          the section or nudges the ring. aria-live announces the swap; the
+          hidden cards are visibility:hidden, so they stay out of the
+          accessibility tree rather than being read as a list of nine. %>
+      <div class="orb-side">
+      <div class="orb-info" id="orbInfo" aria-live="polite">
+        <% _orbIng.forEach(function (ing, i) { %>
+          <article class="orb-card<%= i === 0 ? ' is-on' : '' %>" data-for="<%= ing.k %>">
+            <div class="orb-card__top">
+              <span class="orb-card__swatch"><img src="/img/ingredients/<%= ing.k %>.png" alt="" loading="lazy"></span>
+              <div class="orb-card__id">
+                <h3 class="orb-card__name"><%= ing.t %></h3>
+                <p class="orb-card__form"><%= ing.form %></p>
+              </div>
+            </div>
+            <p class="orb-card__dose"><strong><%= ing.dose %></strong> per capsule <i>·</i> 100% RDA</p>
+            <div class="orb-card__rows">
+              <div class="orb-row">
+                <span class="orb-row__k">What it does</span>
+                <p class="orb-row__v"><%= ing.fn %></p>
+              </div>
+              <div class="orb-row">
+                <span class="orb-row__k">Why it is here</span>
+                <p class="orb-row__v"><%= ing.ben %></p>
+              </div>
+            </div>
+          </article>
+        <% }); %>
+      </div>
+      <%# The basis for the 100% figures, quoted from the carton rather than
+          left to the reader to assume. %>
+      <p class="orb-foot">% RDA calculated for sedentary pregnant women under ICMR and FSS (labelling and display) regulations, 2020.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -1567,16 +1719,20 @@
   // faqShared so every page states the same terms (src/data/faq.js).
   var _faqTabs = [
     { k: 'general', label: 'General', items: [
-          { q: "What makes Iron+ different from regular iron tablets?",
-            a: "Iron+ uses <strong>Ferrous Bisglycinate</strong> \u2014 a chelated form of iron that's 2-4\u00d7 better absorbed and ~90% gentler than ferrous sulfate. It also includes the Vit. B<sub>12</sub>, folate, Vit. B<sub>6</sub> and zinc co-factors most conventional tablets skip." },
+          { q: "What makes Iron+ different from regular iron supplements?",
+            a: "Iron+ uses <strong>Ferrous Bisglycinate</strong> — a chelated form of iron that's 2-4× better absorbed and ~90% gentler than ferrous sulfate. It also includes the Vit. B<sub>12</sub>, folate, Vit. B<sub>6</sub> and zinc co-factors most conventional supplements skip." },
+          { q: "Who should take Advanced Iron+?",
+            a: "It is especially useful for <strong>pregnant and lactating women</strong>, whose iron requirement rises considerably. It also suits adults with low haemoglobin or low iron levels, as recommended by a healthcare professional." },
+          { q: "How should Advanced Iron+ be consumed?",
+            a: "Take <strong>1 capsule daily</strong>, one hour before or two hours after meals, with a full glass of water — or as directed by your healthcare professional. Avoid tea, coffee or calcium-rich drinks within an hour of your capsule, as they blunt iron absorption; vitamin C-rich foods such as citrus or amla help it." },
+          { q: "How long does it take to see results?",
+            a: "Most people begin to notice a difference in their energy levels within <strong>2-3 weeks</strong> of consistent use. Rebuilding the iron stores themselves takes longer — often several months — so take it regularly rather than only when you feel low." },
+          { q: "Are there any side effects of taking Advanced Iron+?",
+            a: "It is designed to be gentle on the stomach: Ferrous Bisglycinate is ~90% gentler on the GI tract than conventional iron, so constipation and nausea are far less likely. If you have a history of iron sensitivity, or you do feel discomfort, consult your healthcare professional. Pairing with Ginger+ can help through the first trimester." },
           { q: "Is the folate in Iron+ active?",
-            a: "Yes. We use <strong>L-methylfolate</strong> (570 mcg) \u2014 the active form. No enzymatic conversion required, so it works even for women with the MTHFR variant." },
+            a: "Yes. We use <strong>L-methylfolate</strong> (570 mcg) — the active form. No enzymatic conversion required, so it works even for women with the MTHFR variant." },
           { q: "Can I take Iron+ throughout pregnancy?",
-            a: "Yes \u2014 Iron+ is designed for use throughout pregnancy and postpartum. Always confirm with your OB-GYN, particularly if your current hemoglobin is on the very low end." },
-          { q: "Will Iron+ cause constipation or nausea?",
-            a: "It's significantly less likely than conventional iron \u2014 Ferrous Bisglycinate is ~90% gentler on the GI tract. If you do feel queasy, take it with food and plenty of water, and pair with Ginger+ during the first trimester." },
-          { q: "When should I take Iron+?",
-            a: "Once a day, ideally with a meal. Avoid pairing with tea, coffee or calcium-rich drinks within an hour \u2014 they can blunt iron absorption. Vitamin C-rich foods (citrus, amla) help." }
+            a: "Yes — Iron+ is designed for use throughout pregnancy and postpartum. Always confirm with your OB-GYN, particularly if your current hemoglobin is on the very low end." }
     ] },
     { k: 'delivery', label: 'Delivery', items: faqShared.delivery },
     { k: 'service',  label: 'Service',  items: faqShared.service }
@@ -1818,19 +1974,23 @@
 
 /* Gallery — click a thumb to swap the main image */
 (function () {
-  const main = document.getElementById('galleryMain');
+  const box = document.getElementById('galleryMain');
+  const img = document.getElementById('galleryImg');
   const thumbs = document.querySelectorAll('.gallery-thumb');
-  if (!main || !thumbs.length) return;
+  if (!box || !img || !thumbs.length) return;
   const select = (t) => {
     const url = t.getAttribute('data-full');
-    if (!url || main.src.endsWith(url)) return;
+    if (!url || img.src.endsWith(url)) return;
     thumbs.forEach((x) => x.classList.remove('is-active'));
     t.classList.add('is-active');
-    main.src = url;
+    img.src = url;
+    // Reshape the card to the incoming slide BEFORE it paints, so a portrait
+    // slide is never briefly cropped into the square the last one left behind.
+    box.style.setProperty('--ar', t.getAttribute('data-ar') || '1');
     // Keep the alt in step with the slide, otherwise it stays stuck
     // describing the first image for anyone using a screen reader.
     const label = t.getAttribute('aria-label');
-    if (label) main.alt = 'Shiōrra Advanced Iron+ — ' + label;
+    if (label) img.alt = 'Shiōrra Advanced Iron+ — ' + label;
   };
 
   // Hover previews the slide on pointer devices; click still works everywhere
@@ -1972,18 +2132,30 @@
     nodes.forEach(function (n) { n.classList.toggle('is-lit', n === node); });
   }
 
+  // Swap the side panel to an active. The cards are all in the DOM already,
+  // so this only flips a class — nothing loads and nothing reflows.
+  // Deliberately NOT cleared on mouseleave: the panel keeps the last ingredient
+  // you looked at, so reading it does not require keeping the pointer parked on
+  // a disc that is slowly drifting away from it.
+  const cards = Array.prototype.slice.call(document.querySelectorAll('.orb-card'));
+  function show(key) {
+    if (!key) return;
+    cards.forEach(function (c) { c.classList.toggle('is-on', c.getAttribute('data-for') === key); });
+  }
+
   nodes.forEach(function (n) {
+    const key = n.getAttribute('data-ing');
     if (hover) {
-      n.addEventListener('mouseenter', hold);
+      n.addEventListener('mouseenter', function () { hold(); show(key); });
       n.addEventListener('mouseleave', resume);
     } else {
       n.addEventListener('click', function (e) {
         e.stopPropagation();
         if (n.classList.contains('is-lit')) { lightOnly(null); resume(); }
-        else { lightOnly(n); hold(); }
+        else { lightOnly(n); hold(); show(key); }
       });
     }
-    n.addEventListener('focus', hold);
+    n.addEventListener('focus', function () { hold(); show(key); });
     n.addEventListener('blur', function () { if (!n.classList.contains('is-lit')) resume(); });
   });
   if (!hover) {

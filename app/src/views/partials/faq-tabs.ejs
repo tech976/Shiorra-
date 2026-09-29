@@ -47,6 +47,13 @@
   .faq-row[open] .faq-chev{transform:rotate(180deg)}
   .faq-row__a{padding:0 4px 24px;font-size:15.5px;color:var(--ink-soft);line-height:1.7;max-width:74ch}
   .faq-row__a a{color:var(--honey-deep);text-decoration:underline}
+  /* Some answers are a list of benefits rather than a paragraph. */
+  .faq-row__a ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+  .faq-row__a li{position:relative;padding-left:20px}
+  .faq-row__a li::before{
+    content:'';position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;
+    background:var(--honey);
+  }
   /* shown only while a search is running and nothing matches */
   .faq-empty{text-align:center;color:var(--muted);font-size:15.5px;padding:40px 0}
 
