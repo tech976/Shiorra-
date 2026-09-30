@@ -54,5 +54,6 @@ module.exports = {
     '/img/products/energy-n5.png',
     '/img/products/energy-n6.png',
     '/img/products/energy-n7.png',
+    '/img/products/energy-n8.png',
   ],
 };
