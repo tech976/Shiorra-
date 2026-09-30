@@ -1430,6 +1430,157 @@
   </div>
 </section>
 
+<!-- WHAT YOU MAY NOTICE — timeline -->
+<style>
+  /* ============================================================
+     TIMELINE — what you may notice with regular usage
+     Three milestones on one dashed rail, straight after the ingredients:
+     having just read what is in the tablet, the next question is what
+     taking it actually looks like over time.
+     Every line here is transcribed from the client's own artwork, which is
+     slide 8 of the gallery — keep the two in step. Deliberately NO percentage
+     or multiplier figures: the reference this was modelled on carries them,
+     but there is no trial behind EnergyOne+ to source them from and they are
+     not inventable.
+     ============================================================ */
+  .nt{background:#fff;border-top:1px solid var(--line);padding:78px 0 86px}
+  .nt__head{text-align:center;margin-bottom:56px}
+  .nt__head .s-title{margin-inline:auto;margin-bottom:12px}
+  .nt__sub{font-size:16px;line-height:1.6;color:var(--muted);max-width:60ch;margin:0 auto}
+
+  .nt-track{
+    list-style:none;margin:0;padding:0;position:relative;
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;
+  }
+  /* The rail sits behind the icons and stops at the first and last of them
+     rather than running to the edges — with 3 equal columns their centres
+     are at 1/6 and 5/6 of the track. */
+  .nt-track::before{
+    content:'';position:absolute;z-index:0;
+    left:16.67%;right:16.67%;top:31px;border-top:2px dashed rgba(183,58,146,.32);
+  }
+  .nt-step{position:relative;z-index:1;text-align:center}
+  .nt-step__ico{
+    width:64px;height:64px;margin:0 auto 18px;border-radius:50%;
+    display:grid;place-items:center;
+    background:#fff;color:var(--honey);
+    box-shadow:0 0 0 2px var(--honey-soft),0 8px 22px rgba(107,34,85,.12);
+  }
+  .nt-step__ico svg{width:28px;height:28px}
+  .nt-step__stage{
+    display:inline-block;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    color:#fff;background:var(--honey-deep);padding:5px 13px;border-radius:999px;margin-bottom:12px;
+  }
+  .nt-step__t{font-size:20px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);margin:0 0 14px;line-height:1.2}
+  .nt-step__list{list-style:none;margin:0;padding:0;display:grid;gap:9px;max-width:30ch;margin-inline:auto}
+  .nt-step__list li{position:relative;padding-left:20px;font-size:14.5px;line-height:1.55;color:var(--ink-soft);text-align:left}
+  .nt-step__list li::before{
+    content:'';position:absolute;left:2px;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--honey);
+  }
+
+  .nt-foot{text-align:center;font-size:12px;color:var(--muted-2);margin:34px 0 0}
+
+  /* "Supplements work best alongside …" — the honest caveat from the same
+     artwork, kept with the timeline rather than dropped. */
+  .nt-note{
+    margin:40px auto 0;max-width:840px;background:var(--surface);border:1px solid var(--line);
+    border-radius:18px;padding:24px 28px;text-align:center;
+  }
+  .nt-note__t{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--honey-deep);margin:0 0 14px}
+  .nt-note__list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:9px}
+  .nt-note__list li{
+    font-size:13.5px;font-weight:600;color:var(--ink-soft);
+    background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 16px;
+  }
+
+  @media (max-width:860px){
+    /* Three across stops working before the bullets do — the rail turns
+       vertical and the steps stack against it. */
+    .nt{padding:52px 0 60px}
+    .nt__head{margin-bottom:38px}
+    .nt-track{grid-template-columns:1fr;gap:34px;max-width:480px;margin-inline:auto}
+    /* One rail down the whole track would trail past the last icon into
+       empty space, so each step draws its own segment to the next one and
+       the last step draws none. */
+    .nt-track::before{display:none}
+    .nt-step{display:grid;grid-template-columns:64px minmax(0,1fr);gap:18px;align-items:start;text-align:left}
+    .nt-step:not(:last-child)::before{
+      content:'';position:absolute;left:31px;top:72px;bottom:-30px;
+      border-left:2px dashed rgba(183,58,146,.32);
+    }
+    .nt-step__ico{margin:0}
+    .nt-step__t{font-size:18px}
+    .nt-step__list{max-width:none;margin-inline:0}
+    .nt-note{padding:20px 18px;border-radius:14px}
+  }
+  @media (max-width:420px){
+    .nt-step{grid-template-columns:52px minmax(0,1fr);gap:14px}
+    .nt-step__ico{width:52px;height:52px}
+    .nt-step__ico svg{width:24px;height:24px}
+    .nt-step:not(:last-child)::before{left:25px;top:60px}
+  }
+</style>
+
+<section class="nt" aria-labelledby="ntTitle">
+  <div class="wrap">
+    <div class="nt__head">
+      <span class="s-eyebrow">What to expect</span>
+      <h2 class="s-title" id="ntTitle">What you may notice <em>with regular usage</em>.</h2>
+      <p class="nt__sub">EnergyOne+ is designed to be a simple addition to your wellness routine, helping you stay prepared for the demands of modern life.</p>
+    </div>
+
+    <%
+      // Transcribed from slide 8 of the gallery (energy-n8.png) so the page
+      // and the artwork say the same thing. If that slide is re-exported with
+      // different wording or different week ranges, change both.
+      var _tl = [
+        { stage: '1–2 weeks', t: 'The base is set',
+          ico: '<rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/><path d="M12 12.8v2.7l1.9 1.1"/>',
+          items: ['Feeling more supported nutritionally',
+                  'A more consistent daily routine',
+                  'An improved sense of wellness'] },
+        { stage: '3–4 weeks', t: 'Energy and focus build',
+          ico: '<path d="M3 20.5h18"/><path d="M6 20.5v-6M11 20.5v-9.5M16 20.5v-4"/><path d="M14.5 6.5h5v5"/><path d="M19.5 6.5 13 12.2 9.5 9 4.5 13"/>',
+          items: ['Better energy support',
+                  'Improved focus and alertness',
+                  'Feeling more active through the day'] },
+        { stage: 'Continued use', t: 'It becomes routine',
+          ico: '<circle cx="12" cy="5" r="2.6"/><path d="M12 9.2v7.3"/><path d="M12 16.5 8.5 21.5M12 16.5l3.5 5"/><path d="M12 11.2 6.2 7.8M12 11.2l5.8-3.4"/>',
+          items: ['Long-term nutritional support',
+                  'Consistent daily wellness',
+                  'Support for an active lifestyle'] }
+      ];
+    %>
+
+    <ol class="nt-track">
+      <% _tl.forEach(function (st) { %>
+        <li class="nt-step">
+          <span class="nt-step__ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><%- st.ico %></svg>
+          </span>
+          <div>
+            <span class="nt-step__stage"><%= st.stage %></span>
+            <h3 class="nt-step__t"><%= st.t %></h3>
+            <ul class="nt-step__list">
+              <% st.items.forEach(function (it) { %><li><%= it %></li><% }); %>
+            </ul>
+          </div>
+        </li>
+      <% }); %>
+    </ol>
+
+    <p class="nt-foot">Individual experiences may vary.</p>
+
+    <div class="nt-note">
+      <p class="nt-note__t">Remember — supplements work best alongside</p>
+      <ul class="nt-note__list">
+        <li>A balanced diet</li><li>Adequate sleep</li><li>Hydration</li>
+        <li>Regular exercise</li><li>Stress management</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- USE CASES -->
 <style>
   /* ============================================================
