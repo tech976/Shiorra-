@@ -51,7 +51,7 @@
   .ed-hero{background:var(--honey-soft);padding:96px 0 80px;position:relative;overflow:hidden;text-align:center}
   .ed-hero::before{content:'';position:absolute;top:-120px;right:-100px;width:420px;height:420px;border-radius:50%;background:transparent;pointer-events:none}
   .ed-hero .wrap{position:relative}
-  .ed-hero .eyebrow{display:inline-block;background:var(--honey-soft);color:var(--honey-deep);font-size:12px;font-weight:800;padding:7px 14px;border-radius:20px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
+  .ed-hero .eyebrow{display:inline-block;background:var(--honey-soft);color:#1E7A73;font-size:12px;font-weight:800;padding:7px 14px;border-radius:20px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
   .ed-hero h1{font-family:'Helvetica Neue',Arial,sans-serif;font-size:60px;font-weight:700;line-height:1.02;letter-spacing:-0.03em;max-width:16ch;margin:0 auto 22px;color:var(--charcoal);text-wrap:balance}
   .ed-hero h1 em{font-style:italic;color:var(--honey);font-weight:500}
   @media(max-width:680px){.ed-hero h1{font-size:40px}}
@@ -66,7 +66,7 @@
   /* Sections */
   section.s{padding:72px 0;font-size:17px}
   @media(max-width:680px){section.s{padding:56px 0}}
-  .s-eyebrow{display:inline-block;background:var(--honey-soft);color:var(--honey-deep);font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;letter-spacing:.10em;text-transform:uppercase;margin-bottom:16px}
+  .s-eyebrow{display:inline-block;background:var(--honey-soft);color:#1E7A73;font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;letter-spacing:.10em;text-transform:uppercase;margin-bottom:16px}
   .s-title{font-family:'Helvetica Neue',Arial,sans-serif;font-size:38px;font-weight:700;line-height:1.05;letter-spacing:-0.025em;margin-bottom:12px;color:var(--charcoal);text-wrap:balance}
   .s-title em{font-style:italic;color:var(--honey);font-weight:500}
   @media(max-width:680px){.s-title{font-size:28px}}
@@ -78,7 +78,10 @@
 
   /* Helpdesk */
   .fq-help{background:var(--charcoal);color:#fff;padding:72px 0;text-align:center}
-  .fq-help h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:42px;font-weight:700;max-width:18ch;margin:0 auto 16px;line-height:1.05;letter-spacing:-0.02em}
+  /* style.css sets `h1..h6 { color: charcoal }` on the element itself, which
+     beats the `color:#fff` inherited from this dark section — so the heading
+     has to name its own colour or it renders charcoal on charcoal. */
+  .fq-help h2{color:#fff;font-family:'Helvetica Neue',Arial,sans-serif;font-size:42px;font-weight:700;max-width:18ch;margin:0 auto 16px;line-height:1.05;letter-spacing:-0.02em}
   .fq-help h2 em{font-style:italic;color:var(--honey);font-weight:500}
   @media(max-width:680px){.fq-help h2{font-size:32px}}
   .fq-help p{font-size:16px;color:#bbb;max-width:60ch;margin:0 auto 32px}
@@ -88,7 +91,7 @@
   .fq-help-card:hover{transform:translateY(-2px);background:rgba(255,255,255,.10)}
   .fq-help-card .ic{width:48px;height:48px;border-radius:14px;background:rgba(61,189,182,.18);color:var(--honey);display:grid;place-items:center;margin-bottom:14px}
   .fq-help-card .ic svg{width:24px;height:24px;stroke-width:2}
-  .fq-help-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;margin-bottom:6px}
+  .fq-help-card h5{color:#fff;font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;margin-bottom:6px}
   .fq-help-card p{font-size:13.5px;color:#bbb;margin:0;line-height:1.5;max-width:none}
 
   /* Footer */
@@ -102,7 +105,7 @@
   .ed-footer__col li{margin-bottom:8px}
   .ed-footer__col a{color:#aaa;font-size:.88rem}
   .ed-footer__col a:hover{color:var(--honey)}
-  .ed-footer__bar{display:flex;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);color:#777;font-size:.82rem;flex-wrap:wrap;gap:8px}
+  .ed-footer__bar{display:flex;justify-content:space-between;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);color:#8E8E8E;font-size:.82rem;flex-wrap:wrap;gap:8px}
 </style>
 </head>
 <body>
@@ -170,8 +173,6 @@
             a: "<strong>Iron+</strong> is a complete hematinic for pregnancy &amp; postpartum. <strong>Ginger+</strong> is a gentle daily support for first-trimester nausea. <strong>EnergyOne+</strong> is a caffeine-free, multi-nutrient daily energy support for busy adults. All three share the same active-form formulation philosophy." },
           { q: "What makes Shi\u014drra Iron+ different from regular iron supplements?",
             a: "Iron+ uses <strong>Ferrous Bisglycinate</strong> \u2014 a chelated form of iron that's 2-4\u00d7 better absorbed and ~90% gentler than ferrous sulfate. It also includes the Vit. B<sub>12</sub>, folate, Vit. B<sub>6</sub> and zinc co-factors most conventional supplements skip." },
-          { q: "Is the folate in Iron+ active?",
-            a: "Yes. We use <strong>L-methylfolate</strong> (570 mcg) \u2014 the active form. No enzymatic conversion required, which means it works even for women with the MTHFR variant." },
           // GINGER+ TEMPORARILY DOWN — restore this Q&A when the product is live again.
           // { q: "What's in Ginger+?",
           // a: "Standardized Ginger Extract (250 mg) + active <strong>Vit. B<sub>6</sub> as P5P</strong> (2.3 mg) + Vit. B<sub>1</sub> + Magnesium Bisglycinate. Built specifically for first-trimester nausea and gentle daily digestion." },

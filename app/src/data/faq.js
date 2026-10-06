@@ -11,10 +11,6 @@ module.exports = {
   delivery: [
     { q: "How long does delivery take?",
       a: "2-5 business days for most Indian addresses. Metros usually 2-3 days, remote pincodes can take up to 7. You'll get a tracking link by email and SMS." },
-    { q: "Is shipping really free?",
-      a: "Free on orders over <strong>\u20b9999</strong>. Below that, a flat \u20b949 shipping fee applies. You'll see the total before checkout." },
-    { q: "Do you offer Cash on Delivery?",
-      a: "Yes \u2014 COD is available across India. You can also pay online via UPI, cards, wallets and netbanking." },
     { q: "What is your return policy?",
       a: "Unopened packs can be returned within <strong>30 days</strong> for a full refund. If your pack arrives damaged, write to us within 7 days and we'll replace it." },
     { q: "Do you ship outside India?",

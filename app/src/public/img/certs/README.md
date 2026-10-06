@@ -6,7 +6,7 @@ Drop the logo files here using these exact filenames. The product page
 | File               | Mark            |
 |--------------------|-----------------|
 | `fssai.png`        | FSSAI           |
-| `gmp.png`          | GMP Quality     |
+| `who-gmp.png`      | WHO-GMP         |
 | `iso.png`          | ISO 9001:2015   |
 | `vegetarian.png`   | 100% Vegetarian |
 | `gmo-free.png`     | GMO Free        |
@@ -15,6 +15,10 @@ Drop the logo files here using these exact filenames. The product page
 
 Any file that is missing falls back to a line icon automatically — the band
 never shows a broken image.
+
+`gmp.png` (the old generic "GMP Quality" roundel) is left in place but nothing
+points at it any more — `who-gmp.png` replaced it in the band on all three
+product pages.
 
 Notes:
 - PNG (or SVG) at roughly 400–600 px on the long edge is plenty.

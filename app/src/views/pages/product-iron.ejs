@@ -988,14 +988,14 @@
           var _slides = [
             { n: 1, t: 'The pack' },
             { n: 2, t: 'Smarter iron for a healthier pregnancy' },
-            { n: 3, t: 'Complete nutritional facts', ar: 1600 / 2766 },
+            { n: 3, t: 'Complete nutritional facts' },
             { n: 4, t: 'Better iron, greater results' },
             { n: 5, t: 'What to expect, week by week' },
             { n: 6, t: 'Why choose Advanced Iron+' },
             { n: 7, t: 'The nine actives, as powders' },
             { n: 8, t: 'Why you should trust us' }
           ];
-          var _slideSrc = function (n) { return '/img/products/iron-n' + n + '.png?v=5'; };
+          var _slideSrc = function (n) { return '/img/products/iron-n' + n + '.png?v=6'; };
           var _slideAr = function (sl) { return (sl.ar || 1).toFixed(4); };
         %>
         <div class="gallery" style="--n:<%= _slides.length %>">
@@ -1187,7 +1187,7 @@
     // Drop the files in app/src/public/img/certs/ using these exact names.
     var _certs = [
       { t: 'FSSAI Certified', img: '/img/certs/fssai.png', scale: 1.2,   svg: '<circle cx="12" cy="9" r="6"/><path d="m9.4 9 1.9 1.9L15 7.2"/><path d="M8.9 14.4 7.6 22l4.4-2.2L16.4 22l-1.3-7.6"/>' },
-      { t: 'GMP Certified', img: '/img/certs/gmp.png',     svg: '<path d="M2.5 21h19"/><path d="M4 21V9.6l5 3.1V9.6l5 3.1V6.3l5 3.1V21"/><path d="M8 21v-3.2M13 21v-3.2"/>' },
+      { t: 'WHO-GMP Certified', img: '/img/certs/who-gmp.png', svg: '<path d="M2.5 21h19"/><path d="M4 21V9.6l5 3.1V9.6l5 3.1V6.3l5 3.1V21"/><path d="M8 21v-3.2M13 21v-3.2"/>' },
       { t: 'ISO Certified', img: '/img/certs/iso.png',     svg: '<path d="M14 2.8H7a2 2 0 0 0-2 2v14.4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.8z"/><path d="M14 2.8v5h5"/><path d="m8.8 14.2 2.1 2.1 4.3-4.3"/>' },
       { t: 'GMO Free', img: '/img/certs/gmo-free.png',          svg: '<path d="M5 3.2c0 5 3 6.6 7 8.6s7 3.9 7 9"/><path d="M19 3.2c0 5-3 6.6-7 8.6s-7 3.9-7 9"/><path d="M7.6 6.6h8.8M7.6 17.4h8.8"/><path d="M3.4 20.6 20.6 3.4"/>' }
     ];
@@ -1640,48 +1640,79 @@
        content (the label top-left) starts at 4%, so nothing is lost.
      ============================================================ */
   .hemo{border-top:1px solid var(--line);background:#fff;padding-top:clamp(24px,3.2vw,48px)}
-  .hemo__fig{
-    margin:0;position:relative;
-    /* what the masked-out bottom edge dissolves into */
-    background:linear-gradient(180deg,rgba(253,244,246,0) 78%,#FDF4F6 100%);
+
+  /* The bed is the full-bleed strip the figure sits on, and the whole reason
+     the image stops looking pasted on. Capping the figure by height leaves
+     white gutters either side, and against them the artwork's own edges read
+     as two hard vertical lines.
+     This gradient IS those edges: each stop is the average colour of the
+     artwork's outermost 6 columns at that height, sampled from hemo.png. So
+     at any point down the image, the colour just outside it is the colour
+     just inside it, and there is no edge left to see. It starts at #FFF to
+     meet the section's white padding, and ends on #FDF4F6 so .hemo__tail
+     carries straight on from it back to white.
+     Re-sample these if the artwork is ever re-exported. */
+  .hemo__bed{
+    background:linear-gradient(180deg,
+      #FFFFFF 0%,  #FEF9FB 4%,  #FEF8FA 20%, #FEF0F4 35%,
+      #FBE4EA 48%, #FDEFF4 57%, #FEF5F7 67%, #FDE8EE 78%,
+      #FDE2E9 85%, #FEF1F4 92%, #FDF4F6 100%);
   }
+  .hemo__fig{
+    margin:0 auto;position:relative;
+    /* The artwork is 16:9, so at full viewport width its height runs past the
+       fold on a laptop and the climb has to be scrolled through in two goes.
+       Cap the figure's WIDTH instead, at whatever width makes its 16:9 height
+       fit the space left under the sticky topbar — so the whole trail lands on
+       one screen. Below that cap (tablets, phones) it is edge to edge as
+       before, because the image is far shorter than the viewport there.
+       --topbar-h is published by the topbar script; 89px is its measured
+       default. The 150px covers this section's own top padding, the 77px
+       sticky buy bar that sits over the bottom of the viewport once you have
+       scrolled, and a little breathing room. svh, not vh, so mobile browser
+       chrome does not make it overshoot. */
+    max-width:calc((100vh  - var(--topbar-h, 89px) - 150px) * 1672 / 941);
+    max-width:calc((100svh - var(--topbar-h, 89px) - 150px) * 1672 / 941);
+  }
+  /* Two masks, intersected: the original top/bottom fade, plus a side fade now
+     that there are sides to see. 2.5% is deliberate — the artwork's first
+     content ("THE TRAIL : 04") starts at 4.1% across, so the fade is spent
+     before it reaches anything that has to stay sharp. A browser that ignores
+     mask-composite falls back to no edge fade, which is the old behaviour
+     rather than a broken one. */
   .hemo__fig img{
     display:block;width:100%;height:auto;
-    -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 3%,#000 95%,transparent 100%);
-            mask-image:linear-gradient(180deg,transparent 0,#000 3%,#000 95%,transparent 100%);
+    -webkit-mask-image:
+      linear-gradient(180deg,transparent 0,#000 3%,#000 95%,transparent 100%),
+      linear-gradient(90deg,transparent 0,#000 2.5%,#000 97.5%,transparent 100%);
+            mask-image:
+      linear-gradient(180deg,transparent 0,#000 3%,#000 95%,transparent 100%),
+      linear-gradient(90deg,transparent 0,#000 2.5%,#000 97.5%,transparent 100%);
+    -webkit-mask-composite:source-in;
+            mask-composite:intersect;
   }
   .hemo__tail{height:clamp(44px,6vw,96px);background:linear-gradient(180deg,#FDF4F6 0%,#FFFFFF 100%)}
-  .hemo__hint{display:none}
   /* visually hidden, but gives the section a real heading for screen readers */
   .hemo__h{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
-  /* Phones: at full width the artwork is a ~220px strip with ~5px text, so it
-     is shown at a readable 940px instead and scrolls sideways. A portrait
-     export for mobile would beat this — swap it in with <picture> if one is
-     made. */
+  /* Phones: this used to be held at 940px and scrolled sideways, so the text
+     stayed readable. That is gone — the whole image has to be on screen at
+     once, which means it is as wide as the phone and nothing more. The cost
+     is real: at 390px the artwork is a ~220px strip and its labels are tiny.
+     A portrait export for mobile is the fix — swap it in with <picture> if
+     one is made, and this rule goes back to being about legibility. */
   @media (max-width:720px){
     .hemo{padding-top:28px}
-    .hemo__hint{
-      display:flex;align-items:center;justify-content:center;gap:6px;
-      font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted-2);margin:0 0 12px;
-    }
-    .hemo__hint svg{width:14px;height:14px}
-    .hemo__scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
-    .hemo__scroll::-webkit-scrollbar{display:none}
-    .hemo__fig{width:940px}
   }
 </style>
 <section class="hemo" aria-labelledby="hemoTitle">
   <h2 class="hemo__h" id="hemoTitle">How haemoglobin climbs on Advanced Iron+</h2>
-  <p class="hemo__hint" aria-hidden="true">Swipe to explore the climb
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-  </p>
-  <div class="hemo__scroll">
+  <div class="hemo__bed">
     <figure class="hemo__fig">
-      <%# The artwork is text-heavy, so the alt carries its content for anyone
-          who cannot see it. Keep it in step if the image is re-exported. %>
-      <img src="/img/products/hemo.png" width="1672" height="941" loading="lazy"
-           alt="Hb climbs gently, visibly. Base camp, week 1 to 2, from a base level of 10.0 g/dL: settling into the routine, no notable side effects, feeling a bit more energy. Mid ascent, week 4 to 8: an average rise of 0.8 to 1.4 g/dL, stamina returning, clearer mental focus. Summit, month 3 to 6: haemoglobin at 12.6 g/dL or above, the WHO normal range, with pregnancy and postpartum support. Average rise about 2.78 g/dL; most women reach WHO normal by month 3 to 6. Individual experiences may vary.">
+    <%# The artwork is text-heavy, so the alt carries its content for anyone
+        who cannot see it. Keep it in step if the image is re-exported. %>
+    <img src="/img/products/hemo.png" width="1672" height="941" loading="lazy"
+         alt="Hb climbs gently, visibly. Base camp, week 1 to 2, from a base level of 10.0 g/dL: settling into the routine, no notable side effects, feeling a bit more energy. Mid ascent, week 4 to 8: an average rise of 0.8 to 1.4 g/dL, stamina returning, clearer mental focus. Summit, month 3 to 6: haemoglobin at 12.6 g/dL or above, the WHO normal range, with pregnancy and postpartum support. Average rise about 2.78 g/dL; most women reach WHO normal by month 3 to 6. Individual experiences may vary.">
     </figure>
   </div>
   <div class="hemo__tail" aria-hidden="true"></div>
@@ -1728,9 +1759,7 @@
           { q: "How long does it take to see results?",
             a: "Most people begin to notice a difference in their energy levels within <strong>2-3 weeks</strong> of consistent use. Rebuilding the iron stores themselves takes longer — often several months — so take it regularly rather than only when you feel low." },
           { q: "Are there any side effects of taking Advanced Iron+?",
-            a: "It is designed to be gentle on the stomach: Ferrous Bisglycinate is ~90% gentler on the GI tract than conventional iron, so constipation and nausea are far less likely. If you have a history of iron sensitivity, or you do feel discomfort, consult your healthcare professional. Pairing with Ginger+ can help through the first trimester." },
-          { q: "Is the folate in Iron+ active?",
-            a: "Yes. We use <strong>L-methylfolate</strong> (570 mcg) — the active form. No enzymatic conversion required, so it works even for women with the MTHFR variant." },
+            a: "It is designed to be gentle on the stomach: Ferrous Bisglycinate is ~90% gentler on the GI tract than conventional iron, so constipation and nausea are far less likely. If you have a history of iron sensitivity, or you do feel discomfort, consult your healthcare professional." },
           { q: "Can I take Iron+ throughout pregnancy?",
             a: "Yes — Iron+ is designed for use throughout pregnancy and postpartum. Always confirm with your OB-GYN, particularly if your current hemoglobin is on the very low end." }
     ] },

@@ -26,8 +26,22 @@
 
     // Re-fire native scroll event so existing scroll-listeners (progress bar,
     // scroll-spy, IntersectionObserver) keep working in lock-step with Lenis.
+    //
+    // The guard is load-bearing. Lenis itself listens for the native 'scroll'
+    // event, so dispatching one from inside its own 'scroll' callback fed
+    // straight back into it: emit -> dispatch -> onNativeScroll -> emit ...
+    // until the call stack overflowed. Every scroll on every page threw
+    // "Maximum call stack size exceeded", which also killed any listener that
+    // had not run yet. Re-entrant emits are dropped, so the relay fires once.
+    let relaying = false;
     lenis.on('scroll', () => {
-        window.dispatchEvent(new Event('scroll'));
+        if (relaying) return;
+        relaying = true;
+        try {
+            window.dispatchEvent(new Event('scroll'));
+        } finally {
+            relaying = false;
+        }
     });
 
     // Native anchor links — let Lenis animate them
