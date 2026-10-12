@@ -7,6 +7,7 @@ const PRODUCT_TEMPLATES = {
   'advanced-iron': 'pages/product-iron',
   'advanced-ginger': 'pages/product-ginger',
   'advanced-energyone': 'pages/product-energyone',
+  'joint-max': 'pages/product-joint-max',
 };
 
 // The home page references the three Shiōrra SKUs by slug — load them all
@@ -27,6 +28,7 @@ exports.home = async (req, res, next) => {
       ironProduct: bySlug['advanced-iron'] || null,
       gingerProduct: bySlug['advanced-ginger'] || null,
       energyProduct: bySlug['advanced-energyone'] || null,
+      jointProduct: bySlug['joint-max'] || null,
       layout: false,
     });
   } catch (err) {
@@ -62,8 +64,14 @@ exports.product = async (req, res, next) => {
     }
     // Siblings for the "Pair it with" strip. Read live rather than hard-coded
     // in the template so price, stock and id can never drift from the catalogue.
+    // Both `not: product.slug` and notWithdrawn's `notIn` target the SAME key,
+    // so spreading one after the other silently replaced the other and every
+    // product listed itself under its own "Pair it with". They are merged.
     const pairWith = await prisma.product.findMany({
-      where: { active: true, slug: { not: product.slug }, ...notWithdrawn },
+      where: {
+        active: true,
+        slug: { not: product.slug, ...(notWithdrawn.slug || {}) },
+      },
       include: { images: { orderBy: { sortOrder: 'asc' }, take: 1 } },
       orderBy: { priceInPaise: 'asc' },
     });

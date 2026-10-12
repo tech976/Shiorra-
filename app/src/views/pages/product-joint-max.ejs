@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Joint Max · Shiōrra · Advanced Joint &amp; Cartilage Support</title>
+<meta name="description" content="Shiōrra Joint Max — Glucosamine Hydrochloride 1500 mg with Chondroitin Sulphate 1200 mg. A targeted two-active formula for joint health, cartilage and everyday mobility. A trademark of K.C. Laboratories." />
+<link rel="shortcut icon" type="image/png" href="/img/logo/logo-green.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    /* Joint Max accent — the vermilion off the carton and the banner.
+       --honey is the pack red (#E04526 sits between the banner's #E3452B and
+       the box's #EE4823). It only reaches 4.16:1 on white, so anything set as
+       small text uses --honey-deep, which clears 4.5:1 on white AND on the
+       --honey-soft chip. --honey-soft is the banner's own peach ground. */
+    --honey:#E04526;
+    --honey-2:#C53E23;
+    --honey-deep:#C53E23;
+    --honey-soft:#FDEDE6;
+    --charcoal:#282828;
+    --charcoal-2:#3A3A3A;
+    --ink:#282828;
+    --ink-soft:#3A3A3A;
+    --white:#FFFFFF;
+    --surface:#F7F7F8;
+    --surface-2:#FBFBFC;
+    --line:#E5E5E7;
+    --line-soft:#F0F0F2;
+    --muted:#6B6B6B;
+    --muted-2:#8A8A8A;
+    --green:#1E9E5C;
+    --shadow-sm:0 2px 6px rgba(40,40,40,.06);
+    --shadow-md:0 8px 24px rgba(40,40,40,.08);
+  }
+  html{scroll-behavior:smooth;overflow-x:clip}
+  body{
+    font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:#fff;
+    line-height:1.55;
+    font-size:15px;
+    overflow-x:clip;
+    padding-bottom:88px;
+  }
+  @media(max-width:720px){body{padding-bottom:84px}}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:0;background:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  /* ---------- Marquee ---------- */
+  .marquee{background:var(--charcoal);color:#fff;padding:10px 0;overflow:hidden;border-bottom:1px solid var(--line)}
+  .marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 36s linear infinite;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+  .marquee-item{display:inline-flex;align-items:center;gap:8px}
+  .marquee-item svg{width:14px;height:14px;color:var(--honey)}
+  .marquee-item .accent{color:var(--honey)}
+  @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+  /* ---------- Trust microbar ---------- */
+  .microbar{background:var(--surface);border-bottom:1px solid var(--line);padding:8px 0;font-size:12px;color:var(--ink-soft);font-weight:500}
+  .microbar-inner{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+  .microbar-item{display:inline-flex;align-items:center;gap:6px}
+  .microbar-item svg{width:14px;height:14px;color:var(--honey)}
+
+  /* ---------- Hero ---------- */
+  .product-hero{
+    background:#fff;
+    padding:48px 0 64px;
+    position:relative;
+    /* Deliberately NOT overflow:hidden — that turns this element into the
+       sticky scroll container and silently kills `position:sticky` on the
+       gallery. Horizontal bleed is already clipped by overflow-x:clip on
+       html/body, so nothing is lost. */
+    overflow:visible;
+  }
+  .product-hero-grid{
+    display:grid;grid-template-columns:1.55fr 1fr;gap:30px;
+    /* Was 1.15fr/36px, sized when the gallery was 4:5. A square frame is
+       20% shorter at the same width, which left the carousel looking small
+       beside the much taller buy panel. Widening the column grows the image
+       itself rather than padding it: the frame and the artwork are both 1:1,
+       so nothing is letterboxed. The panel keeps ~435px, comfortably above
+       the ~400px its 3-up pack selector needs. */
+    /* No align-items:start. The gallery column must STRETCH to the info
+       panel's height, otherwise the sticky rail inside it has no travel room
+       and the image just parks at the top with dead space beneath it. */
+    position:relative;
+  }
+  @media(max-width:880px){.product-hero-grid{grid-template-columns:1fr;gap:28px}}
+
+  /* Gallery — vertical thumb rail flush against the main image.
+     .gallery-col is the stretched grid item; .gallery is the sticky child, so
+     the image tracks the taller info panel on scroll instead of leaving a
+     blank white column on the left. */
+  .gallery-col{min-width:0}
+  .gallery{
+    position:sticky;top:96px;padding-top:8px;display:flex;gap:12px;min-width:0;
+    /* stretch (not flex-start): the flex line's height is set by the main
+       image, and the rail then stretches to exactly that — which is what
+       makes the thumbs line up top AND bottom with the big image. */
+    align-items:stretch;
+  }
+  /* Fixed 1:1. Every Joint Max slide is exported square (1254x1254), so the
+     artwork meets all four edges of the frame with nothing left over. This
+     was 4:5, inherited from the page it was copied from — which letterboxed
+     square art and then hid the gap behind a blurred copy of the slide. */
+  .gallery-main{
+    flex:1;min-width:0;align-self:flex-start;aspect-ratio:1/1;background:#fff;
+    border-radius:20px;border:1px solid var(--line);
+    display:grid;place-items:center;overflow:hidden;position:relative;
+  }
+  /* Absolutely positioned, NOT width/height:100% in the grid flow. Under
+     place-items:center the percentage height does not resolve, so the img
+     falls back to its intrinsic ratio. inset:0 gives object-fit a definite
+     box. cover, not contain: frame and artwork are both 1:1, so cover fills
+     it exactly and crops nothing — and there is no margin left for a blurred
+     backdrop to fill, which is why that element is gone. Export slides
+     square; an off-ratio file would now be cropped rather than letterboxed. */
+  .gallery-main img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center}
+  /* grid-auto-rows:1fr splits whatever height the rail is handed into equal
+     rows, so N thumbs always span exactly the main image — no leftover gap
+     under the last thumb, at any column width and any thumb count. */
+  /* Rail width is SOLVED from the slide count, not hard-coded: the rail spans
+     the main image's height split N ways, so any fixed width only yields 4:5
+     cells at one particular N. At 8 slides 60px was right; at 5 the same width
+     gives tall narrow cells that letterbox the artwork.
+       main_h = 1.0 * (C - w - 12)       rail height == main image height
+       cell_h = (main_h - (N-1)*8) / N   split N ways, 8px gaps
+       want  w = 1.0 * cell_h            cell matches the square artwork
+     solving:  w = (C - 12 - 8*(N-1)) / (N + 1)
+     --n comes from _slides.length, so changing the list re-solves it. */
+  .gallery-thumbs{
+    order:-1;
+    flex:0 0 calc((100% - 12px - 8px * (var(--n, 8) - 1)) / (var(--n, 8) + 1));
+    display:grid;grid-auto-rows:1fr;gap:8px;
+  }
+  .gallery-thumb{position:relative;width:100%;height:100%;min-height:0;background:#fff;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;padding:0;transition:border-color .2s,transform .2s}
+  .gallery-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+  /* Below 880px the rail can't sit beside the image — stack it under, scrolling. */
+  @media(max-width:880px){
+    .gallery{position:static;flex-direction:column;gap:10px}
+    .gallery-main{flex:none;width:100%;max-height:none;aspect-ratio:1/1;padding:0}
+    .gallery-thumbs{order:1;flex:none;display:flex;flex-direction:row;width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none}
+    .gallery-thumbs::-webkit-scrollbar{display:none}
+    .gallery-thumb{flex:0 0 58px;height:auto;aspect-ratio:1/1;min-height:0}
+  }
+  .gallery-thumb:hover{border-color:var(--honey);transform:translateY(-1px)}
+  .gallery-thumb.is-active{border-color:var(--honey);box-shadow:0 0 0 3px var(--honey-soft) inset}
+  .float-badge{
+    position:absolute;background:#fff;
+    border-radius:16px;padding:10px 16px;font-size:12.5px;font-weight:700;
+    box-shadow:0 8px 24px rgba(40,40,40,.10),0 2px 6px rgba(40,40,40,.06);
+    border:1px solid var(--line);
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .float-1{top:18px;left:18px}
+  .float-2{bottom:18px;right:18px}
+  .float-1-icon{
+    color:var(--honey);font-size:14px;line-height:1;
+  }
+  .pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--honey)}
+
+  /* ============================================================
+     PRODUCT INFO PANEL
+     Reworked to the client reference (arthbyemcure "Snooze Away"):
+     an accent-filled card carrying oversized product name -> actives
+     line -> 2x2 benefit cards -> pack pills -> price with % off -> CTA.
+     Panel is plain white with a hairline ring; the rose accent survives
+     only in the type (+ glyph, kicker) and the selected pack pill.
+     ============================================================ */
+  .info{padding-top:8px}
+  .pi-panel{
+    position:relative;overflow:hidden;
+    background:#fff;
+    border-radius:26px;padding:28px 28px 24px;color:var(--ink);
+    /* inset ring instead of a border — same definition, zero added width */
+    box-shadow:inset 0 0 0 1px var(--line),0 10px 30px rgba(40,40,40,.05);
+  }
+  .pi-panel > *{position:relative;z-index:1}
+
+  .pi-kicker{display:block;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--honey-deep);margin-bottom:12px}
+  .pi-title{
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size:clamp(27px,3.0vw,38px);font-weight:900;line-height:1.0;letter-spacing:-0.025em;
+    text-transform:uppercase;color:var(--ink);margin-bottom:6px;text-wrap:balance;
+  }
+  .pi-title em{font-style:normal;font-weight:900;color:var(--honey);font-size:.82em;vertical-align:.04em}
+  .pi-subtitle{
+    font-size:clamp(19px,2.1vw,26px);font-weight:500;line-height:1.12;letter-spacing:.005em;
+    text-transform:uppercase;color:var(--ink-soft);margin-bottom:13px;
+  }
+  .pi-actives{font-size:15px;font-weight:700;font-style:italic;line-height:1.5;color:var(--ink);margin-bottom:14px}
+  .pi-actives i{font-style:normal;font-weight:400;color:#CBCBCB;margin:0 3px}
+
+  .pi-proof{display:flex;align-items:center;gap:8px;margin-bottom:18px;line-height:1}
+  /* Stands where the star rating sits on the other products. Quiet on purpose
+     — it marks the product as new, it does not pretend to be social proof. */
+  .pi-launch{
+    display:inline-block;margin-bottom:18px;font-size:12px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--honey-deep);
+    background:var(--honey-soft);padding:6px 13px;border-radius:999px;
+  }
+  .pi-proof__stars{color:#F5A623;font-size:15px;letter-spacing:2px}
+  .pi-proof__score{font-weight:800;color:var(--ink);font-size:14px}
+  .pi-proof__sep{color:#CBCBCB}
+  .pi-proof__count{font-size:13.5px;color:var(--muted);text-decoration:none}
+  .pi-proof__count:hover{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+
+  /* ---- 2x2 benefit cards ---- */
+  .pi-bene{list-style:none;margin:0 0 16px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .pi-bene li{
+    display:flex;align-items:center;gap:12px;background:#FBFBFC;border-radius:14px;
+    padding:12px 14px;box-shadow:inset 0 0 0 1px var(--line);
+  }
+  .pi-bene__ic{
+    flex:0 0 44px;width:44px;height:44px;border-radius:50%;
+    border:1.6px solid var(--honey-deep);color:var(--honey-deep);
+    display:grid;place-items:center;
+  }
+  .pi-bene__ic svg{width:22px;height:22px}
+  .pi-bene__t{font-size:13.5px;font-weight:700;line-height:1.28;color:var(--ink);letter-spacing:-0.01em}
+
+  /* ---- Trust chips — one slim translucent row ---- */
+  .pi-trust{list-style:none;margin:0 0 18px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .pi-trust li{
+    display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+    background:#FBFBFC;border:1px solid var(--line);
+    border-radius:999px;padding:6px 12px;font-size:11.5px;font-weight:700;
+    letter-spacing:.01em;color:#3F3F3F;
+  }
+  .pi-trust li svg{width:13px;height:13px;flex:0 0 13px;color:#23867F}
+
+  /* ---- Plan cards ----
+     Three equal cards, each self-contained: radio, duration, pack count,
+     its own price and its own saving. Because every price is on the card
+     there is no separate price row to keep in sync — what you see selected
+     is what the cart charges. */
+  .pi-packs{margin:0 0 18px}
+  .pi-packs__label{display:block;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);margin-bottom:14px}
+  .pi-plans{border:0;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .pi-plan{
+    position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;
+    border:1.5px solid var(--line);border-radius:14px;background:#fff;padding:17px 8px 15px;text-align:center;
+    transition:border-color .18s ease,background .18s ease,box-shadow .18s ease;
+  }
+  .pi-plan input{position:absolute;opacity:0;pointer-events:none}
+  .pi-plan:hover{border-color:#C7CCCB}
+  .pi-plan.is-selected{border-color:#23867F;background:#F4FBFA;box-shadow:0 4px 14px rgba(35,134,127,.10)}
+  .pi-plan__dot{width:22px;height:22px;border-radius:50%;border:2px solid #CBD2D1;position:relative;margin-bottom:3px;transition:border-color .18s ease}
+  .pi-plan.is-selected .pi-plan__dot{border-color:#23867F}
+  .pi-plan.is-selected .pi-plan__dot::after{content:'';position:absolute;inset:3px;border-radius:50%;background:#23867F}
+  .pi-plan__days{font-size:15px;font-weight:800;letter-spacing:.01em;text-transform:uppercase;color:var(--ink);line-height:1.1}
+  .pi-plan__packs{font-size:12.5px;color:var(--muted-2);line-height:1.2}
+  .pi-plan__price{font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;color:var(--ink);line-height:1.15;margin-top:3px}
+  .pi-plan__save{margin-top:2px;font-size:11px;font-weight:800;color:#fff;background:#23867F;padding:4px 10px;border-radius:7px;white-space:nowrap;line-height:1.25}
+  /* Ribbon straddles the card's top edge, so it reads as attached to it */
+  .pi-plan__flag{
+    position:absolute;top:0;left:50%;transform:translate(-50%,-50%);
+    font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+    background:#23867F;color:#fff;padding:4px 10px;border-radius:999px;white-space:nowrap;
+  }
+  .pi-plan input:focus-visible ~ .pi-plan__days{outline:2px solid var(--ink);outline-offset:3px;border-radius:3px}
+  .pi-planinfo{display:flex;align-items:center;gap:7px;margin:12px 0 0;font-size:12.5px;color:var(--muted-2);line-height:1.4}
+  .pi-planinfo svg{width:14px;height:14px;flex:0 0 14px}
+
+  /* ---- Urgency strip ---- */
+  .pi-urgency{margin:0 0 20px;display:flex;align-items:center;gap:11px;border:1px solid #F1DAD6;border-radius:12px;padding:10px 14px;background:#FFF7F5}
+  .pi-urgency__ic{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:#FBE3DE;color:#D9463A;display:grid;place-items:center}
+  .pi-urgency__ic svg{width:16px;height:16px;transform-origin:50% 80%;animation:piFlicker 1.7s ease-in-out infinite}
+  @keyframes piFlicker{0%,100%{transform:scale(1) rotate(-1deg);opacity:1}50%{transform:scale(1.13) rotate(1deg);opacity:.9}}
+  .pi-urgency__txt{margin:0;font-size:12.8px;color:var(--muted);line-height:1.4}
+  .pi-urgency__txt strong{color:#D9463A;font-weight:800}
+  .pi-urgency__txt b{color:var(--ink);font-weight:800}
+
+  /* ---- CTAs ---- */
+  .pi-buy-row{display:flex;gap:10px;margin:0 0 16px}
+  .pi-add-secondary,.pi-add{
+    flex:1;height:54px;border-radius:999px;border:0;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:14.5px;letter-spacing:.06em;text-transform:uppercase;
+    transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+  }
+  .pi-add-secondary{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+  .pi-add-secondary:hover{background:var(--ink);color:#fff;transform:translateY(-1px);box-shadow:inset 0 0 0 1.5px var(--ink),0 10px 22px rgba(40,40,40,.18)}
+  .pi-add{background:var(--ink);color:#fff}
+  .pi-add:hover{background:var(--charcoal-2);transform:translateY(-1px);box-shadow:0 10px 22px rgba(40,40,40,.22)}
+
+  .pi-stocknote{margin:10px 0 0;font-size:13px;font-weight:600;color:#C2410C}
+  .pi-stocknote--muted{color:#6A6F75;font-weight:500}
+
+  .pi-footnote{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line-soft,#EFEFEF);font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#8A8A8A;line-height:1.7}
+
+  /* Narrow desktop / tablet — cards go single-column before the grid stacks */
+  @media(max-width:1040px) and (min-width:881px){
+    .pi-panel{padding:26px 22px 24px}
+    .pi-bene{grid-template-columns:1fr}
+    .pi-bene__t{font-size:14px}
+  }
+
+  /* ---------- Section ---------- */
+  section.s{padding:72px 0;font-size:17px;position:relative}
+  @media(max-width:680px){section.s{padding:56px 0}}
+  .s-eyebrow{
+    display:inline-flex;align-items:center;
+    background:var(--honey-soft);
+    color:var(--honey-deep);font-size:12px;font-weight:800;
+    padding:8px 16px;border-radius:22px;letter-spacing:.10em;text-transform:uppercase;margin-bottom:16px;
+  }
+  .s-title{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:48px;font-weight:700;line-height:1.05;letter-spacing:-0.025em;margin-bottom:16px;max-width:760px;color:var(--charcoal);position:relative;text-wrap:balance}
+  .s-title em{font-style:italic;color:var(--honey);font-weight:500}
+  @media(max-width:680px){.s-title{font-size:36px}}
+  .s-sub{font-size:17px;color:var(--ink-soft);max-width:640px;line-height:1.6}
+  .s-head{margin-bottom:40px;position:relative}
+  .s-head.center{text-align:center}
+  .s-head.center .s-title,.s-head.center .s-sub{margin-left:auto;margin-right:auto}
+
+  /* ---------- Premium icon chip (shared) ---------- */
+  .ic-chip{
+    width:64px;height:64px;border-radius:18px;
+    background:#F7F7F8;
+    color:var(--ink);
+    display:grid;place-items:center;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .ic-chip svg{width:30px;height:30px;stroke-width:2.2}
+
+  /* ---------- Symptom cards ---------- */
+  .symptoms-bg{background:#fff}
+  /* Photo figures (other 4 sections) keep the soft rounded-card framing */
+  .symptoms-figure,
+  .actives-figure,
+  .bvitamins-figure,
+  .trail-figure{margin:0;border-radius:18px;overflow:hidden;background:#fff}
+  .bvitamins-figure{margin:0 0 32px}
+  .symptoms-figure picture,
+  .actives-figure picture,
+  .trail-figure picture{display:block}
+  .symptoms-figure img,
+  .actives-figure img,
+  .bvitamins-figure img,
+  .trail-figure img{display:block;width:100%;height:auto}
+  /* Switch + Root figures sit FLUSH with their section bg — no card frame,
+     image edges dissolve directly into the section. */
+  .switch-figure,
+  .root-figure{margin:0;border-radius:0;overflow:visible;background:transparent}
+  .switch-figure picture{display:block}
+  .switch-figure img,
+  .root-figure img{display:block;width:100%;height:auto}
+  /* MOBILE: break image out of .wrap's horizontal padding so it spans full
+     viewport width — "zoomed in" so text inside the illustration is bigger
+     and more legible on phones. */
+  @media (max-width: 720px){
+    .switch-figure,
+    .root-figure{
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+    }
+  }
+  .symptoms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
+  @media(max-width:880px){.symptoms-grid{grid-template-columns:repeat(2,1fr)}}
+  .symptom-card{
+    background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;
+    transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s,border-color .3s;
+  }
+  .symptom-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px -16px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
+  .symptom-card:hover .ic{transform:scale(1.04)}
+  .symptom-card .ic{
+    width:64px;height:64px;border-radius:18px;
+    background:#F7F7F8;
+    color:var(--ink);display:grid;place-items:center;margin-bottom:18px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .symptom-card .ic svg{width:30px;height:30px;stroke-width:2.2}
+  .symptom-card h4{font-family:'Helvetica Neue',Arial,sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;color:var(--ink)}
+  .symptom-card p{font-size:14px;color:var(--muted);line-height:1.5}
+
+  /* ---------- Power team ---------- */
+  .power-bg{background:var(--surface)}
+  .power-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;align-items:stretch}
+  @media(max-width:880px){.power-grid{grid-template-columns:1fr}}
+  .power-card{
+    background:#fff;border:1px solid var(--line);border-radius:24px;padding:34px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s;
+  }
+  .power-card:hover{transform:translateY(-4px);box-shadow:0 20px 44px -20px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
+  .power-card .pc-eye{
+    display:inline-flex;align-items:center;
+    background:var(--honey-soft);
+    color:var(--honey-deep);font-size:11px;font-weight:800;padding:6px 12px;border-radius:16px;
+    letter-spacing:.10em;text-transform:uppercase;margin-bottom:14px;
+  }
+  .power-card h3{font-family:'Helvetica Neue',Arial,sans-serif;font-size:26px;margin-bottom:8px;letter-spacing:-0.015em}
+  .power-card .pc-lede{font-size:14.5px;color:var(--muted);margin-bottom:18px;line-height:1.55}
+  .power-card ul{list-style:none;display:grid;gap:10px}
+  .power-card li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft)}
+  .power-card li svg{
+    width:22px;height:22px;color:var(--honey);
+    flex-shrink:0;
+  }
+  .power-card .pc-tag{margin-top:18px;font-size:12.5px;color:var(--muted);font-style:italic;padding-top:14px;border-top:1px solid var(--line-soft)}
+
+  /* ---------- B Vitamins ---------- */
+  .bvit-bg{background:#fff}
+  .bvit-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:18px}
+  @media(max-width:980px){.bvit-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:520px){.bvit-grid{grid-template-columns:repeat(2,1fr)}}
+  .bvit-pill{
+    background:var(--honey-soft);
+    border-radius:18px;padding:20px 12px;text-align:center;
+    transition:transform .3s,box-shadow .3s;
+  }
+  .bvit-pill:hover{transform:translateY(-3px);box-shadow:0 12px 28px -14px rgba(40,40,40,.12)}
+  .bvit-pill .name{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:18px;color:var(--honey-deep);letter-spacing:.02em}
+  .bvit-pill .sub{font-size:11.5px;color:var(--honey-deep);opacity:.75;margin-top:4px;font-weight:600}
+  .bvit-help{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:36px;align-items:stretch}
+  @media(max-width:880px){.bvit-help{grid-template-columns:repeat(2,1fr)}}
+  .bvit-help-card{
+    background:#fff;border:1px solid var(--line);
+    border-radius:20px;padding:24px;
+    transition:transform .3s,box-shadow .3s,border-color .3s;
+  }
+  .bvit-help-card:hover{transform:translateY(-3px);border-color:var(--line);box-shadow:0 16px 32px -16px rgba(40,40,40,.12)}
+  .bvit-help-card:hover .ic{transform:scale(1.04)}
+  .bvit-help-card .ic{
+    width:64px;height:64px;border-radius:18px;
+    background:#F7F7F8;
+    color:var(--ink);display:grid;place-items:center;margin-bottom:14px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .bvit-help-card .ic svg{width:30px;height:30px;stroke-width:2.2}
+  .bvit-help-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;margin-bottom:6px;color:var(--ink);font-weight:700}
+  .bvit-help-card p{font-size:13px;color:var(--muted);line-height:1.55}
+
+  /* ---------- Minerals ---------- */
+  .min-bg{background:var(--surface)}
+  .min-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:stretch}
+  @media(max-width:880px){.min-grid{grid-template-columns:repeat(2,1fr)}}
+  .min-card{
+    background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;
+    transition:transform .3s,box-shadow .3s,border-color .3s;
+  }
+  .min-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px -16px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
+  .min-card:hover .ic{transform:scale(1.04)}
+  .min-card .ic{
+    width:64px;height:64px;border-radius:18px;
+    background:#F7F7F8;
+    color:var(--ink);display:grid;place-items:center;
+    font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:22px;letter-spacing:-.01em;
+    margin-bottom:14px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .min-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:17px;margin-bottom:6px;color:var(--ink);font-weight:700}
+  .min-card p{font-size:13.5px;color:var(--muted);line-height:1.5}
+
+  /* ---------- 9 actives formula ---------- */
+  .formula-bg{background:#fff}
+  .formula-list{
+    margin-top:14px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff;
+  }
+  .formula-row{display:grid;grid-template-columns:1.5fr 1fr 2fr;align-items:center;padding:18px 22px;border-top:1px solid var(--line-soft);transition:background .25s}
+  .formula-row:not(:first-child):hover{background:rgba(0,0,0,0.02)}
+  .formula-row:first-child{border-top:0;background:var(--surface);font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.10em;color:var(--ink)}
+  .fc-name{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;color:var(--ink);font-size:14.5px}
+  .fc-name small{display:block;font-size:11.5px;color:var(--muted);font-weight:500;margin-top:2px}
+  .fc-amt{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;color:var(--honey-deep);font-size:14px}
+  .fc-role{font-size:13.5px;color:var(--muted);line-height:1.5}
+  @media(max-width:680px){.formula-row{grid-template-columns:1fr}.fc-amt{font-size:13px}.formula-row:first-child{display:none}}
+
+  /* ---------- Timeline ---------- */
+  .timeline-bg{background:var(--surface)}
+  .timeline-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:16px;align-items:stretch}
+  @media(max-width:880px){.timeline-grid{grid-template-columns:1fr}}
+  .tl-card{
+    background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px;position:relative;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s;
+  }
+  .tl-card:hover{transform:translateY(-5px);box-shadow:0 20px 44px -20px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
+  .tl-step{
+    position:absolute;top:20px;right:20px;
+    background:var(--honey-soft);
+    color:var(--honey-deep);font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:11px;
+    padding:6px 12px;border-radius:14px;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .tl-card h4{font-family:'Helvetica Neue',Arial,sans-serif;font-size:22px;color:var(--ink);margin:22px 0 14px;max-width:80%;letter-spacing:-0.015em}
+  .tl-card ul{list-style:none;display:grid;gap:10px}
+  .tl-card li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft)}
+  .tl-card li svg{
+    width:22px;height:22px;color:var(--honey);
+    flex-shrink:0;
+  }
+  .tl-stat{
+    margin-top:36px;
+    background:var(--charcoal);
+    color:#fff;border-radius:20px;padding:26px 32px;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  }
+  .tl-stat strong{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.02em}
+  .tl-stat .ref{font-size:11.5px;opacity:.85;font-style:italic}
+
+  /* ---------- Compare ---------- */
+  /* Reader voices section — text break between two photo-heavy bands.
+     Subtle off-white bg differs from #fff sections above/below so the
+     palette cleanser reads as a distinct moment. */
+  .voices-bg{background:#FAFAF8;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+  .voices-head{text-align:center;margin-bottom:32px}
+  .voices-head .rv-marker{margin-bottom:12px}
+  .voices-title{
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size:clamp(26px,3.6vw,40px);
+    font-weight:700;
+    line-height:1.1;
+    letter-spacing:-0.022em;
+    color:var(--ink);
+    max-width:600px;
+    margin:0 auto;
+  }
+  .voices-title em{font-style:normal;color:var(--honey-deep);font-weight:700}
+  .voices-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    max-width:1080px;
+    margin:0 auto;
+  }
+  .voice-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:30px 24px 22px;
+    position:relative;
+    transition:border-color .2s,transform .25s,box-shadow .25s;
+  }
+  .voice-card:hover{
+    border-color:rgba(40,40,40,.18);
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px -16px rgba(40,40,40,.16);
+  }
+  .voice-card__mark{
+    font-family:'Helvetica Neue',Georgia,serif;
+    font-size:48px;
+    line-height:0.4;
+    color:var(--honey);
+    opacity:.55;
+    position:absolute;
+    top:24px;left:22px;
+    font-weight:300;
+  }
+  .voice-card__quote{
+    font-size:15.5px;
+    line-height:1.55;
+    color:var(--ink);
+    margin:28px 0 18px;
+    font-weight:400;
+    letter-spacing:-0.005em;
+    text-wrap:pretty;
+  }
+  .voice-card__attr{
+    display:flex;flex-direction:column;gap:3px;
+    border-top:1px solid var(--line-soft);
+    padding-top:14px;
+  }
+  .voice-card__name{
+    font-size:12.5px;font-weight:700;color:var(--ink);
+    letter-spacing:.06em;text-transform:uppercase;
+  }
+  .voice-card__meta{font-size:12px;color:var(--muted)}
+  .voice-card__stars{
+    color:var(--honey);font-size:11.5px;letter-spacing:.2em;margin-top:4px;
+  }
+  @media (max-width:880px){.voices-grid{grid-template-columns:1fr;gap:14px;max-width:560px}}
+  .compare-table{margin-top:14px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+  .compare-row{display:grid;grid-template-columns:1.2fr 1fr 1fr}
+  .compare-row + .compare-row{border-top:1px solid var(--line-soft)}
+  .compare-row.head{background:var(--surface);font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink)}
+  .compare-row.head .cc{padding:14px 18px}
+  .compare-row.head .cc:first-child{visibility:hidden}
+  .compare-row.head .cc:nth-child(2){color:var(--honey-deep);background:var(--honey-soft)}
+  .cc{padding:14px 18px;font-size:14px;line-height:1.45}
+  .cc.lbl{font-weight:700;color:var(--ink)}
+  .cc.them{color:var(--muted)}
+  .cc.us{background:var(--honey-soft);color:var(--ink);font-weight:600}
+  @media(max-width:680px){
+    .compare-row{grid-template-columns:1fr 1fr}
+    .compare-row.head .cc:first-child{display:none}
+    .cc.lbl{grid-column:1/-1;background:var(--line-soft);font-size:13px}
+  }
+
+  /* ---------- Root cards ---------- */
+  /* Root section: white bg + collapsed top padding so image sits flush
+     at the section bracket — same treatment as .why-bg / switch section. */
+  .root-bg{background:#fff;padding-top:0 !important}
+  .root-bg .wrap{padding-top:0}
+  .root-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px;align-items:stretch}
+  @media(max-width:980px){.root-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:580px){.root-grid{grid-template-columns:1fr}}
+  .root-card{
+    background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s;
+  }
+  .root-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -18px rgba(40,40,40,.12),0 2px 8px rgba(40,40,40,.06);border-color:var(--line)}
+  .root-card .rc-eye{
+    display:inline-flex;align-items:center;
+    font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:11px;
+    color:var(--honey-deep);letter-spacing:.10em;text-transform:uppercase;margin-bottom:12px;
+    padding:5px 10px;background:var(--honey-soft);
+    border-radius:14px;
+  }
+  .root-card h5{font-family:'Helvetica Neue',Arial,sans-serif;font-size:17px;color:var(--ink);margin-bottom:8px;font-weight:700;letter-spacing:-0.01em}
+  .root-card p{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px}
+  .root-card .solve{
+    display:flex;gap:10px;align-items:center;
+    background:var(--honey-soft);
+    color:var(--honey-deep);padding:12px 14px;border-radius:14px;
+    font-size:13px;font-weight:700;line-height:1.4;
+  }
+  .root-card .solve svg{
+    width:20px;height:20px;flex-shrink:0;color:var(--honey);stroke-width:2.4;
+  }
+
+  /* ---------- Reminder + final CTA ---------- */
+  .reminder{background:var(--charcoal);color:#fff;padding:64px 0}
+  .reminder .wrap{text-align:center}
+  .reminder .eye{display:inline-block;background:rgba(255,255,255,.08);color:#fff;font-size:11px;font-weight:800;padding:6px 14px;border-radius:20px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
+  .reminder h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:42px;font-weight:700;line-height:1.15;color:#fff;max-width:22ch;margin:0 auto 16px;letter-spacing:-0.02em}
+  .reminder h2 em{font-style:italic;color:var(--honey);font-weight:500}
+  .reminder p{font-size:16px;color:#bbb;max-width:560px;margin:0 auto 24px}
+  .reminder .rem-row{display:inline-flex;flex-wrap:wrap;gap:8px;margin-top:8px;justify-content:center}
+  .reminder .rem-chip{background:rgba(255,255,255,.07);color:#fff;font-size:12px;font-weight:600;padding:7px 14px;border-radius:20px}
+  @media(max-width:680px){.reminder h2{font-size:32px}}
+
+  .final{background:var(--honey-soft);padding:80px 0;text-align:center;position:relative}
+  .final h2{font-family:'Helvetica Neue',Arial,sans-serif;font-size:44px;font-weight:700;line-height:1.15;max-width:22ch;margin:0 auto 14px}
+  .final h2 em{font-style:italic;color:var(--honey);font-weight:500}
+  @media(max-width:680px){.final h2{font-size:32px}}
+  .final p{font-size:16px;color:var(--muted);max-width:540px;margin:0 auto 24px}
+  .final-cta{display:inline-flex;align-items:center;gap:10px;background:var(--charcoal);color:#fff;padding:16px 32px;border-radius:14px;font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;transition:transform .2s,background .2s}
+  .final-cta:hover{transform:translateY(-2px);background:var(--charcoal-2)}
+  /* FAQ accordion */
+  .faq-sec{background:#fff}
+  .fq-list{display:grid;gap:12px;max-width:none;margin:0}
+  .fq-item{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+  .fq-item:hover{border-color:var(--honey)}
+  .fq-item[open]{box-shadow:0 8px 24px rgba(40,40,40,.06)}
+  .fq-q{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:16px;color:var(--ink);list-style:none;gap:14px}
+  .fq-q::-webkit-details-marker{display:none}
+  .fq-q .plus{width:28px;height:28px;border-radius:50%;background:var(--honey-soft);color:var(--honey-deep);display:grid;place-items:center;font-size:18px;font-weight:700;flex-shrink:0;transition:transform .3s,background .2s,color .2s}
+  .fq-item[open] .fq-q .plus{transform:rotate(45deg);background:var(--honey);color:#fff}
+  .fq-a{padding:0 22px 22px;color:var(--ink-soft);line-height:1.65;font-size:14.5px;max-width:92ch}
+  /* <details> cannot animate its own height, so the reveal is carried by
+     the panel's own fade-in rather than a height transition. */
+  .fq-item[open] .fq-a{animation:fqReveal .26s ease both}
+  @keyframes fqReveal{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.fq-item[open] .fq-a{animation:none}}
+  .fq-a strong{color:var(--ink)}
+  @media(max-width:640px){.fq-q{font-size:15px;padding:16px 18px}.fq-a{padding:0 18px 18px}}
+
+  /* ---------- Sticky offer ---------- */
+  /* style.css hides .sticky-cta on desktop for every product page. Override
+     it here only — editing the shared rule would switch the bar on for
+     Ginger+ and EnergyOne+ too, which have no plan cards to put in it.
+     !important is needed to beat the global rule's own !important. */
+  .sticky-cta{
+    position:fixed;bottom:0;left:0;right:0;background:#fff;
+    border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(40,40,40,.08);
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:40;
+    display:block !important;
+    /* hidden until the hero CTA scrolls away; visibility keeps it out of the
+       tab order while parked so it can't be focused off-screen */
+    transform:translateY(115%);opacity:0;visibility:hidden;
+    transition:transform .32s cubic-bezier(.2,.7,.3,1),opacity .32s ease,visibility 0s linear .32s;
+  }
+  .sticky-cta.is-visible{transform:none;opacity:1;visibility:visible;transition-delay:0s,0s,0s}
+  .sticky-inner{max-width:none;margin:0;padding:0;display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .sticky-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:560px;margin:0 auto}
+
+  /* Compact plan chips — desktop only; the mobile bar has no room for them. */
+  .sb-plans{display:flex;gap:10px;border:0;padding:0;margin:0;min-width:0}
+  .sb-plan{
+    position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;
+    border:1.5px solid var(--line);border-radius:12px;padding:8px 15px;cursor:pointer;
+    background:#fff;line-height:1.25;white-space:nowrap;
+    transition:border-color .16s ease,background .16s ease;
+  }
+  .sb-plan:hover{border-color:#C7CCCB}
+  .sb-plan input{position:absolute;opacity:0;pointer-events:none}
+  .sb-plan.is-selected{border-color:#23867F;background:#F4FBFA}
+  .sb-plan__d{font-size:11.5px;font-weight:700;color:var(--ink)}
+  .sb-plan__p{font-size:14px;font-weight:800;letter-spacing:-0.01em;color:var(--ink)}
+  .sb-plan__p s{font-size:11.5px;font-weight:400;color:var(--muted-2);margin-left:4px}
+  .sb-plan__s{font-size:10.5px;font-weight:800;color:#23867F}
+  .sb-plan input:focus-visible ~ .sb-plan__d{outline:2px solid var(--ink);outline-offset:3px;border-radius:3px}
+  .sticky-bar__btn{height:48px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;font-weight:700;font-size:13.5px;letter-spacing:.04em;text-transform:uppercase;font-family:inherit;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+  .sticky-bar__cart{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
+  .sticky-bar__cart:active{background:var(--ink);color:#fff}
+  .sticky-bar__buy{background:var(--charcoal);color:#fff;border:1.5px solid var(--charcoal)}
+  .sticky-bar__buy:active{background:#000}
+  .sticky-cta-inner{display:flex;align-items:center;gap:14px;justify-content:space-between}
+  .sticky-text{display:flex;flex-direction:column;line-height:1.2}
+  .sticky-eye{font-size:10px;font-weight:800;color:var(--honey-deep);letter-spacing:.10em;text-transform:uppercase;margin-bottom:2px}
+  .sticky-h{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:14px;color:var(--ink)}
+  .sticky-h em{color:var(--honey);font-style:normal;font-weight:800}
+  .sticky-price{display:flex;align-items:baseline;gap:6px;flex-shrink:0}
+  .sticky-now{font-family:'Helvetica Neue';font-weight:700;font-size:18px;color:var(--ink)}
+  .sticky-mrp{font-size:12px;color:var(--muted);text-decoration:line-through}
+  .sticky-btn{background:var(--charcoal);color:#fff;padding:12px 18px;border-radius:10px;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+  .sticky-btn:hover{background:var(--charcoal-2)}
+  @media(max-width:680px){.sticky-text{display:none}}
+  /* Desktop: chips left, buttons right, buttons sized to their labels. */
+  @media(min-width:721px){
+    .sticky-cta{padding:8px 24px}
+    .sticky-bar{grid-template-columns:auto auto;gap:10px;max-width:none;margin:0}
+    .sticky-bar__btn{height:46px;padding:0 30px;border-radius:11px;font-size:13px}
+    .sb-plan{padding:6px 13px;border-radius:11px}
+    .sb-plan__d{font-size:11px}
+    .sb-plan__p{font-size:13.5px}
+    .sb-plan__s{font-size:10px}
+  }
+  /* Mobile keeps the bar permanently parked on screen as the purchase UI. */
+  @media(max-width:720px){
+    .sticky-cta{transform:none;opacity:1;visibility:visible;transition:none}
+    .sb-plans{display:none}
+    .sticky-inner{padding:0;gap:0}
+    .sticky-bar{flex:1}
+  }
+
+  /* ============================================================
+     MOBILE UX PASS — surgical augmentations only.
+     Targets <=720px viewports (Indian mobile 360–414px primary).
+     ============================================================ */
+  @media (max-width: 720px){
+    /* Horizontal page padding scales smoothly */
+    .wrap{padding:0 clamp(16px,4.5vw,24px)}
+
+    /* Marquee — keep readable */
+    .marquee{padding:8px 0}
+    .marquee-track{gap:32px;font-size:11.5px}
+
+    /* Hero — tighten padding, scale title with clamp */
+    .product-hero{padding:clamp(28px,7vw,44px) 0 clamp(36px,9vw,56px)}
+    .product-hero-grid{gap:24px}
+    .pi-kicker{font-size:10px;letter-spacing:.18em;margin-bottom:8px}
+    .pi-title{font-size:clamp(28px,8vw,36px);line-height:1.04;margin-bottom:12px}
+    .pi-subtitle{font-size:clamp(17px,4.6vw,21px);margin-bottom:10px}
+    .pi-actives{font-size:14px;line-height:1.45;margin-bottom:14px}
+    .pi-plan__price{font-size:20px}
+    .pi-footnote{margin-top:16px;padding-top:13px;font-size:11px}
+
+    /* Gallery thumbs — keep horizontal at 360px, ~64-72px tall */
+    .gallery-thumbs{gap:6px;margin-top:8px}
+    .gallery-thumb{min-height:44px;border-radius:10px;border-width:1.25px}
+
+    /* Buy row — keep touch targets ≥44px; global CTA standard (style.css)
+       handles the 56px heights, equal-width grid, fonts. */
+    .pi-buy-row{gap:8px;margin:0 0 14px}
+
+    /* Section padding scales — tightened for mobile so two sections aren't
+       100+ px apart vertically. Each section gets 28px top/bottom (56px gap
+       between two sections, ~half the previous gap). Heading-to-content
+       margin trimmed from 28 → 18. */
+    section.s{padding:28px 0}
+    .s-title{font-size:clamp(26px,7vw,38px);line-height:1.1;margin-bottom:10px}
+    .s-sub{font-size:15px;line-height:1.55}
+    .s-head{margin-bottom:18px}
+    .pi-feature{padding:36px 0}
+    .reminder{padding:32px 0}
+
+    /* Symptom + min cards — single column on small phones for readability */
+    .power-card{padding:24px}
+    .symptom-card{padding:22px 20px}
+    .symptom-card h4{font-size:16px}
+    .min-card{padding:22px 20px}
+    .root-card{padding:22px 20px}
+    .tl-card{padding:24px 22px}
+    .tl-card h4{font-size:20px;max-width:100%;margin:18px 0 12px}
+    .tl-step{top:14px;right:14px;font-size:10.5px}
+    .tl-stat{padding:20px 22px;flex-direction:column;align-items:flex-start;text-align:left}
+    .tl-stat strong{font-size:20px;line-height:1.25}
+
+    /* Compare table — bigger touch label rows */
+    .cc{padding:12px 14px;font-size:13.5px}
+
+    /* B vitamins help cards — keep icon chip large enough to read */
+    .bvit-help-card{padding:20px 18px}
+    .bvit-help-card .ic{width:56px;height:56px;border-radius:14px}
+    .bvit-help-card .ic svg{width:26px;height:26px}
+
+    /* Reminder + final */
+    .reminder{padding:32px 0}
+    .reminder p{font-size:15px}
+    .final{padding:36px 0}
+    .final p{font-size:15px}
+    .final-cta{padding:14px 24px;font-size:13.5px;min-height:50px}
+
+    /* Mobile purchase UI = the sticky bar (Myntra/Nykaa pattern).
+       Hide the in-column CTA row so there's exactly ONE set of buy
+       buttons on phones; price + qty stepper stay in the column. */
+    .pi-buy-form .pi-buy-row{display:none !important}
+
+    /* Tappable nav & links inherited from layout — reinforce here */
+    .site-header .nav__menu a,.site-header .nav__toggle{min-height:44px}
+  }
+
+  /* Extra-narrow phones (~360px) — only tighten where necessary */
+  @media (max-width: 380px){
+    .pi-title{font-size:27px}
+    .pi-plan{padding:13px 4px 12px}
+    .pi-plan__days{font-size:12px}
+    .pi-plan__price{font-size:16px}
+    .pi-plan__save{font-size:9px;padding:3px 6px}
+    .gallery-thumb{border-radius:8px}
+  }
+
+  /* Single-column at 580px for symptom + B vitamins (8 cards is a lot) */
+  @media (max-width: 580px){
+    .symptoms-grid{grid-template-columns:1fr;gap:12px}
+    .bvit-help{grid-template-columns:1fr;gap:12px}
+    .min-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  }
+
+  /* ============================================================
+     Mobile PDP refinements — tighter, proper e-commerce rhythm.
+     Last media block so it wins over the earlier mobile rules.
+     Gallery stays 4:5 (slides are infographics — must not crop).
+     ============================================================ */
+  @media (max-width:720px){
+    .product-hero{padding:16px 0 26px}
+    .product-hero-grid{gap:16px}
+    .gallery{gap:8px}
+    .gallery-thumb{flex:0 0 54px}
+    .info{padding-top:0}
+    .pi-kicker{font-size:10px;letter-spacing:.16em;margin-bottom:6px}
+    .pi-title{font-size:clamp(23px,6.4vw,29px);line-height:1.05;margin-bottom:8px}
+    /* Panel — trim the inset so the cards keep their width on a 360px screen */
+    .pi-panel{border-radius:20px;padding:22px 18px 20px}
+    .pi-actives{font-size:13.5px;margin-bottom:12px}
+    .pi-proof{margin-bottom:14px}
+    .pi-proof__stars{font-size:14px}
+    /* Benefit cards — stay 2-up (they are short labels), just tighter */
+    .pi-bene{gap:9px;margin-bottom:14px}
+    .pi-bene li{padding:10px 11px;gap:10px;border-radius:12px}
+    .pi-bene__ic{flex:0 0 36px;width:36px;height:36px}
+    .pi-bene__ic svg{width:19px;height:19px}
+    .pi-bene__t{font-size:12px;line-height:1.25}
+    /* Trust chips — wrap freely, smaller */
+    .pi-trust{gap:6px;margin-bottom:14px}
+    .pi-trust li{padding:5px 10px;font-size:10.5px}
+    /* Pack pills — three across the row, no min-width fighting the viewport */
+    .pi-packs{margin-bottom:14px}
+    .pi-packs__label{font-size:11px;letter-spacing:.12em;margin-bottom:16px}
+    .pi-plans{gap:7px}
+    .pi-plan{padding:15px 5px 13px;gap:4px;border-radius:12px}
+    .pi-plan__dot{width:19px;height:19px;margin-bottom:2px}
+    .pi-plan__days{font-size:13px}
+    .pi-plan__packs{font-size:11px}
+    .pi-plan__price{font-size:18px}
+    .pi-plan__save{font-size:10px;padding:3px 7px}
+    .pi-plan__flag{font-size:8px;padding:3px 7px;letter-spacing:.06em}
+    .pi-planinfo{font-size:11.5px;margin-top:10px;gap:6px}
+    .pi-planinfo svg{width:13px;height:13px;flex:0 0 13px}
+    .pi-urgency{margin-bottom:16px;padding:10px 13px}
+    .pi-urgency__txt{font-size:12.5px}
+    .pi-footnote{margin-top:14px;padding-top:12px}
+    /* FAQ + final — tighter headings and rows */
+    section.s{padding:30px 0}
+    .s-head{margin-bottom:16px}
+    .s-title{font-size:clamp(24px,6.2vw,30px)}
+    .fq-list{gap:8px}
+    .fq-q{font-size:14.5px;padding:13px 16px;gap:12px}
+    .fq-q .plus{width:24px;height:24px;font-size:16px}
+    .fq-a{font-size:14px;line-height:1.55}
+    .final{padding:30px 0}
+    .final h2{font-size:clamp(24px,6.4vw,30px);margin-bottom:10px}
+    .final p{font-size:14.5px;margin-bottom:20px}
+  }
+</style>
+</head>
+<body>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping on orders over <span class="accent">₹999</span></span>
+    <span class="marquee-item">30-day money-back guarantee</span>
+    <span class="marquee-item">Made in India</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping on orders over <span class="accent">₹999</span></span>
+    <span class="marquee-item">30-day money-back guarantee</span>
+    <span class="marquee-item">Made in India</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 13h13l-1.5 4h-7L4 7H1V5h4l3.6 8h6.4l1.4-4H5z"/></svg> FREE shipping on orders over <span class="accent">₹999</span></span>
+    <span class="marquee-item">30-day money-back guarantee</span>
+    <span class="marquee-item">Made in India</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+    <div class="container">
+        <nav class="nav" id="primaryNav">
+            <a href="/" class="nav__logo"><img src="/img/logo/logo-green.png" alt="Shiōrra"></a>
+            <ul class="nav__menu" id="navMenu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop" class="active">Shop Products</a></li>                <li><a href="/reviews">Reviews</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/faq">FAQ</a></li>
+            </ul>
+            <div class="nav__cta">
+                <a href="#buy" class="btn">Buy now</a>
+                <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+            </div>
+        </nav>
+    </div>
+</header>
+
+
+<style>
+  /* Editorial masthead — borrows the reviews.ejs rv-hero__masthead language */
+  .pi-masthead{background:#fff;border-bottom:1px solid var(--line);padding:18px 0}
+  .pi-masthead__inner{display:flex;justify-content:space-between;align-items:center;gap:24px;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--c-text-3,#8A8A8A)}
+  .pi-masthead__edition{color:var(--ink)}
+  .pi-masthead__pub{color:var(--honey-deep)}
+  @media (max-width:560px){
+    .pi-masthead{padding:14px 0}
+    .pi-masthead__inner{font-size:10px;letter-spacing:.18em}
+  }
+</style>
+
+<!-- HERO -->
+<section class="product-hero" id="buy">
+  <div class="wrap">
+    <div class="product-hero-grid">
+      <div class="gallery-col">
+        <%
+          // Gallery slides in one list. Removing an entry is all that is needed —
+          // the main frame, the thumb rail and the rail's width all follow from it.
+          // Ordered to match the siblings rather than the file numbering, so a
+          // customer moving between products meets the same sequence:
+          // pack -> lifestyle -> comparison -> facts -> timeline -> ingredients
+          // -> trust. Positions 1, 2, 5, 7 and 8 line up with BOTH Iron+ and
+          // EnergyOne+; 3 and 4 follow EnergyOne+. Slot 6 holds this product's
+          // extra slide, which is where Iron+ carries its extra too.
+          // Adding art: add an entry here AND the same path to
+          // prisma/product-images.js, then run `npm run sync:images`.
+          var _slides = [
+            { n: 1, t: 'The pack' },
+            { n: 2, t: 'Made for everyday life' },
+            { n: 4, t: 'Why choose Joint Max' },
+            { n: 3, t: 'Complete nutritional facts' },
+            { n: 8, t: 'What to expect, week by week' },
+            { n: 5, t: 'How it supports your joints' },
+            { n: 6, t: 'The two actives' },
+            { n: 7, t: 'Why you should trust us' }
+          ];
+          var _slideSrc = function (n) { return '/img/products/joint-n' + n + '.png?v=2'; };
+        %>
+        <div class="gallery" style="--n:<%= _slides.length %>">
+          <div class="gallery-main">
+            <img id="galleryMain" src="<%= _slideSrc(_slides[0].n) %>" alt="Shiōrra Joint Max pack resting on soft peach forms">
+          </div>
+          <div class="gallery-thumbs" id="galleryThumbs">
+            <% _slides.forEach(function (sl, i) { %>
+              <button type="button" class="gallery-thumb<%= i === 0 ? ' is-active' : '' %>" data-full="<%= _slideSrc(sl.n) %>" aria-label="<%- sl.t %>"><img src="<%= _slideSrc(sl.n) %>" alt="" loading="lazy"></button>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="pi-panel">
+          <span class="pi-kicker">Joint &amp; Cartilage Support · 30 Tablets</span>
+          <h1 class="pi-title">Joint Max</h1>
+          <p class="pi-subtitle">Advanced Joint &amp; Cartilage Support</p>
+          <p class="pi-actives">Glucosamine Hydrochloride <i>|</i> Chondroitin Sulphate</p>
+
+          <%# No star rating here, deliberately. The siblings show one because
+              they have been selling; Joint Max has not shipped a single pack,
+              so there is nothing to average. The launch chip goes in its place
+              and the rating block comes back once real reviews exist. %>
+          <p class="pi-launch">New — just launched</p>
+
+          <form action="/cart/buy-now" method="post" id="addToCartForm" class="pi-buy-form">
+            <input type="hidden" name="productId" value="<%= product.id %>">
+            <input type="hidden" name="quantity" id="bundleQty" value="1">
+
+            <%
+              // PRICING IS A PLACEHOLDER until the real numbers land — see the
+              // seed record for 'joint-max'. Change it there, not here.
+              //
+              // No multi-pack discount is defined yet, so each tier is simply
+              // unit price x quantity and the "Save %" shown is the genuine
+              // MRP discount, not an invented bundle saving. When the bundle
+              // totals arrive, put them here AND in BUNDLE_PRICES in
+              // cartController.js — the two must agree or the cart will charge
+              // something different from what this panel promises.
+              //
+              // Tiers are labelled by packs, not days. The carton says 30
+              // tablets while the label says 3 tablets a day, which cannot
+              // both be a month's supply, so no day count is claimed here.
+              var _base = product.priceInPaise || 99900;
+              var _mrp = (product.mrpInPaise && product.mrpInPaise > _base) ? product.mrpInPaise : Math.round(_base * 1.2);
+              var _packs = [
+                { qty: 1, price: _base },
+                // No `rec: true` while every tier is the same unit price —
+                // flagging a 2-pack as recommended when it saves nothing extra
+                // is a nudge with nothing behind it. Restore it with the
+                // bundle totals.
+                { qty: 2, price: _base * 2 },
+                { qty: 3, price: _base * 3 },
+              ];
+              var _inr = function (p) { return '₹' + (p / 100).toLocaleString('en-IN'); };
+              var _off = function (pk) { return Math.round((1 - pk.price / (_mrp * pk.qty)) * 100); };
+            %>
+            <div class="pi-packs">
+              <span class="pi-packs__label">Choose your plan</span>
+              <fieldset class="pi-plans" aria-label="Choose your plan">
+                <% _packs.forEach(function (pk, i) { %>
+                  <label class="pi-plan<%= i === 0 ? ' is-selected' : '' %>">
+                    <input type="radio" name="bundle" value="<%= pk.qty %>" data-qty="<%= pk.qty %>" <%= i === 0 ? 'checked' : '' %>>
+                    <% if (pk.rec) { %><span class="pi-plan__flag">Recommended</span><% } %>
+                    <span class="pi-plan__dot" aria-hidden="true"></span>
+                    <span class="pi-plan__days"><%= pk.qty %> Pack<%= pk.qty > 1 ? 's' : '' %></span>
+                    <span class="pi-plan__packs"><%= pk.qty * 30 %> tablets</span>
+                    <span class="pi-plan__price"><%= _inr(pk.price) %></span>
+                    <span class="pi-plan__save">Save <%= _off(pk) %>%</span>
+                  </label>
+                <% }); %>
+              </fieldset>
+              <p class="pi-planinfo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.6"/></svg>
+                All prices incl. taxes · 3 tablets daily, with meals
+              </p>
+            </div>
+
+
+            <% var _soldOut = (typeof product.stock === 'number' && product.stock <= 0);
+               var _lowStock = (!_soldOut && typeof product.stock === 'number' && product.stock <= 10); %>
+            <% if (_lowStock) { %><p class="pi-stocknote">Only <%= product.stock %> left in stock</p><% } %>
+            <% if (_soldOut) { %>
+              <div class="pi-buy-row">
+                <button type="button" class="pi-add" disabled aria-disabled="true" style="opacity:.5;cursor:not-allowed">Sold out</button>
+              </div>
+              <p class="pi-stocknote pi-stocknote--muted">Currently out of stock. Please check back soon.</p>
+            <% } else { %>
+              <div class="pi-buy-row">
+                <button type="submit" formaction="/cart/add" class="pi-add-secondary">Add to cart</button>
+                <button type="submit" class="pi-add">Buy now</button>
+              </div>
+            <% } %>
+            <%# The siblings carry a "N people are viewing this right now"
+                counter here. It is left off Joint Max on purpose: the number is
+                generated, and inventing live shoppers for a product that has
+                never been sold is a claim rather than a flourish. Add it back
+                if you want the pattern matched. %>
+          </form>
+
+          <%# The four claims printed on the carton, in the carton's order. %>
+          <ul class="pi-bene">
+            <li>
+              <span class="pi-bene__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.2v4.1a4 4 0 0 0 8 0V3.2"/><path d="M8 20.8v-4.1a4 4 0 0 1 8 0v4.1"/><path d="M9.6 12h4.8"/></svg></span>
+              <span class="pi-bene__t">Supports Joint Health &amp; Mobility</span>
+            </li>
+            <li>
+              <span class="pi-bene__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4.2c3 0 4.6 1.6 4.6 4.7v6.2c0 3.1 1.6 4.7 4.6 4.7"/><path d="M4 9.1c2.6.6 4 2.2 4 4.8"/><path d="M20 14.9c-2.6-.6-4-2.2-4-4.8"/></svg></span>
+              <span class="pi-bene__t">Helps Maintain Healthy Cartilage</span>
+            </li>
+            <li>
+              <span class="pi-bene__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="14.6" cy="4.4" r="1.8"/><path d="M5.4 21.2l2.6-5.3 3-2.1"/><path d="m11 13.8-1.6-4.2 4-1.9 3 2.6 2.6.7"/><path d="m13.4 15.2 1.9 2.4.9 3.6"/></svg></span>
+              <span class="pi-bene__t">Supports Joint Flexibility &amp; Function</span>
+            </li>
+            <li>
+              <span class="pi-bene__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.6s-6.6-4-6.6-9.3a3.4 3.4 0 0 1 6.6-1.2 3.4 3.4 0 0 1 6.6 1.2c0 5.3-6.6 9.3-6.6 9.3z"/></svg></span>
+              <span class="pi-bene__t">Daily Nutritional Support For Active Joints</span>
+            </li>
+          </ul>
+
+
+          <ul class="pi-trust" aria-label="Product assurances">
+            <%# Taken from the carton's own badge row. "Vegetarian" is NOT
+                claimed: the label lists tablet excipients and no capsule shell,
+                so there is nothing on the pack to support it. %>
+            <% ['FSSAI & GMP-WHO', 'No preservatives', 'For adults'].forEach(function (t) { %>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><%= t %></li>
+            <% }); %>
+          </ul>
+
+
+          <p class="pi-footnote">Free shipping over ₹999 · 30-day money-back guarantee</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATION SCROLLER -->
+<style>
+  /* Infinite horizontal scroller. The track holds TWO identical sets and
+     slides to -50%, which lands set B exactly where set A began. For that to
+     be seamless the halves must be equal, so the inter-item gap lives inside
+     each set and each set carries a trailing pad of the same size — a `gap`
+     on the track itself would leave the seam half a gap short and the loop
+     would visibly jump. */
+  .certs{background:#FBFBFC;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:40px 0;position:relative}
+  .certs-viewport{overflow:hidden}
+  /* edge fades so items dissolve rather than pop at the boundaries */
+  .certs::before,.certs::after{content:'';position:absolute;top:0;bottom:0;width:150px;z-index:2;pointer-events:none}
+  .certs::before{left:0;background:linear-gradient(90deg,#FBFBFC 0,#FBFBFC 28%,rgba(251,251,252,0) 100%)}
+  .certs::after{right:0;background:linear-gradient(270deg,#FBFBFC 0,#FBFBFC 28%,rgba(251,251,252,0) 100%)}
+  .certs-track{display:flex;width:max-content;animation:certScroll 38s linear infinite}
+  .certs:hover .certs-track{animation-play-state:paused}
+  .certs-set{display:flex;gap:64px;padding-right:64px;list-style:none;margin:0}
+  @keyframes certScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .cert{flex:0 0 184px;width:184px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+  /* No chip/ring: the supplied marks are already self-contained badges in
+     assorted shapes and colours, so a uniform ring around them just fights
+     them. A fixed-height box normalises them to one optical size instead. */
+  .cert__ic{height:128px;display:grid;place-items:center;color:var(--honey-deep)}
+  .cert__ic img{
+    max-height:calc(128px * var(--certScale,1));max-width:100%;width:auto;object-fit:contain;
+    /* Most of these marks ship on a solid white background. multiply against
+       the near-white band drops that box out without needing the PNGs to be
+       re-cut with real transparency. */
+    mix-blend-mode:multiply;
+  }
+  .cert__ic svg{width:60px;height:60px}
+  .cert__t{font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);line-height:1.4}
+  /* A logo file that 404s falls back to its line icon rather than a broken image */
+  .cert__fb{display:none}
+  .cert__ic.is-fallback img{display:none}
+  .cert__ic.is-fallback .cert__fb{display:block}
+
+  @media (max-width:720px){
+    .certs{padding:28px 0}
+    .certs::before,.certs::after{width:64px}
+    .certs-set{gap:38px;padding-right:38px}
+    .cert{flex:0 0 138px;width:138px;gap:12px}
+    .cert__ic{height:90px}
+    .cert__ic img{max-height:calc(90px * var(--certScale,1))}
+    .cert__ic svg{width:46px;height:46px}
+    .cert__t{font-size:10px;letter-spacing:.08em}
+  }
+  /* Motion off: stop the animation and hand the row back as a manual scroller,
+     otherwise the duplicated set is simply unreachable. */
+  @media (prefers-reduced-motion: reduce){
+    .certs-track{animation:none}
+    .certs-viewport{overflow-x:auto;scrollbar-width:none}
+    .certs-viewport::-webkit-scrollbar{display:none}
+    .certs::before,.certs::after{display:none}
+  }
+</style>
+
+<section class="certs" aria-label="Certifications and quality assurances">
+  <%
+    // `img` is the real certification mark; `svg` is the line-icon fallback
+    // shown only if that file is missing (see the cert-logo script below).
+    // `scale` nudges marks whose source file carries a lot of internal
+    // padding so they land at the same optical size as the round seals.
+    // Drop the files in app/src/public/img/certs/ using these exact names.
+    var _certs = [
+      { t: 'FSSAI Certified', img: '/img/certs/fssai.png', scale: 1.2,   svg: '<circle cx="12" cy="9" r="6"/><path d="m9.4 9 1.9 1.9L15 7.2"/><path d="M8.9 14.4 7.6 22l4.4-2.2L16.4 22l-1.3-7.6"/>' },
+      { t: 'WHO-GMP Certified', img: '/img/certs/who-gmp.png', svg: '<path d="M2.5 21h19"/><path d="M4 21V9.6l5 3.1V9.6l5 3.1V6.3l5 3.1V21"/><path d="M8 21v-3.2M13 21v-3.2"/>' },
+      { t: 'ISO Certified', img: '/img/certs/iso.png',     svg: '<path d="M14 2.8H7a2 2 0 0 0-2 2v14.4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.8z"/><path d="M14 2.8v5h5"/><path d="m8.8 14.2 2.1 2.1 4.3-4.3"/>' },
+      { t: 'GMO Free', img: '/img/certs/gmo-free.png',          svg: '<path d="M5 3.2c0 5 3 6.6 7 8.6s7 3.9 7 9"/><path d="M19 3.2c0 5-3 6.6-7 8.6s-7 3.9-7 9"/><path d="M7.6 6.6h8.8M7.6 17.4h8.8"/><path d="M3.4 20.6 20.6 3.4"/>' }
+    ];
+  %>
+  <div class="certs-viewport">
+    <div class="certs-track">
+      <% [0, 1].forEach(function (dup) { %>
+        <ul class="certs-set"<%- dup ? ' aria-hidden="true"' : '' %>>
+          <%# Each half repeats the list twice. The loop is only seamless if
+              one half is at least as wide as the screen; at four badges a
+              single pass is ~992px, which would leave a gap sliding across
+              any wider display. The repeats are hidden from screen readers. %>
+          <% _certs.concat(_certs).forEach(function (c, ci) { %>
+            <li class="cert"<%- ci >= _certs.length ? ' aria-hidden="true"' : '' %>>
+              <span class="cert__ic"<%- c.scale ? ' style="--certScale:' + c.scale + '"' : '' %>>
+                <% if (c.img) { %><img src="<%= c.img %>" alt="" loading="lazy"><% } %>
+                <svg class="cert__fb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"<%- c.img ? '' : ' style="display:block"' %>><%- c.svg %></svg>
+              </span>
+              <span class="cert__t"><%= c.t %></span>
+            </li>
+          <% }); %>
+        </ul>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<style>
+  /* ============================================================
+     WHO IT'S FOR — four pictures, four captions
+     This replaced a three-card benefits block, then briefly carried a second
+     column of medical cautions alongside the photos. The cautions moved out
+     (they are answered in the FAQ below, where someone looking for them will
+     look), so the section is now one job done one way: show four people whose
+     day asks something of their joints, and let the reader recognise one.
+     Four across rather than the circles EnergyOne+ uses for its six — same
+     idea of "when is this for me", different shape, so the two pages rhyme
+     without repeating.
+     ============================================================ */
+  .wf{background:#FBFBFC;border-top:1px solid var(--line);padding:76px 0 84px}
+  .wf__head{text-align:center;margin-bottom:44px}
+  .wf__head .s-title{margin-inline:auto;margin-bottom:12px}
+  .wf__sub{font-size:16px;line-height:1.6;color:var(--muted);max-width:52ch;margin:0 auto}
+
+  .wf-tiles{
+    list-style:none;margin:0 auto;padding:0;max-width:1000px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:22px;
+  }
+  .wf-tile{margin:0}
+  .wf-tile figure{margin:0}
+  .wf-tile img{
+    /* height:auto is load-bearing. The width/height attributes reserve space
+       before the image loads, but an unstyled height attribute acts as a
+       presentational hint, which beats aspect-ratio and renders every tile
+       600px tall. Declaring height in CSS wins it back. */
+    display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;
+    border-radius:18px;background:var(--honey-soft);
+  }
+  .wf-tile figcaption{
+    font-size:15px;font-weight:600;line-height:1.4;color:var(--ink);
+    margin-top:13px;letter-spacing:-0.01em;text-align:center;
+  }
+  .wf-foot{text-align:center;font-size:12.5px;color:var(--muted);line-height:1.55;max-width:62ch;margin:38px auto 0}
+
+  @media (max-width:820px){
+    .wf{padding:52px 0 60px}
+    .wf__head{margin-bottom:30px}
+    .wf-tiles{grid-template-columns:1fr 1fr;gap:16px;max-width:520px}
+    .wf-tile figcaption{font-size:14px;margin-top:10px}
+    .wf-foot{margin-top:28px}
+  }
+</style>
+
+<section class="wf" aria-labelledby="wfTitle">
+  <div class="wrap">
+    <div class="wf__head">
+      <h2 class="s-title" id="wfTitle">Made for days that ask something of your joints.</h2>
+      <p class="wf__sub">Joint Max is a daily supplement for adults — the kind of thing you take because of what tomorrow looks like, not because of how today went.</p>
+    </div>
+
+    <%
+      var _wfTiles = [
+        { img: 'joint-stairs',   t: 'Stairs, twice a day',      alt: 'A man in his sixties climbing the stairs at home, one hand on the bannister' },
+        { img: 'joint-garden',   t: 'Back in the garden',       alt: 'A woman kneeling in a sunlit garden, planting into a terracotta pot' },
+        { img: 'joint-standing', t: 'On your feet all day',     alt: 'A shopkeeper standing at his counter at the end of the working day' },
+        { img: 'joint-walking',  t: 'Still walking at seventy', alt: 'An older couple walking together along a tree-lined path at golden hour' }
+      ];
+    %>
+    <ul class="wf-tiles">
+      <% _wfTiles.forEach(function (x) { %>
+        <li class="wf-tile">
+          <figure>
+            <img src="/img/usecases/<%= x.img %>.jpg?v=1" alt="<%= x.alt %>" loading="lazy" width="600" height="600">
+            <figcaption><%= x.t %></figcaption>
+          </figure>
+        </li>
+      <% }); %>
+    </ul>
+
+    <p class="wf-foot">For adults. Joint Max is a health supplement, not for medicinal use. If you are pregnant, lactating, under 18, taking medication or managing a condition, speak to your healthcare professional first &mdash; see the questions below.</p>
+  </div>
+</section>
+
+<!-- WHERE IT WORKS -->
+<style>
+  /* ============================================================
+     WHERE IT WORKS — the joint, as the orbit's counterpart
+     Iron+ and EnergyOne+ orbit a capsule because their subject is abstract:
+     blood, energy. Joint Max is the only product in the range about a part of
+     the body, so the centrepiece is that part. Same interaction grammar as the
+     orbit (hover / focus / tap a region, a panel beside it fills in), which is
+     what keeps the three pages reading as one family — and a component neither
+     sibling could run, which is what makes it this page's own.
+     The joint is inline SVG, not a photograph: slide 5 of the gallery already
+     carries its own printed labels and they would fight the hover states, and
+     SVG costs no image weight and stays sharp at any size.
+     ============================================================ */
+  .jx{background:linear-gradient(180deg,#FFFFFF 0%,var(--honey-soft) 100%);border-top:1px solid var(--line);padding:78px 0 84px}
+  .jx__head{text-align:center;margin-bottom:14px}
+  .jx__head .s-title{margin-inline:auto;margin-bottom:12px}
+  .jx__sub{font-size:16px;line-height:1.6;color:var(--muted);max-width:56ch;margin:0 auto}
+  .jx__hint{text-align:center;font-size:13px;color:var(--muted);margin:18px 0 34px}
+  .jx__hint-touch{display:none}
+  @media (hover:none){.jx__hint-hover{display:none}.jx__hint-touch{display:inline}}
+
+  .jx-grid{display:grid;grid-template-columns:minmax(0,1fr) clamp(320px,34%,400px);gap:clamp(24px,4vw,56px);align-items:center}
+
+  /* ---- the anatomy ---- */
+  /* Three stacked copies of the same render. The base is the whole joint; the
+     other two are the same file masked down to one region each, sitting on
+     top at opacity 0. Light a region and the base drops back and desaturates
+     while its layer fades in at full strength — so the part you are reading
+     about is literally the only part still lit.
+     Masks rather than overlays, deliberately: an overlay would put a coloured
+     film over the anatomy, where a mask lets the render itself carry the
+     emphasis. Measured off the file (1286x1223): the cartilage band runs
+     27.8%-56.1% down and the subject sits x 24%-81%. */
+  .jx-stage{position:relative;width:min(440px,100%);margin-inline:auto;aspect-ratio:1286 / 1223}
+  .jx-layer{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+    /* The render is on pure white. multiply drops that out so the joint sits
+       on the section's peach wash instead of in a white box. */
+    mix-blend-mode:multiply;
+  }
+  .jx-base{transition:opacity .35s ease,filter .35s ease}
+  .jx-stage.is-lit .jx-base{opacity:.38;filter:grayscale(.72)}
+  .jx-part{opacity:0;transition:opacity .35s ease}
+  .jx-part.is-on{opacity:1}
+  .jx-part[data-part="cartilage"]{
+    -webkit-mask-image:radial-gradient(ellipse 40% 17% at 52% 42%,#000 52%,transparent 100%);
+            mask-image:radial-gradient(ellipse 40% 17% at 52% 42%,#000 52%,transparent 100%);
+  }
+  .jx-part[data-part="space"]{
+    -webkit-mask-image:radial-gradient(ellipse 34% 8% at 51% 50%,#000 46%,transparent 100%);
+            mask-image:radial-gradient(ellipse 34% 8% at 51% 50%,#000 46%,transparent 100%);
+  }
+  /* Two gradients, because "bone ends" is two bones. Mask layers union by
+     default, so both light together. */
+  .jx-part[data-part="bone"]{
+    -webkit-mask-image:radial-gradient(ellipse 28% 17% at 51% 14%,#000 52%,transparent 100%),radial-gradient(ellipse 30% 22% at 51% 80%,#000 52%,transparent 100%);
+            mask-image:radial-gradient(ellipse 28% 17% at 51% 14%,#000 52%,transparent 100%),radial-gradient(ellipse 30% 22% at 51% 80%,#000 52%,transparent 100%);
+  }
+
+  /* Markers sit on the anatomy and are the hit target — a 34px dot is easy to
+     hit, where the cartilage band itself is a few pixels tall. */
+  .jx-hit{
+    position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;padding:0;
+    border:0;background:none;cursor:pointer;z-index:3;border-radius:50%;
+  }
+  .jx-hit::before{
+    content:'';position:absolute;inset:9px;border-radius:50%;
+    background:var(--honey);box-shadow:0 0 0 4px rgba(224,69,38,.22),0 2px 6px rgba(120,30,10,.3);
+    transition:transform .25s ease,box-shadow .25s ease;
+  }
+  .jx-hit:hover::before,.jx-hit:focus-visible::before{transform:scale(1.35);box-shadow:0 0 0 7px rgba(224,69,38,.26),0 2px 8px rgba(120,30,10,.34)}
+  /* One piece of ambient motion on the page, and it earns its place: without
+     it nothing says the anatomy is touchable. It runs only until the first
+     region is read, then stops for good. */
+  .jx-hit::after{
+    content:'';position:absolute;inset:9px;border-radius:50%;
+    border:2px solid var(--honey);animation:jxPulse 2.6s ease-out infinite;
+  }
+  .jx-stage.is-lit .jx-hit::after,.jx-hit:hover::after,.jx-hit:focus-visible::after{animation:none;opacity:0}
+  @keyframes jxPulse{
+    0%{transform:scale(1);opacity:.55}
+    70%{transform:scale(2.3);opacity:0}
+    100%{transform:scale(2.3);opacity:0}
+  }
+  @media (prefers-reduced-motion:reduce){.jx-hit::after{animation:none;opacity:0}}
+  .jx-hit:focus-visible{outline:2px solid var(--honey-deep);outline-offset:3px}
+  /* the ring that marks which region is being read */
+  .jx-ring{
+    position:absolute;border:2px dashed var(--honey);border-radius:999px;
+    opacity:0;transition:opacity .3s ease;pointer-events:none;z-index:2;
+  }
+  .jx-ring.is-on{opacity:1}
+
+  /* ---- panel ---- */
+  .jx-side{min-width:0}
+  .jx-info{display:grid;min-width:0}
+  .jx-card{
+    grid-area:1 / 1;align-self:center;
+    background:#fff;border:1px solid var(--line);border-radius:22px;
+    padding:30px 32px 32px;box-shadow:0 14px 40px rgba(197,62,35,.08);
+    opacity:0;visibility:hidden;transform:translateY(7px);
+    /* No transition at rest, deliberately: the cards share one grid cell, so a
+       symmetric crossfade would show two sets of text through each other. */
+  }
+  .jx-card.is-on{opacity:1;visibility:visible;transform:none;transition:opacity .2s ease,transform .2s ease}
+  .jx-card__k{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--honey-deep);margin:0 0 8px}
+  .jx-card__t{font-size:23px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);margin:0 0 14px;line-height:1.2}
+  .jx-card__p{font-size:15.5px;line-height:1.65;color:var(--ink-soft);margin:0}
+  /* The dose chip only appears on the regions an active actually acts on, so
+     the 1500 mg and 1200 mg figures stay on the page without a separate card. */
+  .jx-doses{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .jx-dose{
+    display:inline-flex;align-items:baseline;gap:6px;margin:0;
+    background:var(--honey-soft);border-radius:999px;padding:9px 16px;
+  }
+  .jx-dose b{font-size:19px;font-weight:800;letter-spacing:-0.02em;color:var(--honey-deep)}
+  .jx-dose span{font-size:13px;font-weight:600;color:var(--ink-soft)}
+  /* Touch fallback. The regions inside the SVG are the right hit areas for a
+     pointer, but at phone size the cartilage band is a 20px strip and three
+     of them cannot each be a 44px target inside a 60-unit joint. So below the
+     stacking breakpoint the same three regions get a real row of buttons.
+     Hidden from pointer layouts, where hovering the drawing is the point. */
+  .jx-keys{display:none}
+  .jx-foot{text-align:center;font-size:12.5px;color:var(--muted);line-height:1.55;max-width:60ch;margin:32px auto 0}
+
+  @media (max-width:860px){
+    .jx{padding:52px 0 60px}
+    .jx-grid{grid-template-columns:1fr;gap:28px;justify-items:center}
+    .jx-side{width:100%;max-width:520px}
+    .jx-stage{width:min(300px,78vw)}
+    .jx-card{padding:24px 24px 26px;border-radius:18px;align-self:start}
+    .jx-card__t{font-size:20px}
+    .jx-keys{
+      display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+      margin:22px auto 0;max-width:520px;
+    }
+    .jx-key{
+      font-family:inherit;font-size:13.5px;font-weight:700;letter-spacing:-0.01em;
+      color:var(--honey-deep);background:#fff;border:1.5px solid var(--honey-soft);
+      border-radius:999px;padding:0 15px;min-height:44px;cursor:pointer;white-space:nowrap;
+      transition:background .2s ease,border-color .2s ease,color .2s ease;
+    }
+    .jx-key[aria-pressed="true"]{background:var(--honey-deep);border-color:var(--honey-deep);color:#fff}
+    .jx-key:focus-visible{outline:2px solid var(--honey);outline-offset:2px}
+  }
+  @media (prefers-reduced-motion:reduce){.jx-part,.jx-ring,.jx-card{transition:none}}
+</style>
+
+<section class="s jx" aria-labelledby="jxTitle">
+  <div class="wrap">
+    <div class="jx__head">
+      <h2 class="s-title" id="jxTitle">Where it actually works.</h2>
+      <p class="jx__sub">Glucosamine and chondroitin are not general-purpose. They belong to specific parts of a joint. Here is which.</p>
+    </div>
+    <p class="jx__hint">
+      <span class="jx__hint-hover">Hover a marker to light up that part of the joint.</span>
+      <span class="jx__hint-touch">Tap a part below to light it up on the joint.</span>
+    </p>
+
+    <%
+      // Each entry is one region of the diagram. Doses are transcribed from
+      // the Supplement Facts panel and are PER SERVING, which that panel
+      // defines as 3 tablets.
+      var _jx = [
+        { k: 'cartilage', kicker: 'The cushion', t: 'Cartilage', short: 'Cartilage',
+          p: 'The smooth layer capping each bone end \u2014 what lets a joint bend without the two bones meeting. Both actives belong here: chondroitin sulphate is a component of cartilage itself, and glucosamine is a building block the body uses to make and repair it.',
+          doses: [{ n: '1500', u: 'mg glucosamine' }, { n: '1200', u: 'mg chondroitin' }] },
+        { k: 'space', kicker: 'The cushion in motion', t: 'The joint space', short: 'Joint space',
+          p: 'The gap between the two cartilage surfaces, filled with synovial fluid that lubricates the joint and spreads load across it. Chondroitin helps cartilage hold water, and holding water is what keeps that cushioning there under weight.',
+          doses: [] },
+        { k: 'bone', kicker: 'The structure', t: 'Bone ends', short: 'Bone ends',
+          p: 'Femur above, tibia below. They are never meant to meet \u2014 cartilage and fluid sit between them. Which is why a joint formula is about maintaining that layer, not about the bone.',
+          doses: [] }
+      ];
+    %>
+
+    <div class="jx-grid">
+      <div class="jx-stage" id="jxStage">
+        <%# One file, three times. The base carries the whole joint; the two
+            masked copies above it light a single region each. alt sits on the
+            base only — the others are the same picture and would just repeat
+            it to a screen reader. %>
+        <img class="jx-layer jx-base" src="/img/products/joint-anatomy.png?v=2"
+             alt="Cross-section of a knee joint: the femur above and tibia below, each capped with cartilage, with the joint space between them">
+        <img class="jx-layer jx-part" data-part="bone" src="/img/products/joint-anatomy.png?v=2" alt="" aria-hidden="true">
+        <img class="jx-layer jx-part" data-part="cartilage" src="/img/products/joint-anatomy.png?v=2" alt="" aria-hidden="true">
+        <img class="jx-layer jx-part" data-part="space" src="/img/products/joint-anatomy.png?v=2" alt="" aria-hidden="true">
+
+        <%# Rings and markers, positioned as percentages of the render so they
+            stay put at any size. Coordinates measured off the file. %>
+        <span class="jx-ring" data-ring="cartilage" style="left:12%;top:25%;width:80%;height:34%" aria-hidden="true"></span>
+        <span class="jx-ring" data-ring="space" style="left:17%;top:42%;width:68%;height:16%" aria-hidden="true"></span>
+        <span class="jx-ring" data-ring="bone" style="left:21%;top:1%;width:60%;height:26%" aria-hidden="true"></span>
+        <span class="jx-ring" data-ring="bone" style="left:20%;top:60%;width:62%;height:39%" aria-hidden="true"></span>
+
+        <button type="button" class="jx-hit" data-hit="bone" style="left:51%;top:13%" aria-label="Bone ends"></button>
+        <button type="button" class="jx-hit" data-hit="cartilage" style="left:62%;top:38%" aria-label="Cartilage"></button>
+        <button type="button" class="jx-hit" data-hit="space" style="left:40%;top:50%" aria-label="The joint space"></button>
+      </div>
+
+      <%# Same three regions as the diagram, as real buttons. Only shown where
+          the layout has stacked — see .jx-keys in the CSS for why. %>
+      <div class="jx-keys" id="jxKeys">
+        <% _jx.forEach(function (r, i) { %>
+          <button type="button" class="jx-key" data-key="<%= r.k %>" aria-pressed="<%= i === 0 ? 'true' : 'false' %>"><%= r.short %></button>
+        <% }); %>
+      </div>
+
+      <%# All three cards are in the DOM and stacked in ONE grid cell, so the
+          panel is already as tall as its longest card and swapping never
+          resizes the section or shifts the diagram. %>
+      <div class="jx-side">
+        <div class="jx-info" id="jxInfo" aria-live="polite">
+          <% _jx.forEach(function (r, i) { %>
+            <article class="jx-card<%= i === 0 ? ' is-on' : '' %>" data-for="<%= r.k %>">
+              <p class="jx-card__k"><%= r.kicker %></p>
+              <h3 class="jx-card__t"><%= r.t %></h3>
+              <p class="jx-card__p"><%- r.p %></p>
+              <% if (r.doses.length) { %>
+                <div class="jx-doses">
+                  <% r.doses.forEach(function (d) { %>
+                    <p class="jx-dose"><b><%= d.n %></b><span><%= d.u %></span></p>
+                  <% }); %>
+                </div>
+              <% } %>
+            </article>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+
+    <p class="jx-foot">An illustration of a knee joint, used to show where each active belongs. Joint Max is a nutritional supplement and is not for medicinal use.</p>
+  </div>
+</section>
+
+<!-- HOW TO TAKE IT -->
+<%
+  // Not an evidence section: Joint Max has no trial of its own, so there is
+  // nothing to present as one. What it does have is a real, printed dosing
+  // protocol with two distinct phases, which IS a sequence and earns a track.
+  // Every line below is transcribed from the Recommended Usage, Caution and
+  // Storage panels on the carton (gallery slide 3).
+  var _jt = {
+    eyebrow: 'How to take it',
+    title: 'A loading phase, then <em>a habit.</em>',
+    lede: 'Joint Max is dosed in two stages. The pack is explicit about both, which is unusual and worth reading before you start.',
+    stages: [
+      {
+        k: 'Months 1\u20136',
+        h: 'Three tablets a day',
+        s: 'The label asks for three tablets every day for the first three to six months, or as your healthcare professional directs.',
+        points: [
+          'Three tablets daily, with meals',
+          '1500 mg glucosamine + 1200 mg chondroitin per serving',
+          'Give it months, not days',
+          'Do not exceed the recommended daily usage'
+        ]
+      },
+      {
+        k: 'After that',
+        h: 'One tablet, once or twice',
+        s: 'For long-term joint health the pack steps the dose down &mdash; one tablet once or twice daily.',
+        points: [
+          'One tablet once or twice a day',
+          'Still taken with meals',
+          'A routine you keep rather than a course you finish'
+        ]
+      }
+      // A third stage covering who it is for used to sit here. It moved up the
+      // page into its own section, so this track is only about dosing now.
+    ],
+    note: '<p>This is the formulation and the dosing exactly as printed on the pack. Joint Max has not itself been through a clinical trial, and nothing above is a claim about when you will feel a difference &mdash; that varies a great deal between people.</p>' +
+          '<ul><li>Glucosamine Hydrochloride: 1500 mg per serving</li><li>Chondroitin Sulphate Sodium: 1200 mg per serving</li><li>A serving is 3 tablets</li><li>No % RDA is established for either active</li><li>Store in a cool, dark, dry place, away from direct sunlight</li></ul>'
+  };
+%>
+<%- include('../partials/journey-timeline', { jt: _jt }) %>
+
+<!-- FAQ -->
+<%
+  // General is this product's own questions; Delivery and Service come from
+  // faqShared so every page states the same terms (src/data/faq.js).
+  var _faqTabs = [
+    { k: 'general', label: 'General', items: [
+          { q: "What's in Joint Max?",
+            a: "Two actives, both at full dose: <strong>Glucosamine Hydrochloride 1500 mg</strong> and <strong>Chondroitin Sulphate Sodium 1200 mg</strong> per serving. Nothing else is doing the work \u2014 the rest of the label is the tablet itself." },
+          { q: "How should Joint Max be taken?",
+            a: "Three tablets daily, with meals, for the first <strong>3 to 6 months</strong>. After that the pack steps down to one tablet once or twice daily for long-term joint health \u2014 or as directed by your healthcare professional. Do not exceed the recommended daily usage." },
+          { q: "How long before I notice anything?",
+            a: "Joint supplements are judged over months rather than days, which is why the label asks for three to six months at the full dose before stepping down. We are not going to put a number on it: there is no Joint Max trial to quote, and it varies a great deal between people." },
+          { q: "Who is Joint Max for?",
+            a: "Adults who want daily nutritional support for their joints and cartilage. It is a health supplement, <strong>not for medicinal use</strong>, and not a substitute for a varied diet. If you are pregnant, lactating, on medication or have a medical condition, speak to your healthcare professional first." },
+          { q: "Are there any side effects?",
+            a: "It is designed to be taken with meals, which is where most people find it sits best. Discontinue use and consult your healthcare professional if any reaction occurs." },
+          { q: "Is Joint Max vegetarian?",
+            a: "We are not claiming either way on this page yet. Glucosamine is commonly shellfish-derived and chondroitin is commonly bovine, and the pack does not state the source \u2014 so if that matters to you, write to us at <a href=\"mailto:hello@shiorra.com\" style=\"color:var(--honey-deep);text-decoration:underline\">hello@shiorra.com</a> and we will confirm before you buy." }
+    ] },
+    { k: 'delivery', label: 'Delivery', items: faqShared.delivery },
+    { k: 'service',  label: 'Service',  items: faqShared.service }
+  ];
+%>
+<%- include('../partials/faq-tabs', { faq: {
+      tabs: _faqTabs,
+      eyebrow: 'FAQ',
+      title: 'Questions, <em>answered</em>.'
+    } }) %>
+
+<!-- PAIR IT WITH -->
+<style>
+  /* Contained cards on white, not full-bleed colour blocks. Each card wears a
+     pastel wash of its own product accent; the accent itself only survives at
+     full strength in the badge text, which keeps two very different hues
+     (green, magenta) sitting quietly side by side. */
+  .pair{background:#fff;padding:72px 0 80px}
+  .pair__head{text-align:center;margin-bottom:36px}
+  /* .s-title carries max-width:760px from the shared section styles. Without
+     auto side margins that is a left-hugging box with centred text inside —
+     which reads as off-centre. This is the line that actually centres it. */
+  .pair__head .s-title{margin-inline:auto;margin-bottom:10px}
+  .pair__sub{font-size:16px;color:var(--muted);margin:0}
+
+  /* auto-fit + justify-content:center so the row stays centred at ANY tile
+     count — two tiles fill the 920px row exactly, a lone tile (e.g. while
+     Ginger+ is down) sits centred instead of stranded in the left column. */
+  .pair-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,448px));justify-content:center;gap:24px;max-width:920px;margin-inline:auto}
+
+  /* Explicit grid rows AND columns: the form is deliberately assigned the
+     media's own cell on desktop. Pinning only the row leaves the column to
+     auto-placement, which finds row 1 col 1 taken and opens an implicit
+     second column — parking the button beside the pack shot. */
+  .pair-tile{
+    position:relative;display:grid;grid-template-columns:minmax(0,1fr);align-content:start;
+    border-radius:24px;padding:28px 28px 34px;text-align:center;
+    background:var(--tile-soft);color:var(--ink);
+    box-shadow:inset 0 0 0 1px rgba(40,40,40,.05);
+    transition:background .28s ease,transform .28s ease,box-shadow .28s ease;
+    isolation:isolate;
+  }
+  .pair-tile:hover,.pair-tile:focus-within{
+    background:#fff;transform:translateY(-4px);
+    box-shadow:inset 0 0 0 1px var(--line),0 18px 40px rgba(40,40,40,.11);
+  }
+  /* Whole card is clickable via a stretched pseudo-element on the product
+     name, NOT by wrapping everything in an <a> — an anchor cannot legally
+     contain the add-to-cart form, and nesting them makes the button fire the
+     link too. The form sits on a higher layer so its clicks never reach it. */
+  .pair-link{color:inherit;text-decoration:none}
+  .pair-link::after{content:'';position:absolute;inset:0;z-index:1}
+  .pair-link:focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:4px}
+  .pair-media{grid-column:1;grid-row:1}
+  .pair-name{grid-column:1;grid-row:2}
+  .pair-price,.pair-sold{grid-column:1;grid-row:3}
+  /* Own row, under the name and price, at EVERY width. It used to share the
+     media's cell and fade in on hover, which meant the primary action was
+     invisible until you hovered the card. z-index keeps it above the
+     stretched .pair-link::after that makes the whole tile clickable. */
+  .pair-form{
+    margin:14px 0 0;grid-column:1;grid-row:4;justify-self:stretch;
+    display:flex;justify-content:center;z-index:3;
+  }
+
+  /* Pack shots are landscape lifestyle photographs, not cut-outs on
+     transparency, so they fill the frame (cover) rather than being
+     letterboxed inside it (contain). */
+  /* Deliberately NO z-index. With one, .pair-media stacked above the
+     stretched .pair-link::after (z-index 1) and swallowed every click over
+     the image — which is most of the card — leaving only the name/price
+     strip clickable. At auto it paints below the link overlay. */
+  .pair-media{
+    position:relative;width:100%;border-radius:16px;overflow:hidden;
+    background:#fff;aspect-ratio:1/1;
+  }
+  .pair-media img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .45s cubic-bezier(.2,.7,.3,1)}
+  .pair-tile:hover .pair-media img{transform:scale(1.05)}
+
+  .pair-badge{
+    position:absolute;top:12px;left:12px;z-index:2;
+    font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(255,255,255,.94);color:var(--tile-ink);padding:5px 10px;border-radius:999px;
+  }
+
+  /* Always visible — no reveal to wait for. Full width of the tile so it
+     reads as the card's primary action rather than a floating pill. */
+  .pair-cta{
+    width:100%;height:50px;border-radius:999px;border:1.5px solid var(--ink);
+    background:#fff;color:var(--ink);font-weight:800;font-size:13.5px;letter-spacing:.06em;
+    text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    transition:background .18s ease,color .18s ease,box-shadow .18s ease;
+    box-shadow:0 8px 20px rgba(40,40,40,.10);
+  }
+  .pair-cta:hover{background:var(--ink);color:#fff;box-shadow:0 10px 26px rgba(40,40,40,.18)}
+
+  /* colour:inherit is load-bearing — the global `h1..h6 {color:charcoal}` in
+     style.css otherwise outranks the colour inherited from the card. */
+  .pair-name{margin:18px 0 0;font-size:19px;font-weight:700;letter-spacing:-0.01em;line-height:1.25;color:inherit}
+  .pair-price{margin:7px 0 0;font-size:16px;font-weight:700;letter-spacing:-0.01em;color:inherit}
+  .pair-price s{color:var(--muted-2);font-weight:400;margin-right:7px}
+  .pair-sold{margin:7px 0 0;font-size:13px;font-weight:600;color:var(--muted)}
+
+  @media (max-width:820px){
+    .pair{padding:44px 0 52px}
+    .pair__head{margin-bottom:26px}
+    .pair-grid{gap:16px}
+    .pair-tile{padding:20px 20px 26px;border-radius:20px}
+    .pair-name{margin-top:14px;font-size:16px}
+    .pair-price{font-size:14.5px}
+    .pair-form{margin-top:12px}
+    .pair-cta{height:44px;font-size:12px}
+  }
+  @media (max-width:560px){
+    .pair-grid{grid-template-columns:1fr;max-width:420px}
+  }
+</style>
+
+<% if (typeof pairWith !== 'undefined' && pairWith && pairWith.length) { %>
+<%
+  // PER-PRODUCT colours — each tile wears its own product's pastel wherever it
+  // appears, so this block is identical on all three PDPs and must NOT be
+  // re-tinted to the host page's accent (doing so is what previously turned
+  // the Iron+ tile green on the Ginger+ page).
+  //   iron  -> pastel pink | ginger -> pastel green | energyone -> pastel purple
+  var _tint = {
+    'advanced-iron':      { soft: '#FDEEF3', ink: '#E11D48' },
+    'advanced-ginger':    { soft: '#EAF5EF', ink: '#2E8B57' },
+    'advanced-energyone': { soft: '#F1E9F8', ink: '#B73A92' },
+    'joint-max':          { soft: '#FDEDE6', ink: '#C53E23' }
+  };
+  var _rupee = function (p) { return '₹' + (p / 100).toLocaleString('en-IN'); };
+%>
+<section class="pair" aria-labelledby="pairTitle">
+  <div class="wrap">
+    <div class="pair__head">
+      <h2 class="s-title" id="pairTitle">Pair it <em>with</em></h2>
+      <p class="pair__sub">Built to work alongside Joint Max in the same daily routine.</p>
+    </div>
+
+    <div class="pair-grid">
+      <% pairWith.forEach(function (p) {
+           var t = _tint[p.slug] || _tint['advanced-iron'];
+           // "Pair it with" tile art — a fixed clean pack shot per product, so
+           // this section never inherits stale/wrong catalogue images from the DB.
+           var _pairImg = {
+             'advanced-iron':      '/img/products/iron-home.png',
+             'advanced-ginger':    '/img/products/ginger-home.png',
+             'advanced-energyone': '/img/products/energy-home.png',
+             'joint-max':          '/img/products/joint-home.png'
+           };
+           var img = _pairImg[p.slug] || (p.images && p.images[0] && p.images[0].url) || '/img/products/box-studio.png';
+           var out = (typeof p.stock === 'number' && p.stock <= 0); %>
+        <div class="pair-tile" style="--tile-soft:<%= t.soft %>;--tile-ink:<%= t.ink %>">
+          <div class="pair-media">
+            <% if (p.badge) { %><span class="pair-badge"><%= p.badge %></span><% } %>
+            <img src="<%= img %>" alt="<%= p.name %>" loading="lazy">
+          </div>
+
+          <h3 class="pair-name"><a class="pair-link" href="/product/<%= p.slug %>"><%= p.name %></a></h3>
+          <% if (out) { %>
+            <p class="pair-sold">Out of stock</p>
+          <% } else { %>
+            <p class="pair-price">
+              <% if (p.mrpInPaise && p.mrpInPaise > p.priceInPaise) { %><s><%= _rupee(p.mrpInPaise) %></s><% } %><%= _rupee(p.priceInPaise) %>
+            </p>
+          <% } %>
+
+          <%# last in source order, so on a phone it lands below the price;
+              on desktop CSS puts it back over the foot of the pack shot %>
+          <% if (!out) { %>
+            <form class="pair-form" action="/cart/add" method="post">
+              <input type="hidden" name="productId" value="<%= p.id %>">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="pair-cta">Add to cart</button>
+            </form>
+          <% } %>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- FOOTER -->
+<%- include('../partials/footer-home') %>
+
+<!-- STICKY BUY BAR — standard mobile e-comm pattern (Myntra / Nykaa / Man Matters):
+     the bar IS the purchase UI on phones. Buttons submit the main hero form via
+     form= attribute, so the qty stepper value is respected. -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-inner">
+    <% if (!_soldOut) { %>
+      <%# Mirrors the hero plan cards. Deliberately NOT part of addToCartForm:
+          a second radio group named "bundle" inside the same form would merge
+          with the hero's and the existing sync would only see half of them.
+          A separate name plus two-way JS sync keeps one source of truth. %>
+      <fieldset class="sb-plans" aria-label="Choose your plan">
+        <% _packs.forEach(function (pk, i) { %>
+          <label class="sb-plan<%= i === 0 ? ' is-selected' : '' %>">
+            <input type="radio" name="bundleSticky" value="<%= pk.qty %>" data-qty="<%= pk.qty %>" <%= i === 0 ? 'checked' : '' %>>
+            <%# Packs and tablets, not days — same reason as the hero panel:
+                the carton's quantity and its dosing do not agree on how long a
+                pack lasts, so no day count is claimed. %>
+            <span class="sb-plan__d"><%= pk.qty %> Pack<%= pk.qty > 1 ? 's' : '' %> &middot; <%= pk.qty * 30 %> tablets</span>
+            <span class="sb-plan__p"><%= _inr(pk.price) %><s><%= _inr(_mrp * pk.qty) %></s></span>
+            <span class="sb-plan__s">Save <%= _off(pk) %>%</span>
+          </label>
+        <% }); %>
+      </fieldset>
+    <% } %>
+    <div class="sticky-bar">
+      <% if (_soldOut) { %>
+        <button type="button" class="sticky-bar__btn sticky-bar__buy" disabled aria-disabled="true" style="opacity:.5;cursor:not-allowed">Sold out</button>
+      <% } else { %>
+        <button type="submit" form="addToCartForm" formaction="/cart/add" class="sticky-bar__btn sticky-bar__cart">Add to cart</button>
+        <button type="submit" form="addToCartForm" class="sticky-bar__btn sticky-bar__buy">Buy now</button>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="/js/lenis-init.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="/js/award.js"></script>
+<script src="/js/main.js"></script>
+<script>
+/* Where it works — hover, focus or tap a region of the joint; the rest of the
+   diagram dims, that region's ring shows, and the panel beside it swaps card.
+   Same grammar as the ingredient orbit on Iron+ and EnergyOne+, so the three
+   pages behave the same way even though the drawing is different. */
+(function () {
+  var stage = document.getElementById('jxStage');
+  if (!stage) return;
+  var hits  = Array.prototype.slice.call(stage.querySelectorAll('.jx-hit'));
+  var parts = Array.prototype.slice.call(stage.querySelectorAll('.jx-part'));
+  var rings = Array.prototype.slice.call(stage.querySelectorAll('.jx-ring'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.jx-card'));
+  if (!hits.length) return;
+  var hover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  function show(key) {
+    if (!key) return;
+    stage.classList.add('is-lit');
+    parts.forEach(function (el) { el.classList.toggle('is-on', el.getAttribute('data-part') === key); });
+    rings.forEach(function (el) { el.classList.toggle('is-on', el.getAttribute('data-ring') === key); });
+    cards.forEach(function (c) { c.classList.toggle('is-on', c.getAttribute('data-for') === key); });
+    press(key);
+  }
+  // Deliberately keeps the last region you looked at rather than resetting:
+  // reading the panel should not require keeping the pointer on the diagram.
+  function rest() { stage.classList.remove('is-lit'); rings.forEach(function (el) { el.classList.remove('is-on'); }); }
+
+  var keys = Array.prototype.slice.call(document.querySelectorAll('.jx-key'));
+  function press(key) {
+    keys.forEach(function (k) { k.setAttribute('aria-pressed', k.getAttribute('data-key') === key ? 'true' : 'false'); });
+  }
+  keys.forEach(function (k) {
+    k.addEventListener('click', function () { show(k.getAttribute('data-key')); press(k.getAttribute('data-key')); });
+  });
+
+  hits.forEach(function (h) {
+    var key = h.getAttribute('data-hit');
+    if (hover) {
+      h.addEventListener('mouseenter', function () { show(key); });
+      h.addEventListener('mouseleave', rest);
+    }
+    h.addEventListener('click', function () { show(key); });
+    h.addEventListener('focus', function () { show(key); });
+    h.addEventListener('blur', rest);
+    h.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(key); }
+    });
+  });
+})();
+
+/* Gallery — click a thumb to swap the main image */
+(function () {
+  const main = document.getElementById('galleryMain');
+  const thumbs = document.querySelectorAll('.gallery-thumb');
+  if (!main || !thumbs.length) return;
+  const select = (t) => {
+    const url = t.getAttribute('data-full');
+    if (!url || main.src.endsWith(url)) return;
+    thumbs.forEach((x) => x.classList.remove('is-active'));
+    t.classList.add('is-active');
+    main.src = url;
+    // Keep the alt in step with the slide, otherwise it stays stuck
+    // describing the first image for anyone using a screen reader.
+    const label = t.getAttribute('aria-label');
+    if (label) main.alt = 'Shiōrra Joint Max — ' + label;
+  };
+
+  // Hover previews the slide on pointer devices; click still works everywhere
+  // (and is the only path on touch, where there is no hover).
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  thumbs.forEach((t) => {
+    t.addEventListener('click', () => select(t));
+    if (canHover) t.addEventListener('mouseenter', () => select(t));
+  });
+})();
+// Plan selection — one source of truth (the hidden quantity the cart posts),
+// mirrored across the hero cards and the sticky bar's chips so the two can
+// never disagree about what is in the basket.
+(function () {
+  const qtyInput = document.getElementById('bundleQty');
+  const hero = document.querySelectorAll('.pi-plan input[name="bundle"]');
+  const sticky = document.querySelectorAll('.sb-plan input[name="bundleSticky"]');
+  if (!qtyInput || !hero.length) return;
+
+  function apply(qty) {
+    qtyInput.value = qty;
+    const mark = (nodes, cls) => nodes.forEach((r) => {
+      const on = (r.dataset.qty === qty);
+      r.checked = on;
+      const card = r.closest(cls);
+      if (card) card.classList.toggle('is-selected', on);
+    });
+    mark(hero, '.pi-plan');
+    mark(sticky, '.sb-plan');
+  }
+
+  hero.forEach((r) => r.addEventListener('change', () => apply(r.dataset.qty)));
+  sticky.forEach((r) => r.addEventListener('change', () => apply(r.dataset.qty)));
+
+  const initial = Array.prototype.find.call(hero, (r) => r.checked);
+  apply(initial ? initial.dataset.qty : '1');
+})();
+
+// Sticky bar reveal — slides up once the hero's own buy row has scrolled off
+// the top. Desktop only: on mobile the bar is the permanent purchase UI, and
+// the hero row it watches is display:none there, so the observer would never
+// fire and would leave the bar hidden.
+(function () {
+  const bar = document.getElementById('stickyCta');
+  const anchor = document.querySelector('.pi-buy-form .pi-buy-row');
+  if (!bar || !anchor || !('IntersectionObserver' in window)) return;
+
+  const desktop = window.matchMedia('(min-width:721px)');
+  const io = new IntersectionObserver(function (entries) {
+    const e = entries[0];
+    // scrolled past (row sits above the viewport) — not merely not-yet-reached
+    bar.classList.toggle('is-visible', !e.isIntersecting && e.boundingClientRect.top < 0);
+  }, { threshold: 0 });
+
+  function wire() {
+    io.disconnect();
+    if (desktop.matches) io.observe(anchor);
+    else bar.classList.remove('is-visible');
+  }
+  wire();
+  desktop.addEventListener('change', wire);
+})();
+
+// Cert logos — a missing logo file reveals its line-icon fallback instead of
+// leaving a broken image in the band.
+(function () {
+  document.querySelectorAll('.cert__ic img').forEach(function (img) {
+    var fail = function () { img.parentNode.classList.add('is-fallback'); };
+    if (img.complete && img.naturalWidth === 0) fail();
+    img.addEventListener('error', fail);
+  });
+})();
+
+// Key-ingredients shot — falls back to the stock capsule photo until the
+// dedicated single-pill cut-out is added.
+(function () {
+  var img = document.getElementById('kiPill');
+  if (!img) return;
+  var swap = function () {
+    var fb = img.getAttribute('data-fallback');
+    if (!fb) return;
+    img.removeAttribute('data-fallback');
+    img.src = fb;
+  };
+  if (img.complete && img.naturalWidth === 0) swap();
+  img.addEventListener('error', swap);
+})();
+
+// FAQ — open on hover for mouse users, one at a time.
+// Gated on a real hover-capable pointer: touch devices never fire hover, so
+// they keep the native tap-to-toggle and are left completely alone. Keyboard
+// users are covered by focusin/focusout, which is why suppressing the click
+// toggle here does not strand them — Tab still reveals each answer.
+(function () {
+  var items = document.querySelectorAll('.fq-item');
+  if (!items.length) return;
+  if (!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+
+  function openOnly(target) {
+    items.forEach(function (d) { d.open = (d === target); });
+  }
+
+  items.forEach(function (d) {
+    d.addEventListener('mouseenter', function () { openOnly(d); });
+    d.addEventListener('mouseleave', function () { d.open = false; });
+    d.addEventListener('focusin', function () { openOnly(d); });
+    d.addEventListener('focusout', function (e) {
+      if (!d.contains(e.relatedTarget)) d.open = false;
+    });
+    // Hover is the single source of truth on these devices; letting the native
+    // click toggle run as well would fight it and strand items closed.
+    var q = d.querySelector('.fq-q');
+    if (q) q.addEventListener('click', function (e) { e.preventDefault(); });
+  });
+})();
+
+// Social-proof viewer count — a fresh random 10-30 on each visit.
+(function () {
+  const el = document.getElementById('piViewers');
+  if (!el) return;
+  el.textContent = String(Math.floor(Math.random() * 21) + 10); // 10..30
+})();
+</script>
+<%- include('../partials/cart-drawer') %>
+</body>
+</html>

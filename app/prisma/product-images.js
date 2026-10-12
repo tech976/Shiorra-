@@ -45,6 +45,21 @@ module.exports = {
     '/img/products/ginger-g6.png',
     '/img/products/ginger-g8.png',
   ],
+  // Order mirrors _slides in views/pages/product-joint-max.ejs, which follows
+  // the sibling sequence rather than the file numbering. Add a path here AND
+  // there, then run `npm run sync:images`. Index 0 is the card image, not a
+  // gallery slide.
+  'joint-max': [
+    '/img/products/joint-home.png',
+    '/img/products/joint-n1.png',
+    '/img/products/joint-n2.png',
+    '/img/products/joint-n4.png',
+    '/img/products/joint-n3.png',
+    '/img/products/joint-n8.png',
+    '/img/products/joint-n5.png',
+    '/img/products/joint-n6.png',
+    '/img/products/joint-n7.png',
+  ],
   'advanced-energyone': [
     '/img/products/energy-home.png',
     '/img/products/energy-n1.png',

@@ -47,6 +47,24 @@ const products = [
     images: PRODUCT_IMAGES['advanced-ginger'],
   },
   {
+    slug: 'joint-max',
+    name: 'Joint Max',
+    tagline: 'Advanced joint & cartilage support.',
+    description: `A targeted combination of two actives, glucosamine and chondroitin, designed to support joint function, cartilage health and everyday mobility.\n\nGlucosamine Hydrochloride 1500 mg and Chondroitin Sulphate Sodium 1200 mg per serving — both at full dose, in one daily routine rather than a token amount of each.`,
+    // PLACEHOLDER PRICING — not the real numbers. Set price and mrp here, then
+    // add the matching 2-pack and 3-pack totals to BUNDLE_PRICES in
+    // src/controllers/cartController.js. Until that entry exists there is no
+    // multi-pack discount, and the product page shows plain unit x quantity.
+    price: 999,
+    mrp: 1199,
+    stock: 150,
+    featured: true,
+    badge: 'New Launch',
+    ingredients: `Glucosamine Hydrochloride (1500 mg) · Chondroitin Sulphate Sodium (1200 mg)`,
+    servingInfo: '3 tablets daily with meals for the first 3-6 months, then 1 tablet once or twice daily. 30 tablets per pack.',
+    images: PRODUCT_IMAGES['joint-max'],
+  },
+  {
     slug: 'advanced-energyone',
     name: 'EnergyOne+',
     tagline: 'Daily energy, focus & vitality — caffeine-free.',

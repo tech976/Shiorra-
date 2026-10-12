@@ -7249,11 +7249,31 @@ body.aw-cursor-out .aw-cursor-ring {
     transform: translateY(-1px);
     box-shadow: 0 8px 22px rgba(35,134,127,.32);
 }
+/* Pin the button to the bottom of the card. The cards are stretched to equal
+   height, but their bodies are not equal: Joint Max has no star row because it
+   has no reviews yet, which left its button floating a line higher than its
+   neighbours'. */
+.product-card__cta{margin-top: auto;}
 .product-card__cta:active{transform: translateY(0);}
 .product-card__cta svg{width: 16px; height: 16px;}
 
 /* Match the warm shoot backdrop across all 4 cards */
 .product-card--04 .product-card__media{background: #F7F3EC;}
+/* Joint Max — the carton vermilion, one step darker so it holds up as text.
+   #E04526 itself only reaches 4.16:1 on white; #C53E23 clears 4.5:1. */
+.product-card--04 .product-card__name,
+.product-card--04 .product-card__price { color: #C53E23; }
+
+/* The row is 3-up, which is exactly right while Ginger+ is withdrawn and
+   three cards are live. If it comes back there are four, and a fourth would
+   be stranded alone on a second line — so the row widens to 4 only when a
+   fourth card is actually present. Nothing changes at three. */
+@media (min-width: 1101px){
+    .products-row__grid:has(> .product-card:nth-child(4)){
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 1320px;
+    }
+}
 
 /* Tighten card density when the row holds 4 SKUs */
 @media (min-width: 1101px){
