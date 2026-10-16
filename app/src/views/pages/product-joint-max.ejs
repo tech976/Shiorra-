@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Joint Max · Shiōrra · Advanced Joint &amp; Cartilage Support</title>
-<meta name="description" content="Shiōrra Joint Max — Glucosamine Hydrochloride 1500 mg with Chondroitin Sulphate 1200 mg. A targeted two-active formula for joint health, cartilage and everyday mobility. A trademark of K.C. Laboratories." />
+<meta name="description" content="Shiōrra Joint Max. Glucosamine Hydrochloride 1500 mg with Chondroitin Sulphate 1200 mg. A targeted two-active formula for joint health, cartilage and everyday mobility. A trademark of K.C. Laboratories." />
 <link rel="shortcut icon" type="image/png" href="/img/logo/logo-green.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -955,7 +955,7 @@
             { n: 6, t: 'The two actives' },
             { n: 7, t: 'Why you should trust us' }
           ];
-          var _slideSrc = function (n) { return '/img/products/joint-n' + n + '.png?v=2'; };
+          var _slideSrc = function (n) { return '/img/products/joint-n' + n + '.png?v=3'; };
         %>
         <div class="gallery" style="--n:<%= _slides.length %>">
           <div class="gallery-main">
@@ -980,7 +980,7 @@
               they have been selling; Joint Max has not shipped a single pack,
               so there is nothing to average. The launch chip goes in its place
               and the rating block comes back once real reviews exist. %>
-          <p class="pi-launch">New — just launched</p>
+          <p class="pi-launch">New. Just launched</p>
 
           <form action="/cart/buy-now" method="post" id="addToCartForm" class="pi-buy-form">
             <input type="hidden" name="productId" value="<%= product.id %>">
@@ -1240,16 +1240,16 @@
 <section class="wf" aria-labelledby="wfTitle">
   <div class="wrap">
     <div class="wf__head">
-      <h2 class="s-title" id="wfTitle">Made for days that ask something of your joints.</h2>
-      <p class="wf__sub">Joint Max is a daily supplement for adults — the kind of thing you take because of what tomorrow looks like, not because of how today went.</p>
+      <h2 class="s-title" id="wfTitle">Made for the way you move</h2>
+      <p class="wf__sub">Everyday joint support for the movements that matter, today and for the years ahead.</p>
     </div>
 
     <%
       var _wfTiles = [
-        { img: 'joint-stairs',   t: 'Stairs, twice a day',      alt: 'A man in his sixties climbing the stairs at home, one hand on the bannister' },
-        { img: 'joint-garden',   t: 'Back in the garden',       alt: 'A woman kneeling in a sunlit garden, planting into a terracotta pot' },
+        { img: 'joint-stairs',   t: 'Stairs without second thoughts', alt: 'A man in his sixties climbing the stairs at home, one hand on the bannister' },
+        { img: 'joint-garden',   t: 'Gardening without holding back', alt: 'A woman kneeling in a sunlit garden, planting into a terracotta pot' },
         { img: 'joint-standing', t: 'On your feet all day',     alt: 'A shopkeeper standing at his counter at the end of the working day' },
-        { img: 'joint-walking',  t: 'Still walking at seventy', alt: 'An older couple walking together along a tree-lined path at golden hour' }
+        { img: 'joint-walking',  t: 'Walks you don’t want to miss',  alt: 'An older couple walking together along a tree-lined path at golden hour' }
       ];
     %>
     <ul class="wf-tiles">
@@ -1263,7 +1263,7 @@
       <% }); %>
     </ul>
 
-    <p class="wf-foot">For adults. Joint Max is a health supplement, not for medicinal use. If you are pregnant, lactating, under 18, taking medication or managing a condition, speak to your healthcare professional first &mdash; see the questions below.</p>
+    <p class="wf-foot">Joint Max is a daily supplement for adults who want to stay active, mobile and confident in everyday movement. Not for medicinal use. If you are pregnant, lactating, under 18, taking medication or managing a condition, speak to your healthcare professional first.</p>
   </div>
 </section>
 
@@ -1376,6 +1376,16 @@
   .jx-card__k{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--honey-deep);margin:0 0 8px}
   .jx-card__t{font-size:23px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);margin:0 0 14px;line-height:1.2}
   .jx-card__p{font-size:15.5px;line-height:1.65;color:var(--ink-soft);margin:0}
+  /* The ingredient sentence in each card. A tinted highlight rather than bold:
+     bold at this size competes with the card heading, where a wash of the
+     brand peach reads as "this is the line that matters" without shouting.
+     box-decoration-break keeps the tint rounded on every wrapped line instead
+     of only the first and last. */
+  .jx-card__p mark{
+    background:var(--honey-soft);color:var(--ink);
+    padding:1px 3px;border-radius:4px;
+    -webkit-box-decoration-break:clone;box-decoration-break:clone;
+  }
   /* The dose chip only appears on the regions an active actually acts on, so
      the 1500 mg and 1200 mg figures stay on the page without a separate card. */
   .jx-doses{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
@@ -1431,15 +1441,19 @@
       // Each entry is one region of the diagram. Doses are transcribed from
       // the Supplement Facts panel and are PER SERVING, which that panel
       // defines as 3 tablets.
+      // <mark> marks the sentence in each card that names an active and says
+      // what it does there — the line a skimmer should land on. Styled as a
+      // tinted highlight rather than bold so it reads as emphasis on the page
+      // rather than as a heading.
       var _jx = [
         { k: 'cartilage', kicker: 'The cushion', t: 'Cartilage', short: 'Cartilage',
-          p: 'The smooth layer capping each bone end \u2014 what lets a joint bend without the two bones meeting. Both actives belong here: chondroitin sulphate is a component of cartilage itself, and glucosamine is a building block the body uses to make and repair it.',
+          p: 'The smooth layer capping each bone end, and what lets a joint bend without the two bones meeting. <mark>Chondroitin sulphate is a component of cartilage itself, and glucosamine is a building block the body uses to make and repair it.</mark>',
           doses: [{ n: '1500', u: 'mg glucosamine' }, { n: '1200', u: 'mg chondroitin' }] },
         { k: 'space', kicker: 'The cushion in motion', t: 'The joint space', short: 'Joint space',
-          p: 'The gap between the two cartilage surfaces, filled with synovial fluid that lubricates the joint and spreads load across it. Chondroitin helps cartilage hold water, and holding water is what keeps that cushioning there under weight.',
+          p: 'The gap between the two cartilage surfaces, filled with synovial fluid that lubricates the joint and spreads load across it. <mark>Chondroitin helps cartilage hold water, and holding water is what keeps that cushioning there under weight.</mark>',
           doses: [] },
         { k: 'bone', kicker: 'The structure', t: 'Bone ends', short: 'Bone ends',
-          p: 'Femur above, tibia below. They are never meant to meet \u2014 cartilage and fluid sit between them. Which is why a joint formula is about maintaining that layer, not about the bone.',
+          p: 'Femur above, tibia below. They are never meant to meet: cartilage and fluid sit between them. <mark>Which is why a joint formula is about maintaining that layer, not about the bone.</mark>',
           doses: [] }
       ];
     %>
@@ -1503,47 +1517,79 @@
   </div>
 </section>
 
-<!-- HOW TO TAKE IT -->
-<%
-  // Not an evidence section: Joint Max has no trial of its own, so there is
-  // nothing to present as one. What it does have is a real, printed dosing
-  // protocol with two distinct phases, which IS a sequence and earns a track.
-  // Every line below is transcribed from the Recommended Usage, Caution and
-  // Storage panels on the carton (gallery slide 3).
-  var _jt = {
-    eyebrow: 'How to take it',
-    title: 'A loading phase, then <em>a habit.</em>',
-    lede: 'Joint Max is dosed in two stages. The pack is explicit about both, which is unusual and worth reading before you start.',
-    stages: [
-      {
-        k: 'Months 1\u20136',
-        h: 'Three tablets a day',
-        s: 'The label asks for three tablets every day for the first three to six months, or as your healthcare professional directs.',
-        points: [
-          'Three tablets daily, with meals',
-          '1500 mg glucosamine + 1200 mg chondroitin per serving',
-          'Give it months, not days',
-          'Do not exceed the recommended daily usage'
-        ]
-      },
-      {
-        k: 'After that',
-        h: 'One tablet, once or twice',
-        s: 'For long-term joint health the pack steps the dose down &mdash; one tablet once or twice daily.',
-        points: [
-          'One tablet once or twice a day',
-          'Still taken with meals',
-          'A routine you keep rather than a course you finish'
-        ]
-      }
-      // A third stage covering who it is for used to sit here. It moved up the
-      // page into its own section, so this track is only about dosing now.
-    ],
-    note: '<p>This is the formulation and the dosing exactly as printed on the pack. Joint Max has not itself been through a clinical trial, and nothing above is a claim about when you will feel a difference &mdash; that varies a great deal between people.</p>' +
-          '<ul><li>Glucosamine Hydrochloride: 1500 mg per serving</li><li>Chondroitin Sulphate Sodium: 1200 mg per serving</li><li>A serving is 3 tablets</li><li>No % RDA is established for either active</li><li>Store in a cool, dark, dry place, away from direct sunlight</li></ul>'
-  };
-%>
-<%- include('../partials/journey-timeline', { jt: _jt }) %>
+<!-- JOINT HEALTH TIMELINE — full-bleed artwork -->
+<style>
+  /* ============================================================
+     JOINT HEALTH TIMELINE — edge-to-edge artwork, blended into the page
+     Same treatment as the haemoglobin trail on Iron+. The artwork spans the
+     full viewport, outside .wrap, and is sized so the whole thing lands on one
+     screen rather than taking two scrolls.
+     It sits on a peach gradient, not a flat colour, so the band behind it is
+     built from the artwork's OWN edges: every stop below is the average of
+     its outermost 6 columns at that height, measured off the file. At any
+     point down the image the colour just outside it is the colour just inside
+     it, so when the height cap narrows the figure the gutters disappear.
+     Re-sample these if the artwork is re-exported.
+     ============================================================ */
+  .jtl{background:#fff}
+  .jtl__bed{
+    padding-top:clamp(52px,7vw,96px);
+    background:linear-gradient(180deg,
+      var(--honey-soft) 0%, #FEEDD6 15%, #FEEBD3 24%, #FDEAD0 32%,
+      #FDE9CE 49%, #FDECD2 58%, #FDDBAE 66%, #FED7A3 75%,
+      #FDDDAC 83%, #FDD79F 92%, #FCD295 100%);
+  }
+  .jtl__fig{
+    margin:0 auto;position:relative;
+    /* Cap the WIDTH at whatever makes the 2.4:1 height fit the space left
+       under the sticky topbar, so the whole timeline is readable without
+       scrolling. --topbar-h is published by the topbar script; 170px covers
+       this section's own top padding and the sticky buy bar that sits over
+       the bottom of the viewport once you have scrolled. svh, not vh, so
+       mobile browser chrome does not make it overshoot. */
+    max-width:calc((100vh  - var(--topbar-h, 89px) - 170px) * 1600 / 667);
+    max-width:calc((100svh - var(--topbar-h, 89px) - 170px) * 1600 / 667);
+  }
+  .jtl__fig img{
+    display:block;width:100%;height:auto;
+    /* A hair of side fade. The bed already matches the artwork's edges, so
+       this is insurance against the join showing on a wide gamut display,
+       and it is spent well before the first circle. */
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 2%,#000 98%,transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0,#000 2%,#000 98%,transparent 100%);
+  }
+  /* Eases the artwork's bottom edge back to the white the FAQ starts on. */
+  .jtl__tail{height:clamp(44px,6vw,92px);background:linear-gradient(180deg,#FCD295 0%,#FFFFFF 100%)}
+  /* The head sits inside the bed, on the peach, so the band reads as one
+     thing: title, then the artwork it introduces. */
+  .jtl__head{text-align:center;margin:0 auto clamp(26px,3.6vw,44px);padding:0 20px;max-width:720px}
+  .jtl__head .s-title{margin-inline:auto;margin-bottom:12px}
+  .jtl__sub{font-size:16px;line-height:1.6;color:var(--muted);margin:0}
+  @media (max-width:680px){.jtl__sub{font-size:15px}}
+  @media (max-width:720px){
+    /* At phone width the artwork is a ~160px strip and its labels are tiny.
+       A portrait export for mobile is the fix; swap it in with <picture>
+       when one exists. */
+    .jtl__bed{padding-top:40px}
+  }
+</style>
+
+<section class="jtl" aria-labelledby="jtlTitle">
+  <div class="jtl__bed">
+    <div class="jtl__head">
+      <span class="s-eyebrow">What to expect</span>
+      <h2 class="s-title" id="jtlTitle">Your joint health timeline</h2>
+      <p class="jtl__sub">With consistent daily use. Individual results vary.</p>
+    </div>
+    <figure class="jtl__fig">
+      <%# The artwork is text-heavy, so the alt carries its content for anyone
+          who cannot see it. Keep it in step if the image is re-exported. %>
+      <img src="/img/products/joint-timeline.png?v=2" width="1600" height="667" loading="lazy"
+           alt="Your joint health timeline with consistent daily use. Weeks 4 to 6, pain reduction. Weeks 8 to 12, improved function. Months 3 to 6, cartilage support. Months 3 to 6, quality of life. Individual results may vary.">
+    </figure>
+  </div>
+  <div class="jtl__tail" aria-hidden="true"></div>
+</section>
 
 <!-- FAQ -->
 <%
@@ -1552,17 +1598,15 @@
   var _faqTabs = [
     { k: 'general', label: 'General', items: [
           { q: "What's in Joint Max?",
-            a: "Two actives, both at full dose: <strong>Glucosamine Hydrochloride 1500 mg</strong> and <strong>Chondroitin Sulphate Sodium 1200 mg</strong> per serving. Nothing else is doing the work \u2014 the rest of the label is the tablet itself." },
+            a: "Two trusted joint support nutrients at meaningful doses. Each serving provides <strong>Glucosamine Hydrochloride 1500 mg</strong> and <strong>Chondroitin Sulphate Sodium 1200 mg</strong>, a complementary combination designed to support cartilage health, joint function and everyday mobility." },
           { q: "How should Joint Max be taken?",
-            a: "Three tablets daily, with meals, for the first <strong>3 to 6 months</strong>. After that the pack steps down to one tablet once or twice daily for long-term joint health \u2014 or as directed by your healthcare professional. Do not exceed the recommended daily usage." },
+            a: "Three tablets daily, with meals, for the first <strong>3 to 6 months</strong>. After that the pack steps down to one tablet once or twice daily for long-term joint health, or as directed by your healthcare professional. Do not exceed the recommended daily usage." },
           { q: "How long before I notice anything?",
-            a: "Joint supplements are judged over months rather than days, which is why the label asks for three to six months at the full dose before stepping down. We are not going to put a number on it: there is no Joint Max trial to quote, and it varies a great deal between people." },
+            a: "Joint health is a long-term journey, and results can vary from person to person. We recommend taking Joint Max consistently at the suggested dose for <strong>3 to 6 months</strong> to support joint health, mobility and comfort. Consistent daily use is key to getting the most from your supplement." },
           { q: "Who is Joint Max for?",
-            a: "Adults who want daily nutritional support for their joints and cartilage. It is a health supplement, <strong>not for medicinal use</strong>, and not a substitute for a varied diet. If you are pregnant, lactating, on medication or have a medical condition, speak to your healthcare professional first." },
+            a: "Joint Max is for adults who want to support their joint health, mobility, and flexibility. It is especially suitable for people experiencing age-related joint stiffness, those with physically demanding or active lifestyles, or anyone looking for daily nutritional support to keep their joints moving comfortably." },
           { q: "Are there any side effects?",
-            a: "It is designed to be taken with meals, which is where most people find it sits best. Discontinue use and consult your healthcare professional if any reaction occurs." },
-          { q: "Is Joint Max vegetarian?",
-            a: "We are not claiming either way on this page yet. Glucosamine is commonly shellfish-derived and chondroitin is commonly bovine, and the pack does not state the source \u2014 so if that matters to you, write to us at <a href=\"mailto:hello@shiorra.com\" style=\"color:var(--honey-deep);text-decoration:underline\">hello@shiorra.com</a> and we will confirm before you buy." }
+            a: "It is designed to be taken with meals, which is where most people find it sits best. Discontinue use and consult your healthcare professional if any reaction occurs." }
     ] },
     { k: 'delivery', label: 'Delivery', items: faqShared.delivery },
     { k: 'service',  label: 'Service',  items: faqShared.service }
@@ -1856,7 +1900,7 @@
     // Keep the alt in step with the slide, otherwise it stays stuck
     // describing the first image for anyone using a screen reader.
     const label = t.getAttribute('aria-label');
-    if (label) main.alt = 'Shiōrra Joint Max — ' + label;
+    if (label) main.alt = 'Shiōrra Joint Max: ' + label;
   };
 
   // Hover previews the slide on pointer devices; click still works everywhere

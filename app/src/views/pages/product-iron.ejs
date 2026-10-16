@@ -1891,7 +1891,8 @@
   var _tint = {
     'advanced-iron':      { soft: '#FDEEF3', ink: '#E11D48' },
     'advanced-ginger':    { soft: '#EAF5EF', ink: '#2E8B57' },
-    'advanced-energyone': { soft: '#F1E9F8', ink: '#B73A92' }
+    'advanced-energyone': { soft: '#F1E9F8', ink: '#B73A92' },
+    'joint-max':          { soft: '#FDEDE6', ink: '#C53E23' }
   };
   var _rupee = function (p) { return '₹' + (p / 100).toLocaleString('en-IN'); };
 %>
@@ -1910,7 +1911,8 @@
            var _pairImg = {
              'advanced-iron':      '/img/products/iron-home.png',
              'advanced-ginger':    '/img/products/ginger-home.png',
-             'advanced-energyone': '/img/products/energy-home.png'
+             'advanced-energyone': '/img/products/energy-home.png',
+             'joint-max':          '/img/products/joint-home.png'
            };
            var img = _pairImg[p.slug] || (p.images && p.images[0] && p.images[0].url) || '/img/products/box-studio.png';
            var out = (typeof p.stock === 'number' && p.stock <= 0); %>
