@@ -198,13 +198,6 @@
   .pi-actives i{font-style:normal;font-weight:400;color:#CBCBCB;margin:0 3px}
 
   .pi-proof{display:flex;align-items:center;gap:8px;margin-bottom:18px;line-height:1}
-  /* Stands where the star rating sits on the other products. Quiet on purpose
-     — it marks the product as new, it does not pretend to be social proof. */
-  .pi-launch{
-    display:inline-block;margin-bottom:18px;font-size:12px;font-weight:700;
-    letter-spacing:.08em;text-transform:uppercase;color:var(--honey-deep);
-    background:var(--honey-soft);padding:6px 13px;border-radius:999px;
-  }
   .pi-proof__stars{color:#F5A623;font-size:15px;letter-spacing:2px}
   .pi-proof__score{font-weight:800;color:var(--ink);font-size:14px}
   .pi-proof__sep{color:#CBCBCB}
@@ -955,7 +948,7 @@
             { n: 6, t: 'The two actives' },
             { n: 7, t: 'Why you should trust us' }
           ];
-          var _slideSrc = function (n) { return '/img/products/joint-n' + n + '.png?v=3'; };
+          var _slideSrc = function (n) { return '/img/products/joint-n' + n + '.png?v=4'; };
         %>
         <div class="gallery" style="--n:<%= _slides.length %>">
           <div class="gallery-main">
@@ -976,11 +969,11 @@
           <p class="pi-subtitle">Advanced Joint &amp; Cartilage Support</p>
           <p class="pi-actives">Glucosamine Hydrochloride <i>|</i> Chondroitin Sulphate</p>
 
-          <%# No star rating here, deliberately. The siblings show one because
-              they have been selling; Joint Max has not shipped a single pack,
-              so there is nothing to average. The launch chip goes in its place
-              and the rating block comes back once real reviews exist. %>
-          <p class="pi-launch">New. Just launched</p>
+          <%# No star rating here, deliberately: the siblings show one because
+              they have been selling, and Joint Max has not shipped a pack, so
+              there is nothing to average. A launch chip used to stand in this
+              gap and has been removed, so the gap is now simply empty. Put the
+              .pi-proof block back here once real reviews exist. %>
 
           <form action="/cart/buy-now" method="post" id="addToCartForm" class="pi-buy-form">
             <input type="hidden" name="productId" value="<%= product.id %>">
@@ -1535,9 +1528,9 @@
   .jtl__bed{
     padding-top:clamp(52px,7vw,96px);
     background:linear-gradient(180deg,
-      var(--honey-soft) 0%, #FEEDD6 15%, #FEEBD3 24%, #FDEAD0 32%,
-      #FDE9CE 49%, #FDECD2 58%, #FDDBAE 66%, #FED7A3 75%,
-      #FDDDAC 83%, #FDD79F 92%, #FCD295 100%);
+      var(--honey-soft) 0%, #FEEFD9 15%, #FDEACF 24%, #FEE9CD 32%,
+      #FDE8CC 49%, #FDEBD3 58%, #FED8A7 66%, #FED49D 75%,
+      #FDDCAA 83%, #FDD59C 92%, #FCCF90 100%);
   }
   .jtl__fig{
     margin:0 auto;position:relative;
@@ -1547,8 +1540,8 @@
        this section's own top padding and the sticky buy bar that sits over
        the bottom of the viewport once you have scrolled. svh, not vh, so
        mobile browser chrome does not make it overshoot. */
-    max-width:calc((100vh  - var(--topbar-h, 89px) - 170px) * 1600 / 667);
-    max-width:calc((100svh - var(--topbar-h, 89px) - 170px) * 1600 / 667);
+    max-width:calc((100vh  - var(--topbar-h, 89px) - 170px) * 1942 / 810);
+    max-width:calc((100svh - var(--topbar-h, 89px) - 170px) * 1942 / 810);
   }
   .jtl__fig img{
     display:block;width:100%;height:auto;
@@ -1559,7 +1552,7 @@
             mask-image:linear-gradient(90deg,transparent 0,#000 2%,#000 98%,transparent 100%);
   }
   /* Eases the artwork's bottom edge back to the white the FAQ starts on. */
-  .jtl__tail{height:clamp(44px,6vw,92px);background:linear-gradient(180deg,#FCD295 0%,#FFFFFF 100%)}
+  .jtl__tail{height:clamp(44px,6vw,92px);background:linear-gradient(180deg,#FCCF90 0%,#FFFFFF 100%)}
   /* The head sits inside the bed, on the peach, so the band reads as one
      thing: title, then the artwork it introduces. */
   .jtl__head{text-align:center;margin:0 auto clamp(26px,3.6vw,44px);padding:0 20px;max-width:720px}
@@ -1584,7 +1577,7 @@
     <figure class="jtl__fig">
       <%# The artwork is text-heavy, so the alt carries its content for anyone
           who cannot see it. Keep it in step if the image is re-exported. %>
-      <img src="/img/products/joint-timeline.png?v=2" width="1600" height="667" loading="lazy"
+      <img src="/img/products/joint-timeline.png?v=3" width="1942" height="810" loading="lazy"
            alt="Your joint health timeline with consistent daily use. Weeks 4 to 6, pain reduction. Weeks 8 to 12, improved function. Months 3 to 6, cartilage support. Months 3 to 6, quality of life. Individual results may vary.">
     </figure>
   </div>

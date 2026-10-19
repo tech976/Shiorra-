@@ -821,13 +821,12 @@
                 </a>
 
                 <div class="fp-feature__copy reveal">
-                    <%# No rating row here. Iron+ and EnergyOne+ carry one because
-                        they have been selling; Joint Max has not shipped a pack,
-                        so there is nothing to average. The launch chip stands in
-                        and the stars come back with real reviews. %>
-                    <div class="fp-feature__rating-row">
-                        <span class="fp-feature__rating-link" style="color:var(--c-charcoal);font-weight:700">New &mdash; just launched</span>
-                    </div>
+                    <%# No rating row here. Iron+ and EnergyOne+ carry one
+                        because they have been selling; Joint Max has not
+                        shipped a pack, so there is nothing to average. A
+                        launch chip stood in and has been removed, so the row
+                        is dropped entirely rather than rendered empty.
+                        Restore the sibling markup here with real reviews. %>
 
                     <h2 class="fp-feature__title">
                         <span class="fp-feature__title-pre">Advanced joint &amp; cartilage support</span>
