@@ -59,6 +59,7 @@ const RAW_BODY_PATHS = new Set([
   '/checkout/shipping-info',
   '/checkout/promotions',
   '/checkout/promotions/apply',
+  '/checkout/abandoned',
 ]);
 app.use((req, res, next) => {
   if (RAW_BODY_PATHS.has(req.originalUrl)) return next();

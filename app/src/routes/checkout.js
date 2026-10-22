@@ -32,4 +32,8 @@ router.get('/promotions', ctrl.promotionsHealth);
 router.post('/promotions', express.raw({ type: '*/*' }), ctrl.getPromotions);
 router.post('/promotions/apply', express.raw({ type: '*/*' }), ctrl.applyPromotion);
 
+// Magic Checkout abandoned-cart webhook (same secret as shipping-info).
+router.get('/abandoned', ctrl.abandonedHealth);
+router.post('/abandoned', express.raw({ type: '*/*' }), ctrl.abandonedCheckout);
+
 module.exports = router;

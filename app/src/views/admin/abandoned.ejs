@@ -1,0 +1,67 @@
+<%- include('./_styles') %>
+<div class="admin">
+    <%- include('./_nav') %>
+    <div class="admin__main">
+
+        <div class="adm-hero">
+            <div class="adm-crumbs">
+                <a href="/admin">Admin</a>
+                <span class="sep">/</span>
+                <strong>Abandoned checkouts</strong>
+            </div>
+            <div class="adm-hero__row">
+                <div>
+                    <h1>Abandoned checkouts</h1>
+                    <div class="adm-hero__sub">
+                        <%= rows.length %> captured · people who entered their details on Magic Checkout and left without paying
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <% if (!rows.length) { %>
+            <div class="card">
+                <p style="color:#6B6B6B;margin:0">
+                    Nothing captured yet. These arrive from Razorpay once the
+                    <strong>Abandoned webhook</strong> is pointed at
+                    <code>/checkout/abandoned</code> in Magic Checkout settings.
+                </p>
+            </div>
+        <% } else { %>
+            <div class="card" style="padding:0;overflow-x:auto">
+                <table class="tbl" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>When</th><th>Name</th><th>Phone</th><th>Email</th>
+                            <th>Location</th><th>Value</th><th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% rows.forEach(function (r) { %>
+                            <tr>
+                                <td><%= r.createdAt.toLocaleString('en-IN') %></td>
+                                <td><%= r.name || '—' %></td>
+                                <td>
+                                    <% if (r.phone) { %><a href="tel:<%= r.phone %>"><%= r.phone %></a><% } else { %>—<% } %>
+                                </td>
+                                <td>
+                                    <% if (r.email) { %><a href="mailto:<%= r.email %>"><%= r.email %></a><% } else { %>—<% } %>
+                                </td>
+                                <td><%= [r.city, r.state, r.postcode].filter(Boolean).join(', ') || '—' %></td>
+                                <td><%= r.totalInPaise ? '₹' + (r.totalInPaise/100).toFixed(0) : '—' %></td>
+                                <td>
+                                    <% if (r.recoveredAt) { %>
+                                        <span class="badge badge--paid">Recovered</span>
+                                    <% } else { %>
+                                        <span class="badge">Open</span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+
+    </div>
+</div>

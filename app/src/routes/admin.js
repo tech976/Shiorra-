@@ -54,6 +54,12 @@ router.get('/orders/:id', ctrl.orderDetail);
 router.get('/orders/:id/invoice', ctrl.orderInvoice);
 router.post('/orders/:id/status', ctrl.orderUpdateStatus);
 router.post('/orders/:id/notes', ctrl.orderUpdateNotes);
+router.post('/orders/:id/ship', ctrl.orderShip);
+router.post('/orders/:id/track', ctrl.orderTrack);
+router.post('/orders/:id/refund', ctrl.orderRefund);
+
+// Magic Checkout drop-offs
+router.get('/abandoned', ctrl.abandonedList);
 
 // Users
 router.get('/users', ctrl.userList);

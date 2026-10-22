@@ -20,6 +20,9 @@ module.exports = {
   // Delhivery — pincode serviceability on the checkout path.
   delhivery: {
     apiToken: process.env.DELHIVERY_API_TOKEN,
+    // Must match the warehouse name registered in the Delhivery panel EXACTLY
+    // — shipment creation is rejected otherwise.
+    pickupName: process.env.DELHIVERY_PICKUP_NAME,
   },
   razorpay: {
     keyId: process.env.RAZORPAY_KEY_ID,

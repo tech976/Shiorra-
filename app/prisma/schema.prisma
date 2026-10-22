@@ -159,6 +159,20 @@ model Order {
   adminNotes        String?       @db.Text
   tags              String[]      @default([])
 
+  // Fulfilment (Delhivery). Populated when the shipment is pushed to them.
+  awbNumber      String?   @unique
+  courier        String?
+  shipmentStatus String?
+  trackingUrl    String?
+  shippedAt      DateTime?
+  deliveredAt    DateTime?
+
+  // Refunds. Partial refunds are allowed, so this is an amount, not a flag.
+  refundedInPaise  Int       @default(0)
+  razorpayRefundId String?
+  refundedAt       DateTime?
+  refundReason     String?
+
   couponCode String?
   couponId   String?
   coupon     Coupon? @relation(fields: [couponId], references: [id])
@@ -221,4 +235,26 @@ model PaymentEvent {
   payload     String    @db.Text
   processedAt DateTime?
   createdAt   DateTime  @default(now())
+}
+
+// Magic Checkout drop-offs. Razorpay posts these when a customer enters their
+// details and leaves without paying — people our own cart never sees, because
+// they abandon on Razorpay's screen rather than ours.
+model AbandonedCheckout {
+  id              String    @id @default(cuid())
+  razorpayOrderId String?   @unique
+  phone           String?
+  email           String?
+  name            String?
+  city            String?
+  state           String?
+  postcode        String?
+  totalInPaise    Int       @default(0)
+  itemsJson       String?   @db.Text
+  recoveredAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([phone])
+  @@index([createdAt])
 }

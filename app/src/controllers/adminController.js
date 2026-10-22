@@ -4,6 +4,8 @@ const { z } = require('zod');
 const prisma = require('../config/db');
 const env = require('../config/env');
 const { toPaise, formatINR } = require('../utils/money');
+const delhivery = require('../services/delhivery');
+const { getRazorpay } = require('../config/razorpay');
 
 const productSchema = z.object({
   name: z.string().min(2).max(160),
@@ -986,4 +988,160 @@ exports.reportsCsv = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+
+// ---------------------------------------------------------------------------
+// Fulfilment + refunds
+// ---------------------------------------------------------------------------
+
+// POST /admin/orders/:id/ship — hand the order to Delhivery, store the waybill.
+exports.orderShip = async (req, res, next) => {
+  try {
+    const order = await prisma.order.findUnique({
+      where: { id: req.params.id },
+      include: { items: true, shippingAddress: true },
+    });
+    if (!order) {
+      req.flash('error', 'Order not found.');
+      return res.redirect('/admin/orders');
+    }
+    if (order.awbNumber) {
+      req.flash('info', `Already shipped — waybill ${order.awbNumber}.`);
+      return res.redirect(`/admin/orders/${order.id}`);
+    }
+    if (order.paymentStatus !== 'CAPTURED') {
+      req.flash('error', 'Only paid orders can be shipped.');
+      return res.redirect(`/admin/orders/${order.id}`);
+    }
+
+    const result = await delhivery.createShipment(order, order.shippingAddress);
+    if (!result.ok) {
+      req.flash('error', result.error);
+      return res.redirect(`/admin/orders/${order.id}`);
+    }
+    await prisma.order.update({
+      where: { id: order.id },
+      data: {
+        awbNumber: result.awb,
+        courier: 'Delhivery',
+        trackingUrl: delhivery.trackingUrlFor(result.awb),
+        shipmentStatus: 'Manifested',
+        shippedAt: new Date(),
+        status: 'SHIPPED',
+      },
+    });
+    req.flash('success', `Shipped. Waybill ${result.awb}.`);
+    res.redirect(`/admin/orders/${order.id}`);
+  } catch (err) { next(err); }
+};
+
+// POST /admin/orders/:id/track — pull the latest scan and mirror it locally.
+exports.orderTrack = async (req, res, next) => {
+  try {
+    const order = await prisma.order.findUnique({ where: { id: req.params.id } });
+    if (!order?.awbNumber) {
+      req.flash('error', 'No waybill on this order yet.');
+      return res.redirect(`/admin/orders/${req.params.id}`);
+    }
+    const r = await delhivery.trackShipment(order.awbNumber);
+    if (!r.ok) {
+      req.flash('error', r.error);
+      return res.redirect(`/admin/orders/${order.id}`);
+    }
+    const delivered = String(r.statusType).toUpperCase() === 'DL'
+      || String(r.status).toLowerCase() === 'delivered';
+    await prisma.order.update({
+      where: { id: order.id },
+      data: {
+        shipmentStatus: r.status || order.shipmentStatus,
+        ...(delivered ? { status: 'DELIVERED', deliveredAt: order.deliveredAt || new Date() } : {}),
+      },
+    });
+    req.flash('success', `Tracking: ${r.status || 'updated'}.`);
+    res.redirect(`/admin/orders/${order.id}`);
+  } catch (err) { next(err); }
+};
+
+// POST /admin/orders/:id/refund — refund through Razorpay, in full or part.
+//
+// Money leaves the business here, so every guard is explicit: the order must
+// be captured, the amount must be positive, and it can never exceed what is
+// still refundable. Razorpay is the source of truth — we only record what it
+// confirms, so a failed call never leaves the books saying we refunded.
+exports.orderRefund = async (req, res, next) => {
+  try {
+    const order = await prisma.order.findUnique({ where: { id: req.params.id } });
+    if (!order) {
+      req.flash('error', 'Order not found.');
+      return res.redirect('/admin/orders');
+    }
+    if (order.paymentStatus !== 'CAPTURED' || !order.razorpayPaymentId) {
+      req.flash('error', 'Only a captured online payment can be refunded.');
+      return res.redirect(`/admin/orders/${order.id}`);
+    }
+    const remaining = order.totalInPaise - (order.refundedInPaise || 0);
+    if (remaining <= 0) {
+      req.flash('info', 'This order is already fully refunded.');
+      return res.redirect(`/admin/orders/${order.id}`);
+    }
+
+    // Blank amount = refund everything still outstanding.
+    const raw = String(req.body.amount || '').trim();
+    const amount = raw ? Math.round(parseFloat(raw) * 100) : remaining;
+    if (!Number.isFinite(amount) || amount <= 0) {
+      req.flash('error', 'Enter a refund amount greater than zero.');
+      return res.redirect(`/admin/orders/${order.id}`);
+    }
+    if (amount > remaining) {
+      req.flash('error', `Too much — only Rs${(remaining / 100).toFixed(2)} is still refundable.`);
+      return res.redirect(`/admin/orders/${order.id}`);
+    }
+
+    const rzp = getRazorpay();
+    if (!rzp) {
+      req.flash('error', 'Razorpay is not configured.');
+      return res.redirect(`/admin/orders/${order.id}`);
+    }
+
+    let refund;
+    try {
+      refund = await rzp.payments.refund(order.razorpayPaymentId, {
+        amount,
+        speed: 'normal',
+        notes: { orderNumber: order.orderNumber, reason: req.body.reason || 'Admin refund' },
+      });
+    } catch (e) {
+      const why = e?.error?.description || e?.message || 'Razorpay rejected the refund.';
+      console.error('[refund] failed:', why);
+      req.flash('error', `Refund failed: ${why}`);
+      return res.redirect(`/admin/orders/${order.id}`);
+    }
+
+    const totalRefunded = (order.refundedInPaise || 0) + amount;
+    await prisma.order.update({
+      where: { id: order.id },
+      data: {
+        refundedInPaise: totalRefunded,
+        razorpayRefundId: refund.id,
+        refundedAt: new Date(),
+        refundReason: req.body.reason || null,
+        // Only call the order REFUNDED once nothing is left outstanding.
+        ...(totalRefunded >= order.totalInPaise ? { status: 'REFUNDED', paymentStatus: 'REFUNDED' } : {}),
+      },
+    });
+    req.flash('success', `Refunded Rs${(amount / 100).toFixed(2)} (${refund.id}).`);
+    res.redirect(`/admin/orders/${order.id}`);
+  } catch (err) { next(err); }
+};
+
+// GET /admin/abandoned — Magic Checkout drop-offs.
+exports.abandonedList = async (req, res, next) => {
+  try {
+    const rows = await prisma.abandonedCheckout.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 200,
+    });
+    res.render('admin/abandoned', { title: 'Abandoned checkouts', rows });
+  } catch (err) { next(err); }
 };

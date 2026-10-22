@@ -715,6 +715,59 @@ function promotionPayload(c, subtotal) {
 exports.promotionsHealth = (req, res) =>
   res.json({ ok: true, endpoint: 'promotions', method: 'POST' });
 
+// GET /checkout/abandoned — health only.
+exports.abandonedHealth = (req, res) =>
+  res.json({ ok: true, endpoint: 'abandoned', method: 'POST' });
+
+// POST /checkout/abandoned
+// Razorpay posts here when a customer enters their details on Magic Checkout
+// and leaves without paying. These are people our own cart never sees: they
+// abandon on Razorpay's screen, as guests, so there is no session to inspect.
+exports.abandonedCheckout = async (req, res) => {
+  const body = verifiedBody(req, res, env.razorpay.shippingSecret, 'abandoned');
+  if (!body) return;
+  try {
+    const c = body.customer_details || body.customer || {};
+    const addr = c.shipping_address || c.billing_address || {};
+    const rzpOrderId = body.order_id || body.razorpay_order_id || null;
+
+    const data = {
+      phone: c.contact || c.phone || null,
+      email: c.email || null,
+      name: c.name || null,
+      city: addr.city || null,
+      state: addr.state || null,
+      postcode: addr.zipcode || addr.postal_code || null,
+      totalInPaise: Number.isFinite(body.amount) ? body.amount : 0,
+      itemsJson: body.line_items ? JSON.stringify(body.line_items).slice(0, 4000) : null,
+    };
+
+    // Razorpay retries, and a customer may bounce more than once — key on the
+    // order id so one drop-off stays one row rather than piling up duplicates.
+    if (rzpOrderId) {
+      // Razorpay may post the same drop-off again with LESS detail (an early
+      // bounce carries no address). Updating with the blanks would erase what
+      // we already captured, so only overwrite fields that actually arrived.
+      const patch = Object.fromEntries(
+        Object.entries(data).filter(([, v]) => v !== null && v !== undefined && v !== 0 && v !== '')
+      );
+      await prisma.abandonedCheckout.upsert({
+        where: { razorpayOrderId: rzpOrderId },
+        update: patch,
+        create: { razorpayOrderId: rzpOrderId, ...data },
+      });
+    } else {
+      await prisma.abandonedCheckout.create({ data });
+    }
+    console.log(`[abandoned] captured ${data.phone || data.email || 'unknown'}`);
+    return res.json({ ok: true });
+  } catch (err) {
+    console.error('[abandoned] failed:', err?.message || err);
+    // Always 200 — a failure here must never make Razorpay retry forever.
+    return res.json({ ok: true });
+  }
+};
+
 // POST /checkout/promotions
 // Razorpay asks which coupons to offer this customer. With no usable coupon
 // it must still answer 200 with an empty list — an error here stalls checkout.
