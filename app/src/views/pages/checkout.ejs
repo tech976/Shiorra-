@@ -707,14 +707,22 @@
     if (MAGIC) {
         document.querySelectorAll('#checkoutForm .co-fields [required]')
             .forEach(function (el) { el.required = false; });
-        // There is more than one .co-fields block, so hide them all — the
-        // address inputs live in the second. And `hidden` alone loses: it
-        // sets display:none from the UA stylesheet, which .co-fields' own
-        // `display: grid` overrides. An inline style beats the stylesheet.
-        document.querySelectorAll('#checkoutForm .co-fields').forEach(function (el) {
+        // Magic Checkout is meant to be frictionless: Razorpay collects
+        // contact, address AND payment method on one screen. Re-asking here
+        // is the friction we are removing, so drop both steps entirely.
+        // NOTE: inline style, not `hidden` — `hidden` only sets display:none
+        // from the UA stylesheet, which .co-fields' `display: grid` overrides.
+        const hide = function (el) {
+            if (!el) return;
             el.hidden = true;
             el.style.display = 'none';
-        });
+        };
+        document.querySelectorAll('#checkoutForm .co-fields').forEach(hide);
+        // Whole "Shipping address" and "Payment method" steps.
+        const addrInput = document.querySelector('#checkoutForm #co-name');
+        if (addrInput) hide(addrInput.closest('.co-section'));
+        const payBox = document.querySelector('#checkoutForm .co-pay');
+        if (payBox) hide(payBox.closest('.co-section'));
         // The saved-address picker and its heading belong to the same step.
         document.querySelectorAll('#checkoutForm .co-saved, #checkoutForm .co-addr-head')
             .forEach(function (el) { el.style.display = 'none'; });
@@ -744,7 +752,11 @@
     });
 
     form.addEventListener('submit', async (e) => {
-        const method = (form.querySelector('input[name="payMethod"]:checked') || {}).value || 'cod';
+        // Magic Checkout has no COD step of its own here — Razorpay presents
+        // the payment options — so it never falls through to the COD submit.
+        const method = MAGIC
+            ? 'razorpay'
+            : ((form.querySelector('input[name="payMethod"]:checked') || {}).value || 'cod');
 
         // COD = let the form submit natively
         if (method === 'cod') return;
@@ -814,5 +826,17 @@
             btn.disabled = false;
         }
     });
+
+    // Zero-friction: with Magic Checkout the summary page is a speed bump —
+    // everything on it is collected on Razorpay's screen anyway. Open it as
+    // soon as we are ready. The button stays as the fallback if a customer
+    // dismisses the modal, or if the auto-open is blocked.
+    if (MAGIC && razorpayEnabled) {
+        window.setTimeout(function () {
+            if (btn.disabled) return;
+            if (typeof form.requestSubmit === 'function') form.requestSubmit();
+            else form.dispatchEvent(new Event('submit', { cancelable: true }));
+        }, 250);
+    }
 })();
 </script>

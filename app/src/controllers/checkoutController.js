@@ -794,7 +794,10 @@ exports.shippingInfo = async (req, res) => {
       zipcode: zip,
       serviceable,
       shipping_fee: serviceable ? fee : 0,
-      cod: serviceable,
+      // COD is deliberately off for Magic Checkout — it is a prepaid, one-tap
+      // flow, and a COD option reintroduces the confirmation friction it
+      // exists to remove. The site's own COD checkout is untouched.
+      cod: false,
       cod_fee: 0,
     };
   });
