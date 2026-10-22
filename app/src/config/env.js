@@ -14,6 +14,10 @@ module.exports = {
   appUrl: process.env.APP_URL || 'http://localhost:3000',
   databaseUrl: process.env.DATABASE_URL,
   sessionSecret: process.env.SESSION_SECRET || 'dev-only-change-me',
+  // Delhivery — pincode serviceability on the checkout path.
+  delhivery: {
+    apiToken: process.env.DELHIVERY_API_TOKEN,
+  },
   razorpay: {
     keyId: process.env.RAZORPAY_KEY_ID,
     keySecret: process.env.RAZORPAY_KEY_SECRET,

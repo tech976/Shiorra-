@@ -4,6 +4,7 @@ const prisma = require('../config/db');
 const env = require('../config/env');
 const { getRazorpay } = require('../config/razorpay');
 const cartController = require('./cartController');
+const delhivery = require('../services/delhivery');
 const { generateOrderNumber } = require('../utils/orderNumber');
 const mailer = require('../utils/mailer');
 
@@ -783,12 +784,21 @@ exports.shippingInfo = async (req, res) => {
     : cartController.shippingFor(subtotal);
 
   const addresses = Array.isArray(body.addresses) ? body.addresses : [];
-  const out = addresses.map((a) => {
+  const out = await Promise.all(addresses.map(async (a) => {
     const zip = String(a.zipcode || a.postal_code || a.pincode || '').trim();
     const country = String(a.country || 'in').toLowerCase();
-    // International shipping is off in the dashboard and we hold no overseas
-    // rates, so: India only, and a real 6-digit PIN (never starts with 0).
-    const serviceable = (country === 'in' || country === 'india') && /^[1-9][0-9]{5}$/.test(zip);
+    const inIndia = country === 'in' || country === 'india';
+
+    // Ask Delhivery whether they actually deliver there, rather than
+    // accepting any well-formed PIN. checkPincode fails open on an outage.
+    let serviceable = false;
+    if (inIndia) {
+      const d = await delhivery.checkPincode(zip);
+      serviceable = d.serviceable;
+      if (d.oda) console.log(`[shipping-info] ${zip} is ODA (${d.district || '?'})`);
+      if (!serviceable) console.log(`[shipping-info] ${zip} not serviceable (${d.source || 'api'})`);
+    }
+
     return {
       id: a.id,
       zipcode: zip,
@@ -800,7 +810,7 @@ exports.shippingInfo = async (req, res) => {
       cod: false,
       cod_fee: 0,
     };
-  });
+  }));
 
   return res.json({ addresses: out });
 };
