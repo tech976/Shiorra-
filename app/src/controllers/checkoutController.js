@@ -498,7 +498,8 @@ exports.shippingInfo = async (req, res) => {
   try {
     subtotal = await subtotalForRazorpayOrder(body.order_id);
   } catch (err) {
-    console.error('[shipping-info] subtotal lookup failed:', err.message);
+    console.error('[shipping-info] subtotal lookup failed:',
+      err?.message || err?.error?.description || JSON.stringify(err)?.slice(0, 200) || err);
   }
   const fee = subtotal == null
     ? cartController.shippingFor(0)            // unknown cart -> charge the flat rate
