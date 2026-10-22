@@ -440,6 +440,10 @@ async function subtotalForRazorpayOrder(rzpOrderId) {
     select: { subtotalInPaise: true },
   });
   if (local) return local.subtotalInPaise;
+  // The client is built per-call (see getRazorpay) — there is no module-level
+  // instance to borrow here.
+  const rzp = getRazorpay();
+  if (!rzp) return null;
   const remote = await rzp.orders.fetch(rzpOrderId);
   return typeof remote?.amount === 'number' ? remote.amount : null;
 }
