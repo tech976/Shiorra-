@@ -448,6 +448,15 @@ async function subtotalForRazorpayOrder(rzpOrderId) {
   return typeof remote?.amount === 'number' ? remote.amount : null;
 }
 
+// GET /checkout/shipping-info
+//
+// Not part of the Razorpay contract — the real work is POST-only. This exists
+// so a browser visit, an uptime probe, or a dashboard "is this URL alive?"
+// check sees a healthy endpoint instead of a 404 that reads like a dead link.
+// Deliberately says nothing about carts, orders or configuration.
+exports.shippingInfoHealth = (req, res) =>
+  res.json({ ok: true, endpoint: 'shipping-info', method: 'POST' });
+
 // POST /checkout/shipping-info  (raw body)
 //
 // Razorpay Magic Checkout calls this mid-checkout with the customer's
