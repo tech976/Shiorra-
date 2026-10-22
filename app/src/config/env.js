@@ -21,6 +21,12 @@ module.exports = {
     // Magic Checkout signs its calls to /checkout/shipping-info with this.
     // Razorpay dashboard -> Magic Checkout -> Platform Settings -> "Enable Secret Key".
     shippingSecret: process.env.RAZORPAY_SHIPPING_SECRET,
+    // Magic Checkout coupon APIs. One secret for both the get + apply
+    // endpoints — paste the same value into both dashboard toggles.
+    promoSecret: process.env.RAZORPAY_PROMO_SECRET,
+    // Magic Checkout (1CC). OFF unless explicitly enabled, so the standard
+    // checkout keeps running until this is verified end to end.
+    magicCheckout: String(process.env.MAGIC_CHECKOUT_ENABLED || '').toLowerCase() === 'true',
   },
   // Transactional email (order confirmations). Provider-agnostic SMTP so it
   // works with Resend (smtp.resend.com, user "resend", pass = API key), Brevo,

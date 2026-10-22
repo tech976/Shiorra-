@@ -8,6 +8,8 @@ const router = express.Router();
 // session (see req.session.guestOrders for success-page access).
 router.get('/', ctrl.showCheckout);
 router.post('/create-order', ctrl.createOrder);
+// Magic Checkout (1CC): no address collected here — Razorpay gathers it.
+router.post('/create-magic-order', ctrl.createMagicOrder);
 router.post('/cod', ctrl.placeCod);
 router.post('/verify', ctrl.verifyPayment);
 // Razorpay redirects the browser here (POST, form-encoded) after payment —
@@ -23,5 +25,11 @@ router.post('/webhook', express.raw({ type: '*/*' }), ctrl.webhook);
 // COD available. Raw body for the same HMAC reason as the webhook.
 router.get('/shipping-info', ctrl.shippingInfoHealth);
 router.post('/shipping-info', express.raw({ type: '*/*' }), ctrl.shippingInfo);
+
+// Magic Checkout coupon APIs. Razorpay asks which coupons to show, then asks
+// us to validate the one the customer picked. Raw body for the HMAC.
+router.get('/promotions', ctrl.promotionsHealth);
+router.post('/promotions', express.raw({ type: '*/*' }), ctrl.getPromotions);
+router.post('/promotions/apply', express.raw({ type: '*/*' }), ctrl.applyPromotion);
 
 module.exports = router;

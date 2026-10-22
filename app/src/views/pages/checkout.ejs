@@ -699,6 +699,17 @@
     const form = document.getElementById('checkoutForm');
     const btn  = document.getElementById('payBtn');
     const msg  = document.getElementById('checkoutMsg');
+
+    // Magic Checkout (1CC): Razorpay gathers contact + address itself, so
+    // asking for them here is a second, pointless form. Hide the fields and
+    // clear their `required`, which would otherwise block submit.
+    const MAGIC = <%= magicCheckout ? 'true' : 'false' %>;
+    if (MAGIC) {
+        document.querySelectorAll('#checkoutForm .co-fields [required]')
+            .forEach(function (el) { el.required = false; });
+        const coFields = document.querySelector('#checkoutForm .co-fields');
+        if (coFields) coFields.hidden = true;
+    }
     const razorpayEnabled = <%- razorpayEnabled ? 'true' : 'false' %>;
 
     // Mobile summary toggle
@@ -747,10 +758,13 @@
             else if (k === 'guestEmail') payload.guestEmail = v;
         }
         try {
-            const r = await fetch('/checkout/create-order', {
+            // Magic Checkout collects contact + address on Razorpay's own
+            // screen, so it posts none and we persist what Razorpay returns
+            // after payment (see syncMagicAddress).
+            const r = await fetch(MAGIC ? '/checkout/create-magic-order' : '/checkout/create-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify(payload),
+                body: MAGIC ? '{}' : JSON.stringify(payload),
             });
             const data = await r.json();
             if (!r.ok) throw new Error(data.error || 'Failed to create order');

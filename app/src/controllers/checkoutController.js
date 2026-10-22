@@ -90,6 +90,11 @@ async function captureOrder({ razorpayOrderId, paymentId, signature }) {
   // and webhook both funnel through here, but alreadyCaptured returns above,
   // so this never double-sends. Fire-and-forget: mail must not fail payment.
   if (result.captured) {
+    // A Magic Checkout order has no address until Razorpay hands one back.
+    // Fill it in first so the confirmation shows where the parcel is going.
+    if (!result.order.shippingAddressId) {
+      await syncMagicAddress(result.order);
+    }
     mailer.sendOrderConfirmation(result.order.id).catch(() => {});
   }
   return result;
@@ -126,6 +131,7 @@ exports.showCheckout = async (req, res, next) => {
       isGuest: !req.user,
       razorpayKeyId: env.razorpay.keyId || '',
       razorpayEnabled: !!(env.razorpay.keyId && env.razorpay.keySecret),
+      magicCheckout: env.razorpay.magicCheckout,
     });
   } catch (err) {
     next(err);
@@ -311,6 +317,150 @@ exports.createOrder = async (req, res, next) => {
   }
 };
 
+// POST /checkout/create-magic-order
+//
+// Magic Checkout (1CC) inverts the normal flow: we do NOT collect an address
+// here — Razorpay gathers it (prefilled from their network, which is the whole
+// speed benefit) and hands it back after payment, where syncMagicAddress
+// persists it. So the order is created address-less and its shipping is
+// settled on capture.
+//
+// The order amount is the GOODS total only. Razorpay adds shipping itself from
+// whatever /checkout/shipping-info quotes, and applies coupons through the
+// promotions APIs — so pre-applying a session coupon here would double-count.
+exports.createMagicOrder = async (req, res, next) => {
+  try {
+    if (!env.razorpay.magicCheckout) {
+      return res.status(400).json({ error: 'Magic Checkout is not enabled.' });
+    }
+    const items = await cartController.loadCart(req);
+    if (!items.length) return res.status(400).json({ error: 'Cart is empty.' });
+
+    const rzp = getRazorpay();
+    if (!rzp) return res.status(500).json({ error: 'Payment gateway not configured.' });
+
+    const goodsTotal = items.reduce((n, it) => n + it.subtotalInPaise, 0);
+    if (goodsTotal < 100) return res.status(400).json({ error: 'Order total must be at least Rs1.' });
+
+    const origin = `${req.protocol}://${req.get('host')}`;
+    const lineItems = items.map((it) => ({
+      type: 'e-commerce',
+      sku: it.product.slug,
+      variant_id: it.product.id,
+      price: it.product.priceInPaise,
+      offer_price: it.product.priceInPaise,
+      tax_amount: 0,
+      quantity: it.quantity,
+      name: it.product.name,
+      description: it.product.tagline || it.product.name,
+      image_url: it.product.images?.[0]?.url ? `${origin}${it.product.images[0].url}` : undefined,
+    }));
+
+    const orderNumber = generateOrderNumber();
+    const rzpOrder = await rzp.orders.create({
+      amount: goodsTotal,
+      currency: 'INR',
+      receipt: orderNumber,
+      line_items_total: goodsTotal,
+      line_items: lineItems,
+      // NOTE: no one_click_checkout flag — Razorpay rejects it with
+      // "not required and should not be sent" on this account, because Magic
+      // Checkout is switched on account-side. Sending line_items is what
+      // makes this a 1CC order.
+      notes: { orderNumber, userId: req.user?.id || 'guest', magic: 'true' },
+    });
+
+    // Address and final shipping are unknown until Razorpay returns them, so
+    // the row starts address-less with shipping 0 and is reconciled on capture.
+    const order = await prisma.$transaction(async (tx) => tx.order.create({
+      data: {
+        orderNumber,
+        userId: req.user?.id || null,
+        guestEmail: null,
+        subtotalInPaise: goodsTotal,
+        shippingInPaise: 0,
+        taxInPaise: 0,
+        discountInPaise: 0,
+        totalInPaise: goodsTotal,
+        razorpayOrderId: rzpOrder.id,
+        items: {
+          create: items.map((it) => ({
+            productId: it.productId,
+            name: it.product.name,
+            priceInPaise: it.product.priceInPaise,
+            quantity: it.quantity,
+            totalInPaise: it.subtotalInPaise,
+          })),
+        },
+      },
+    }));
+    rememberGuestOrder(req, order.orderNumber);
+
+    return res.json({
+      ok: true,
+      magic: true,
+      key: env.razorpay.keyId,
+      amount: goodsTotal,
+      currency: 'INR',
+      orderId: rzpOrder.id,
+      orderNumber: order.orderNumber,
+      name: 'Shiorra',
+      description: `Order ${order.orderNumber}`,
+    });
+  } catch (err) {
+    console.error('[magic-order] failed:', err?.error?.description || err?.message || err);
+    return next(err);
+  }
+};
+
+// After a Magic Checkout payment, Razorpay holds the address the customer
+// entered. Persist it and settle the money fields, which were provisional at
+// order creation (goods only, no shipping). Never throws into the payment
+// path: a failure here must not turn a captured payment into an error.
+async function syncMagicAddress(order) {
+  try {
+    if (!order?.razorpayOrderId || order.shippingAddressId) return;
+    const rzp = getRazorpay();
+    if (!rzp) return;
+    const remote = await rzp.orders.fetch(order.razorpayOrderId);
+    const c = remote?.customer_details;
+    const s = c?.shipping_address || c?.billing_address;
+    if (!s) return;
+
+    const address = await prisma.address.create({
+      data: {
+        userId: order.userId || null,
+        fullName: c.name || s.name || 'Customer',
+        phone: c.contact || s.contact || '',
+        line1: s.line1 || s.address || '',
+        line2: s.line2 || null,
+        city: s.city || '',
+        state: s.state || '',
+        postcode: s.zipcode || s.postal_code || '',
+        country: s.country || 'India',
+      },
+    });
+
+    // Razorpay's amount is what was actually charged (goods + shipping, less
+    // any promotion). Trust it over our provisional figure.
+    const paid = typeof remote.amount === 'number' ? remote.amount : order.totalInPaise;
+    const shipping = Math.max(0, paid - order.subtotalInPaise + (order.discountInPaise || 0));
+
+    await prisma.order.update({
+      where: { id: order.id },
+      data: {
+        shippingAddressId: address.id,
+        guestEmail: order.userId ? null : (c.email || order.guestEmail),
+        shippingInPaise: shipping,
+        totalInPaise: paid,
+      },
+    });
+    console.log(`[magic-order] address synced for ${order.orderNumber} (paid ${paid})`);
+  } catch (err) {
+    console.error('[magic-order] address sync failed:', err?.error?.description || err?.message || err);
+  }
+}
+
 // POST /checkout/verify
 // Called by the client after Razorpay Checkout returns. Verifies the
 // signature and marks the order PAID. Webhook is the source of truth — this
@@ -447,6 +597,124 @@ async function subtotalForRazorpayOrder(rzpOrderId) {
   const remote = await rzp.orders.fetch(rzpOrderId);
   return typeof remote?.amount === 'number' ? remote.amount : null;
 }
+
+// Shared guard for the Magic Checkout APIs. Razorpay signs each call with
+// HMAC-SHA256 over the raw body; these endpoints decide what a customer is
+// charged, so an unverifiable request is never honoured. Returns the parsed
+// body, or null after it has already answered the response.
+function verifiedBody(req, res, secret, label) {
+  if (!secret) {
+    console.error(`[${label}] secret is not set - rejecting.`);
+    res.status(503).json({ error: 'Not configured.' });
+    return null;
+  }
+  const signature = req.headers['x-razorpay-signature'];
+  if (!signature) {
+    res.status(400).json({ error: 'Missing signature' });
+    return null;
+  }
+  const raw = Buffer.isBuffer(req.body) ? req.body : Buffer.from(String(req.body || ''));
+  const expected = crypto.createHmac('sha256', secret).update(raw).digest('hex');
+  if (!signaturesMatch(expected, signature)) {
+    res.status(400).json({ error: 'Invalid signature' });
+    return null;
+  }
+  try {
+    const body = JSON.parse(raw.toString('utf8') || '{}');
+    // Keep the first live payloads visible so the real contract can be
+    // checked against what Razorpay actually sends.
+    console.log(`[${label}] payload:`, raw.toString('utf8').slice(0, 600));
+    return body;
+  } catch (_) {
+    res.status(400).json({ error: 'Malformed JSON' });
+    return null;
+  }
+}
+
+// Is this coupon usable right now, for this cart value?
+function couponUsable(c, subtotal) {
+  if (!c.active) return false;
+  if (c.expiresAt && new Date(c.expiresAt) < new Date()) return false;
+  if (c.usageLimit && c.usedCount >= c.usageLimit) return false;
+  if (c.minSubtotal && subtotal < c.minSubtotal) return false;
+  return true;
+}
+
+// Describe a coupon in the shape Magic Checkout renders.
+function promotionPayload(c, subtotal) {
+  const value = cartController.computeDiscount(c, subtotal);
+  return {
+    reference_id: c.id,
+    code: c.code,
+    summary: c.type === 'PERCENT' ? `${c.value}% off` : `Flat off`,
+    description: c.notes || (c.type === 'PERCENT' ? `${c.value}% off your order` : 'Discount applied'),
+    value,                       // always paise, already resolved for this cart
+    value_type: 'fixed_amount',
+    tags: [],
+  };
+}
+
+// GET /checkout/promotions — health only (the real APIs are POST).
+exports.promotionsHealth = (req, res) =>
+  res.json({ ok: true, endpoint: 'promotions', method: 'POST' });
+
+// POST /checkout/promotions
+// Razorpay asks which coupons to offer this customer. With no usable coupon
+// it must still answer 200 with an empty list — an error here stalls checkout.
+exports.getPromotions = async (req, res) => {
+  const body = verifiedBody(req, res, env.razorpay.promoSecret, 'promotions');
+  if (!body) return;
+  try {
+    let subtotal = 0;
+    try { subtotal = (await subtotalForRazorpayOrder(body.order_id)) || 0; } catch (_) {}
+    const coupons = await prisma.coupon.findMany({ where: { active: true } });
+    const promotions = coupons
+      .filter((c) => couponUsable(c, subtotal))
+      .map((c) => promotionPayload(c, subtotal))
+      // Never offer a coupon that takes nothing off — a "10% off" chip that
+      // applies Rs0 reads as broken. Happens when the cart value is unknown.
+      .filter((p) => p.value > 0);
+    return res.json({ promotions });
+  } catch (err) {
+    console.error('[promotions] failed:', err?.message || err);
+    return res.json({ promotions: [] });
+  }
+};
+
+// POST /checkout/promotions/apply
+// Razorpay asks us to validate the code the customer entered. A rejection is
+// a normal 200 carrying failure_reason — not an HTTP error.
+exports.applyPromotion = async (req, res) => {
+  const body = verifiedBody(req, res, env.razorpay.promoSecret, 'promotions/apply');
+  if (!body) return;
+  const code = String(body.code || body.promotion?.code || '').trim().toUpperCase();
+  try {
+    if (!code) return res.json({ failure_reason: 'Enter a coupon code.' });
+
+    let subtotal = 0;
+    try { subtotal = (await subtotalForRazorpayOrder(body.order_id)) || 0; } catch (_) {}
+
+    const coupon = await prisma.coupon.findUnique({ where: { code } });
+    if (!coupon || !coupon.active) {
+      return res.json({ failure_reason: `Coupon "${code}" is not valid.` });
+    }
+    if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) {
+      return res.json({ failure_reason: `Coupon "${code}" has expired.` });
+    }
+    if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) {
+      return res.json({ failure_reason: `Coupon "${code}" has reached its usage limit.` });
+    }
+    if (coupon.minSubtotal && subtotal < coupon.minSubtotal) {
+      return res.json({
+        failure_reason: `Spend at least Rs${Math.round(coupon.minSubtotal / 100)} to use "${code}".`,
+      });
+    }
+    return res.json({ promotion: promotionPayload(coupon, subtotal) });
+  } catch (err) {
+    console.error('[promotions/apply] failed:', err?.message || err);
+    return res.json({ failure_reason: 'Could not apply that code right now.' });
+  }
+};
 
 // GET /checkout/shipping-info
 //
