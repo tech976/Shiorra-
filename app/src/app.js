@@ -35,12 +35,15 @@ app.use(
           useDefaults: true,
           directives: {
             'default-src': ["'self'"],
-            'script-src': ["'self'", "'unsafe-inline'", 'https://checkout.razorpay.com', 'https://unpkg.com'],
+            // Magic Checkout pulls risk-detection from cdn.razorpay.com and
+            // beacons to lumberjack.*; checkout.razorpay.com alone is not
+            // enough and the blocked script breaks 1CC.
+            'script-src': ["'self'", "'unsafe-inline'", 'https://*.razorpay.com', 'https://unpkg.com'],
             'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
             'font-src': ["'self'", 'https://fonts.gstatic.com', 'data:'],
             'img-src': ["'self'", 'data:', 'https:'],
-            'frame-src': ["'self'", 'https://api.razorpay.com', 'https://checkout.razorpay.com'],
-            'connect-src': ["'self'", 'https://api.razorpay.com'],
+            'frame-src': ["'self'", 'https://*.razorpay.com'],
+            'connect-src': ["'self'", 'https://*.razorpay.com'],
           },
         }
       : false,

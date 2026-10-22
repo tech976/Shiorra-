@@ -707,14 +707,14 @@
     if (MAGIC) {
         document.querySelectorAll('#checkoutForm .co-fields [required]')
             .forEach(function (el) { el.required = false; });
-        const coFields = document.querySelector('#checkoutForm .co-fields');
-        // `hidden` alone loses: it sets display:none from the UA stylesheet,
-        // which .co-fields' own `display` rule overrides — the form stayed
-        // visible. An inline style beats the stylesheet.
-        if (coFields) {
-            coFields.hidden = true;
-            coFields.style.display = 'none';
-        }
+        // There is more than one .co-fields block, so hide them all — the
+        // address inputs live in the second. And `hidden` alone loses: it
+        // sets display:none from the UA stylesheet, which .co-fields' own
+        // `display: grid` overrides. An inline style beats the stylesheet.
+        document.querySelectorAll('#checkoutForm .co-fields').forEach(function (el) {
+            el.hidden = true;
+            el.style.display = 'none';
+        });
         // The saved-address picker and its heading belong to the same step.
         document.querySelectorAll('#checkoutForm .co-saved, #checkoutForm .co-addr-head')
             .forEach(function (el) { el.style.display = 'none'; });
