@@ -14,6 +14,9 @@ module.exports = {
   appUrl: process.env.APP_URL || 'http://localhost:3000',
   databaseUrl: process.env.DATABASE_URL,
   sessionSecret: process.env.SESSION_SECRET || 'dev-only-change-me',
+  // Absolute base for links we put in emails.
+  siteUrl: process.env.SITE_URL || 'https://shiorra.com',
+
   // Delhivery — pincode serviceability on the checkout path.
   delhivery: {
     apiToken: process.env.DELHIVERY_API_TOKEN,

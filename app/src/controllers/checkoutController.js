@@ -5,6 +5,7 @@ const env = require('../config/env');
 const { getRazorpay } = require('../config/razorpay');
 const cartController = require('./cartController');
 const delhivery = require('../services/delhivery');
+const customerAccount = require('../services/customerAccount');
 const { generateOrderNumber } = require('../utils/orderNumber');
 const mailer = require('../utils/mailer');
 
@@ -318,6 +319,30 @@ exports.createOrder = async (req, res, next) => {
   }
 };
 
+// Invite a freshly auto-created customer to set a password, so the account
+// their order is attached to actually becomes usable.
+async function sendSetPasswordInvite(user) {
+  const token = await customerAccount.issueResetToken(user.id);
+  const base = env.siteUrl || 'https://shiorra.com';
+  const link = `${base}/set-password?token=${token}`;
+  await mailer.sendMail({
+    to: user.email,
+    subject: 'Track your Shiorra order — set your password',
+    text: `Thanks for your order.\n\nWe created an account for ${user.email} so you can track it.\nSet your password: ${link}\n\nThe link works for 7 days.`,
+    html: `
+      <div style="font-family:Helvetica,Arial,sans-serif;max-width:520px;margin:0 auto;color:#282828">
+        <h2 style="font-weight:700;letter-spacing:-0.02em">Thanks for your order.</h2>
+        <p style="line-height:1.6;color:#4a4a4a">We have created an account for <strong>${user.email}</strong> so you can
+        track this order and see your history.</p>
+        <p style="margin:26px 0">
+          <a href="${link}" style="background:#23867F;color:#fff;padding:13px 26px;border-radius:10px;text-decoration:none;font-weight:700;display:inline-block">Set your password</a>
+        </p>
+        <p style="font-size:13px;color:#8a8a8a;line-height:1.6">The link works for 7 days. If you did not order from Shiorra, ignore this email — the account cannot be used until a password is set.</p>
+      </div>`,
+  });
+  console.log(`[magic-order] set-password invite sent to ${user.email}`);
+}
+
 // POST /checkout/create-magic-order
 //
 // Magic Checkout (1CC) inverts the normal flow: we do NOT collect an address
@@ -428,9 +453,31 @@ async function syncMagicAddress(order) {
     const s = c?.shipping_address || c?.billing_address;
     if (!s) return;
 
+    // Give the buyer a real account so they can log in and see this order.
+    // Magic Checkout collects no password, so the account is created locked
+    // and we email a set-password link (see sendSetPassword below).
+    let linkedUserId = order.userId || null;
+    let newAccount = null;
+    if (!linkedUserId) {
+      try {
+        const res = await customerAccount.ensureCustomer({
+          email: c.email,
+          name: c.name || s.name,
+          phone: c.contact || s.contact,
+        });
+        if (res) {
+          linkedUserId = res.user.id;
+          if (res.isNew) newAccount = res.user;
+        }
+      } catch (e) {
+        // Never let account creation cost us a paid order.
+        console.error('[magic-order] account link failed:', e?.message || e);
+      }
+    }
+
     const address = await prisma.address.create({
       data: {
-        userId: order.userId || null,
+        userId: linkedUserId,
         fullName: c.name || s.name || 'Customer',
         phone: c.contact || s.contact || '',
         line1: s.line1 || s.address || '',
@@ -451,12 +498,21 @@ async function syncMagicAddress(order) {
       where: { id: order.id },
       data: {
         shippingAddressId: address.id,
-        guestEmail: order.userId ? null : (c.email || order.guestEmail),
+        userId: linkedUserId,
+        // Keep the contact email on the order even once it has an owner, so
+        // receipts and lookups still work if the account is later removed.
+        guestEmail: c.email || order.guestEmail,
         shippingInPaise: shipping,
         totalInPaise: paid,
       },
     });
     console.log(`[magic-order] address synced for ${order.orderNumber} (paid ${paid})`);
+
+    if (newAccount) {
+      // Fire and forget — a mail failure must not disturb a captured payment.
+      sendSetPasswordInvite(newAccount).catch((e) =>
+        console.error('[magic-order] set-password mail failed:', e?.message || e));
+    }
   } catch (err) {
     console.error('[magic-order] address sync failed:', err?.error?.description || err?.message || err);
   }

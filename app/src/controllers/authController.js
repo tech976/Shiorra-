@@ -3,6 +3,10 @@ const { z } = require('zod');
 const passport = require('../config/passport');
 const prisma = require('../config/db');
 const { mergeGuestCart } = require('./cartController');
+const customerAccount = require('../services/customerAccount');
+const mailer = require('../utils/mailer');
+const env = require('../config/env');
+const prismaClient = require('../config/db');
 
 const registerSchema = z.object({
   name: z.string().min(2).max(80),
@@ -85,4 +89,78 @@ exports.logout = (req, res, next) => {
     req.flash('success', 'You have been logged out.');
     res.redirect('/');
   });
+};
+
+
+// GET /set-password?token=... — the link emailed to auto-created customers,
+// and the same page a password reset lands on.
+exports.showSetPassword = async (req, res) => {
+  const user = await customerAccount.findByResetToken(req.query.token);
+  if (!user) {
+    req.flash('error', 'That link has expired or already been used. Request a new one below.');
+    return res.redirect('/forgot-password');
+  }
+  res.render('pages/set-password', {
+    title: 'Set your password',
+    token: req.query.token,
+    email: user.email,
+  });
+};
+
+// POST /set-password — consume the token, set the password, log them straight
+// in so they land on their orders rather than a second login form.
+exports.setPassword = async (req, res, next) => {
+  try {
+    const { token, password, confirm } = req.body;
+    const user = await customerAccount.findByResetToken(token);
+    if (!user) {
+      req.flash('error', 'That link has expired or already been used.');
+      return res.redirect('/forgot-password');
+    }
+    if (!password || String(password).length < 8) {
+      req.flash('error', 'Password must be at least 8 characters.');
+      return res.redirect(`/set-password?token=${encodeURIComponent(token)}`);
+    }
+    if (password !== confirm) {
+      req.flash('error', 'Those passwords do not match.');
+      return res.redirect(`/set-password?token=${encodeURIComponent(token)}`);
+    }
+    await customerAccount.consumeResetToken(user.id, password);
+    const fresh = await prismaClient.user.findUnique({ where: { id: user.id } });
+    req.logIn(fresh, (err) => {
+      if (err) return next(err);
+      req.flash('success', 'Password set. Here are your orders.');
+      res.redirect('/account/orders');
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// POST /forgot-password — always answers the same way, so the form cannot be
+// used to discover which email addresses have accounts.
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    const email = String(req.body.email || '').trim().toLowerCase();
+    const user = email ? await prismaClient.user.findUnique({ where: { email } }) : null;
+    if (user) {
+      const token = await customerAccount.issueResetToken(user.id);
+      const link = `${env.siteUrl}/set-password?token=${token}`;
+      mailer.sendMail({
+        to: user.email,
+        subject: 'Reset your Shiorra password',
+        text: `Reset your password: ${link}\n\nThe link works for 7 days. If you did not ask for this, ignore this email.`,
+        html: `<div style="font-family:Helvetica,Arial,sans-serif;max-width:520px;margin:0 auto;color:#282828">
+          <h2>Reset your password</h2>
+          <p style="line-height:1.6;color:#4a4a4a">Click below to choose a new password.</p>
+          <p style="margin:26px 0"><a href="${link}" style="background:#23867F;color:#fff;padding:13px 26px;border-radius:10px;text-decoration:none;font-weight:700;display:inline-block">Reset password</a></p>
+          <p style="font-size:13px;color:#8a8a8a">The link works for 7 days. If you did not ask for this, ignore this email.</p>
+        </div>`,
+      }).catch((e) => console.error('[forgot-password] mail failed:', e?.message || e));
+    }
+    req.flash('success', 'If that email has an account, a reset link is on its way.');
+    res.redirect('/login');
+  } catch (err) {
+    next(err);
+  }
 };

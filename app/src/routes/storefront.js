@@ -57,7 +57,13 @@ const staticPages = {
     heading: 'Reset your password',
     sub: "We'll get you back in",
     body: `
-      <p>Self-serve password reset is coming soon. For now, email <a href="mailto:hello@shiorra.com">hello@shiorra.com</a> from the address on your account and we'll reset it within one business day.</p>
+      <p>Enter the email on your account and we'll send you a link to choose a new password.</p>
+      <form action="/forgot-password" method="post" style="margin:22px 0;max-width:380px">
+        <label for="fp-email" style="display:block;font-size:13px;font-weight:600;margin-bottom:7px">Email</label>
+        <input id="fp-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com"
+               style="width:100%;padding:12px 14px;border:1px solid #E5E5E7;border-radius:10px;font-size:15px;font-family:inherit">
+        <button type="submit" class="btn" style="margin-top:14px;width:100%;min-height:48px">Send reset link</button>
+      </form>
       <p><a href="/login" class="btn btn--ghost">← Back to log in</a></p>
     `,
   },

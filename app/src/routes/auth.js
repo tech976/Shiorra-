@@ -17,6 +17,11 @@ router.post('/login', loginLimiter, ctrl.login);
 router.get('/register', isGuest, ctrl.showRegister);
 router.post('/register', loginLimiter, ctrl.register);
 
+// Set-password links emailed to Magic Checkout customers (and resets).
+router.get('/set-password', ctrl.showSetPassword);
+router.post('/set-password', loginLimiter, ctrl.setPassword);
+router.post('/forgot-password', loginLimiter, ctrl.forgotPassword);
+
 router.post('/logout', ctrl.logout);
 router.get('/logout', ctrl.logout); // convenience
 
