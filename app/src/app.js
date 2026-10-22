@@ -49,13 +49,15 @@ app.use(
 );
 app.use(morgan(env.isProd ? 'combined' : 'dev'));
 
-// Body parsing — note the Razorpay webhook needs RAW body, so its route uses express.raw() locally
+// Body parsing — these routes verify an HMAC over the exact bytes Razorpay
+// sent, so they must keep the RAW body (their routes use express.raw()).
+const RAW_BODY_PATHS = new Set(['/checkout/webhook', '/checkout/shipping-info']);
 app.use((req, res, next) => {
-  if (req.originalUrl === '/checkout/webhook') return next();
+  if (RAW_BODY_PATHS.has(req.originalUrl)) return next();
   express.json({ limit: '1mb' })(req, res, next);
 });
 app.use((req, res, next) => {
-  if (req.originalUrl === '/checkout/webhook') return next();
+  if (RAW_BODY_PATHS.has(req.originalUrl)) return next();
   express.urlencoded({ extended: true, limit: '1mb' })(req, res, next);
 });
 app.use(methodOverride('_method'));

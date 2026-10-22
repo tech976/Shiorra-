@@ -429,6 +429,97 @@ exports.success = async (req, res, next) => {
   }
 };
 
+// Resolve the goods subtotal for a Razorpay order so shipping can be quoted
+// on the same rule the cart uses. Our own row is authoritative; Magic Checkout
+// can create the Razorpay order before we persist ours, so fall back to the
+// amount Razorpay itself holds.
+async function subtotalForRazorpayOrder(rzpOrderId) {
+  if (!rzpOrderId) return null;
+  const local = await prisma.order.findFirst({
+    where: { razorpayOrderId: rzpOrderId },
+    select: { subtotalInPaise: true },
+  });
+  if (local) return local.subtotalInPaise;
+  const remote = await rzp.orders.fetch(rzpOrderId);
+  return typeof remote?.amount === 'number' ? remote.amount : null;
+}
+
+// POST /checkout/shipping-info  (raw body)
+//
+// Razorpay Magic Checkout calls this mid-checkout with the customer's
+// address(es) and asks, per address: do you ship there, what does shipping
+// cost, and is COD available. Configured in the Razorpay dashboard under
+// Magic Checkout -> Platform Settings -> "URL for shipping info".
+//
+// Signed exactly like the payment webhook: HMAC-SHA256 of the raw body in
+// X-Razorpay-Signature, keyed with the "Enable Secret Key" value.
+//
+// SERVICEABILITY is currently "any valid Indian PIN code". When the Delhivery
+// account is live, that single check is the only thing to swap for a real
+// pincode lookup — the request/response contract is unchanged, so nothing
+// needs re-editing in the Razorpay dashboard.
+exports.shippingInfo = async (req, res) => {
+  // FAIL CLOSED. Without the secret the HMAC key would be "" and anyone could
+  // forge a request — and this endpoint sets what the customer is charged.
+  if (!env.razorpay.shippingSecret) {
+    console.error('[shipping-info] RAZORPAY_SHIPPING_SECRET is not set - rejecting.');
+    return res.status(503).json({ error: 'Shipping info not configured.' });
+  }
+  const signature = req.headers['x-razorpay-signature'];
+  if (!signature) return res.status(400).json({ error: 'Missing signature' });
+
+  const raw = Buffer.isBuffer(req.body) ? req.body : Buffer.from(String(req.body || ''));
+  const expected = crypto
+    .createHmac('sha256', env.razorpay.shippingSecret)
+    .update(raw)
+    .digest('hex');
+  if (!signaturesMatch(expected, signature)) {
+    return res.status(400).json({ error: 'Invalid signature' });
+  }
+
+  let body;
+  try {
+    body = JSON.parse(raw.toString('utf8') || '{}');
+  } catch (_) {
+    return res.status(400).json({ error: 'Malformed JSON' });
+  }
+
+  // Keep the first live payloads visible so the real contract can be checked
+  // against what Razorpay actually sends, then this line can go.
+  console.log('[shipping-info] payload:', raw.toString('utf8').slice(0, 800));
+
+  // A lookup failure must not block checkout — fall back to the flat rate
+  // rather than refusing to quote.
+  let subtotal = null;
+  try {
+    subtotal = await subtotalForRazorpayOrder(body.order_id);
+  } catch (err) {
+    console.error('[shipping-info] subtotal lookup failed:', err.message);
+  }
+  const fee = subtotal == null
+    ? cartController.shippingFor(0)            // unknown cart -> charge the flat rate
+    : cartController.shippingFor(subtotal);
+
+  const addresses = Array.isArray(body.addresses) ? body.addresses : [];
+  const out = addresses.map((a) => {
+    const zip = String(a.zipcode || a.postal_code || a.pincode || '').trim();
+    const country = String(a.country || 'in').toLowerCase();
+    // International shipping is off in the dashboard and we hold no overseas
+    // rates, so: India only, and a real 6-digit PIN (never starts with 0).
+    const serviceable = (country === 'in' || country === 'india') && /^[1-9][0-9]{5}$/.test(zip);
+    return {
+      id: a.id,
+      zipcode: zip,
+      serviceable,
+      shipping_fee: serviceable ? fee : 0,
+      cod: serviceable,
+      cod_fee: 0,
+    };
+  });
+
+  return res.json({ addresses: out });
+};
+
 // POST /checkout/webhook  (raw body)
 // Razorpay calls this. Verifies HMAC with the webhook secret. Used as source
 // of truth for payment status. We store the event id so retries are idempotent.

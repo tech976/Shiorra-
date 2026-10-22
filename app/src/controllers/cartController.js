@@ -80,9 +80,18 @@ function computeBundleDiscount(items) {
   return d;
 }
 
+// Flat-rate shipping — the single source of truth. /checkout/shipping-info
+// quotes Razorpay Magic Checkout from this same function, so the fee shown
+// mid-checkout can never drift from what the cart actually charges.
+const FREE_SHIP_THRESHOLD = 99900;      // Rs999
+const FLAT_SHIPPING_IN_PAISE = 4900;    // Rs49
+function shippingFor(subtotal) {
+  return subtotal >= FREE_SHIP_THRESHOLD ? 0 : FLAT_SHIPPING_IN_PAISE;
+}
+
 function summarise(items, coupon) {
   const subtotal = items.reduce((n, it) => n + it.subtotalInPaise, 0);
-  const shipping = subtotal >= 99900 ? 0 : 4900;
+  const shipping = shippingFor(subtotal);
   const discount = computeDiscount(coupon, subtotal) + computeBundleDiscount(items);
   const total = Math.max(0, subtotal + shipping - discount);
   const itemCount = items.reduce((n, it) => n + it.quantity, 0);
@@ -99,9 +108,10 @@ exports.loadCart = loadCart;
 exports.summarise = summarise;
 exports.resolveSessionCoupon = resolveSessionCoupon;
 exports.computeDiscount = computeDiscount;
+exports.shippingFor = shippingFor;
+exports.FREE_SHIP_THRESHOLD = FREE_SHIP_THRESHOLD;
 
 // ---- Mini-cart (slide-out drawer) JSON API ---------------------------------
-const FREE_SHIP_THRESHOLD = 99900; // ₹999 — keep in sync with summarise()
 
 // Everything the drawer needs to render itself, in one payload.
 async function cartPayload(req) {

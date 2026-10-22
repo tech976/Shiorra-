@@ -18,4 +18,9 @@ router.get('/success/:orderNumber', ctrl.success);
 // Razorpay webhook expects raw body — register before json/urlencoded for this path
 router.post('/webhook', express.raw({ type: '*/*' }), ctrl.webhook);
 
+// Magic Checkout serviceability API — Razorpay POSTs the customer's address
+// mid-checkout and we answer: do we ship there, what does shipping cost, is
+// COD available. Raw body for the same HMAC reason as the webhook.
+router.post('/shipping-info', express.raw({ type: '*/*' }), ctrl.shippingInfo);
+
 module.exports = router;

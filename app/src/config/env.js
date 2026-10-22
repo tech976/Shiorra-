@@ -18,6 +18,9 @@ module.exports = {
     keyId: process.env.RAZORPAY_KEY_ID,
     keySecret: process.env.RAZORPAY_KEY_SECRET,
     webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET,
+    // Magic Checkout signs its calls to /checkout/shipping-info with this.
+    // Razorpay dashboard -> Magic Checkout -> Platform Settings -> "Enable Secret Key".
+    shippingSecret: process.env.RAZORPAY_SHIPPING_SECRET,
   },
   // Transactional email (order confirmations). Provider-agnostic SMTP so it
   // works with Resend (smtp.resend.com, user "resend", pass = API key), Brevo,
