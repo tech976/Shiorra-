@@ -454,7 +454,87 @@
     flex-direction: column;
     gap: 4px;
 }
-.datelbl input { height: 40px; }
+/* The generic ".admin__search input { flex: 1 1 220px }" turns into a 220px
+   HEIGHT inside this column label — pin date inputs to the 40px control size. */
+.admin__search .datelbl input {
+    flex: 0 0 auto;
+    height: 40px;
+    min-width: 0;
+    width: 160px;
+    font-family: inherit;
+    letter-spacing: 0;
+    cursor: pointer;
+}
+.admin__search .datelbl input::-webkit-calendar-picker-indicator { cursor: pointer; opacity: .6; }
+.admin__search .datelbl input::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+/* Labelled date fields sit taller than the other controls — line every
+   control up along the bottom edge so the bar reads as one row. */
+.admin__search--multi { align-items: flex-end; }
+
+/* Order detail · "email the customer" toggle under the status form */
+.adm-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--adm-ink-3);
+    line-height: 1.4;
+    cursor: pointer;
+}
+.adm-check input { margin: 2px 0 0; accent-color: var(--adm-sage); cursor: pointer; }
+
+/* Order detail · fulfilment + refund cards */
+.adm-panel-text {
+    color: var(--adm-ink-2);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin: 0 0 16px;
+}
+.adm-panel-actions { margin: 16px 0 0; }
+.adm-refund-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
+}
+.adm-refund-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--adm-ink-3);
+}
+.adm-refund-form label:first-child { flex: 0 1 140px; }
+.adm-refund-form label:nth-child(2) { flex: 1 1 180px; }
+.adm-refund-form input {
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--adm-line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--adm-ink);
+    font: inherit;
+    font-size: 0.9rem;
+    letter-spacing: 0;
+    text-transform: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+.adm-refund-form input:focus {
+    outline: none;
+    border-color: var(--adm-sage);
+    box-shadow: 0 0 0 3px rgba(35,134,127,0.12);
+}
+.adm-refund-form .btn { height: 40px; }
+.adm-refund-form__hint {
+    flex-basis: 100%;
+    color: var(--adm-ink-3);
+    font-size: 0.78rem;
+}
 
 /* ---------- Status pills · single unified spec ---------- */
 .badge,

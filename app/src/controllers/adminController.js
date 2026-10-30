@@ -6,6 +6,16 @@ const env = require('../config/env');
 const { toPaise, formatINR } = require('../utils/money');
 const delhivery = require('../services/delhivery');
 const { getRazorpay } = require('../config/razorpay');
+const mailer = require('../utils/mailer');
+
+// Tell the customer their order changed. Fire-and-forget: a mail problem must
+// never block or fail an admin action. Only the customer-facing kinds send.
+// Returns true when an email was actually queued (false when mail isn't configured).
+function notifyCustomer(orderId, kind, extra) {
+  if (!mailer.UPDATE_KINDS.includes(kind)) return false;
+  mailer.sendOrderUpdate(orderId, kind, extra).catch(() => {});
+  return mailer.isEnabled();
+}
 
 const productSchema = z.object({
   name: z.string().min(2).max(160),
@@ -630,8 +640,22 @@ exports.orderUpdateStatus = async (req, res, next) => {
       req.flash('error', 'Invalid status.');
       return res.redirect('back');
     }
+    const before = await prisma.order.findUnique({
+      where: { id: req.params.id },
+      select: { status: true, refundedInPaise: true },
+    });
+    if (!before) {
+      req.flash('error', 'Order not found.');
+      return res.redirect('/admin/orders');
+    }
     await prisma.order.update({ where: { id: req.params.id }, data: { status: parsed.data } });
-    req.flash('success', `Order marked ${parsed.data}.`);
+    // Email only on a real change, and only when the admin left "email the
+    // customer" ticked — so fixing a mis-click doesn't spam the buyer.
+    const notify = req.body.notify === 'on' && before.status !== parsed.data
+      && mailer.UPDATE_KINDS.includes(parsed.data);
+    const emailed = notify && notifyCustomer(req.params.id, parsed.data,
+      parsed.data === 'REFUNDED' && before.refundedInPaise > 0 ? { amountInPaise: before.refundedInPaise } : {});
+    req.flash('success', `Order marked ${parsed.data}.${emailed ? ' Customer emailed.' : ''}`);
     res.redirect(`/admin/orders/${req.params.id}`);
   } catch (err) {
     next(err);
@@ -665,8 +689,14 @@ exports.orderBulk = async (req, res, next) => {
         req.flash('error', 'Invalid status.');
         return res.redirect('/admin/orders');
       }
+      // Remember which orders actually change, so only those customers hear about it.
+      const changing = await prisma.order.findMany({
+        where: { id: { in: ids }, status: { not: next } },
+        select: { id: true },
+      });
       const n = await prisma.order.updateMany({ where: { id: { in: ids } }, data: { status: next } });
-      req.flash('success', `Updated ${n.count} order(s) → ${next}.`);
+      const emailed = changing.filter((o) => notifyCustomer(o.id, next)).length;
+      req.flash('success', `Updated ${n.count} order(s) → ${next}.${emailed ? ` ${emailed} customer(s) emailed.` : ''}`);
     } else {
       req.flash('error', 'Unknown bulk action.');
     }
@@ -1031,7 +1061,8 @@ exports.orderShip = async (req, res, next) => {
         status: 'SHIPPED',
       },
     });
-    req.flash('success', `Shipped. Waybill ${result.awb}.`);
+    const emailed = notifyCustomer(order.id, 'SHIPPED');
+    req.flash('success', `Shipped. Waybill ${result.awb}.${emailed ? ' Customer emailed.' : ''}`);
     res.redirect(`/admin/orders/${order.id}`);
   } catch (err) { next(err); }
 };
@@ -1058,6 +1089,8 @@ exports.orderTrack = async (req, res, next) => {
         ...(delivered ? { status: 'DELIVERED', deliveredAt: order.deliveredAt || new Date() } : {}),
       },
     });
+    // First time we learn it's delivered → tell the customer (once).
+    if (delivered && order.status !== 'DELIVERED') notifyCustomer(order.id, 'DELIVERED');
     req.flash('success', `Tracking: ${r.status || 'updated'}.`);
     res.redirect(`/admin/orders/${order.id}`);
   } catch (err) { next(err); }
@@ -1130,7 +1163,8 @@ exports.orderRefund = async (req, res, next) => {
         ...(totalRefunded >= order.totalInPaise ? { status: 'REFUNDED', paymentStatus: 'REFUNDED' } : {}),
       },
     });
-    req.flash('success', `Refunded Rs${(amount / 100).toFixed(2)} (${refund.id}).`);
+    const emailed = notifyCustomer(order.id, 'REFUNDED', { amountInPaise: amount, partial: totalRefunded < order.totalInPaise });
+    req.flash('success', `Refunded Rs${(amount / 100).toFixed(2)} (${refund.id}).${emailed ? ' Customer emailed.' : ''}`);
     res.redirect(`/admin/orders/${order.id}`);
   } catch (err) { next(err); }
 };

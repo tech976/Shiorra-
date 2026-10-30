@@ -97,9 +97,33 @@ async function captureOrder({ razorpayOrderId, paymentId, signature }) {
     if (!result.order.shippingAddressId) {
       await syncMagicAddress(result.order);
     }
+    await ensureOrderEmail(result.order.id, paymentId);
     mailer.sendOrderConfirmation(result.order.id).catch(() => {});
   }
   return result;
+}
+
+// Last-chance recipient for the confirmation email. A Magic Checkout order is
+// created with no email; syncMagicAddress normally fills it from Razorpay, but
+// if that lookup fails the customer would get no confirmation at all. The
+// payment itself also carries the buyer's email — use it as the fallback.
+// Never throws: a failure here must not disturb a captured payment.
+async function ensureOrderEmail(orderId, paymentId) {
+  try {
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      select: { guestEmail: true, user: { select: { email: true } } },
+    });
+    if (!order || order.guestEmail || order.user?.email || !paymentId) return;
+    const rzp = getRazorpay();
+    if (!rzp) return;
+    const payment = await rzp.payments.fetch(paymentId);
+    if (payment?.email) {
+      await prisma.order.update({ where: { id: orderId }, data: { guestEmail: payment.email } });
+    }
+  } catch (err) {
+    console.error('[checkout] email fallback failed:', err?.error?.description || err?.message || err);
+  }
 }
 
 // Logged-in carts live in the DB; guest carts live in the session.

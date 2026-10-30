@@ -113,7 +113,7 @@
                 <div class="adm-card__head">
                     <h3>Update status</h3>
                 </div>
-                <form action="/admin/orders/<%= order.id %>/status" method="post" class="adm-inline-form">
+                <form action="/admin/orders/<%= order.id %>/status" method="post" class="adm-inline-form" id="statusForm">
                     <select name="status">
                         <% ['PENDING','PAID','PROCESSING','SHIPPED','DELIVERED','CANCELLED','REFUNDED'].forEach(function(s) { %>
                             <option value="<%= s %>" <%= order.status === s ? 'selected' : '' %>><%= s %></option>
@@ -121,6 +121,10 @@
                     </select>
                     <button class="btn btn--sm">Update</button>
                 </form>
+                <label class="adm-check">
+                    <input type="checkbox" name="notify" form="statusForm" checked>
+                    Email the customer when marked Shipped, Delivered, Cancelled or Refunded
+                </label>
 
                 <hr class="adm-divider">
 
@@ -147,59 +151,66 @@
                 <% } %>
             </section>
         </div>
+
+        <% var _refundable = (order.totalInPaise || 0) - (order.refundedInPaise || 0); %>
+        <div class="admin__panels admin__panels--equal adm-section-gap">
+            <!-- ============ FULFILMENT ============ -->
+            <section class="admin__panel">
+                <div class="adm-card__head">
+                    <h3>Fulfilment</h3>
+                    <small><%= order.awbNumber ? (order.courier || 'Delhivery') : 'Not shipped' %></small>
+                </div>
+                <% if (order.awbNumber) { %>
+                    <dl class="kvp">
+                        <dt>Courier</dt><dd><%= order.courier || 'Delhivery' %></dd>
+                        <dt>Waybill</dt><dd><code><%= order.awbNumber %></code></dd>
+                        <dt>Status</dt><dd><%= order.shipmentStatus || '—' %></dd>
+                        <% if (order.shippedAt) { %><dt>Shipped</dt><dd><%= order.shippedAt.toLocaleString('en-IN') %></dd><% } %>
+                        <% if (order.deliveredAt) { %><dt>Delivered</dt><dd><%= order.deliveredAt.toLocaleString('en-IN') %></dd><% } %>
+                        <% if (order.trackingUrl) { %><dt>Track</dt><dd><a href="<%= order.trackingUrl %>" target="_blank" rel="noopener" class="adm-link-accent">Open tracking ↗</a></dd><% } %>
+                    </dl>
+                    <form action="/admin/orders/<%= order.id %>/track" method="post" class="adm-panel-actions">
+                        <button class="btn btn--sm btn--ghost" type="submit">Refresh tracking</button>
+                    </form>
+                <% } else if (order.paymentStatus === 'CAPTURED') { %>
+                    <p class="adm-panel-text">This hands the order to Delhivery and stores the waybill number.</p>
+                    <form action="/admin/orders/<%= order.id %>/ship" method="post" class="adm-panel-actions">
+                        <button class="btn btn--sm" type="submit">Ship with Delhivery</button>
+                    </form>
+                <% } else { %>
+                    <p class="adm-panel-text">Shipping becomes available once the payment is captured.</p>
+                <% } %>
+            </section>
+
+            <!-- ============ REFUND ============ -->
+            <section class="admin__panel">
+                <div class="adm-card__head">
+                    <h3>Refund</h3>
+                    <% if (order.refundedInPaise > 0) { %><small>₹<%= (order.refundedInPaise/100).toFixed(2) %> refunded</small><% } %>
+                </div>
+                <% if (order.paymentStatus !== 'CAPTURED' && order.paymentStatus !== 'REFUNDED') { %>
+                    <p class="adm-panel-text">Only a captured online payment can be refunded.</p>
+                <% } else if (_refundable <= 0) { %>
+                    <p class="adm-panel-text">Fully refunded — nothing outstanding.</p>
+                <% } else { %>
+                    <p class="adm-panel-text">
+                        Up to <strong>₹<%= (_refundable/100).toFixed(2) %></strong> can still be refunded.
+                        This moves real money through Razorpay and cannot be undone.
+                    </p>
+                    <form action="/admin/orders/<%= order.id %>/refund" method="post" class="adm-refund-form"
+                          onsubmit="return confirm('Refund this payment? Money leaves the account and this cannot be undone.')">
+                        <label>Amount (₹)
+                            <input name="amount" type="number" step="0.01" min="0.01" max="<%= (_refundable/100).toFixed(2) %>"
+                                   placeholder="<%= (_refundable/100).toFixed(2) %>">
+                        </label>
+                        <label>Reason
+                            <input name="reason" type="text" placeholder="Optional">
+                        </label>
+                        <button class="btn btn--sm" type="submit">Refund</button>
+                        <small class="adm-refund-form__hint">Leave the amount blank to refund everything outstanding.</small>
+                    </form>
+                <% } %>
+            </section>
+        </div>
     </div>
 </div>
-
-
-<!-- ============ FULFILMENT ============ -->
-<section class="card" style="margin-top:22px">
-  <h3 style="margin-top:0">Fulfilment</h3>
-  <% if (order.awbNumber) { %>
-    <dl class="kv">
-      <dt>Courier</dt><dd><%= order.courier || 'Delhivery' %></dd>
-      <dt>Waybill</dt><dd><code><%= order.awbNumber %></code></dd>
-      <dt>Status</dt><dd><%= order.shipmentStatus || '—' %></dd>
-      <% if (order.shippedAt) { %><dt>Shipped</dt><dd><%= order.shippedAt.toLocaleString('en-IN') %></dd><% } %>
-      <% if (order.deliveredAt) { %><dt>Delivered</dt><dd><%= order.deliveredAt.toLocaleString('en-IN') %></dd><% } %>
-      <% if (order.trackingUrl) { %><dt>Track</dt><dd><a href="<%= order.trackingUrl %>" target="_blank" rel="noopener">Open tracking ↗</a></dd><% } %>
-    </dl>
-    <form action="/admin/orders/<%= order.id %>/track" method="post" style="margin-top:12px">
-      <button class="btn" type="submit">Refresh tracking</button>
-    </form>
-  <% } else { %>
-    <% if (order.paymentStatus === 'CAPTURED') { %>
-      <p style="color:#6B6B6B;font-size:14px">Not shipped yet. This hands the order to Delhivery and stores the waybill.</p>
-      <form action="/admin/orders/<%= order.id %>/ship" method="post">
-        <button class="btn" type="submit">Ship with Delhivery</button>
-      </form>
-    <% } else { %>
-      <p style="color:#6B6B6B;font-size:14px">Shipping becomes available once the payment is captured.</p>
-    <% } %>
-  <% } %>
-</section>
-
-<!-- ============ REFUND ============ -->
-<% var _refundable = (order.totalInPaise || 0) - (order.refundedInPaise || 0); %>
-<section class="card" style="margin-top:22px">
-  <h3 style="margin-top:0">Refund</h3>
-  <% if (order.paymentStatus !== 'CAPTURED' && order.paymentStatus !== 'REFUNDED') { %>
-    <p style="color:#6B6B6B;font-size:14px">Only a captured online payment can be refunded.</p>
-  <% } else if (_refundable <= 0) { %>
-    <p style="color:#6B6B6B;font-size:14px">Fully refunded — nothing outstanding.</p>
-  <% } else { %>
-    <p style="color:#6B6B6B;font-size:14px">
-      Up to <strong>₹<%= (_refundable/100).toFixed(2) %></strong> can still be refunded.
-      This moves real money through Razorpay and cannot be undone.
-    </p>
-    <form action="/admin/orders/<%= order.id %>/refund" method="post"
-          onsubmit="return confirm('Refund this payment? Money leaves the account and this cannot be undone.')">
-      <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px">Amount (₹) — blank refunds everything outstanding</label>
-      <input name="amount" type="number" step="0.01" min="0.01" max="<%= (_refundable/100).toFixed(2) %>"
-             placeholder="<%= (_refundable/100).toFixed(2) %>"
-             style="padding:10px 12px;border:1px solid #E5E5E7;border-radius:8px;width:180px">
-      <input name="reason" type="text" placeholder="Reason (optional)"
-             style="padding:10px 12px;border:1px solid #E5E5E7;border-radius:8px;width:260px;margin-left:8px">
-      <button class="btn" type="submit" style="margin-left:8px">Refund</button>
-    </form>
-  <% } %>
-</section>
