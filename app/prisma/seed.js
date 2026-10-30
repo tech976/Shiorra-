@@ -16,8 +16,8 @@ const products = [
     name: 'Advanced Iron+',
     tagline: 'For a healthier pregnancy & postpartum.',
     description: `An innovative blend to support healthy iron levels and the co-factors of pregnancy — designed to improve hemoglobin and your baby's development.\n\nFerrous Bisglycinate 27 mg with active Folate, B12, B6, Zinc, Copper & Selenium — gentle on the stomach, no metallic aftertaste.`,
-    price: 749,
-    mrp: 899,
+    price: 1400,
+    mrp: 1400,
     stock: 200,
     featured: true,
     badge: 'Best Seller',
@@ -51,12 +51,13 @@ const products = [
     name: 'Joint Max',
     tagline: 'Advanced joint & cartilage support.',
     description: `A targeted combination of two actives, glucosamine and chondroitin, designed to support joint function, cartilage health and everyday mobility.\n\nGlucosamine Hydrochloride 1500 mg and Chondroitin Sulphate Sodium 1200 mg per serving — both at full dose, in one daily routine rather than a token amount of each.`,
-    // PLACEHOLDER PRICING — not the real numbers. Set price and mrp here, then
-    // add the matching 2-pack and 3-pack totals to BUNDLE_PRICES in
-    // src/controllers/cartController.js. Until that entry exists there is no
-    // multi-pack discount, and the product page shows plain unit x quantity.
-    price: 999,
-    mrp: 1199,
+    // Repriced 2026-10-30. mrp is set EQUAL to price deliberately: no MRP
+    // above the selling price was supplied, and the alternative is a
+    // strikethrough against a number that never existed. Set a real mrp here
+    // to turn the savings UI back on, and put the 2-pack and 3-pack totals in
+    // BUNDLE_PRICES in src/controllers/cartController.js at the same time.
+    price: 1350,
+    mrp: 1350,
     stock: 150,
     featured: true,
     badge: 'New Launch',
@@ -69,8 +70,8 @@ const products = [
     name: 'EnergyOne+',
     tagline: 'Daily energy, focus & vitality — caffeine-free.',
     description: `Daily nutritional support for energy, focus and vitality — thoughtfully formulated with Taurine, Ginseng Extract, B-Complex vitamins, essential minerals and amino acids.\n\nNot a temporary stimulation, not a caffeine spike. EnergyOne+ supports your body's natural energy systems for sustained daily wellness.`,
-    price: 699,
-    mrp: 849,
+    price: 1200,
+    mrp: 1200,
     stock: 150,
     featured: true,
     badge: 'New Launch',

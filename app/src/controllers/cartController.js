@@ -60,9 +60,14 @@ async function resolveSessionCoupon(req) {
 // as a real discount (shown as a line, flows to the order + payment total), so
 // the displayed pack price always equals what the customer is actually charged.
 const BUNDLE_PRICES = {
-  'advanced-iron': { 2: 134900, 3: 189900 }, // ₹1,349 (60d) · ₹1,899 (90d)
-  'advanced-ginger': { 2: 104900, 3: 146900 }, // ₹1,049 (60d) · ₹1,469 (90d)
-  'advanced-energyone': { 2: 124900, 3: 174900 }, // ₹1,249 (60d) · ₹1,749 (90d)
+  // CLEARED on the 2026-10-30 repricing. These tiers were set against the old
+  // unit prices (Iron+ ₹749, EnergyOne+ ₹699). After the increase a 2-pack of
+  // Iron+ would have been charged ₹1,349 against a real value of ₹2,800 — the
+  // discount is applied for real and flows to the order and payment total, so
+  // this was money, not a display bug.
+  // Put the new 2-pack and 3-pack TOTALS back here when they are decided, and
+  // mirror them in the _packs array on each product page. With no entry the
+  // cart charges unit price x quantity, which is correct and safe.
 };
 
 // Total bundle saving across the cart = sum of (unit×qty − bundle price) for any

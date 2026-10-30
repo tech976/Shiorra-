@@ -994,7 +994,12 @@
               // tablets while the label says 3 tablets a day, which cannot
               // both be a month's supply, so no day count is claimed here.
               var _base = product.priceInPaise || 99900;
-              var _mrp = (product.mrpInPaise && product.mrpInPaise > _base) ? product.mrpInPaise : Math.round(_base * 1.2);
+              // null, NOT base x 1.2. The old fallback invented a 20% higher
+              // "was" price whenever the catalogue had no MRP above the selling
+              // price, so the page showed a strikethrough and a Save % against
+              // a number that never existed. With null the savings UI hides
+              // instead — see _off and the markup below.
+              var _mrp = (product.mrpInPaise && product.mrpInPaise > _base) ? product.mrpInPaise : null;
               var _packs = [
                 { qty: 1, price: _base },
                 // No `rec: true` while every tier is the same unit price —
@@ -1005,7 +1010,7 @@
                 { qty: 3, price: _base * 3 },
               ];
               var _inr = function (p) { return '₹' + (p / 100).toLocaleString('en-IN'); };
-              var _off = function (pk) { return Math.round((1 - pk.price / (_mrp * pk.qty)) * 100); };
+              var _off = function (pk) { return _mrp ? Math.round((1 - pk.price / (_mrp * pk.qty)) * 100) : 0; };
             %>
             <div class="pi-packs">
               <span class="pi-packs__label">Choose your plan</span>
@@ -1018,7 +1023,7 @@
                     <span class="pi-plan__days"><%= pk.qty %> Pack<%= pk.qty > 1 ? 's' : '' %></span>
                     <span class="pi-plan__packs"><%= pk.qty * 30 %> tablets</span>
                     <span class="pi-plan__price"><%= _inr(pk.price) %></span>
-                    <span class="pi-plan__save">Save <%= _off(pk) %>%</span>
+                    <% if (_off(pk) > 0) { %><span class="pi-plan__save">Save <%= _off(pk) %>%</span><% } %>
                   </label>
                 <% }); %>
               </fieldset>
@@ -1806,8 +1811,8 @@
                 the carton's quantity and its dosing do not agree on how long a
                 pack lasts, so no day count is claimed. %>
             <span class="sb-plan__d"><%= pk.qty %> Pack<%= pk.qty > 1 ? 's' : '' %> &middot; <%= pk.qty * 30 %> tablets</span>
-            <span class="sb-plan__p"><%= _inr(pk.price) %><s><%= _inr(_mrp * pk.qty) %></s></span>
-            <span class="sb-plan__s">Save <%= _off(pk) %>%</span>
+            <span class="sb-plan__p"><%= _inr(pk.price) %><% if (_mrp) { %><s><%= _inr(_mrp * pk.qty) %></s><% } %></span>
+            <% if (_off(pk) > 0) { %><span class="sb-plan__s">Save <%= _off(pk) %>%</span><% } %>
           </label>
         <% }); %>
       </fieldset>

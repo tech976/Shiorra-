@@ -1032,15 +1032,26 @@
 
             <%
               var _base = product.priceInPaise || 74900;
-              var _mrp = (product.mrpInPaise && product.mrpInPaise > _base) ? product.mrpInPaise : Math.round(_base * 1.2);
+              // null, NOT base x 1.2. The old fallback invented a 20% higher
+              // "was" price whenever the catalogue had no MRP above the selling
+              // price, so the page showed a strikethrough and a Save % against
+              // a number that never existed. With null the savings UI hides
+              // instead — see _off and the markup below.
+              var _mrp = (product.mrpInPaise && product.mrpInPaise > _base) ? product.mrpInPaise : null;
               // Pack total prices in paise — MUST match BUNDLE_PRICES in cartController.
+              // Tiers are unit price x quantity while BUNDLE_PRICES is empty.
+              // These two numbers MUST agree: this array is only what the panel
+              // promises, and cartController is what actually gets charged.
+              // Hardcoded totals here previously matched the old bundle tiers;
+              // left alone they would have advertised a price the cart no
+              // longer honours. Set both together when bundles are decided.
               var _packs = [
                 { qty: 1, days: 30, price: _base },
-                { qty: 2, days: 60, price: 134900, rec: true },
-                { qty: 3, days: 90, price: 189900 },
+                { qty: 2, days: 60, price: _base * 2 },
+                { qty: 3, days: 90, price: _base * 3 },
               ];
               var _inr = function (p) { return '₹' + (p / 100).toLocaleString('en-IN'); };
-              var _off = function (pk) { return Math.round((1 - pk.price / (_mrp * pk.qty)) * 100); };
+              var _off = function (pk) { return _mrp ? Math.round((1 - pk.price / (_mrp * pk.qty)) * 100) : 0; };
             %>
             <div class="pi-packs">
               <span class="pi-packs__label">Choose your plan</span>
@@ -1053,7 +1064,7 @@
                     <span class="pi-plan__days"><%= pk.days %> Days</span>
                     <span class="pi-plan__packs"><%= pk.qty %> Pack<%= pk.qty > 1 ? 's' : '' %></span>
                     <span class="pi-plan__price"><%= _inr(pk.price) %></span>
-                    <span class="pi-plan__save">Save <%= _off(pk) %>%</span>
+                    <% if (_off(pk) > 0) { %><span class="pi-plan__save">Save <%= _off(pk) %>%</span><% } %>
                   </label>
                 <% }); %>
               </fieldset>
@@ -1965,8 +1976,8 @@
           <label class="sb-plan<%= i === 0 ? ' is-selected' : '' %>">
             <input type="radio" name="bundleSticky" value="<%= pk.qty %>" data-qty="<%= pk.qty %>" <%= i === 0 ? 'checked' : '' %>>
             <span class="sb-plan__d"><%= pk.days %> Days &middot; <%= pk.qty %> Pack<%= pk.qty > 1 ? 's' : '' %></span>
-            <span class="sb-plan__p"><%= _inr(pk.price) %><s><%= _inr(_mrp * pk.qty) %></s></span>
-            <span class="sb-plan__s">Save <%= _off(pk) %>%</span>
+            <span class="sb-plan__p"><%= _inr(pk.price) %><% if (_mrp) { %><s><%= _inr(_mrp * pk.qty) %></s><% } %></span>
+            <% if (_off(pk) > 0) { %><span class="sb-plan__s">Save <%= _off(pk) %>%</span><% } %>
           </label>
         <% }); %>
       </fieldset>

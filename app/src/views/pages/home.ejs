@@ -371,7 +371,6 @@
                 <article class="product-card product-card--01 reveal">
                     <a href="/product/advanced-iron" class="product-card__media" aria-label="Advanced Iron+ · 30 vegecaps">
                         <span class="product-card__badge product-card__badge--sea">Best Seller</span>
-                        <span class="product-card__discount">Save <strong>17%</strong> today</span>
                         <img src="/img/products/iron-home.png" alt="Shiōrra Advanced Iron+ pack nestled in soft sculptural pink forms">
                     </a>
                     <div class="product-card__body">
@@ -381,7 +380,7 @@
                             <span class="product-card__stars">★★★★★</span>
                             <a href="/reviews" class="product-card__reviews">1,240 reviews</a>
                         </div>
-                        <p class="product-card__price"><small>From</small>₹749</p>
+                        <p class="product-card__price"><small>From</small>₹<%= (ironProduct ? ironProduct.priceInPaise / 100 : 1400).toLocaleString('en-IN') %></p>
                     </div>
                     <a href="/product/advanced-iron" class="product-card__cta">
                         Add to cart
@@ -419,7 +418,6 @@
                 <article class="product-card product-card--03 reveal">
                     <a href="/product/advanced-energyone" class="product-card__media" aria-label="EnergyOne+ · daily energy, focus & vitality">
                         <span class="product-card__badge product-card__badge--ink">New Launch</span>
-                        <span class="product-card__discount">Save <strong>18%</strong> on subscription</span>
                         <img src="/img/products/energy-home.png" alt="Shiōrra EnergyOne+ pack set into a glossy lilac swirl">
                     </a>
                     <div class="product-card__body">
@@ -429,7 +427,7 @@
                             <span class="product-card__stars">★★★★★</span>
                             <a href="/reviews" class="product-card__reviews">Early reviews</a>
                         </div>
-                        <p class="product-card__price"><small>From</small>₹699</p>
+                        <p class="product-card__price"><small>From</small>₹<%= (energyProduct ? energyProduct.priceInPaise / 100 : 1200).toLocaleString('en-IN') %></p>
                     </div>
                     <a href="/product/advanced-energyone" class="product-card__cta">
                         Add to cart
@@ -448,7 +446,7 @@
                         <p class="product-card__desc">Advanced joint &amp; cartilage support.</p>
                         <%# No star row here: the siblings show one because they have
                             reviews to average. Joint Max has not shipped yet. %>
-                        <p class="product-card__price"><small>From</small>₹<%= jointProduct ? (jointProduct.priceInPaise / 100) : 999 %></p>
+                        <p class="product-card__price"><small>From</small>₹<%= (jointProduct ? jointProduct.priceInPaise / 100 : 1350).toLocaleString('en-IN') %></p>
                     </div>
                     <a href="/product/joint-max" class="product-card__cta">
                         Add to cart
@@ -610,7 +608,7 @@
                 <a href="/product/advanced-iron" class="fp-feature__media reveal" aria-label="Open Advanced Iron+ product page">
                     <span class="fp-feature__price-tag">
                         <span class="fp-feature__price-currency">₹</span>
-                        <span class="fp-feature__price-num">749</span>
+                        <span class="fp-feature__price-num"><%= (ironProduct ? ironProduct.priceInPaise / 100 : 1400).toLocaleString('en-IN') %></span>
                         <span class="fp-feature__price-unit">/ 30 caps</span>
                     </span>
                     <img src="/img/products/iron-home.png" alt="Shiōrra Advanced Iron+ pack nestled in soft sculptural pink forms">
@@ -657,7 +655,7 @@
                     </ul>
 
                     <div class="fp-feature__cta">
-                        <a href="/product/advanced-iron" class="btn btn--pink">Shop now · ₹ 749</a>
+                        <a href="/product/advanced-iron" class="btn btn--pink">Shop now · ₹ <%= (ironProduct ? ironProduct.priceInPaise / 100 : 1400).toLocaleString('en-IN') %></a>
                         <a href="#" class="btn btn--ghost">Learn more</a>
                     </div>
 
@@ -746,7 +744,7 @@
                 <a href="/product/advanced-energyone" class="fp-feature__media reveal" aria-label="Open EnergyOne+ product page">
                     <span class="fp-feature__price-tag">
                         <span class="fp-feature__price-currency">₹</span>
-                        <span class="fp-feature__price-num">699</span>
+                        <span class="fp-feature__price-num"><%= (energyProduct ? energyProduct.priceInPaise / 100 : 1200).toLocaleString('en-IN') %></span>
                         <span class="fp-feature__price-unit">/ 30 caps</span>
                     </span>
                     <img src="/img/products/energy-home.png" alt="Shiōrra EnergyOne+ pack set into a glossy lilac swirl">
@@ -793,7 +791,7 @@
                     </ul>
 
                     <div class="fp-feature__cta">
-                        <a href="/product/advanced-energyone" class="btn btn--pink">Shop now · ₹ 699</a>
+                        <a href="/product/advanced-energyone" class="btn btn--pink">Shop now · ₹ <%= (energyProduct ? energyProduct.priceInPaise / 100 : 1200).toLocaleString('en-IN') %></a>
                         <a href="/product/advanced-energyone" class="btn btn--ghost">See the science</a>
                     </div>
 
@@ -814,7 +812,7 @@
                 <a href="/product/joint-max" class="fp-feature__media reveal" aria-label="Open Joint Max product page">
                     <span class="fp-feature__price-tag">
                         <span class="fp-feature__price-currency">₹</span>
-                        <span class="fp-feature__price-num"><%= jointProduct ? (jointProduct.priceInPaise / 100) : 999 %></span>
+                        <span class="fp-feature__price-num"><%= (jointProduct ? jointProduct.priceInPaise / 100 : 1350).toLocaleString('en-IN') %></span>
                         <span class="fp-feature__price-unit">/ 30 tablets</span>
                     </span>
                     <img src="/img/products/joint-home.png" alt="Shiōrra Joint Max pack resting on soft peach forms">
@@ -862,7 +860,7 @@
                     </ul>
 
                     <div class="fp-feature__cta">
-                        <a href="/product/joint-max" class="btn btn--pink">Shop now · ₹ <%= jointProduct ? (jointProduct.priceInPaise / 100) : 999 %></a>
+                        <a href="/product/joint-max" class="btn btn--pink">Shop now · ₹ <%= (jointProduct ? jointProduct.priceInPaise / 100 : 1350).toLocaleString('en-IN') %></a>
                         <a href="/product/joint-max" class="btn btn--ghost">See the science</a>
                     </div>
 
