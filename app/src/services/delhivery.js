@@ -117,6 +117,18 @@ async function postForm(url, params, timeoutMs) {
   }
 }
 
+// Parcel size for an order: one carton per unit, stacked on the thin side.
+function packageFor(order) {
+  const c = env.delhivery.carton;
+  const units = Math.max(1, (order.items || []).reduce((n, i) => n + i.quantity, 0));
+  return {
+    weight: Math.round(c.weightG * units),                       // grams
+    shipment_length: c.lengthCm,                                 // cm
+    shipment_width: c.widthCm,
+    shipment_height: Math.round(c.heightCm * units * 10) / 10,
+  };
+}
+
 // Push one order to Delhivery and come back with a waybill (AWB).
 // Returns { ok, awb, raw } or { ok:false, error }.
 //
@@ -147,6 +159,7 @@ async function createShipment(order, address) {
       cod_amount: 0,
       products_desc: (order.items || []).map((i) => `${i.name} x${i.quantity}`).join(', ').slice(0, 250) || 'Health supplement',
       quantity: (order.items || []).reduce((n, i) => n + i.quantity, 0) || 1,
+      ...packageFor(order),
       waybill: '',
     }],
     pickup_location: { name: pickupName() },
@@ -204,4 +217,4 @@ function trackingUrlFor(awb) {
   return `https://www.delhivery.com/track/package/${encodeURIComponent(awb)}`;
 }
 
-module.exports = { checkPincode, isConfigured, createShipment, trackShipment, trackingUrlFor, pickupName };
+module.exports = { checkPincode, isConfigured, createShipment, trackShipment, trackingUrlFor, pickupName, packageFor };

@@ -23,6 +23,14 @@ module.exports = {
     // Must match the warehouse name registered in the Delhivery panel EXACTLY
     // — shipment creation is rejected otherwise.
     pickupName: process.env.DELHIVERY_PICKUP_NAME,
+    // One product carton, as packed. Sent with every shipment so Delhivery
+    // bills on the real size instead of a default (avoids weight disputes).
+    carton: {
+      lengthCm: parseFloat(process.env.DELHIVERY_CARTON_LENGTH_CM) || 15.5,
+      widthCm: parseFloat(process.env.DELHIVERY_CARTON_WIDTH_CM) || 9,
+      heightCm: parseFloat(process.env.DELHIVERY_CARTON_HEIGHT_CM) || 3.5,
+      weightG: parseFloat(process.env.DELHIVERY_CARTON_WEIGHT_G) || 150,
+    },
   },
   razorpay: {
     keyId: process.env.RAZORPAY_KEY_ID,
