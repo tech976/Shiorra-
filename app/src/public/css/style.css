@@ -7893,3 +7893,35 @@ body.aw-cursor-out .aw-cursor-ring {
 }
 
 /* === Tertiary text-link buttons inherit current style — left alone deliberately === */
+
+
+/* ============================================================
+   AGENCY CREDIT — "Made by DigiVeritaz"
+   Sits in the bottom bar of all four footers the site has: the shared
+   partials (footer.ejs and footer-home.ejs) and the inline ed-footer on
+   /about and /faq. Colour is inherited rather than set, because two of those
+   bars are white-on-charcoal and one is grey-on-white — currentColor is the
+   only value that is correct in both.
+   ============================================================ */
+.made-by {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color .2s ease;
+    /* Colour is set per footer below, NOT by inheriting and dimming with
+       opacity. Inheriting looked tidy but the two schemes start from very
+       different places: dimming the dark footer's rgba(255,255,255,.7) was
+       fine at 4.9:1, while dimming the light bar's #94A3B8 landed at 1.9:1,
+       well under AA. Explicit values clear 4.5:1 on both. */
+    color: rgba(255, 255, 255, 0.78);
+}
+.made-by:hover, .made-by:focus-visible { color: #FFFFFF; }
+/* The bar in partials/footer.ejs is the one light-on-white footer. */
+.site-footer .footer__bar .made-by { color: #64748B; }
+.site-footer .footer__bar .made-by:hover,
+.site-footer .footer__bar .made-by:focus-visible { color: #0F172A; }
+.made-by img { width: 17px; height: 17px; display: block; flex: 0 0 auto; }
+.made-by b { font-weight: 700; letter-spacing: -0.01em; }
