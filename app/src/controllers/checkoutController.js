@@ -8,6 +8,7 @@ const delhivery = require('../services/delhivery');
 const customerAccount = require('../services/customerAccount');
 const { generateOrderNumber } = require('../utils/orderNumber');
 const mailer = require('../utils/mailer');
+const invoiceLink = require('../utils/invoiceLink');
 
 const addressSchema = z.object({
   fullName: z.string().min(2).max(80),
@@ -660,7 +661,11 @@ exports.success = async (req, res, next) => {
       include: { items: true, shippingAddress: true },
     });
     if (!order) return res.status(404).render('pages/error', { title: 'Not found', status: 404, message: 'Order not found.' });
-    res.render('pages/order-success', { title: `Order ${order.orderNumber}`, order });
+    res.render('pages/order-success', {
+      title: `Order ${order.orderNumber}`,
+      order,
+      invoiceUrl: invoiceLink.urlFor(order.orderNumber),
+    });
   } catch (err) {
     next(err);
   }

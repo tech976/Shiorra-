@@ -272,6 +272,11 @@
                 <% } else { %>
                     <a href="/track" class="btn">Track this order</a>
                 <% } %>
+                <%# Signed link, so a guest who has not set a password yet can
+                    still open their own receipt. %>
+                <% if (typeof invoiceUrl !== 'undefined' && invoiceUrl) { %>
+                    <a href="<%= invoiceUrl %>" class="btn btn--ghost" target="_blank" rel="noopener">View invoice</a>
+                <% } %>
                 <a href="/shop" class="btn btn--ghost">Continue shopping</a>
             </div>
 

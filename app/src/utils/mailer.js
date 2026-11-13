@@ -11,6 +11,7 @@ const nodemailer = require('nodemailer');
 const env = require('../config/env');
 const prisma = require('../config/db');
 const { formatINR } = require('./money');
+const invoiceLink = require('./invoiceLink');
 
 let transportPromise = null;
 
@@ -117,6 +118,9 @@ function paymentLabel(order) {
 }
 
 function renderOrderConfirmationHtml(order) {
+  const invoiceUrl = invoiceLink.urlFor(order.orderNumber);
+
+
   const brandGreen = '#23867F';
   const ink = '#15171A';
   const muted = '#6A6F75';
@@ -209,6 +213,10 @@ function renderOrderConfirmationHtml(order) {
           <tr>
             <td style="padding:28px 32px 32px;text-align:center;">
               <a href="${trackUrl}" style="display:inline-block;background:${brandGreen};color:#FFFFFF;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;padding:13px 28px;border-radius:10px;">Track your order</a>
+              <a href="${invoiceUrl}" style="display:inline-block;margin-left:10px;background:#FFFFFF;color:${ink};border:1px solid ${line};text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;padding:12px 26px;border-radius:10px;">View invoice</a>
+              <p style="margin:14px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:${muted};">
+                Your invoice opens in the browser — use Print &gt; Save as PDF to keep a copy.
+              </p>
               <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:${muted};line-height:1.6;">
                 Questions? Just reply to this email or write to
                 <a href="mailto:${escapeHtml(env.mail.replyTo)}" style="color:${brandGreen};text-decoration:none;">${escapeHtml(env.mail.replyTo)}</a>.
@@ -241,6 +249,7 @@ function renderOrderConfirmationText(order) {
     `Payment: ${paymentLabel(order)}`,
     ``,
     `Track your order: ${env.appUrl}/track`,
+    `Your invoice: ${invoiceLink.urlFor(order.orderNumber)}`,
     ``,
     `Questions? Reply to this email or write to ${env.mail.replyTo}.`,
     `Shiōrra — a trademark of K.C. Laboratories.`,

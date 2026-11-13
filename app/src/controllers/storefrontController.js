@@ -1,5 +1,6 @@
 const prisma = require('../config/db');
 const { notWithdrawn, isWithdrawn } = require('../config/withdrawn');
+const invoiceLink = require('../utils/invoiceLink');
 
 // Each product slug → the specific styled EJS template that mirrors the
 // static marketing site. Unknown slugs fall back to the generic page.
@@ -134,4 +135,35 @@ exports.trackLookup = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+
+// GET /invoice/:orderNumber?t=...
+//
+// The receipt a buyer can actually open. Requires the signed token rather than
+// a login, because a Magic Checkout customer has no password at the moment
+// they pay. Renders the same invoice admin and account use.
+exports.publicInvoice = async (req, res, next) => {
+  try {
+    const { orderNumber } = req.params;
+    if (!invoiceLink.isValid(orderNumber, req.query.t)) {
+      return res.status(404).render('pages/error', {
+        title: 'Not found', status: 404, message: 'Invoice not found.',
+      });
+    }
+    const order = await prisma.order.findFirst({
+      where: { orderNumber },
+      include: { user: true, items: true, shippingAddress: true, coupon: true },
+    });
+    if (!order) {
+      return res.status(404).render('pages/error', {
+        title: 'Not found', status: 404, message: 'Invoice not found.',
+      });
+    }
+    res.render('admin/order-invoice', {
+      title: `Invoice · ${order.orderNumber}`,
+      order,
+      layout: false,
+    });
+  } catch (err) { next(err); }
 };

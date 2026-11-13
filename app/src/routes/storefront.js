@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get('/', ctrl.home);
 router.get('/shop', ctrl.shop);
+// Signed receipt link emailed to the buyer — no login, token-scoped.
+router.get('/invoice/:orderNumber', ctrl.publicInvoice);
 router.get('/product/:slug', ctrl.product);
 router.get('/about', ctrl.about);
 router.get('/faq', ctrl.faq);
