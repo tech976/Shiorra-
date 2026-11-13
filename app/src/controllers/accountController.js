@@ -1,9 +1,18 @@
 const bcrypt = require('bcryptjs');
 const { z } = require('zod');
 const prisma = require('../config/db');
+const customerAccount = require('../services/customerAccount');
+
+// Pick up any order placed as a guest under this account's email since the
+// last visit (e.g. they checked out logged-out while already having an
+// account). Cheap when there's nothing to claim, and it must never break the
+// account page.
+const claim = (user) =>
+  customerAccount.claimGuestOrders(user).catch((e) => console.error('[account] claim failed:', e?.message || e));
 
 exports.dashboard = async (req, res, next) => {
   try {
+    await claim(req.user);
     const [orderCount, latestOrders, addressCount] = await Promise.all([
       prisma.order.count({ where: { userId: req.user.id } }),
       prisma.order.findMany({
@@ -22,6 +31,7 @@ exports.dashboard = async (req, res, next) => {
 
 exports.orders = async (req, res, next) => {
   try {
+    await claim(req.user);
     const orders = await prisma.order.findMany({
       where: { userId: req.user.id },
       orderBy: { createdAt: 'desc' },
@@ -181,7 +191,15 @@ exports.addressDelete = async (req, res, next) => {
       req.flash('error', 'Address not found.');
       return res.redirect('/account/addresses');
     }
-    await prisma.address.delete({ where: { id: owned.id } });
+    // An address an order shipped to is part of that order's record (the FK is
+    // ON DELETE SET NULL, so deleting it would blank the order's shipping
+    // address for us and for Delhivery). Remove it from the book instead.
+    const usedByOrders = await prisma.order.count({ where: { shippingAddressId: owned.id } });
+    if (usedByOrders) {
+      await prisma.address.update({ where: { id: owned.id }, data: { userId: null, isDefault: false } });
+    } else {
+      await prisma.address.delete({ where: { id: owned.id } });
+    }
     // If we deleted the default, promote the next-most-recent address
     if (owned.isDefault) {
       const next = await prisma.address.findFirst({

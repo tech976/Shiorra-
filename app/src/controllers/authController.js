@@ -37,6 +37,9 @@ exports.login = (req, res, next) => {
     req.logIn(user, async (loginErr) => {
       if (loginErr) return next(loginErr);
       await mergeGuestCart(user.id, guestCart);
+      // Orders they placed as a guest under this email show up in the account.
+      await customerAccount.claimGuestOrders(user).catch((e) =>
+        console.error('[login] claim orders failed:', e?.message || e));
       delete req.session.returnTo;
       req.flash('success', `Welcome back, ${user.name || user.email}.`);
       res.redirect(returnTo);
@@ -54,7 +57,9 @@ exports.register = async (req, res, next) => {
     const { name, email, phone, password } = parsed.data;
     const exists = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
     if (exists) {
-      req.flash('error', 'An account with that email already exists.');
+      // Most often a past buyer: checking out creates their account. Point
+      // them at the emailed set-password route rather than a dead end.
+      req.flash('error', 'An account with that email already exists. If you have ordered from us before, use "Forgot password" on the login page to set your password and see your orders.');
       return res.render('auth/register', { title: 'Create account', values: req.body });
     }
     const passwordHash = await bcrypt.hash(password, 12);
@@ -127,6 +132,9 @@ exports.setPassword = async (req, res, next) => {
     }
     await customerAccount.consumeResetToken(user.id, password);
     const fresh = await prismaClient.user.findUnique({ where: { id: user.id } });
+    // The link proved they own this email — pick up any guest orders under it.
+    await customerAccount.claimGuestOrders(fresh).catch((e) =>
+      console.error('[set-password] claim orders failed:', e?.message || e));
     req.logIn(fresh, (err) => {
       if (err) return next(err);
       req.flash('success', 'Password set. Here are your orders.');

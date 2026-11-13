@@ -99,6 +99,7 @@ async function captureOrder({ razorpayOrderId, paymentId, signature }) {
       await syncMagicAddress(result.order);
     }
     await ensureOrderEmail(result.order.id, paymentId);
+    await linkOrderToAccount(result.order.id);
     mailer.sendOrderConfirmation(result.order.id).catch(() => {});
   }
   return result;
@@ -124,6 +125,40 @@ async function ensureOrderEmail(orderId, paymentId) {
     }
   } catch (err) {
     console.error('[checkout] email fallback failed:', err?.error?.description || err?.message || err);
+  }
+}
+
+// Every placed order belongs to an account, keyed on the buyer's email: a
+// guest who pays (card, UPI, COD or Magic Checkout) can later log in with that
+// email and find this order, their details and their address waiting. A new
+// account is created locked and gets a set-password email; an existing one
+// simply gains the order. Also sweeps up any earlier guest orders under the
+// same email. Never throws: a failure here must not disturb a placed order.
+async function linkOrderToAccount(orderId) {
+  try {
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: { user: true, shippingAddress: true },
+    });
+    if (!order) return;
+    let user = order.user;
+    let isNew = false;
+    if (!user) {
+      const res = await customerAccount.ensureCustomer({
+        email: order.guestEmail,
+        name: order.shippingAddress?.fullName,
+        phone: order.shippingAddress?.phone,
+      });
+      if (!res) return;
+      ({ user, isNew } = res);
+    }
+    await customerAccount.claimGuestOrders(user);
+    if (isNew) {
+      sendSetPasswordInvite(user).catch((e) =>
+        console.error('[checkout] set-password mail failed:', e?.message || e));
+    }
+  } catch (err) {
+    console.error('[checkout] account link failed:', err?.message || err);
   }
 }
 
@@ -237,6 +272,7 @@ exports.placeCod = async (req, res, next) => {
     await clearCart(req);
     delete req.session.couponCode;
     rememberGuestOrder(req, order.orderNumber);
+    await linkOrderToAccount(order.id);
 
     // Fire-and-forget: a mail hiccup must never fail a placed order.
     mailer.sendOrderConfirmation(order.id).catch(() => {});

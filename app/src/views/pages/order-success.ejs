@@ -188,6 +188,9 @@
             <div class="os-headline">
                 <h1>Thank you for your order</h1>
                 <p>A confirmation has been sent to <strong><%= (currentUser && currentUser.email) || order.guestEmail %></strong>.<br>We'll email you again the moment it ships.</p>
+                <% if (!currentUser && order.userId) { %>
+                    <p style="font-size:14px;color:var(--c-text-2,#6A6F75);">This order is saved to your account. <a href="/login">Log in</a> with this email to see it any time. New here? We've emailed you a link to set your password.</p>
+                <% } %>
             </div>
 
             <span class="os-ordnum">Order #<%= order.orderNumber %></span>

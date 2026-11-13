@@ -79,4 +79,76 @@ async function ensureCustomer({ email, name, phone }) {
   return { user, isNew: true };
 }
 
-module.exports = { ensureCustomer, issueResetToken, findByResetToken, consumeResetToken };
+// Same person, same street — compare loosely so "Flat 4, MG Rd" typed twice
+// with different spacing/case doesn't fill the address book with copies.
+const addrKey = (a) =>
+  [a.line1, a.postcode, a.phone].map((v) => String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '')).join('|');
+
+// Attach every order placed under this email to the account, so whoever logs
+// in with that email sees their history and profile, however they checked out
+// (guest card payment, COD, Magic Checkout, or before the account existed).
+//
+// Only PLACED orders are claimed — a PENDING row is a checkout someone opened
+// and walked away from, and must not show up as an order in their account.
+// The shipping addresses come along into the address book (minus duplicates),
+// and the newest becomes the default if they have none yet.
+// Returns the number of orders claimed.
+async function claimGuestOrders(user) {
+  if (!user?.id || !user.email) return 0;
+  const orders = await prisma.order.findMany({
+    where: {
+      userId: null,
+      guestEmail: { equals: user.email, mode: 'insensitive' },
+      status: { not: 'PENDING' },
+    },
+    orderBy: { createdAt: 'desc' },
+    select: { id: true, shippingAddress: true },
+  });
+  if (orders.length) {
+    await prisma.order.updateMany({
+      where: { id: { in: orders.map((o) => o.id) } },
+      data: { userId: user.id },
+    });
+  }
+
+  // Bring the shipping addresses of ALL their placed orders into the book —
+  // including ones already linked (Magic Checkout attaches the order but its
+  // address arrives separately), skipping duplicates of what's there.
+  const linked = await prisma.order.findMany({
+    where: { userId: user.id, status: { not: 'PENDING' }, shippingAddress: { userId: null } },
+    orderBy: { createdAt: 'desc' },
+    select: { shippingAddress: true },
+  });
+  const book = await prisma.address.findMany({ where: { userId: user.id } });
+  const seen = new Set(book.map(addrKey));
+  const adopt = [];
+  for (const { shippingAddress: a } of linked) {
+    if (!a) continue;
+    const key = addrKey(a);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    adopt.push(a.id);
+  }
+  if (adopt.length) {
+    await prisma.address.updateMany({ where: { id: { in: adopt }, userId: null }, data: { userId: user.id } });
+  }
+  await ensureDefaultAddress(user.id);
+  return orders.length;
+}
+
+// Give the account a default address if it has addresses but none is default.
+async function ensureDefaultAddress(userId) {
+  const hasDefault = await prisma.address.count({ where: { userId, isDefault: true } });
+  if (hasDefault) return;
+  const newest = await prisma.address.findFirst({ where: { userId }, orderBy: { createdAt: 'desc' } });
+  if (newest) await prisma.address.update({ where: { id: newest.id }, data: { isDefault: true } });
+}
+
+module.exports = {
+  ensureCustomer,
+  claimGuestOrders,
+  ensureDefaultAddress,
+  issueResetToken,
+  findByResetToken,
+  consumeResetToken,
+};
