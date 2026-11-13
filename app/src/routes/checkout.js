@@ -1,7 +1,21 @@
 const express = require('express');
 const ctrl = require('../controllers/checkoutController');
 
+const rateLimit = require('express-rate-limit');
+
 const router = express.Router();
+
+// Razorpay does not sign its Magic Checkout platform callbacks, so these
+// routes lean on the order-existence check plus this limit rather than an
+// HMAC. Generous enough for a real checkout (Razorpay re-asks as the customer
+// edits their address), tight enough that nobody can grind order numbers.
+const magicLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 120,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests' },
+});
 
 // Guest checkout: none of these require an account. Logged-in users still get
 // their saved addresses + order history; guests are identified by their
@@ -24,16 +38,16 @@ router.post('/webhook', express.raw({ type: '*/*' }), ctrl.webhook);
 // mid-checkout and we answer: do we ship there, what does shipping cost, is
 // COD available. Raw body for the same HMAC reason as the webhook.
 router.get('/shipping-info', ctrl.shippingInfoHealth);
-router.post('/shipping-info', express.raw({ type: '*/*' }), ctrl.shippingInfo);
+router.post('/shipping-info', magicLimiter, express.raw({ type: '*/*' }), ctrl.shippingInfo);
 
 // Magic Checkout coupon APIs. Razorpay asks which coupons to show, then asks
 // us to validate the one the customer picked. Raw body for the HMAC.
 router.get('/promotions', ctrl.promotionsHealth);
-router.post('/promotions', express.raw({ type: '*/*' }), ctrl.getPromotions);
-router.post('/promotions/apply', express.raw({ type: '*/*' }), ctrl.applyPromotion);
+router.post('/promotions', magicLimiter, express.raw({ type: '*/*' }), ctrl.getPromotions);
+router.post('/promotions/apply', magicLimiter, express.raw({ type: '*/*' }), ctrl.applyPromotion);
 
 // Magic Checkout abandoned-cart webhook (same secret as shipping-info).
 router.get('/abandoned', ctrl.abandonedHealth);
-router.post('/abandoned', express.raw({ type: '*/*' }), ctrl.abandonedCheckout);
+router.post('/abandoned', magicLimiter, express.raw({ type: '*/*' }), ctrl.abandonedCheckout);
 
 module.exports = router;

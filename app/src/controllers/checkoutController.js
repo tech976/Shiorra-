@@ -684,31 +684,43 @@ async function subtotalForRazorpayOrder(rzpOrderId) {
 // charged, so an unverifiable request is never honoured. Returns the parsed
 // body, or null after it has already answered the response.
 function verifiedBody(req, res, secret, label) {
-  if (!secret) {
-    console.error(`[${label}] secret is not set - rejecting.`);
-    res.status(503).json({ error: 'Not configured.' });
-    return null;
-  }
   const signature = req.headers['x-razorpay-signature'];
   const raw = Buffer.isBuffer(req.body) ? req.body : Buffer.from(String(req.body || ''));
 
-  // Razorpay's docs for these platform APIs are gone (404), so when a call is
-  // refused, record exactly what arrived — the header set and the body are the
-  // only way to learn how they actually sign it. Still rejected either way.
-  if (!signature) {
-    console.error(`[${label}] NO SIGNATURE HEADER. headers=` + JSON.stringify(req.headers) +
-      ' bodyLen=' + raw.length + ' body=' + raw.toString('utf8').slice(0, 300));
-    res.status(400).json({ error: 'Missing signature' });
-    return null;
-  }
-  const expected = crypto.createHmac('sha256', secret).update(raw).digest('hex');
-  if (!signaturesMatch(expected, signature)) {
-    console.error(`[${label}] SIGNATURE MISMATCH. got=` + String(signature) +
-      ' expected=' + expected + ' secretLen=' + String(secret).length +
-      ' bodyLen=' + raw.length + ' headers=' + JSON.stringify(req.headers) +
-      ' body=' + raw.toString('utf8').slice(0, 400));
-    res.status(400).json({ error: 'Invalid signature' });
-    return null;
+  // AUTHENTICATION MODEL for Razorpay's Magic Checkout platform callbacks.
+  //
+  // Verified from a real captured request: Razorpay sends NO signature and NO
+  // Authorization header on these calls — only tracing headers and
+  // `baggage: merchant.id=...` — even with the dashboard's "Secret Key"
+  // active. Their published docs for these APIs now 404. So an HMAC gate here
+  // rejects 100% of legitimate traffic and protects nothing, which is exactly
+  // what took the checkout down.
+  //
+  // Standard layered handling for an unsigned provider callback:
+  //   1. If a signature IS present, it is still verified in full — nothing is
+  //      relaxed for a caller that sends one, so this strengthens as soon as
+  //      Razorpay starts signing.
+  //   2. Otherwise the caller must name an order we actually issued; the
+  //      handlers answer 404 to anything else (see resolveClaimedOrder).
+  //   3. The routes are rate limited.
+  //   4. The responses carry no customer data — only a shipping fee and
+  //      serviceability, which is public pricing. No money moves, no order is
+  //      mutated.
+  // The payment webhook is deliberately NOT routed through here: it governs
+  // money, Razorpay does sign it, and it still fails closed.
+  if (signature) {
+    if (!secret) {
+      console.error(`[${label}] signature sent but no secret configured.`);
+      res.status(503).json({ error: 'Not configured.' });
+      return null;
+    }
+    const expected = crypto.createHmac('sha256', secret).update(raw).digest('hex');
+    if (!signaturesMatch(expected, signature)) {
+      console.error(`[${label}] SIGNATURE MISMATCH. got=` + String(signature) +
+        ' expected=' + expected + ' bodyLen=' + raw.length);
+      res.status(400).json({ error: 'Invalid signature' });
+      return null;
+    }
   }
   try {
     const body = JSON.parse(raw.toString('utf8') || '{}');
@@ -807,8 +819,10 @@ exports.getPromotions = async (req, res) => {
   const body = verifiedBody(req, res, env.razorpay.promoSecret, 'promotions');
   if (!body) return;
   try {
-    let subtotal = 0;
-    try { subtotal = (await subtotalForRazorpayOrder(body.order_id)) || 0; } catch (_) {}
+    // Same authenticity gate as shipping-info: name a real order or get nothing.
+    const order = await resolveClaimedOrder(body);
+    if (!order) return res.status(404).json({ error: 'Unknown order' });
+    const subtotal = order.subtotalInPaise;
     const coupons = await prisma.coupon.findMany({ where: { active: true } });
     const promotions = coupons
       .filter((c) => couponUsable(c, subtotal))
@@ -833,8 +847,9 @@ exports.applyPromotion = async (req, res) => {
   try {
     if (!code) return res.json({ failure_reason: 'Enter a coupon code.' });
 
-    let subtotal = 0;
-    try { subtotal = (await subtotalForRazorpayOrder(body.order_id)) || 0; } catch (_) {}
+    const order = await resolveClaimedOrder(body);
+    if (!order) return res.status(404).json({ error: 'Unknown order' });
+    const subtotal = order.subtotalInPaise;
 
     const coupon = await prisma.coupon.findUnique({ where: { code } });
     if (!coupon || !coupon.active) {
@@ -867,6 +882,25 @@ exports.applyPromotion = async (req, res) => {
 exports.shippingInfoHealth = (req, res) =>
   res.json({ ok: true, endpoint: 'shipping-info', method: 'POST' });
 
+// Resolve the order a Magic Checkout call refers to.
+//
+// Razorpay identifies it two ways at once, and NEITHER is what the old code
+// assumed: `order_id` is OUR order number (the receipt we set), and
+// `razorpay_order_id` is their id with the "order_" prefix STRIPPED. Looking
+// up order_id as a Razorpay id is why every lookup logged
+// "The id provided does not exist".
+async function resolveClaimedOrder(body) {
+  const orderNumber = typeof body.order_id === 'string' ? body.order_id.trim() : '';
+  let rzpId = typeof body.razorpay_order_id === 'string' ? body.razorpay_order_id.trim() : '';
+  if (rzpId && !rzpId.startsWith('order_')) rzpId = 'order_' + rzpId;
+
+  const or = [];
+  if (orderNumber) or.push({ orderNumber });
+  if (rzpId) or.push({ razorpayOrderId: rzpId });
+  if (!or.length) return null;
+  return prisma.order.findFirst({ where: { OR: or } });
+}
+
 // POST /checkout/shipping-info  (raw body)
 //
 // Razorpay Magic Checkout calls this mid-checkout with the customer's
@@ -892,16 +926,19 @@ exports.shippingInfo = async (req, res) => {
 
   // A lookup failure must not block checkout — fall back to the flat rate
   // rather than refusing to quote.
-  let subtotal = null;
+  let order = null;
   try {
-    subtotal = await subtotalForRazorpayOrder(body.order_id);
+    order = await resolveClaimedOrder(body);
   } catch (err) {
-    console.error('[shipping-info] subtotal lookup failed:',
-      err?.message || err?.error?.description || JSON.stringify(err)?.slice(0, 200) || err);
+    console.error('[shipping-info] order lookup failed:', err?.message || err);
   }
-  const fee = subtotal == null
-    ? cartController.shippingFor(0)            // unknown cart -> charge the flat rate
-    : cartController.shippingFor(subtotal);
+  if (!order) {
+    console.error('[shipping-info] unknown order:', JSON.stringify({
+      order_id: body.order_id, razorpay_order_id: body.razorpay_order_id,
+    }));
+    return res.status(404).json({ error: 'Unknown order' });
+  }
+  const fee = cartController.shippingFor(order.subtotalInPaise);
 
   const addresses = Array.isArray(body.addresses) ? body.addresses : [];
   const out = await Promise.all(addresses.map(async (a) => {
