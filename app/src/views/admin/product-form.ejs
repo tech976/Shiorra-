@@ -82,9 +82,16 @@
                         <% product.images.forEach(function(img) { %>
                             <div class="product-image-card">
                                 <img src="<%= img.url %>" alt="">
-                                <form action="/admin/products/<%= product.id %>/images/<%= img.id %>?_method=DELETE" method="post" class="adm-image-card__form">
-                                    <button class="btn btn--sm btn--danger">Delete</button>
-                                </form>
+                                <%# A separate form element here would nest inside the product
+                                    form. HTML forbids that: the browser drops the inner opening
+                                    tag but its closing tag ends the OUTER form, which left
+                                    "Save changes" outside the form and silently doing nothing.
+                                    formaction posts the same request without nesting anything. %>
+                                <button type="submit" class="btn btn--sm btn--danger"
+                                        formaction="/admin/products/<%= product.id %>/images/<%= img.id %>?_method=DELETE"
+                                        formmethod="post"
+                                        formnovalidate
+                                        onclick="return confirm('Delete this image?')">Delete</button>
                             </div>
                         <% }); %>
                     </div>
