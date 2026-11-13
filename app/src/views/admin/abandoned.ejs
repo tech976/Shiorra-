@@ -13,18 +13,31 @@
                 <div>
                     <h1>Abandoned checkouts</h1>
                     <div class="adm-hero__sub">
-                        <%= rows.length %> captured · people who entered their details on Magic Checkout and left without paying
+                        <%= rows.length %> checkout<%= rows.length === 1 ? '' : 's' %> started and never paid ·
+                        <strong style="color:var(--adm-ink)"><%= reachable %></strong> with contact details ·
+                        <strong style="color:var(--adm-ink)"><%= formatINR(valueInPaise) %></strong> of lost carts
                     </div>
                 </div>
             </div>
         </div>
 
+        <% if (!reachable && rows.length) { %>
+            <div class="card" style="margin-bottom:18px;border-left:3px solid #C2410C">
+                <p style="margin:0;font-size:14px">
+                    <strong>No contact details on any of these.</strong>
+                    Magic Checkout collects the phone and email on Razorpay's own screen, so they only
+                    reach us if the <strong>Abandoned webhook</strong> is enabled in
+                    Razorpay → Magic Checkout settings, pointed at
+                    <code>https://shiorra.com/checkout/abandoned</code>.
+                    Without it you can see that carts were lost, but not who to follow up with.
+                </p>
+            </div>
+        <% } %>
+
         <% if (!rows.length) { %>
             <div class="card">
                 <p style="color:#6B6B6B;margin:0">
-                    Nothing captured yet. These arrive from Razorpay once the
-                    <strong>Abandoned webhook</strong> is pointed at
-                    <code>/checkout/abandoned</code> in Magic Checkout settings.
+                    Nothing abandoned yet — every checkout started in the last while was either paid or is still in progress.
                 </p>
             </div>
         <% } else { %>
@@ -32,35 +45,30 @@
                 <table class="tbl" style="width:100%">
                     <thead>
                         <tr>
-                            <th>When</th><th>Name</th><th>Phone</th><th>Email</th>
-                            <th>Location</th><th>Value</th><th>Status</th>
+                            <th>When</th><th>Order</th><th>Name</th><th>Phone</th>
+                            <th>Email</th><th>Cart</th><th>Value</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% rows.forEach(function (r) { %>
-                            <tr>
-                                <td><%= r.createdAt.toLocaleString('en-IN') %></td>
+                            <tr<%= r.hasContact ? '' : ' style="opacity:.62"' %>>
+                                <td style="white-space:nowrap"><%= r.when.toLocaleString('en-IN') %></td>
+                                <td><% if (r.orderNumber) { %><code style="font-size:12px"><%= r.orderNumber %></code><% } else { %><span style="color:#8A8A8A">—</span><% } %></td>
                                 <td><%= r.name || '—' %></td>
-                                <td>
-                                    <% if (r.phone) { %><a href="tel:<%= r.phone %>"><%= r.phone %></a><% } else { %>—<% } %>
-                                </td>
-                                <td>
-                                    <% if (r.email) { %><a href="mailto:<%= r.email %>"><%= r.email %></a><% } else { %>—<% } %>
-                                </td>
-                                <td><%= [r.city, r.state, r.postcode].filter(Boolean).join(', ') || '—' %></td>
-                                <td><%= r.totalInPaise ? '₹' + (r.totalInPaise/100).toFixed(0) : '—' %></td>
-                                <td>
-                                    <% if (r.recoveredAt) { %>
-                                        <span class="badge badge--paid">Recovered</span>
-                                    <% } else { %>
-                                        <span class="badge">Open</span>
-                                    <% } %>
-                                </td>
+                                <td><% if (r.phone) { %><a href="tel:<%= r.phone %>"><%= r.phone %></a><% } else { %><span style="color:#8A8A8A">—</span><% } %></td>
+                                <td><% if (r.email) { %><a href="mailto:<%= r.email %>"><%= r.email %></a><% } else { %><span style="color:#8A8A8A">—</span><% } %></td>
+                                <td style="max-width:280px;font-size:13px"><%= r.items || '—' %></td>
+                                <td style="white-space:nowrap"><strong><%= formatINR(r.valueInPaise) %></strong></td>
                             </tr>
                         <% }); %>
                     </tbody>
                 </table>
             </div>
+            <p style="color:#8A8A8A;font-size:12.5px;margin-top:12px">
+                A checkout counts as abandoned once it has gone 15 minutes without payment, so anything
+                still in progress is not listed here. These are hidden from the Orders page by default —
+                filter Orders by <strong>PENDING</strong> to see them there.
+            </p>
         <% } %>
 
     </div>

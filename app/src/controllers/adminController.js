@@ -479,9 +479,27 @@ exports.productToggleActive = async (req, res, next) => {
 // ---------- Orders ----------
 const statusSchema = z.enum(ORDER_STATUSES);
 
+// A checkout that was started and never paid for. Magic Checkout creates the
+// order up front, so every browse-and-leave becomes a row — 43 of the first 45.
+// They are shown on the Abandoned page, not mixed into real orders.
+const ABANDON_GRACE_MS = 15 * 60 * 1000; // still in-flight until this passes
+function abandonedOrderWhere() {
+  return {
+    paymentStatus: 'CREATED',
+    status: 'PENDING',
+    createdAt: { lt: new Date(Date.now() - ABANDON_GRACE_MS) },
+  };
+}
+
 function buildOrderWhere(q, status, from, to) {
   const where = { AND: [] };
-  if (status && ORDER_STATUSES.includes(status)) where.AND.push({ status });
+  if (status && ORDER_STATUSES.includes(status)) {
+    where.AND.push({ status });
+  } else {
+    // Default view = orders that actually became orders. Filtering by PENDING
+    // still shows the abandoned ones for anyone who wants them.
+    where.AND.push({ NOT: abandonedOrderWhere() });
+  }
   if (q) {
     where.AND.push({
       OR: [
@@ -1169,13 +1187,72 @@ exports.orderRefund = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-// GET /admin/abandoned — Magic Checkout drop-offs.
+// GET /admin/abandoned
+//
+// Two sources, because neither alone is the whole picture:
+//  - every checkout we opened that was never paid (we always have these), and
+//  - Razorpay's abandoned-cart webhook, which is the only thing that carries a
+//    phone and email, since Magic Checkout collects those on their screen.
+// Matched on the Razorpay order id so one drop-off is one row, with contact
+// details attached whenever the webhook did fire.
 exports.abandonedList = async (req, res, next) => {
   try {
-    const rows = await prisma.abandonedCheckout.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 200,
+    const [orders, captured] = await Promise.all([
+      prisma.order.findMany({
+        where: abandonedOrderWhere(),
+        orderBy: { createdAt: 'desc' },
+        take: 300,
+        include: { items: true, user: true, shippingAddress: true },
+      }),
+      prisma.abandonedCheckout.findMany({ orderBy: { createdAt: 'desc' }, take: 300 }),
+    ]);
+
+    // Razorpay sends its order id unprefixed; ours is stored with "order_".
+    const byRzp = new Map();
+    captured.forEach((c) => {
+      if (!c.razorpayOrderId) return;
+      const k = c.razorpayOrderId.startsWith('order_') ? c.razorpayOrderId : 'order_' + c.razorpayOrderId;
+      byRzp.set(k, c);
     });
-    res.render('admin/abandoned', { title: 'Abandoned checkouts', rows });
+
+    const rows = orders.map((o) => {
+      const c = o.razorpayOrderId ? byRzp.get(o.razorpayOrderId) : null;
+      if (c) byRzp.delete(o.razorpayOrderId);
+      return {
+        when: o.createdAt,
+        orderNumber: o.orderNumber,
+        name: c?.name || o.user?.name || o.shippingAddress?.fullName || null,
+        phone: c?.phone || o.shippingAddress?.phone || o.user?.phone || null,
+        email: c?.email || o.guestEmail || o.user?.email || null,
+        location: [o.shippingAddress?.city, o.shippingAddress?.state, c?.city, c?.state]
+          .filter(Boolean).join(', ') || null,
+        valueInPaise: o.totalInPaise || c?.totalInPaise || 0,
+        items: o.items.map((i) => `${i.name} x${i.quantity}`).join(', '),
+        hasContact: !!(c?.phone || c?.email || o.guestEmail),
+      };
+    });
+
+    // Drop-offs Razorpay told us about that never produced an order of ours.
+    byRzp.forEach((c) => rows.push({
+      when: c.createdAt,
+      orderNumber: null,
+      name: c.name, phone: c.phone, email: c.email,
+      location: [c.city, c.state].filter(Boolean).join(', ') || null,
+      valueInPaise: c.totalInPaise || 0,
+      items: '',
+      hasContact: !!(c.phone || c.email),
+    }));
+    rows.sort((a, b) => b.when - a.when);
+
+    const reachable = rows.filter((r) => r.hasContact).length;
+    const valueInPaise = rows.reduce((n, r) => n + (r.valueInPaise || 0), 0);
+
+    res.render('admin/abandoned', {
+      title: 'Abandoned checkouts',
+      rows,
+      reachable,
+      valueInPaise,
+      webhookRows: captured.length,
+    });
   } catch (err) { next(err); }
 };
