@@ -691,29 +691,27 @@ function verifiedBody(req, res, secret, label) {
   }
   const signature = req.headers['x-razorpay-signature'];
   const raw = Buffer.isBuffer(req.body) ? req.body : Buffer.from(String(req.body || ''));
+
+  // Razorpay's docs for these platform APIs are gone (404), so when a call is
+  // refused, record exactly what arrived — the header set and the body are the
+  // only way to learn how they actually sign it. Still rejected either way.
   if (!signature) {
-    // DIAGNOSTIC: every live call was being rejected, so record exactly what
-    // Razorpay sends. Remove once the contract is confirmed.
-    console.error(`[${label}] REJECT: no x-razorpay-signature. headers=` +
-      JSON.stringify(Object.keys(req.headers)) + ' bodyLen=' + raw.length);
+    console.error(`[${label}] NO SIGNATURE HEADER. headers=` + JSON.stringify(req.headers) +
+      ' bodyLen=' + raw.length + ' body=' + raw.toString('utf8').slice(0, 300));
     res.status(400).json({ error: 'Missing signature' });
     return null;
   }
   const expected = crypto.createHmac('sha256', secret).update(raw).digest('hex');
   if (!signaturesMatch(expected, signature)) {
-    console.error(`[${label}] REJECT: signature mismatch.` +
-      ' got=' + String(signature).slice(0, 12) + '...' +
-      ' expected=' + expected.slice(0, 12) + '...' +
-      ' secretLen=' + String(secret).length +
-      ' bodyLen=' + raw.length +
-      ' body=' + raw.toString('utf8').slice(0, 200));
+    console.error(`[${label}] SIGNATURE MISMATCH. got=` + String(signature) +
+      ' expected=' + expected + ' secretLen=' + String(secret).length +
+      ' bodyLen=' + raw.length + ' headers=' + JSON.stringify(req.headers) +
+      ' body=' + raw.toString('utf8').slice(0, 400));
     res.status(400).json({ error: 'Invalid signature' });
     return null;
   }
   try {
     const body = JSON.parse(raw.toString('utf8') || '{}');
-    // Keep the first live payloads visible so the real contract can be
-    // checked against what Razorpay actually sends.
     console.log(`[${label}] payload:`, raw.toString('utf8').slice(0, 600));
     return body;
   } catch (_) {
@@ -886,32 +884,11 @@ exports.shippingInfoHealth = (req, res) =>
 exports.shippingInfo = async (req, res) => {
   // FAIL CLOSED. Without the secret the HMAC key would be "" and anyone could
   // forge a request — and this endpoint sets what the customer is charged.
-  if (!env.razorpay.shippingSecret) {
-    console.error('[shipping-info] RAZORPAY_SHIPPING_SECRET is not set - rejecting.');
-    return res.status(503).json({ error: 'Shipping info not configured.' });
-  }
-  const signature = req.headers['x-razorpay-signature'];
-  if (!signature) return res.status(400).json({ error: 'Missing signature' });
-
-  const raw = Buffer.isBuffer(req.body) ? req.body : Buffer.from(String(req.body || ''));
-  const expected = crypto
-    .createHmac('sha256', env.razorpay.shippingSecret)
-    .update(raw)
-    .digest('hex');
-  if (!signaturesMatch(expected, signature)) {
-    return res.status(400).json({ error: 'Invalid signature' });
-  }
-
-  let body;
-  try {
-    body = JSON.parse(raw.toString('utf8') || '{}');
-  } catch (_) {
-    return res.status(400).json({ error: 'Malformed JSON' });
-  }
-
-  // Keep the first live payloads visible so the real contract can be checked
-  // against what Razorpay actually sends, then this line can go.
-  console.log('[shipping-info] payload:', raw.toString('utf8').slice(0, 800));
+  // One shared guard with the promotions APIs — this used to be a private
+  // copy that rejected SILENTLY, so every live Razorpay call failed with
+  // nothing in the logs to say why.
+  const body = verifiedBody(req, res, env.razorpay.shippingSecret, 'shipping-info');
+  if (!body) return;
 
   // A lookup failure must not block checkout — fall back to the flat rate
   // rather than refusing to quote.
