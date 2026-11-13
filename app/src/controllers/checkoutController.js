@@ -690,13 +690,23 @@ function verifiedBody(req, res, secret, label) {
     return null;
   }
   const signature = req.headers['x-razorpay-signature'];
+  const raw = Buffer.isBuffer(req.body) ? req.body : Buffer.from(String(req.body || ''));
   if (!signature) {
+    // DIAGNOSTIC: every live call was being rejected, so record exactly what
+    // Razorpay sends. Remove once the contract is confirmed.
+    console.error(`[${label}] REJECT: no x-razorpay-signature. headers=` +
+      JSON.stringify(Object.keys(req.headers)) + ' bodyLen=' + raw.length);
     res.status(400).json({ error: 'Missing signature' });
     return null;
   }
-  const raw = Buffer.isBuffer(req.body) ? req.body : Buffer.from(String(req.body || ''));
   const expected = crypto.createHmac('sha256', secret).update(raw).digest('hex');
   if (!signaturesMatch(expected, signature)) {
+    console.error(`[${label}] REJECT: signature mismatch.` +
+      ' got=' + String(signature).slice(0, 12) + '...' +
+      ' expected=' + expected.slice(0, 12) + '...' +
+      ' secretLen=' + String(secret).length +
+      ' bodyLen=' + raw.length +
+      ' body=' + raw.toString('utf8').slice(0, 200));
     res.status(400).json({ error: 'Invalid signature' });
     return null;
   }
