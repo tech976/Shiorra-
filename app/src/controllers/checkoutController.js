@@ -638,16 +638,22 @@ exports.paymentCallback = async (req, res, next) => {
 exports.success = async (req, res, next) => {
   try {
     const { orderNumber } = req.params;
-    // Logged-in users can only see their own orders. Guests can only see
-    // orders created in this session — never someone else's by URL guessing.
-    const where = req.user
-      ? { orderNumber, userId: req.user.id }
-      : { orderNumber, userId: null };
 
-    const isOwnGuestOrder = !req.user && (req.session.guestOrders || []).includes(orderNumber);
-    if (!req.user && !isOwnGuestOrder) {
+    // Authorisation: you may see an order you own, or one bought in THIS
+    // session. The session list only ever holds orders created here, so it
+    // cannot be used to read someone else's by guessing a URL.
+    const boughtInThisSession = (req.session.guestOrders || []).includes(orderNumber);
+    if (!req.user && !boughtInThisSession) {
       return res.status(404).render('pages/error', { title: 'Not found', status: 404, message: 'Order not found.' });
     }
+
+    // Deliberately NOT `userId: null` for guests. A Magic Checkout order gets
+    // an owner moments after payment, when the buyer's account is created from
+    // the details Razorpay returns — so pinning the lookup to a null owner
+    // 404'd the success page on every successful purchase.
+    const where = boughtInThisSession
+      ? { orderNumber }
+      : { orderNumber, userId: req.user.id };
 
     const order = await prisma.order.findFirst({
       where,
