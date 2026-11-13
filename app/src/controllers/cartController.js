@@ -88,8 +88,11 @@ function computeBundleDiscount(items) {
 // Flat-rate shipping — the single source of truth. /checkout/shipping-info
 // quotes Razorpay Magic Checkout from this same function, so the fee shown
 // mid-checkout can never drift from what the cart actually charges.
-const FREE_SHIP_THRESHOLD = 99900;      // Rs999
-const FLAT_SHIPPING_IN_PAISE = 4900;    // Rs49
+const FREE_SHIP_THRESHOLD = 99900;      // Rs999 — the old paid-shipping cutoff
+// Shipping is currently FREE on every order. Set this back to 4900 (Rs49) to
+// restore the "free over Rs999, otherwise Rs49" rule — shippingFor already
+// honours the threshold, so that one number is the only change needed.
+const FLAT_SHIPPING_IN_PAISE = 0;
 function shippingFor(subtotal) {
   return subtotal >= FREE_SHIP_THRESHOLD ? 0 : FLAT_SHIPPING_IN_PAISE;
 }
@@ -137,7 +140,11 @@ async function cartPayload(req) {
     })),
     totals,
     freeShipThreshold: FREE_SHIP_THRESHOLD,
-    freeShipRemaining: Math.max(0, FREE_SHIP_THRESHOLD - totals.subtotalInPaise),
+    // Nothing left to unlock once shipping is already free, so the drawer
+    // stops telling people to add more to earn it.
+    freeShipRemaining: shippingFor(totals.subtotalInPaise) === 0
+      ? 0
+      : Math.max(0, FREE_SHIP_THRESHOLD - totals.subtotalInPaise),
   };
 }
 
