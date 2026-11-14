@@ -22,7 +22,7 @@ const staticPages = {
     title: 'Terms of Service · Shiōrra',
     heading: 'Terms of Service',
     sub: 'Last updated: November 2026',
-    body: `
+    content: `
       <p>By using the Shiōrra website (shiorra.com), you agree to these terms.</p>
       <h2>Use of site</h2>
       <p>You may use this site to browse, learn about and order Shiōrra products. You may not use it for any illegal purpose, or in any way that could harm us, our suppliers, our customers or other site users.</p>
@@ -40,7 +40,7 @@ const staticPages = {
     title: 'Privacy Policy · Shiōrra',
     heading: 'Privacy Policy',
     sub: 'Last updated: November 2026',
-    body: `
+    content: `
       <p>Your trust matters to us. Here's how we handle the data you share with us.</p>
       <h2>What we collect</h2>
       <p>When you create an account or place an order, we collect: name, email, phone number, shipping address, and order history. When you pay through Razorpay, payment details are handled directly by them — we never see your card.</p>
@@ -58,7 +58,7 @@ const staticPages = {
     title: 'Reset your password · Shiōrra',
     heading: 'Reset your password',
     sub: "We'll get you back in",
-    body: `
+    content: `
       <p>Enter the email on your account and we'll send you a link to choose a new password.</p>
       <form action="/forgot-password" method="post" style="margin:22px 0;max-width:380px">
         <label for="fp-email" style="display:block;font-size:13px;font-weight:600;margin-bottom:7px">Email</label>
@@ -73,7 +73,7 @@ const staticPages = {
     title: 'Journal · Shiōrra',
     heading: 'The Journal',
     sub: 'Coming soon',
-    body: `
+    content: `
       <p>We're working on a small library of articles about pregnancy nutrition, postpartum recovery, and gentle daily wellness. Until then, browse <a href="/shop">our range</a> or read more <a href="/about">about us</a>.</p>
     `,
   },
@@ -81,7 +81,7 @@ const staticPages = {
     title: 'Sustainability · Shiōrra',
     heading: 'Sustainability',
     sub: 'How we think about it',
-    body: `
+    content: `
       <p>Shiōrra products are formulated in India, manufactured in GMP-certified facilities, and packaged in recyclable cartons. We're working toward fully compostable inner packaging by 2027.</p>
       <p>More detail coming soon. In the meantime, learn more <a href="/about">about us</a>.</p>
     `,
@@ -90,10 +90,10 @@ const staticPages = {
     title: 'Shipping · Shiōrra',
     heading: 'Shipping',
     sub: 'Getting Shiōrra to your door',
-    body: `
+    content: `
       <p>We ship across India. Orders are dispatched within 1–2 business days and typically arrive in 3–7 business days depending on your location.</p>
       <h2>Shipping charges</h2>
-      <p>Free shipping on all orders over ₹999. Orders below ₹999 carry a flat ₹49 shipping fee, shown at checkout.</p>
+      <p>Shipping is free on every order — no minimum, no surprises at checkout.</p>
       <h2>Tracking</h2>
       <p>Once your order ships, we'll email a tracking link so you can follow it to your door.</p>
       <h2>Questions?</h2>
@@ -104,7 +104,7 @@ const staticPages = {
     title: 'Returns &amp; Refunds · Shiōrra',
     heading: 'Returns & Refunds',
     sub: 'Our 30-day promise',
-    body: `
+    content: `
       <p>We want you to feel good about your order. If something isn't right, we're here to help.</p>
       <h2>Returns</h2>
       <p>Unopened, sealed products may be returned within 30 days of delivery for a full refund. For hygiene and safety reasons, opened or used products cannot be returned.</p>
@@ -116,8 +116,11 @@ const staticPages = {
   },
 };
 
+// NOTE: the page HTML is passed as `content`, never `body` — express-ejs-layouts
+// uses `body` for the rendered view, so a local of that name replaces the whole
+// template (heading, styles, container) with bare paragraphs.
 Object.entries(staticPages).forEach(([routePath, page]) => {
-  router.get(routePath, (req, res) => res.render('pages/static', page));
+  router.get(routePath, (req, res) => res.render('pages/static', { ...page, pagePath: routePath }));
 });
 
 // Newsletter — gracefully accepts the footer signup. No email integration
