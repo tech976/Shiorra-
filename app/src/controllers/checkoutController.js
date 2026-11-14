@@ -814,17 +814,47 @@ exports.abandonedHealth = (req, res) =>
 // Razorpay posts here when a customer enters their details on Magic Checkout
 // and leaves without paying. These are people our own cart never sees: they
 // abandon on Razorpay's screen, as guests, so there is no session to inspect.
+// Razorpay sends its order id with the "order_" prefix stripped; we store it
+// with the prefix (as Order.razorpayOrderId does) so the two always match.
+function normalizeRzpOrderId(id) {
+  const s = typeof id === 'string' ? id.trim() : '';
+  if (!s) return null;
+  return s.startsWith('order_') ? s : 'order_' + s;
+}
+
+// Record whatever we learn about the person behind a checkout, keyed on the
+// Razorpay order id so one checkout stays one row however many calls mention it.
+// Callers may know LESS than an earlier call did (an early bounce carries no
+// address), so only fields that actually arrived overwrite what is stored.
+async function rememberCheckoutContact(rzpOrderId, data) {
+  const clean = Object.fromEntries(
+    Object.entries(data).filter(([, v]) => v !== null && v !== undefined && v !== 0 && v !== '')
+  );
+  if (!rzpOrderId) {
+    if (!clean.phone && !clean.email) return; // nothing worth a row
+    return prisma.abandonedCheckout.create({ data: clean });
+  }
+  return prisma.abandonedCheckout.upsert({
+    where: { razorpayOrderId: rzpOrderId },
+    update: clean,
+    create: { razorpayOrderId: rzpOrderId, ...clean },
+  });
+}
+
 exports.abandonedCheckout = async (req, res) => {
   const body = verifiedBody(req, res, env.razorpay.shippingSecret, 'abandoned');
   if (!body) return;
   try {
     const c = body.customer_details || body.customer || {};
     const addr = c.shipping_address || c.billing_address || {};
-    const rzpOrderId = body.order_id || body.razorpay_order_id || null;
+    // NOT body.order_id — on Magic Checkout calls that is OUR order number
+    // (the receipt), so keying on it meant a webhook row could never be
+    // matched to its checkout on the Abandoned page.
+    const rzpOrderId = normalizeRzpOrderId(body.razorpay_order_id);
 
     const data = {
-      phone: c.contact || c.phone || null,
-      email: c.email || null,
+      phone: c.contact || c.phone || body.contact || null,
+      email: c.email || body.email || null,
       name: c.name || null,
       city: addr.city || null,
       state: addr.state || null,
@@ -833,23 +863,7 @@ exports.abandonedCheckout = async (req, res) => {
       itemsJson: body.line_items ? JSON.stringify(body.line_items).slice(0, 4000) : null,
     };
 
-    // Razorpay retries, and a customer may bounce more than once — key on the
-    // order id so one drop-off stays one row rather than piling up duplicates.
-    if (rzpOrderId) {
-      // Razorpay may post the same drop-off again with LESS detail (an early
-      // bounce carries no address). Updating with the blanks would erase what
-      // we already captured, so only overwrite fields that actually arrived.
-      const patch = Object.fromEntries(
-        Object.entries(data).filter(([, v]) => v !== null && v !== undefined && v !== 0 && v !== '')
-      );
-      await prisma.abandonedCheckout.upsert({
-        where: { razorpayOrderId: rzpOrderId },
-        update: patch,
-        create: { razorpayOrderId: rzpOrderId, ...data },
-      });
-    } else {
-      await prisma.abandonedCheckout.create({ data });
-    }
+    await rememberCheckoutContact(rzpOrderId, data);
     console.log(`[abandoned] captured ${data.phone || data.email || 'unknown'}`);
     return res.json({ ok: true });
   } catch (err) {
@@ -988,6 +1002,22 @@ exports.shippingInfo = async (req, res) => {
   const fee = cartController.shippingFor(order.subtotalInPaise);
 
   const addresses = Array.isArray(body.addresses) ? body.addresses : [];
+
+  // This call is the one reliable place Magic Checkout hands us the customer's
+  // phone (and often email) — it collects them on Razorpay's own screen, and
+  // its abandoned-cart webhook is not dependable. Keep them, so a checkout that
+  // is never paid shows up on Admin → Abandoned with someone to follow up with.
+  // Fire-and-forget: this must never slow down or fail the shipping quote.
+  if (body.contact || body.email) {
+    const first = addresses[0] || {};
+    rememberCheckoutContact(order.razorpayOrderId || normalizeRzpOrderId(body.razorpay_order_id), {
+      phone: typeof body.contact === 'string' ? body.contact.trim() : null,
+      email: typeof body.email === 'string' ? body.email.trim().toLowerCase() : null,
+      state: first.state_code || null,
+      postcode: String(first.zipcode || first.postal_code || first.pincode || '').trim() || null,
+      totalInPaise: order.totalInPaise || 0,
+    }).catch((err) => console.error('[shipping-info] contact capture failed:', err?.message || err));
+  }
   const out = await Promise.all(addresses.map(async (a) => {
     const zip = String(a.zipcode || a.postal_code || a.pincode || '').trim();
     const country = String(a.country || 'in').toLowerCase();

@@ -154,11 +154,8 @@ exports.dashboard = async (req, res, next) => {
         take: 5,
         select: { id: true, email: true, name: true, createdAt: true, role: true },
       }),
-      // "Abandoned" carts: any user with items in cart whose last activity was > 1 day ago
-      prisma.cartItem.groupBy({
-        by: ['userId'],
-        where: { updatedAt: { lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } },
-      }),
+      // Same list the Abandoned page shows, so the two numbers always match.
+      collectAbandoned(),
     ]);
 
     // 30-day daily series — both revenue and order count
@@ -227,7 +224,7 @@ exports.dashboard = async (req, res, next) => {
         userCount,
         newUsersToday,
         aovInPaise,
-        cartAbandonedCount: cartAbandonedCount.length,
+        cartAbandonedCount: cartAbandonedCount.rows.length,
         revDeltaPct,
       },
       statusBreakdown: {
@@ -1187,17 +1184,18 @@ exports.orderRefund = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-// GET /admin/abandoned
-//
-// Two sources, because neither alone is the whole picture:
-//  - every checkout we opened that was never paid (we always have these), and
-//  - Razorpay's abandoned-cart webhook, which is the only thing that carries a
-//    phone and email, since Magic Checkout collects those on their screen.
-// Matched on the Razorpay order id so one drop-off is one row, with contact
-// details attached whenever the webhook did fire.
-exports.abandonedList = async (req, res, next) => {
-  try {
-    const [orders, captured] = await Promise.all([
+// Every abandoned cart, from all three places one can show up:
+//  - checkouts we opened that were never paid (we always have these),
+//  - contact details captured for them (from Magic Checkout's shipping-info
+//    call, or Razorpay's abandoned-cart webhook when it fires) — matched on the
+//    Razorpay order id so one drop-off is one row, and
+//  - logged-in shoppers whose saved cart has sat untouched past the grace
+//    period without them starting checkout.
+// One source of truth for both the Abandoned page and the dashboard count, so
+// the two can never disagree.
+const SAVED_CART_GRACE_MS = 60 * 60 * 1000;
+async function collectAbandoned() {
+    const [orders, captured, staleCartItems] = await Promise.all([
       prisma.order.findMany({
         where: abandonedOrderWhere(),
         orderBy: { createdAt: 'desc' },
@@ -1205,6 +1203,12 @@ exports.abandonedList = async (req, res, next) => {
         include: { items: true, user: true, shippingAddress: true },
       }),
       prisma.abandonedCheckout.findMany({ orderBy: { createdAt: 'desc' }, take: 300 }),
+      // Only carts whose NEWEST item is past the grace period — someone still
+      // adding things is shopping, not abandoning.
+      prisma.cartItem.findMany({
+        where: { user: { cartItems: { none: { updatedAt: { gte: new Date(Date.now() - SAVED_CART_GRACE_MS) } } } } },
+        include: { product: { select: { name: true, priceInPaise: true } }, user: true },
+      }),
     ]);
 
     // Razorpay sends its order id unprefixed; ours is stored with "order_".
@@ -1215,44 +1219,90 @@ exports.abandonedList = async (req, res, next) => {
       byRzp.set(k, c);
     });
 
+    const usersWithAbandonedOrder = new Set(orders.map((o) => o.userId).filter(Boolean));
     const rows = orders.map((o) => {
       const c = o.razorpayOrderId ? byRzp.get(o.razorpayOrderId) : null;
       if (c) byRzp.delete(o.razorpayOrderId);
       return {
+        source: 'checkout',
         when: o.createdAt,
         orderNumber: o.orderNumber,
         name: c?.name || o.user?.name || o.shippingAddress?.fullName || null,
         phone: c?.phone || o.shippingAddress?.phone || o.user?.phone || null,
         email: c?.email || o.guestEmail || o.user?.email || null,
-        location: [o.shippingAddress?.city, o.shippingAddress?.state, c?.city, c?.state]
+        location: [o.shippingAddress?.city, o.shippingAddress?.state, c?.city, c?.state, c?.postcode]
           .filter(Boolean).join(', ') || null,
         valueInPaise: o.totalInPaise || c?.totalInPaise || 0,
         items: o.items.map((i) => `${i.name} x${i.quantity}`).join(', '),
-        hasContact: !!(c?.phone || c?.email || o.guestEmail),
+        hasContact: !!(c?.phone || c?.email || o.guestEmail || o.shippingAddress?.phone || o.user?.email),
       };
     });
 
+    // Contact details are now captured mid-checkout for EVERY Magic Checkout
+    // order, including ones that go on to be paid. A leftover row whose order
+    // exists (paid, or still inside the grace window) is not a drop-off.
+    const leftoverIds = [...byRzp.keys()];
+    if (leftoverIds.length) {
+      const known = await prisma.order.findMany({
+        where: { razorpayOrderId: { in: leftoverIds } },
+        select: { razorpayOrderId: true },
+      });
+      known.forEach((o) => byRzp.delete(o.razorpayOrderId));
+    }
+    // Captured rows with no order id at all (webhook posts without one).
+    captured.forEach((c) => { if (!c.razorpayOrderId) byRzp.set(c.id, c); });
+
     // Drop-offs Razorpay told us about that never produced an order of ours.
-    byRzp.forEach((c) => rows.push({
-      when: c.createdAt,
-      orderNumber: null,
-      name: c.name, phone: c.phone, email: c.email,
-      location: [c.city, c.state].filter(Boolean).join(', ') || null,
-      valueInPaise: c.totalInPaise || 0,
-      items: '',
-      hasContact: !!(c.phone || c.email),
-    }));
-    rows.sort((a, b) => b.when - a.when);
-
-    const reachable = rows.filter((r) => r.hasContact).length;
-    const valueInPaise = rows.reduce((n, r) => n + (r.valueInPaise || 0), 0);
-
-    res.render('admin/abandoned', {
-      title: 'Abandoned checkouts',
-      rows,
-      reachable,
-      valueInPaise,
-      webhookRows: captured.length,
+    // Skip empty rows (e.g. a manual endpoint probe) — nothing to act on.
+    byRzp.forEach((c) => {
+      if (!c.phone && !c.email && !c.totalInPaise) return;
+      rows.push({
+        source: 'checkout',
+        when: c.createdAt,
+        orderNumber: null,
+        name: c.name, phone: c.phone, email: c.email,
+        location: [c.city, c.state, c.postcode].filter(Boolean).join(', ') || null,
+        valueInPaise: c.totalInPaise || 0,
+        items: '',
+        hasContact: !!(c.phone || c.email),
+      });
     });
+    // Saved carts of logged-in shoppers who never got as far as checkout.
+    // One row per shopper; skip anyone already listed via an unpaid checkout.
+    const carts = new Map();
+    staleCartItems.forEach((ci) => {
+      if (usersWithAbandonedOrder.has(ci.userId)) return;
+      const r = carts.get(ci.userId) || { user: ci.user, items: [], value: 0, last: ci.updatedAt };
+      r.items.push(`${ci.product.name} x${ci.quantity}`);
+      r.value += (ci.product.priceInPaise || 0) * ci.quantity;
+      if (ci.updatedAt > r.last) r.last = ci.updatedAt;
+      carts.set(ci.userId, r);
+    });
+    carts.forEach((r) => rows.push({
+      source: 'cart',
+      when: r.last,
+      orderNumber: null,
+      name: r.user.name || null,
+      phone: r.user.phone || null,
+      email: r.user.email || null,
+      location: null,
+      valueInPaise: r.value,
+      items: r.items.join(', '),
+      hasContact: !!(r.user.email || r.user.phone),
+    }));
+
+    rows.sort((a, b) => b.when - a.when);
+    return {
+      rows,
+      reachable: rows.filter((r) => r.hasContact).length,
+      valueInPaise: rows.reduce((n, r) => n + (r.valueInPaise || 0), 0),
+    };
+}
+
+// GET /admin/abandoned
+exports.abandonedList = async (req, res, next) => {
+  try {
+    const { rows, reachable, valueInPaise } = await collectAbandoned();
+    res.render('admin/abandoned', { title: 'Abandoned checkouts', rows, reachable, valueInPaise });
   } catch (err) { next(err); }
 };

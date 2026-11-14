@@ -13,7 +13,7 @@
                 <div>
                     <h1>Abandoned checkouts</h1>
                     <div class="adm-hero__sub">
-                        <%= rows.length %> checkout<%= rows.length === 1 ? '' : 's' %> started and never paid ·
+                        <%= rows.length %> abandoned cart<%= rows.length === 1 ? '' : 's' %> ·
                         <strong style="color:var(--adm-ink)"><%= reachable %></strong> with contact details ·
                         <strong style="color:var(--adm-ink)"><%= formatINR(valueInPaise) %></strong> of lost carts
                     </div>
@@ -25,11 +25,11 @@
             <div class="card" style="margin-bottom:18px;border-left:3px solid #C2410C">
                 <p style="margin:0;font-size:14px">
                     <strong>No contact details on any of these.</strong>
-                    Magic Checkout collects the phone and email on Razorpay's own screen, so they only
-                    reach us if the <strong>Abandoned webhook</strong> is enabled in
+                    Magic Checkout collects the phone and email on Razorpay's own screen. We capture them
+                    when the customer reaches the address step; anyone who leaves before that is only
+                    reachable if the <strong>Abandoned webhook</strong> is enabled in
                     Razorpay → Magic Checkout settings, pointed at
                     <code>https://shiorra.com/checkout/abandoned</code>.
-                    Without it you can see that carts were lost, but not who to follow up with.
                 </p>
             </div>
         <% } %>
@@ -53,8 +53,8 @@
                         <% rows.forEach(function (r) { %>
                             <tr<%= r.hasContact ? '' : ' style="opacity:.62"' %>>
                                 <td style="white-space:nowrap"><%= r.when.toLocaleString('en-IN') %></td>
-                                <td><% if (r.orderNumber) { %><code style="font-size:12px"><%= r.orderNumber %></code><% } else { %><span style="color:#8A8A8A">—</span><% } %></td>
-                                <td><%= r.name || '—' %></td>
+                                <td><% if (r.orderNumber) { %><code style="font-size:12px"><%= r.orderNumber %></code><% } else if (r.source === 'cart') { %><span style="font-size:12px;color:#6B6B6B">Saved cart</span><% } else { %><span style="color:#8A8A8A">—</span><% } %></td>
+                                <td><%= r.name || '—' %><% if (r.location) { %><div style="color:#8A8A8A;font-size:12px"><%= r.location %></div><% } %></td>
                                 <td><% if (r.phone) { %><a href="tel:<%= r.phone %>"><%= r.phone %></a><% } else { %><span style="color:#8A8A8A">—</span><% } %></td>
                                 <td><% if (r.email) { %><a href="mailto:<%= r.email %>"><%= r.email %></a><% } else { %><span style="color:#8A8A8A">—</span><% } %></td>
                                 <td style="max-width:280px;font-size:13px"><%= r.items || '—' %></td>
@@ -65,7 +65,8 @@
                 </table>
             </div>
             <p style="color:#8A8A8A;font-size:12.5px;margin-top:12px">
-                A checkout counts as abandoned once it has gone 15 minutes without payment, so anything
+                A checkout counts as abandoned once it has gone 15 minutes without payment, and a
+                logged-in shopper's saved cart once it has sat untouched for an hour, so anything
                 still in progress is not listed here. These are hidden from the Orders page by default —
                 filter Orders by <strong>PENDING</strong> to see them there.
             </p>
