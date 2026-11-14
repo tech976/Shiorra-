@@ -1040,8 +1040,27 @@ exports.reportsCsv = async (req, res, next) => {
 // Fulfilment + refunds
 // ---------------------------------------------------------------------------
 
+// Ship and Refund each do something real and irreversible (a booked pickup,
+// money out). A double click or two admins at once must not do it twice, so
+// an order can have only one of each in flight. One app process, so memory
+// is enough.
+const inFlight = new Set();
+const once = (kind, handler) => async (req, res, next) => {
+  const key = `${kind}:${req.params.id}`;
+  if (inFlight.has(key)) {
+    req.flash('info', `This order's ${kind} is already being processed — refresh in a moment.`);
+    return res.redirect(`/admin/orders/${req.params.id}`);
+  }
+  inFlight.add(key);
+  try {
+    return await handler(req, res, next);
+  } finally {
+    inFlight.delete(key);
+  }
+};
+
 // POST /admin/orders/:id/ship — hand the order to Delhivery, store the waybill.
-exports.orderShip = async (req, res, next) => {
+exports.orderShip = once('shipment', async (req, res, next) => {
   try {
     const order = await prisma.order.findUnique({
       where: { id: req.params.id },
@@ -1080,7 +1099,7 @@ exports.orderShip = async (req, res, next) => {
     req.flash('success', `Shipped. Waybill ${result.awb}.${emailed ? ' Customer emailed.' : ''}`);
     res.redirect(`/admin/orders/${order.id}`);
   } catch (err) { next(err); }
-};
+});
 
 // POST /admin/orders/:id/track — pull the latest scan and mirror it locally.
 exports.orderTrack = async (req, res, next) => {
@@ -1117,7 +1136,7 @@ exports.orderTrack = async (req, res, next) => {
 // be captured, the amount must be positive, and it can never exceed what is
 // still refundable. Razorpay is the source of truth — we only record what it
 // confirms, so a failed call never leaves the books saying we refunded.
-exports.orderRefund = async (req, res, next) => {
+exports.orderRefund = once('refund', async (req, res, next) => {
   try {
     const order = await prisma.order.findUnique({ where: { id: req.params.id } });
     if (!order) {
@@ -1182,7 +1201,7 @@ exports.orderRefund = async (req, res, next) => {
     req.flash('success', `Refunded Rs${(amount / 100).toFixed(2)} (${refund.id}).${emailed ? ' Customer emailed.' : ''}`);
     res.redirect(`/admin/orders/${order.id}`);
   } catch (err) { next(err); }
-};
+});
 
 // Every abandoned cart, from all three places one can show up:
 //  - checkouts we opened that were never paid (we always have these),

@@ -174,7 +174,8 @@
                     </form>
                 <% } else if (order.paymentStatus === 'CAPTURED') { %>
                     <p class="adm-panel-text">This hands the order to Delhivery and stores the waybill number.</p>
-                    <form action="/admin/orders/<%= order.id %>/ship" method="post" class="adm-panel-actions">
+                    <form action="/admin/orders/<%= order.id %>/ship" method="post" class="adm-panel-actions"
+                          onsubmit="if (!confirm('Book this order with Delhivery? This creates a real shipment for pickup.')) return false; this.querySelector('button').disabled = true; this.querySelector('button').textContent = 'Booking…'; return true;">
                         <button class="btn btn--sm" type="submit">Ship with Delhivery</button>
                     </form>
                 <% } else { %>
@@ -198,7 +199,7 @@
                         This moves real money through Razorpay and cannot be undone.
                     </p>
                     <form action="/admin/orders/<%= order.id %>/refund" method="post" class="adm-refund-form"
-                          onsubmit="return confirm('Refund this payment? Money leaves the account and this cannot be undone.')">
+                          onsubmit="if (!confirm('Refund this payment? Money leaves the account and this cannot be undone.')) return false; this.querySelector('button[type=submit]').disabled = true; this.querySelector('button[type=submit]').textContent = 'Refunding…'; return true;">
                         <label>Amount (₹)
                             <input name="amount" type="number" step="0.01" min="0.01" max="<%= (_refundable/100).toFixed(2) %>"
                                    placeholder="<%= (_refundable/100).toFixed(2) %>">

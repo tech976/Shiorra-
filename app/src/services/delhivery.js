@@ -142,15 +142,24 @@ async function createShipment(order, address) {
   }
   if (!address) return { ok: false, error: 'Order has no shipping address yet.' };
 
+  // Razorpay hands addresses back as country "in" and phone "+91XXXXXXXXXX";
+  // Delhivery wants "India" and a plain 10-digit mobile for the delivery
+  // agent's call/OTP. Normalise here so every source of address works.
+  const digits = String(address.phone || '').replace(/\D/g, '');
+  const phone = digits.length >= 10 ? digits.slice(-10) : digits;
+  const country = !address.country || /^(in|ind|india)$/i.test(String(address.country).trim())
+    ? 'India'
+    : address.country;
+
   const payload = {
     shipments: [{
       name: address.fullName,
       add: [address.line1, address.line2].filter(Boolean).join(', '),
-      pin: address.postcode,
+      pin: String(address.postcode || '').trim(),
       city: address.city,
       state: address.state,
-      country: address.country || 'India',
-      phone: address.phone,
+      country,
+      phone,
       order: order.orderNumber,
       // Magic Checkout is prepaid-only, and COD orders are captured before
       // shipping too, so nothing here is collected on delivery.
