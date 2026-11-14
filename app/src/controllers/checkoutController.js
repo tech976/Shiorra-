@@ -149,8 +149,15 @@ async function linkOrderToAccount(orderId) {
         name: order.shippingAddress?.fullName,
         phone: order.shippingAddress?.phone,
       });
-      if (!res) return;
-      ({ user, isNew } = res);
+      if (res) {
+        ({ user, isNew } = res);
+      } else {
+        // No email (Magic Checkout paid with phone only): an existing account
+        // with that phone number gets the order. If nobody has the number yet,
+        // it's claimed when they register or add it to their profile.
+        user = await customerAccount.findUserByPhone(order.shippingAddress?.phone);
+        if (!user) return;
+      }
     }
     await customerAccount.claimGuestOrders(user);
     if (isNew) {

@@ -79,6 +79,10 @@ exports.register = async (req, res, next) => {
       // Same as login: merge guest cart + honour returnTo so a guest who
       // came in via "Buy now → Sign up" lands on /checkout with their cart.
       await mergeGuestCart(user.id, guestCart);
+      // Bought before signing up (e.g. Magic Checkout with just a phone)?
+      // Those orders belong in the new account straight away.
+      await customerAccount.claimGuestOrders(user).catch((e) =>
+        console.error('[register] claim orders failed:', e?.message || e));
       delete req.session.returnTo;
       req.flash('success', 'Account created.');
       res.redirect(returnTo);

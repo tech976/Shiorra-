@@ -1,4 +1,5 @@
-// One-off backfill: attach past guest orders to accounts by email.
+// One-off backfill: attach past guest orders to accounts by email (and, for
+// orders that have no email, by phone).
 //
 // Checkout now links every placed order to an account keyed on the buyer's
 // email (see services/customerAccount.js). Orders placed before that change
@@ -51,6 +52,27 @@ async function main() {
     linked += await customerAccount.claimGuestOrders(res.user);
   }
   if (!dryRun) console.log(`Linked ${linked} order(s); created ${created} account(s).`);
+
+  // Phone-only orders (Magic Checkout paid without an email): hand each to
+  // the one existing account with that phone. No account is created for
+  // these — there's no email to send a set-password link to.
+  const phoneOnly = await prisma.order.findMany({
+    where: { userId: null, OR: [{ guestEmail: null }, { guestEmail: '' }], status: { not: 'PENDING' } },
+    select: { orderNumber: true, shippingAddress: { select: { phone: true } } },
+  });
+  let phoneLinked = 0;
+  const done = new Set();
+  for (const o of phoneOnly) {
+    const user = await customerAccount.findUserByPhone(o.shippingAddress?.phone);
+    if (dryRun) {
+      console.log(`  phone-only ${o.orderNumber}: ${user ? 'matches an account' : 'no single matching account'}`);
+      continue;
+    }
+    if (!user || done.has(user.id)) continue;
+    done.add(user.id);
+    phoneLinked += await customerAccount.claimGuestOrders(user);
+  }
+  if (!dryRun) console.log(`Linked ${phoneLinked} phone-only order(s) of ${phoneOnly.length}.`);
 }
 
 main()

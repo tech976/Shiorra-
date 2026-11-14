@@ -95,18 +95,19 @@ const addrKey = (a) =>
 // Returns the number of orders claimed.
 async function claimGuestOrders(user) {
   if (!user?.id || !user.email) return 0;
-  const orders = await prisma.order.findMany({
+  const byEmail = await prisma.order.findMany({
     where: {
       userId: null,
       guestEmail: { equals: user.email, mode: 'insensitive' },
       status: { not: 'PENDING' },
     },
-    orderBy: { createdAt: 'desc' },
-    select: { id: true, shippingAddress: true },
+    select: { id: true },
   });
-  if (orders.length) {
+  const ids = new Set(byEmail.map((o) => o.id));
+  for (const id of await phoneOnlyOrderIds(user)) ids.add(id);
+  if (ids.size) {
     await prisma.order.updateMany({
-      where: { id: { in: orders.map((o) => o.id) } },
+      where: { id: { in: [...ids] }, userId: null },
       data: { userId: user.id },
     });
   }
@@ -133,7 +134,59 @@ async function claimGuestOrders(user) {
     await prisma.address.updateMany({ where: { id: { in: adopt }, userId: null }, data: { userId: user.id } });
   }
   await ensureDefaultAddress(user.id);
-  return orders.length;
+  return ids.size;
+}
+
+// Indian mobile numbers arrive as "+91 76664 47338", "917666447338",
+// "07666447338" or "7666447338" depending on who typed them (Razorpay always
+// sends +91). Compare on the last 10 digits. null when it isn't a real number.
+function phoneKey(phone) {
+  const digits = String(phone || '').replace(/\D/g, '');
+  return digits.length >= 10 ? digits.slice(-10) : null;
+}
+
+// Same normalisation, done in SQL so it works on whatever format is stored.
+const SQL_PHONE_KEY = (col) => `right(regexp_replace(coalesce(${col}, ''), '[^0-9]', '', 'g'), 10)`;
+
+// Accounts whose phone matches. Phone numbers aren't unique, so callers
+// that need one person must check there is exactly one.
+async function usersByPhone(phone) {
+  const key = phoneKey(phone);
+  if (!key) return [];
+  const rows = await prisma.$queryRawUnsafe(
+    `SELECT id FROM "User" WHERE ${SQL_PHONE_KEY('phone')} = $1`,
+    key,
+  );
+  if (!rows.length) return [];
+  return prisma.user.findMany({ where: { id: { in: rows.map((r) => r.id) } } });
+}
+
+// The single account with this phone, or null if none / ambiguous.
+async function findUserByPhone(phone) {
+  const users = await usersByPhone(phone);
+  return users.length === 1 ? users[0] : null;
+}
+
+// Magic Checkout lets a buyer pay with just their phone: Razorpay sends no
+// email, so such an order has nothing to match on except the delivery phone.
+// Those orders go to the account with that phone, as long as exactly one
+// account has it. Orders that DO carry an email stay keyed on that email, so
+// a phone number can never pull in someone else's emailed order.
+async function phoneOnlyOrderIds(user) {
+  const key = phoneKey(user.phone);
+  if (!key) return [];
+  const owners = await usersByPhone(key);
+  if (owners.length !== 1 || owners[0].id !== user.id) return [];
+  const rows = await prisma.$queryRawUnsafe(
+    `SELECT o.id FROM "Order" o
+       JOIN "Address" a ON a.id = o."shippingAddressId"
+      WHERE o."userId" IS NULL
+        AND o.status <> 'PENDING'
+        AND coalesce(o."guestEmail", '') = ''
+        AND ${SQL_PHONE_KEY('a.phone')} = $1`,
+    key,
+  );
+  return rows.map((r) => r.id);
 }
 
 // Give the account a default address if it has addresses but none is default.
@@ -148,6 +201,8 @@ module.exports = {
   ensureCustomer,
   claimGuestOrders,
   ensureDefaultAddress,
+  findUserByPhone,
+  phoneKey,
   issueResetToken,
   findByResetToken,
   consumeResetToken,
