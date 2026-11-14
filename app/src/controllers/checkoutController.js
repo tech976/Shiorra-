@@ -100,9 +100,11 @@ async function captureOrder({ razorpayOrderId, paymentId, signature }) {
       // Magic orders count their coupon use only once paid — most Magic
       // checkouts are opened and abandoned, and those must not burn a
       // limited-use code. (Card/COD orders count it when they're created.)
-      if (result.order.couponId) {
+      // Re-read: the coupon may have been applied in Razorpay's popup.
+      const synced = await prisma.order.findUnique({ where: { id: result.order.id }, select: { couponId: true } });
+      if (synced?.couponId) {
         await prisma.coupon.update({
-          where: { id: result.order.couponId },
+          where: { id: synced.couponId },
           data: { usedCount: { increment: 1 } },
         }).catch((e) => console.error('[magic-order] coupon count failed:', e?.message || e));
       }
@@ -605,10 +607,26 @@ async function syncMagicAddress(order) {
       },
     });
 
-    // Razorpay's amount is what was actually charged (goods + shipping, less
-    // any promotion). Trust it over our provisional figure.
+    // Razorpay's amount is what was actually charged (goods + shipping + COD
+    // fee, less any coupon taken in its popup). Trust it over our provisional
+    // figure, and split it back into its parts so the order, invoice and
+    // reports show the real shipping and discount.
     const paid = typeof remote.amount === 'number' ? remote.amount : order.totalInPaise;
-    const shipping = Math.max(0, paid - order.subtotalInPaise + (order.discountInPaise || 0));
+    const fees = (Number(remote.shipping_fee) || 0) + (Number(remote.cod_fee) || 0);
+    const hasFeeInfo = remote.shipping_fee !== undefined || remote.cod_fee !== undefined;
+    const shipping = hasFeeInfo
+      ? fees
+      : Math.max(0, paid - order.subtotalInPaise + (order.discountInPaise || 0));
+    // Whatever wasn't covered by goods + fees came off as a popup coupon.
+    const popupDiscount = Math.max(0, order.totalInPaise + shipping - paid);
+    const promo = Array.isArray(remote.promotions) ? remote.promotions.find((p) => p && p.code) : null;
+    const promoCoupon = promo && !order.couponId
+      ? await prisma.coupon.findUnique({ where: { code: String(promo.code).trim().toUpperCase() } })
+      : null;
+    if (popupDiscount || promo) {
+      console.log(`[magic-order] popup coupon on ${order.orderNumber}: ${promo?.code || '(no code)'} -${popupDiscount}`,
+        JSON.stringify(remote.promotions || []).slice(0, 400));
+    }
 
     await prisma.order.update({
       where: { id: order.id },
@@ -620,6 +638,11 @@ async function syncMagicAddress(order) {
         guestEmail: c.email || order.guestEmail,
         shippingInPaise: shipping,
         totalInPaise: paid,
+        ...(popupDiscount ? { discountInPaise: (order.discountInPaise || 0) + popupDiscount } : {}),
+        // A Razorpay-side coupon (one of theirs, not in our admin) still gets
+        // its code on the order; only our own coupons get the link + count.
+        ...(promo && !order.couponId ? { couponCode: String(promo.code).toUpperCase().slice(0, 60) } : {}),
+        ...(promoCoupon ? { couponId: promoCoupon.id } : {}),
       },
     });
     console.log(`[magic-order] address synced for ${order.orderNumber} (paid ${paid})`);
