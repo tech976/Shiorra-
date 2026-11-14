@@ -97,6 +97,15 @@ async function captureOrder({ razorpayOrderId, paymentId, signature }) {
     // Fill it in first so the confirmation shows where the parcel is going.
     if (!result.order.shippingAddressId) {
       await syncMagicAddress(result.order);
+      // Magic orders count their coupon use only once paid — most Magic
+      // checkouts are opened and abandoned, and those must not burn a
+      // limited-use code. (Card/COD orders count it when they're created.)
+      if (result.order.couponId) {
+        await prisma.coupon.update({
+          where: { id: result.order.couponId },
+          data: { usedCount: { increment: 1 } },
+        }).catch((e) => console.error('[magic-order] coupon count failed:', e?.message || e));
+      }
     }
     await ensureOrderEmail(result.order.id, paymentId);
     await linkOrderToAccount(result.order.id);
@@ -419,9 +428,32 @@ async function sendSetPasswordInvite(user) {
 // persists it. So the order is created address-less and its shipping is
 // settled on capture.
 //
-// The order amount is the GOODS total only. Razorpay adds shipping itself from
-// whatever /checkout/shipping-info quotes, and applies coupons through the
-// promotions APIs — so pre-applying a session coupon here would double-count.
+// The order amount is the GOODS total, less any coupon applied on our cart
+// page. Razorpay adds shipping itself from whatever /checkout/shipping-info
+// quotes. Razorpay's own coupon box only knows our coupons if its dashboard
+// is pointed at /checkout/promotions; a cart coupon makes those APIs step
+// aside (see getPromotions) so the two can never stack.
+//
+// Razorpay has no order-level discount field for 1CC orders, so the coupon is
+// expressed as a lower offer_price per unit (price stays the list price, and
+// Razorpay shows the difference as a saving).
+// Per-unit prices are whole paise, so a line of 3 can't absorb a remainder
+// that isn't a multiple of 3; the line with the fewest units goes last and
+// takes what's left, so a single-unit line lands the coupon exactly.
+function discountLineItems(items, discount) {
+  const goods = items.reduce((n, it) => n + it.subtotalInPaise, 0);
+  const order = items.map((_, i) => i).sort((a, b) => items[b].quantity - items[a].quantity);
+  const perUnit = new Array(items.length).fill(0);
+  let left = discount;
+  order.forEach((i, k) => {
+    const it = items[i];
+    const share = k === order.length - 1 ? left : Math.floor((discount * it.subtotalInPaise) / goods);
+    perUnit[i] = Math.min(it.product.priceInPaise, Math.floor(share / it.quantity));
+    left -= perUnit[i] * it.quantity;
+  });
+  return items.map((it, i) => ({ it, offer: it.product.priceInPaise - perUnit[i] }));
+}
+
 exports.createMagicOrder = async (req, res, next) => {
   try {
     if (!env.razorpay.magicCheckout) {
@@ -436,13 +468,22 @@ exports.createMagicOrder = async (req, res, next) => {
     const goodsTotal = items.reduce((n, it) => n + it.subtotalInPaise, 0);
     if (goodsTotal < 100) return res.status(400).json({ error: 'Order total must be at least Rs1.' });
 
+    // Coupon from the cart page. Razorpay can't take less than Rs1, so a flat
+    // coupon bigger than the cart leaves Rs1 to pay rather than failing.
+    const coupon = await cartController.resolveSessionCoupon(req);
+    const wanted = Math.min(cartController.computeDiscount(coupon, goodsTotal), goodsTotal - 100);
+    const priced = discountLineItems(items, Math.max(0, wanted));
+    const payable = priced.reduce((n, p) => n + p.offer * p.it.quantity, 0);
+    const discount = goodsTotal - payable; // exact, after per-unit rounding
+    const appliedCoupon = discount > 0 ? coupon : null;
+
     const origin = `${req.protocol}://${req.get('host')}`;
-    const lineItems = items.map((it) => ({
+    const lineItems = priced.map(({ it, offer }) => ({
       type: 'e-commerce',
       sku: it.product.slug,
       variant_id: it.product.id,
       price: it.product.priceInPaise,
-      offer_price: it.product.priceInPaise,
+      offer_price: offer,
       tax_amount: 0,
       quantity: it.quantity,
       name: it.product.name,
@@ -452,16 +493,21 @@ exports.createMagicOrder = async (req, res, next) => {
 
     const orderNumber = generateOrderNumber();
     const rzpOrder = await rzp.orders.create({
-      amount: goodsTotal,
+      amount: payable,
       currency: 'INR',
       receipt: orderNumber,
-      line_items_total: goodsTotal,
+      line_items_total: payable,
       line_items: lineItems,
       // NOTE: no one_click_checkout flag — Razorpay rejects it with
       // "not required and should not be sent" on this account, because Magic
       // Checkout is switched on account-side. Sending line_items is what
       // makes this a 1CC order.
-      notes: { orderNumber, userId: req.user?.id || 'guest', magic: 'true' },
+      notes: {
+        orderNumber,
+        userId: req.user?.id || 'guest',
+        magic: 'true',
+        ...(appliedCoupon ? { coupon: appliedCoupon.code } : {}),
+      },
     });
 
     // Address and final shipping are unknown until Razorpay returns them, so
@@ -474,8 +520,10 @@ exports.createMagicOrder = async (req, res, next) => {
         subtotalInPaise: goodsTotal,
         shippingInPaise: 0,
         taxInPaise: 0,
-        discountInPaise: 0,
-        totalInPaise: goodsTotal,
+        discountInPaise: discount,
+        totalInPaise: payable,
+        couponCode: appliedCoupon?.code || null,
+        couponId: appliedCoupon?.id || null,
         razorpayOrderId: rzpOrder.id,
         items: {
           create: items.map((it) => ({
@@ -494,7 +542,7 @@ exports.createMagicOrder = async (req, res, next) => {
       ok: true,
       magic: true,
       key: env.razorpay.keyId,
-      amount: goodsTotal,
+      amount: payable,
       currency: 'INR',
       orderId: rzpOrder.id,
       orderNumber: order.orderNumber,
@@ -617,6 +665,7 @@ exports.verifyPayment = async (req, res, next) => {
 
     // Empty the cart (DB cart for users, session cart for guests)
     await clearCart(req);
+    delete req.session.couponCode;
     rememberGuestOrder(req, order.orderNumber);
 
     res.json({ ok: true, redirect: `/checkout/success/${order.orderNumber}` });
@@ -890,6 +939,8 @@ exports.getPromotions = async (req, res) => {
     // Same authenticity gate as shipping-info: name a real order or get nothing.
     const order = await resolveClaimedOrder(body);
     if (!order) return res.status(404).json({ error: 'Unknown order' });
+    // Coupon already applied on our cart page and priced into the order.
+    if (order.couponId) return res.json({ promotions: [] });
     const subtotal = order.subtotalInPaise;
     const coupons = await prisma.coupon.findMany({ where: { active: true } });
     const promotions = coupons
@@ -917,6 +968,9 @@ exports.applyPromotion = async (req, res) => {
 
     const order = await resolveClaimedOrder(body);
     if (!order) return res.status(404).json({ error: 'Unknown order' });
+    if (order.couponId) {
+      return res.json({ failure_reason: `Coupon ${order.couponCode} is already applied to this order.` });
+    }
     const subtotal = order.subtotalInPaise;
 
     const coupon = await prisma.coupon.findUnique({ where: { code } });

@@ -226,6 +226,19 @@
     margin-bottom: 18px;
   }
 
+  .co-coupon { display: flex; gap: 8px; margin-bottom: 18px; }
+  .co-coupon input[type="text"] {
+    flex: 1; min-width: 0; height: 46px; padding: 0 14px;
+    border: 1px solid var(--sh-line-strong, #d6d6d6); border-radius: 12px;
+    font-size: 16px; color: var(--sh-ink); background: #fff;
+  }
+  .co-coupon input[type="text"]:focus { outline: none; border-color: var(--sh-sage); box-shadow: 0 0 0 4px rgba(35,134,127,.14); }
+  .co-coupon button {
+    appearance: none; border: 1px solid var(--sh-ink); background: var(--sh-ink); color: #fff;
+    border-radius: 12px; padding: 0 18px; height: 46px; font-size: 14px; font-weight: 500; cursor: pointer;
+  }
+  .co-coupon button:hover { opacity: .88; }
+
   .summary-divider { height: 1px; background: var(--sh-line); margin: 0 0 18px; }
 
   .summary-row {
@@ -637,7 +650,17 @@
             <div class="coupon-chip">
               <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1a1.5 1.5 0 0 0 0 3v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1a1.5 1.5 0 0 0 0-3V6Z"/></svg>
               <%= coupon.code %> applied
+              <form action="/cart/coupon/remove" method="post" style="display:inline-flex;margin:0 0 0 6px;">
+                <input type="hidden" name="next" value="/checkout">
+                <button type="submit" aria-label="Remove coupon" style="background:none;border:0;cursor:pointer;font-size:15px;line-height:1;opacity:.7;color:inherit;">×</button>
+              </form>
             </div>
+          <% } else { %>
+            <form action="/cart/coupon" method="post" class="co-coupon">
+              <input type="hidden" name="next" value="/checkout">
+              <input type="text" name="code" placeholder="Discount code" autocomplete="off" aria-label="Discount code">
+              <button type="submit">Apply</button>
+            </form>
           <% } %>
 
           <ul class="mini-items">

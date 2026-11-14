@@ -305,25 +305,29 @@ exports.remove = async (req, res, next) => {
   }
 };
 
+// The coupon box sits on both the cart and the checkout page; send the buyer
+// back to whichever one they used. Only these two — never an arbitrary URL.
+const couponReturn = (req) => (req.body.next === '/checkout' ? '/checkout' : '/cart');
+
 exports.applyCoupon = async (req, res, next) => {
   try {
     const code = String(req.body.code || '').trim().toUpperCase();
     if (!code) {
       req.flash('error', 'Enter a coupon code.');
-      return res.redirect('/cart');
+      return res.redirect(couponReturn(req));
     }
     const coupon = await prisma.coupon.findUnique({ where: { code } });
     if (!coupon || !coupon.active) {
       req.flash('error', `Coupon "${code}" is not valid.`);
-      return res.redirect('/cart');
+      return res.redirect(couponReturn(req));
     }
     if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) {
       req.flash('error', `Coupon "${code}" has expired.`);
-      return res.redirect('/cart');
+      return res.redirect(couponReturn(req));
     }
     if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) {
       req.flash('error', `Coupon "${code}" has reached its usage limit.`);
-      return res.redirect('/cart');
+      return res.redirect(couponReturn(req));
     }
     // Validate min subtotal against current cart
     const items = await loadCart(req);
@@ -333,11 +337,11 @@ exports.applyCoupon = async (req, res, next) => {
         'error',
         `Coupon "${code}" needs a minimum subtotal of ₹${(coupon.minSubtotal / 100).toFixed(0)}.`
       );
-      return res.redirect('/cart');
+      return res.redirect(couponReturn(req));
     }
     req.session.couponCode = coupon.code;
     req.flash('success', `Coupon "${code}" applied.`);
-    res.redirect('/cart');
+    res.redirect(couponReturn(req));
   } catch (err) {
     next(err);
   }
@@ -346,5 +350,5 @@ exports.applyCoupon = async (req, res, next) => {
 exports.removeCoupon = (req, res) => {
   delete req.session.couponCode;
   req.flash('success', 'Coupon removed.');
-  res.redirect('/cart');
+  res.redirect(couponReturn(req));
 };
