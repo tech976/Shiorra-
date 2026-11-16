@@ -885,6 +885,9 @@ function promotionPayload(c, subtotal) {
 exports.promotionsHealth = (req, res) =>
   res.json({ ok: true, endpoint: 'promotions', method: 'POST' });
 
+exports.promotionsApplyHealth = (req, res) =>
+  res.json({ ok: true, endpoint: 'promotions/apply', method: 'POST' });
+
 // GET /checkout/abandoned — health only.
 exports.abandonedHealth = (req, res) =>
   res.json({ ok: true, endpoint: 'abandoned', method: 'POST' });

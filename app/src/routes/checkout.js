@@ -43,6 +43,9 @@ router.post('/shipping-info', magicLimiter, express.raw({ type: '*/*' }), ctrl.s
 // Magic Checkout coupon APIs. Razorpay asks which coupons to show, then asks
 // us to validate the one the customer picked. Raw body for the HMAC.
 router.get('/promotions', ctrl.promotionsHealth);
+// Browser/dashboard reachability check for the apply URL too — without it
+// this one path answered with an error page while the other three were fine.
+router.get('/promotions/apply', ctrl.promotionsApplyHealth);
 router.post('/promotions', magicLimiter, express.raw({ type: '*/*' }), ctrl.getPromotions);
 router.post('/promotions/apply', magicLimiter, express.raw({ type: '*/*' }), ctrl.applyPromotion);
 
