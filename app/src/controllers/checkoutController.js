@@ -635,7 +635,10 @@ async function syncMagicAddress(order) {
         userId: linkedUserId,
         // Keep the contact email on the order even once it has an owner, so
         // receipts and lookups still work if the account is later removed.
-        guestEmail: c.email || order.guestEmail,
+        // Never store Razorpay's void@razorpay.com placeholder as the
+        // customer's email — it is not an address anyone can be reached at,
+        // and it blocks matching the order to their real account by phone.
+        guestEmail: customerAccount.realEmail(c.email) || order.guestEmail,
         shippingInPaise: shipping,
         totalInPaise: paid,
         ...(popupDiscount ? { discountInPaise: (order.discountInPaise || 0) + popupDiscount } : {}),

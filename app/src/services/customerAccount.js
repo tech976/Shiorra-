@@ -48,9 +48,35 @@ async function consumeResetToken(userId, newPassword) {
 
 // Find or create the account behind a checkout. Returns { user, isNew } —
 // null when there is no email to key on, since email IS the identity here.
+// Magic Checkout lets people pay with a phone and no email. Razorpay does not
+// send an empty field for that — it sends a PLACEHOLDER, void@razorpay.com.
+// Taken at face value it looks like a real address, so an account was created
+// for "void@razorpay.com" and every phone-only buyer's order was filed under
+// that one junk account. It also blocked phone matching, which only considers
+// orders with no email at all.
+const PLACEHOLDER_EMAIL_RE = /^(void|noreply|no-reply|donotreply)@(razorpay\.com|.*\.razorpay\.com)$/i;
+
+function isPlaceholderEmail(email) {
+  const e = String(email || '').trim().toLowerCase();
+  return !e || PLACEHOLDER_EMAIL_RE.test(e);
+}
+
+// The email to actually keep for an order/account, or null when there is none.
+function realEmail(email) {
+  const e = String(email || '').trim().toLowerCase();
+  if (!e || !e.includes('@') || isPlaceholderEmail(e)) return null;
+  return e;
+}
+
 async function ensureCustomer({ email, name, phone }) {
-  const addr = String(email || '').trim().toLowerCase();
-  if (!addr || !addr.includes('@')) return null;
+  const addr = realEmail(email);
+  // No usable email: fall back to the account that already owns this phone,
+  // so a phone-only buyer joins their real account instead of spawning one
+  // keyed on a placeholder nobody can ever log into.
+  if (!addr) {
+    const byPhone = await findUserByPhone(phone);
+    return byPhone ? { user: byPhone, isNew: false } : null;
+  }
 
   const existing = await prisma.user.findUnique({ where: { email: addr } });
   if (existing) {
@@ -182,7 +208,8 @@ async function phoneOnlyOrderIds(user) {
        JOIN "Address" a ON a.id = o."shippingAddressId"
       WHERE o."userId" IS NULL
         AND o.status <> 'PENDING'
-        AND coalesce(o."guestEmail", '') = ''
+        AND (coalesce(o."guestEmail", '') = ''
+             OR o."guestEmail" ~* '^(void|noreply|no-reply|donotreply)@.*razorpay\\.com$')
         AND ${SQL_PHONE_KEY('a.phone')} = $1`,
     key,
   );
@@ -199,6 +226,8 @@ async function ensureDefaultAddress(userId) {
 
 module.exports = {
   ensureCustomer,
+  isPlaceholderEmail,
+  realEmail,
   claimGuestOrders,
   ensureDefaultAddress,
   findUserByPhone,
